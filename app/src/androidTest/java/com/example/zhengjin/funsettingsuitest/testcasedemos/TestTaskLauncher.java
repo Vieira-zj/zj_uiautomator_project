@@ -76,7 +76,7 @@ public class TestTaskLauncher {
         boolean results = TaskLauncher.openSpecifiedApp(mDevice, appName);
         Assert.assertTrue(results);
     }
-    
+
     @After
     public void clearUp() {
         Log.d(TAG, String.format("***** Test %s finished.", TAG));
