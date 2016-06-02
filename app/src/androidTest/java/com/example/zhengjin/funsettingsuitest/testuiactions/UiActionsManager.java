@@ -7,7 +7,7 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 /**
  * Created by zhengjin on 2016/6/2.
  *
- * Includes the UI actions invoked by test tasks and test cases.
+ * Include the UI actions invoked by test tasks and test cases.
  */
 public final class UiActionsManager {
 

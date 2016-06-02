@@ -19,7 +19,7 @@ import org.junit.runners.MethodSorters;
 /**
  * Created by zhengjin on 2016/6/1.
  *
- * Test cases for ShellUtils.java
+ * Include test cases for ShellUtils.java
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 
 /**
  * Created by zhengjin on 2016/6/1.
+ *
+ * Category for test case demos.
  */
 
 @RunWith(Categories.class)

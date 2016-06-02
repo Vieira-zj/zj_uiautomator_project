@@ -27,7 +27,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 /**
  * Created by zhengjin on 2016/6/1.
  *
- * Includes the test cases for Main activity.
+ * Include test cases for Main activity.
  */
 public class TestMainActivity {
 

@@ -3,7 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testutils;
 /**
  * Created by zhengjin on 2016/6/2.
  *
- * Includes the testing constants in common use.
+ * Include the testing constants in common use.
  */
 public final class TestConstants {
 

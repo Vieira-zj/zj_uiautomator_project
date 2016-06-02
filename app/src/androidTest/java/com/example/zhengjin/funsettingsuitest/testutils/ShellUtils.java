@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 /**
  * Created by zhengjin on 2016/5/31.
  *
- * Includes the utils for shell env.
+ * Include the utils for shell ENV.
  */
 public final class ShellUtils {
 

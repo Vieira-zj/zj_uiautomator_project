@@ -23,7 +23,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 /**
  * Created by zhengjin on 2016/6/1.
  *
- * Includes the UI tasks on Launcher.
+ * Include the UI tasks on Launcher.
  */
 public final class TaskLauncher {
 
