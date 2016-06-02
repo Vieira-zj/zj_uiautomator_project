@@ -69,7 +69,6 @@ public final class ShellUtils {
         String output;
         try {
             process = runtime.exec(cmd);
-
             String tmp = getShellCommandOutput(process);
             if ("".equals(tmp)) {
                 output = NULL;
@@ -127,6 +126,5 @@ public final class ShellUtils {
     public static void systemWait(long ms) {
         SystemClock.sleep(ms);
     }
-
 
 }

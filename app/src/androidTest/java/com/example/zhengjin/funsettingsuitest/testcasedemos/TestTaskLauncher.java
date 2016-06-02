@@ -6,7 +6,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.DemoTests;
-import com.example.zhengjin.funsettingsuitest.testtasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 
 import junit.framework.Assert;
 
@@ -30,7 +30,6 @@ public class TestTaskLauncher {
 
     private final String TAG = this.getClass().getSimpleName();
     private UiDevice mDevice;
-
 
     @Before
     public void setUp() {
@@ -69,11 +68,20 @@ public class TestTaskLauncher {
         Assert.assertTrue(results);
     }
 
-    @Test
+    @Ignore
     @Category(DemoTests.class)
     public void test5OpenSpecifiedApp() {
         String appName = "沙发管家";
         boolean results = TaskLauncher.openSpecifiedApp(mDevice, appName);
+        Assert.assertTrue(results);
+    }
+
+    @Test
+    @Category(DemoTests.class)
+    public void test6OpenSettingsFromTopBar() {
+//        String settingsId = "com.bestv.ott:id/setting";
+        String networkSettingId = "com.bestv.ott:id/network";
+        boolean results = TaskLauncher.openQuickAccessButtonFromTopBar(mDevice, networkSettingId);
         Assert.assertTrue(results);
     }
 

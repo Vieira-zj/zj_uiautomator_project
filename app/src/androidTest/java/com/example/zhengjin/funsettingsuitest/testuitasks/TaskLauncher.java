@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.testtasks;
+package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +9,11 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionHome;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveUp;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import java.util.List;
@@ -20,16 +25,20 @@ import java.util.List;
  */
 public final class TaskLauncher {
 
-    final static long WAIT = 1000;
-    final static String TAG = TaskLauncher.class.getSimpleName();
+    private final static int WAIT = 1000;
+    private final static String TAG;
+    private static UiActionsManager ACTION;
+
+    static {
+        TAG = TaskLauncher.class.getSimpleName();
+        ACTION = UiActionsManager.getInstance();
+    }
 
     public static boolean backToLauncher(UiDevice device) {
 
         final String results = "com.bestv.ott";
 
-        device.pressHome();
-        ShellUtils.systemWait(WAIT);
-
+        ACTION.doUiActionAndWait(device, new UiActionHome());
         String pkgName = getLauncherPackageName();
         if ((pkgName == null) || ("".equals(pkgName))) {
             return false;
@@ -55,8 +64,7 @@ public final class TaskLauncher {
         if (!backToLauncher(device)) {
             return false;
         }
-        device.pressDPadUp();
-        ShellUtils.systemWait(WAIT);
+        ACTION.doUiActionAndWait(device, new UiActionMoveUp());
 
         UiObject2 tabVideo = getSpecifiedTab(device, textVideoTab);
         if (tabVideo == null) {
@@ -74,10 +82,8 @@ public final class TaskLauncher {
         if (!navigateToVideoTab(device)) {
             return false;
         }
-        device.pressDPadRight();
-        ShellUtils.systemWait(WAIT);
-        device.pressDPadRight();
-        ShellUtils.systemWait(WAIT);
+        int repeatTwoTimes = 2;
+        ACTION.doRepeatUiActionAndWait(device, new UiActionMoveRight(), repeatTwoTimes);
 
         UiObject2 tabApp = getSpecifiedTab(device, textAppTab);
         if (tabApp == null) {
@@ -95,6 +101,9 @@ public final class TaskLauncher {
         List<UiObject2> tabs = device.findObjects(By.res(tabId));
         if (tabs.size() == 0) {
             return null;
+        }
+        if (tabs.size() == 1) {
+            return tabs.get(0);
         }
 
         for (UiObject2 tab : tabs) {
@@ -128,5 +137,37 @@ public final class TaskLauncher {
         return device.pressEnter();
     }
 
+    public static boolean openQuickAccessButtonFromTopBar(UiDevice device, String id) {
 
+        UiObject2 quickAccessBtn = getQuickAccessButtonFromTopBar(device, id);
+        if (quickAccessBtn == null) {
+            Log.e(TAG, "The settings button from top bar is NOT found.");
+            return false;
+        }
+        quickAccessBtn.click();
+        ShellUtils.systemWait(WAIT);
+
+        return ACTION.doUiActionAndWait(device, new UiActionEnter());
+    }
+
+    private static boolean showLauncherTopBar(UiDevice device) {
+
+        backToLauncher(device);
+        int repeatTimes = 2;
+        ACTION.doRepeatUiActionAndWait(device, new UiActionMoveUp(), repeatTimes);
+
+        UiObject2 bar = device.findObject(By.res("com.bestv.ott:id/container"));
+        if (bar == null) {
+            Log.e(TAG, "The top bar on launcher is NOT found.");
+            return false;
+        }
+
+        return bar.isEnabled();
+    }
+
+    private static UiObject2 getQuickAccessButtonFromTopBar(UiDevice device, String id) {
+
+        showLauncherTopBar(device);
+        return device.findObject(By.res(id));
+    }
 }
