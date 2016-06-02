@@ -13,21 +13,22 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final EditText et = (EditText) this.findViewById(R.id.edit1);
+        final EditText edit = (EditText) this.findViewById(R.id.edit1);
         final Button btOk = (Button) this.findViewById(R.id.buttonOK);
         final Button btBack = (Button) this.findViewById(R.id.buttonBack);
-        final TextView tv = (TextView) this.findViewById(R.id.text1);
+        final TextView text = (TextView) this.findViewById(R.id.text1);
 
         if (btOk != null) {
             btOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (et != null && tv != null) {
-                        String tmp = et.getText().toString();
-                        tv.setText(BuildHelloMessage(tmp));
+                    if (edit != null && text != null) {
+                        String tmp = edit.getText().toString();
+                        text.setText(BuildHelloMessage(tmp));
                     }
                 }
             });
@@ -46,8 +47,8 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     public String BuildHelloMessage (String msg) {
-        final String helloMsg = "Pls enter your name in edit text.";
 
+        final String helloMsg = "Pls enter your name in edit text.";
         if ("".equals(msg) || msg == null) {
             return helloMsg;
         }

@@ -25,7 +25,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestShellUtils {
 
-    private final String TAG = this.getClass().getSimpleName();
+    private final static String TAG = TestShellUtils.class.getSimpleName();
 
     @Before
     public void setUp() {

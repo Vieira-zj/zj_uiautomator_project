@@ -18,6 +18,8 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+
 /**
  * Created by zhengjin on 2016/6/1.
  *
@@ -25,7 +27,6 @@ import java.util.List;
  */
 public final class TaskLauncher {
 
-    private final static int WAIT = 1000;
     private final static String TAG;
     private static UiActionsManager ACTION;
 

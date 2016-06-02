@@ -28,13 +28,18 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestTaskLauncher {
 
-    private final String TAG = this.getClass().getSimpleName();
+    private final static String TAG = TestTaskLauncher.class.getSimpleName();
     private UiDevice mDevice;
 
     @Before
     public void setUp() {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    }
+
+    @After
+    public void clearUp() {
+        Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 
 //    @Test
@@ -83,11 +88,6 @@ public class TestTaskLauncher {
         String networkSettingId = "com.bestv.ott:id/network";
         boolean results = TaskLauncher.openQuickAccessButtonFromTopBar(mDevice, networkSettingId);
         Assert.assertTrue(results);
-    }
-
-    @After
-    public void clearUp() {
-        Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 
 }
