@@ -5,7 +5,7 @@ package com.example.zhengjin.funsettingsuitest.testutils;
  *
  * Include the shared functions for test cases.
  */
-public class TestHelper {
+public final class TestHelper {
 
     // TODO: 2016/6/2
 }

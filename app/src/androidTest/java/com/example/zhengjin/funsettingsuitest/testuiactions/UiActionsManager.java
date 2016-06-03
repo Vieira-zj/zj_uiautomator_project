@@ -4,6 +4,8 @@ import android.support.test.uiautomator.UiDevice;
 
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+
 /**
  * Created by zhengjin on 2016/6/2.
  *
@@ -12,7 +14,6 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 public final class UiActionsManager {
 
     private static UiActionsManager instance = null;
-    static final long WAIT = 1000;
 
     private UiActionsManager() {}
 

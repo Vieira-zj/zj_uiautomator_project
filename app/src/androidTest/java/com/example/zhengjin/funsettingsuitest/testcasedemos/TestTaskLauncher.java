@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.DemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 
 import junit.framework.Assert;
 
@@ -39,6 +41,7 @@ public class TestTaskLauncher {
 
     @After
     public void clearUp() {
+        ShellUtils.systemWait(TestConstants.LONG_WAIT);
         Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 
@@ -73,7 +76,7 @@ public class TestTaskLauncher {
         Assert.assertTrue(results);
     }
 
-    @Ignore
+    @Test
     @Category(DemoTests.class)
     public void test5OpenSpecifiedApp() {
         String appName = "沙发管家";
