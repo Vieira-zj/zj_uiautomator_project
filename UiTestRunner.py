@@ -35,9 +35,11 @@ g_push_instrument_test_file_path = '%s/%s' %(g_shell_data_tmp_path, g_instrument
 g_instrument_test_runner = \
     '%s/android.support.test.runner.AndroidJUnitRunner' %(g_instrument_test_name)
 
-# var to be update
+# vars to be update
 g_test_cases = '%s.testcasedemos.TestTaskLauncher' %(g_package_name)
 g_flag_build = False;
+g_flag_assemble_debug_apk = False;
+g_flag_assemble_release_apk = False;
 g_flag_run = True;
 
 
@@ -47,7 +49,11 @@ g_flag_run = True;
 def build_testing_prj():
     run_prj_clean()
     run_prj_assemble_android_test()
-    run_prj_assemble_debug()
+    if g_flag_assemble_debug_apk:
+        run_prj_assemble_debug()
+    if g_flag_assemble_release_apk:
+        run_prj_assemble_release()
+
     verify_build_output_files_exist()
 
 def run_win_command(cmd):
@@ -150,6 +156,9 @@ def push_and_run_instrument_test():
 # --------------------------------------------------------------
 # Test report
 # --------------------------------------------------------------
+def write_test_output_to_file():
+    print 'TODO'
+
 def filter_and_format_test_output(lines):
     test_case = ''
     test_class = ''
@@ -162,6 +171,7 @@ def filter_and_format_test_output(lines):
     for line in lines:
         if 'test=' in line:
             test_case = line.split(' ')[1].strip('\n')
+            continue
         if 'class=' in line:
             test_class = line.split(' ')[1].strip('\n')
             test_cases.append('%s::%s' %(test_class, test_case))

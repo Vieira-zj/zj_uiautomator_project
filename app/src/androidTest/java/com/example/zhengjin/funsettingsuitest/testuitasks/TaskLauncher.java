@@ -18,6 +18,7 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
@@ -148,7 +149,7 @@ public final class TaskLauncher {
         quickAccessBtn.click();
         ShellUtils.systemWait(WAIT);
 
-        return ACTION.doUiActionAndWait(device, new UiActionEnter());
+        return ACTION.doUiActionAndWait(device, new UiActionEnter(), LONG_WAIT);
     }
 
     private static boolean showLauncherTopBar(UiDevice device) {
