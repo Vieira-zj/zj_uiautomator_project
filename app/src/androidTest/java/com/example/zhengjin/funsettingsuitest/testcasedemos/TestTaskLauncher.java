@@ -8,18 +8,17 @@ import android.util.Log;
 import com.example.zhengjin.funsettingsuitest.testcategory.DemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
-
-import junit.framework.Assert;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 
 /**
  * Created by zhengjin on 2016/6/1.
@@ -41,56 +40,52 @@ public class TestTaskLauncher {
 
     @After
     public void clearUp() {
-        ShellUtils.systemWait(TestConstants.LONG_WAIT);
+        ShellUtils.systemWait(LONG_WAIT);
         Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 
-//    @Test
-//    @Category(DemoTests.class)
-//    public void test1GetLauncherPackageName() {
-//        final String results = "com.bestv.ott";
-//        String pkg = TaskLauncher.getLauncherPackageName();
-//
-//        Assert.assertNotNull(pkg);
-//        Assert.assertEquals(results, pkg);
-//    }
+    @Test
+    @Category(DemoTests.class)
+    public void test1GetLauncherPackageName() {
+        final String results = "com.bestv.ott";
+        String pkg = TaskLauncher.getLauncherPackageName();
 
-    @Ignore
+        Assert.assertNotNull(pkg);
+        Assert.assertEquals(results, pkg);
+    }
+
+    @Test
     @Category(DemoTests.class)
     public void test2BackToLauncher() {
-        boolean results = TaskLauncher.backToLauncher(mDevice);
-        Assert.assertTrue(results);
+        TaskLauncher.backToLauncher(mDevice);
     }
 
-    @Ignore
+    @Test
     @Category(DemoTests.class)
     public void test3NavigateToVideoTab() {
-        boolean results = TaskLauncher.navigateToVideoTab(mDevice);
-        Assert.assertTrue(results);
+        TaskLauncher.navigateToVideoTab(mDevice);
     }
 
-    @Ignore
+    @Test
     @Category(DemoTests.class)
     public void test4NavigateToAppTab() {
-        boolean results = TaskLauncher.navigateToAppTab(mDevice);
-        Assert.assertTrue(results);
+        TaskLauncher.navigateToAppTab(mDevice);
     }
 
     @Test
     @Category(DemoTests.class)
     public void test5OpenSpecifiedApp() {
         String appName = "沙发管家";
-        boolean results = TaskLauncher.openSpecifiedApp(mDevice, appName);
-        Assert.assertTrue(results);
+        TaskLauncher.openSpecifiedApp(mDevice, appName);
+        ShellUtils.systemWait(LONG_WAIT);
     }
 
     @Test
     @Category(DemoTests.class)
     public void test6OpenSettingsFromTopBar() {
-//        String settingsId = "com.bestv.ott:id/setting";
-        String networkSettingId = "com.bestv.ott:id/network";
-        boolean results = TaskLauncher.openQuickAccessButtonFromTopBar(mDevice, networkSettingId);
-        Assert.assertTrue(results);
+        String settingsId = "com.bestv.ott:id/setting";
+//        String networkSettingId = "com.bestv.ott:id/network";
+        TaskLauncher.openQuickAccessButtonFromTopBar(mDevice, settingsId);
     }
 
 }
