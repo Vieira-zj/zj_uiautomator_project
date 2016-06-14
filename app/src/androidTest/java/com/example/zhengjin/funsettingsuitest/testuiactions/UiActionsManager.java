@@ -41,25 +41,21 @@ public final class UiActionsManager {
         return ret;
     }
 
-    public boolean doRepeatUiActionAndWait(UiDevice device, UiAction action, int repeatTimes) {
+    public void doRepeatUiActionAndWait(UiDevice device, UiAction action, int repeatTimes) {
 
-        boolean ret = true;
         for (int i = 0; i < repeatTimes; ++i) {
-            ret = (ret && action.doUiAction(device));
+            action.doUiAction(device);
             ShellUtils.systemWait(WAIT);
         }
-        return ret;
     }
 
-    public boolean doRepeatUiActionAndWait(
+    public void doRepeatUiActionAndWait(
             UiDevice device, UiAction action, int repeatTimes, long wait) {
 
-        boolean ret = true;
         for (int i = 0; i < repeatTimes; ++i) {
-            ret = (ret && action.doUiAction(device));
+            action.doUiAction(device);
             ShellUtils.systemWait(wait);
         }
-        return ret;
     }
 
 

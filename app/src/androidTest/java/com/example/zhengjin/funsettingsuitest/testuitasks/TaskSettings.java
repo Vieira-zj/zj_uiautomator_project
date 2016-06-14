@@ -18,7 +18,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 /**
  * Created by zhengjin on 2016/6/6.
  *
- * Include the tasks on settings page
+ * Include the tasks for settings apk.
  */
 public final class TaskSettings {
 

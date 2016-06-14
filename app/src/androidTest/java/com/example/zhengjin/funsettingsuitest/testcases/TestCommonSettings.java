@@ -61,7 +61,7 @@ public final class TestCommonSettings {
 
     @After
     public void clearUp() {
-        int repeatTimes = 3;
+        int repeatTimes = 2;
         ACTION.doRepeatUiActionAndWait(mDevice, new UiActionBack(), repeatTimes);
     }
 
