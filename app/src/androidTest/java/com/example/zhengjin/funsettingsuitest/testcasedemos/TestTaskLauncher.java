@@ -33,6 +33,10 @@ public class TestTaskLauncher {
     private final static String TAG = TestTaskLauncher.class.getSimpleName();
     private UiDevice mDevice;
 
+    public TestTaskLauncher() {
+        Log.d(TAG, String.format("***** Test class (%s) init.", TAG));
+    }
+
     @Before
     public void setUp() {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
