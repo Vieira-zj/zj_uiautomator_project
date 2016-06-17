@@ -45,7 +45,7 @@ public final class TestHelper {
 
         while (!UiObj.isEnabled() && ((SystemClock.uptimeMillis() - start) < timeOut)) {
             flag_UiObj_enabled = UiObj.isEnabled();
-            ShellUtils.systemWait(SHORT_WAIT);
+            ShellUtils.systemWait(interval);
         }
 
         return flag_UiObj_enabled;
