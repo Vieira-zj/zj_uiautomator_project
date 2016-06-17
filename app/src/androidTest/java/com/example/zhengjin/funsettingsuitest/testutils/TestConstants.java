@@ -7,6 +7,10 @@ package com.example.zhengjin.funsettingsuitest.testutils;
  */
 public final class TestConstants {
 
-    public final static long WAIT = 1000;
-    public final static long LONG_WAIT = 3000;
+    public final static long SHORT_WAIT = 1000;
+    public final static long WAIT = 3000;
+    public final static long LONG_WAIT = 8000;
+
+    public final static String fileManagerPkg = "tv.fun.filemanager";
+    public final static String settingsPkg = "tv.fun.settings";
 }

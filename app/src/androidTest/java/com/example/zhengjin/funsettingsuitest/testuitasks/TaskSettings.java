@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -13,7 +14,7 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 
 /**
  * Created by zhengjin on 2016/6/6.
@@ -24,6 +25,26 @@ public final class TaskSettings {
 
 //    private final static String TAG = TaskSettings.class.getSimpleName();
     private static UiActionsManager ACTION = UiActionsManager.getInstance();
+
+    public static BySelector getTitleOfSettingsPageSelector() {
+        return By.res("tv.fun.settings:id/setting_title");
+    }
+
+    public static BySelector getDeviceNameSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_name");
+    }
+
+    public static BySelector getSleepTimeSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_sleep");
+    }
+
+    public static BySelector getSystemRecoverSettingItemKeySelector() {
+        return By.res("tv.fun.settings:id/recovery_title");
+    }
+
+    public static BySelector getCancelBtnOfSystemRecoverDialogSelector() {
+        return By.res("tv.fun.settings:id/recovery_btn_cancel");
+    }
 
     public static void moveToSpecifiedSettingsItem(UiDevice device, UiObject2 item) {
 
@@ -59,7 +80,7 @@ public final class TaskSettings {
         Assert.assertNotNull(message, settingsItem);
 
         settingsItem.click();
-        ShellUtils.systemWait(WAIT);
+        ShellUtils.systemWait(SHORT_WAIT);
     }
 
 }

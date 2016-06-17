@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
@@ -14,12 +15,13 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
 import java.util.List;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
@@ -29,18 +31,30 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskLauncher {
 
-//    private final static String TAG;
-    private static UiActionsManager ACTION;
+//    private final static String TAG = TaskLauncher.class.getSimpleName();
+    private static UiActionsManager ACTION = UiActionsManager.getInstance();
 
-    static {
-//        TAG = TaskLauncher.class.getSimpleName();
-        ACTION = UiActionsManager.getInstance();
+    public static BySelector getAllLauncherTabsSelector() {
+        return By.res("com.bestv.ott:id/tab_title");
+    }
+
+    public static BySelector getLauncherTopBarSelector() {
+        return By.res("com.bestv.ott:id/container");
+    }
+
+    public static BySelector getQuickAccessBtnSettingsSelector() {
+        return By.res("com.bestv.ott:id/setting");
+    }
+
+    public static BySelector getQuickAccessBtnNetworkSelector() {
+        return By.res("com.bestv.ott:id/network");
     }
 
     public static void backToLauncher(UiDevice device) {
 
         ACTION.doUiActionAndWait(device, new UiActionHome());
-        String pkgName = getLauncherPackageName();
+//        String pkgName = getLauncherPackageName();
+        String pkgName = device.getLauncherPackageName();
 
         final String name = "com.bestv.ott";
         String message = "Error in backToLauncher(), the launcher package name is incorrect.";
@@ -98,9 +112,7 @@ public final class TaskLauncher {
 
     private static UiObject2 getSpecifiedTab(UiDevice device, String tabName) {
 
-        final String tabId = "com.bestv.ott:id/tab_title";
-
-        List<UiObject2> tabs = device.findObjects(By.res(tabId));
+        List<UiObject2> tabs = device.findObjects(getAllLauncherTabsSelector());
         if (tabs.size() == 0) {
             return null;
         }
@@ -117,8 +129,20 @@ public final class TaskLauncher {
         return null;
     }
 
+    public static void openSpecifiedApp(UiDevice device, String appName, String pkgName) {
+
+        focusOnSpecifiedApp(device, appName);
+        ACTION.doUiActionAndWait(device, new UiActionEnter());
+        Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
+    }
+
     public static void openSpecifiedApp(UiDevice device, String appName) {
 
+        focusOnSpecifiedApp(device, appName);
+        Assert.assertTrue(ACTION.doUiActionAndWait(device, new UiActionEnter(), WAIT));
+    }
+
+    private static void focusOnSpecifiedApp(UiDevice device, String appName) {
         navigateToAppTab(device);
 
         UiObject2 appTest = device.findObject(By.text(appName));
@@ -132,20 +156,21 @@ public final class TaskLauncher {
         Assert.assertNotNull(message, appContainer);
 
         appContainer.click();
-        ShellUtils.systemWait(WAIT);
-        Assert.assertTrue(device.pressEnter());
+        ShellUtils.systemWait(SHORT_WAIT);
     }
 
-    public static void openQuickAccessButtonFromTopBar(UiDevice device, String id) {
+    public static void clickOnQuickAccessButtonFromTopBar(
+            UiDevice device, BySelector selector, String pkgName) {
 
-        UiObject2 quickAccessBtn = getQuickAccessButtonFromTopBar(device, id);
+        UiObject2 quickAccessBtn = getQuickAccessButtonFromTopBar(device, selector);
         String message =
-                "Error in openQuickAccessButtonFromTopBar(), the settings button from top bar is NOT found.";
+                "Error in clickOnQuickAccessButtonFromTopBar(), the settings button from top bar is NOT found.";
         Assert.assertNotNull(message, quickAccessBtn);
 
         quickAccessBtn.click();
-        ShellUtils.systemWait(WAIT);
-        Assert.assertTrue(ACTION.doUiActionAndWait(device, new UiActionEnter(), LONG_WAIT));
+        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doUiActionAndWait(device, new UiActionEnter());
+        Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
     private static void showLauncherTopBar(UiDevice device) {
@@ -154,8 +179,7 @@ public final class TaskLauncher {
         int repeatTimes = 2;
         ACTION.doRepeatUiActionAndWait(device, new UiActionMoveUp(), repeatTimes);
 
-        String topBarId = "com.bestv.ott:id/container";
-        UiObject2 bar = device.findObject(By.res(topBarId));
+        UiObject2 bar = device.findObject(getLauncherTopBarSelector());
 
         String message = "Error in showLauncherTopBar(), the top bar on launcher is NOT found.";
         Assert.assertNotNull(message, bar);
@@ -164,9 +188,9 @@ public final class TaskLauncher {
         Assert.assertTrue(message, bar.isEnabled());
     }
 
-    private static UiObject2 getQuickAccessButtonFromTopBar(UiDevice device, String id) {
+    private static UiObject2 getQuickAccessButtonFromTopBar(UiDevice device, BySelector selector) {
 
         showLauncherTopBar(device);
-        return device.findObject(By.res(id));
+        return device.findObject(selector);
     }
 }

@@ -4,7 +4,7 @@ import android.support.test.uiautomator.UiDevice;
 
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -30,7 +30,7 @@ public final class UiActionsManager {
     public boolean doUiActionAndWait(UiDevice device, UiAction action) {
 
         boolean ret = action.doUiAction(device);
-        ShellUtils.systemWait(WAIT);
+        ShellUtils.systemWait(SHORT_WAIT);
         return ret;
     }
 
@@ -45,7 +45,7 @@ public final class UiActionsManager {
 
         for (int i = 0; i < repeatTimes; ++i) {
             action.doUiAction(device);
-            ShellUtils.systemWait(WAIT);
+            ShellUtils.systemWait(SHORT_WAIT);
         }
     }
 

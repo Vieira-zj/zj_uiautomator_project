@@ -5,5 +5,5 @@ package com.example.zhengjin.funsettingsuitest.testcategory;
  *
  * Testing category for test demos.
  */
-public interface DemoTests {
+public interface CategoryDemoTests {
 }

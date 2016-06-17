@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -14,8 +15,8 @@ import junit.framework.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 
 /**
  * Created by zhengjin on 2016/6/14.
@@ -24,12 +25,28 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskFileManager {
 
-    public static String getMainTitleId() {
-        return "tv.fun.filemanager:id/activity_sub_title_main";
+    public static BySelector getMainTitleSelector() {
+        return By.res("tv.fun.filemanager:id/activity_sub_title_main");
     }
 
-    public static String getSubTitleId() {
-        return "tv.fun.filemanager:id/activity_sub_title_sub";
+    public static BySelector getSubTitleSelector() {
+        return By.res("tv.fun.filemanager:id/activity_sub_title_sub");
+    }
+
+    public static BySelector getMenuTipsSelector() {
+        return By.res("tv.fun.filemanager:id/activity_sub_menu_tips");
+    }
+
+    public static BySelector getMenuRemoveBtnContainerSelector() {
+        return By.res("tv.fun.filemanager:id/menu_item_del_id");
+    }
+
+    public static BySelector getMenuHideBtnContainerSelector() {
+        return By.res("tv.fun.filemanager:id/menu_item_hide_id");
+    }
+
+    public static BySelector getMenuBtnTextSelector() {
+        return By.res("android:id/tv_fun_menu_text");
     }
 
     public static void openSdcardLocalFilesCard(UiDevice device) {
@@ -38,7 +55,7 @@ public final class TaskFileManager {
         final int positionY = 408;
         String message = "Error in openSdcardLocalFilesCard(), click on AllFiles card.";
         Assert.assertTrue(message, device.click(positionX, positionY));
-        ShellUtils.systemWait(LONG_WAIT);
+        ShellUtils.systemWait(WAIT);
     }
 
     public static void navigateToSpecifiedPath(UiDevice device, String path) {
@@ -62,7 +79,7 @@ public final class TaskFileManager {
         String message;
         try {
             fileList.scrollTextIntoView(dirName);
-            ShellUtils.systemWait(WAIT);
+            ShellUtils.systemWait(SHORT_WAIT);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             message = String.format("Error in clickOnSpecifiedDirFromCurrentDir(), scroll to directory %s.", dirName);
@@ -71,10 +88,10 @@ public final class TaskFileManager {
 
         UiObject2 dir = device.findObject(By.text(dirName));
         dir.click();
-        ShellUtils.systemWait(WAIT);
+        ShellUtils.systemWait(SHORT_WAIT);
     }
 
-    public static void openSpecifiedFileFromCurrentDir(UiDevice device, String fileName) {
+    public static void clickOnSpecifiedFileFromCurrentDir(UiDevice device, String fileName) {
         clickOnSpecifiedDirFromCurrentDir(device, fileName);
     }
 

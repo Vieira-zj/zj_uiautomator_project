@@ -3,7 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testcasedemos;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.DemoTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
@@ -33,7 +33,7 @@ public final class TestShellUtils {
     }
 
     @Test
-    @Category(DemoTests.class)
+    @Category(CategoryDemoTests.class)
     public void test1ExecShellCommandWithOutput() {
 
         String input = "ls";
@@ -43,7 +43,7 @@ public final class TestShellUtils {
     }
 
     @Test
-    @Category(DemoTests.class)
+    @Category(CategoryDemoTests.class)
     public void test2ExecShellCommand() {
 
         String input = "ls";

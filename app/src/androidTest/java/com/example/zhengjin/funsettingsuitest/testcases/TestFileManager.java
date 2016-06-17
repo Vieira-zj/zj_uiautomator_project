@@ -6,12 +6,14 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.FileManagerTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionBack;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMenu;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
@@ -24,7 +26,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.fileManagerPkg;
 
 /**
  * Created by zhengjin on 2016/6/7.
@@ -45,7 +47,6 @@ public final class TestFileManager {
 
         String appName = "文件管理";
         TaskLauncher.openSpecifiedApp(mDevice, appName);
-        ShellUtils.systemWait(LONG_WAIT);
     }
 
     @After
@@ -56,8 +57,8 @@ public final class TestFileManager {
 
     // Error: ddmlib.SyncException: Remote object doesn't exist!
     @Ignore
-    @Category(FileManagerTests.class)
-    public void test1SdcardTabNameAndFocused() {
+    @Category(CategoryFileManagerTests.class)
+    public void test11SdcardTabNameAndFocused() {
 
         String tabContainerId = "tv.fun.filemanager:id/activity_fun_fm_tab";
         UiObject2 tabContainer = mDevice.findObject(By.res(tabContainerId));
@@ -69,8 +70,8 @@ public final class TestFileManager {
 
     // Error: ddmlib.SyncException: Remote object doesn't exist!
     @Ignore
-    @Category(FileManagerTests.class)
-    public void test2VideoCardNameAndItemCount() {
+    @Category(CategoryFileManagerTests.class)
+    public void test12VideoCardNameAndItemCount() {
 
         String videoCardId = "category_video";
         UiObject2 videoCard = mDevice.findObject(By.res(videoCardId));
@@ -92,42 +93,42 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category(FileManagerTests.class)
-    public void test3OpenSdcardAllFilesCard() {
+    @Category(CategoryFileManagerTests.class)
+    public void test13OpenSdcardAllFilesCard() {
 
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
 
         // verification 1
-        UiObject2 mainTitle = mDevice.findObject(By.res(TaskFileManager.getMainTitleId()));
+        UiObject2 mainTitle = mDevice.findObject(TaskFileManager.getMainTitleSelector());
         String expectedText = "本地存储";
         String message = "Verify the text of main title from sdcard local files.";
         Assert.assertEquals(message, expectedText, mainTitle.getText());
 
         // verification 2
-        UiObject2 subTitle = mDevice.findObject(By.res(TaskFileManager.getSubTitleId()));
+        UiObject2 subTitle = mDevice.findObject(TaskFileManager.getSubTitleSelector());
         expectedText = "全部文件";
         message = "Verify the text of sub title from sdcard local files.";
         Assert.assertEquals(message, expectedText, subTitle.getText());
     }
 
     @Test
-    @Category(FileManagerTests.class)
-    public void test4NavigateToSpecifiedPath() {
+    @Category(CategoryFileManagerTests.class)
+    public void test14NavigateToSpecifiedPath() {
 
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
 
         String path = "/testfiles/testpics";
         TaskFileManager.navigateAndOpenSpecifiedFile(mDevice, path);
 
-        UiObject2 subTitle = mDevice.findObject(By.res(TaskFileManager.getSubTitleId()));
+        UiObject2 subTitle = mDevice.findObject(TaskFileManager.getSubTitleSelector());
         String expectedText = "testpics";
         String message = "Verify navigate to the specified path.";
         Assert.assertEquals(message, expectedText, subTitle.getText());
     }
 
     @Test
-    @Category(FileManagerTests.class)
-    public void test5OpenSpecifiedPicture() {
+    @Category(CategoryFileManagerTests.class)
+    public void test15OpenSpecifiedPicture() {
 
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
 
@@ -141,4 +142,101 @@ public final class TestFileManager {
         String message = "Verify the specified picture is opened.";
         Assert.assertEquals(message, fileName, fileTitle.getText());
     }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test16OpenUnknownTypeFile() {
+
+        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+
+        final String fileName = "applog";
+        String message = "Verify open unknown type file.";
+        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
+        Assert.assertEquals(message, fileManagerPkg, mDevice.getCurrentPackageName());
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test20MenuHideBtnForDir() {
+
+        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+
+        // verification 1
+        UiObject2 menuTips = mDevice.findObject(TaskFileManager.getMenuTipsSelector());
+        String expectedText = "查看更多操作";
+        String message = "Verify the menu tips is displayed.";
+        Assert.assertTrue(message, menuTips.getText().contains(expectedText));
+
+        // verification 2
+        final String dirName = "testfiles";
+        TaskFileManager.clickOnSpecifiedDirFromCurrentDir(mDevice, dirName);
+        ACTION.doUiActionAndWait(mDevice, new UiActionMenu());
+        ACTION.doUiActionAndWait(mDevice, new UiActionMoveDown());  // request focus
+
+        UiObject2 menuHideBtnContainer =
+                mDevice.findObject(TaskFileManager.getMenuHideBtnContainerSelector());
+        message = "Verify the hide button is focused in the bottom menu.";
+        Assert.assertTrue(message, menuHideBtnContainer.isFocused());
+
+        UiObject2 menuHideBtn =
+                menuHideBtnContainer.findObject(TaskFileManager.getMenuBtnTextSelector());
+        expectedText = "隐藏";
+        message = "Verify the text of hide button in the bottom menu.";
+        Assert.assertEquals(message, expectedText, menuHideBtn.getText());
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test21MenuHideAndRemoveBtnForFile() {
+
+        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+
+        final String fileName = "applog";
+        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
+        ACTION.doUiActionAndWait(mDevice, new UiActionEnter());  // request focus
+
+        ACTION.doUiActionAndWait(mDevice, new UiActionMenu());  // show menu and request focus
+        ACTION.doUiActionAndWait(mDevice, new UiActionMoveDown());
+
+        // verification 1
+        UiObject2 menuRemoveBtnContainer =
+                mDevice.findObject(TaskFileManager.getMenuRemoveBtnContainerSelector());
+        String message = "Verify the remove button is focused in the bottom menu.";
+        Assert.assertTrue(message, menuRemoveBtnContainer.isFocused());
+
+        UiObject2 menuRemoveBtn =
+                menuRemoveBtnContainer.findObject(TaskFileManager.getMenuBtnTextSelector());
+        String expectedText = "删除";
+        message = "Verify the text of remove button in the bottom menu.";
+        Assert.assertEquals(message, expectedText, menuRemoveBtn.getText());
+
+        // verification 2
+        UiObject2 menuHideBtnContainer =
+                mDevice.findObject(TaskFileManager.getMenuHideBtnContainerSelector());
+        UiObject2 menuHideBtn =
+                menuHideBtnContainer.findObject(TaskFileManager.getMenuBtnTextSelector());
+        expectedText = "隐藏";
+        message = "Verify the text of hide button in the bottom menu.";
+        Assert.assertEquals(message, expectedText, menuHideBtn.getText());
+    }
+
+    @Ignore
+    @Category(CategoryFileManagerTests.class)
+    public void test22HideFiles() {
+        // TODO: 2016/6/14
+    }
+
+    @Ignore
+    @Category(CategoryFileManagerTests.class)
+    public void test23ShowHiddenFiles() {
+        // TODO: 2016/6/14
+    }
+
+    @Ignore
+    @Category(CategoryFileManagerTests.class)
+    public void test24RemoveFiles() {
+        // TODO: 2016/6/14
+    }
+
+
 }

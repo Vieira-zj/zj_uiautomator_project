@@ -5,5 +5,5 @@ package com.example.zhengjin.funsettingsuitest.testcategory;
  *
  * Testing category for file manager test cases.
  */
-public interface FileManagerTests {
+public interface CategoryFileManagerTests {
 }
