@@ -10,11 +10,8 @@ import android.support.test.uiautomator.UiSelector;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
-
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 
 /**
  * Created by zhengjin on 2016/6/6.
@@ -46,12 +43,12 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/recovery_btn_cancel");
     }
 
-    public static void moveToSpecifiedSettingsItem(UiDevice device, UiObject2 item) {
+    public static void moveToSpecifiedSettingsItem(UiObject2 item) {
 
         final int maxMoveTimes = 15;
         int i = 0;
         while (!item.isFocused() && ((i++) < maxMoveTimes)) {
-            ACTION.doUiActionAndWait(new DeviceActionMoveDown());
+            ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());
         }
 
         String message =
@@ -79,8 +76,7 @@ public final class TaskSettings {
         message = "Error in scrollMoveToAndClickSettingsItem(), the settings item is NOT found.";
         Assert.assertNotNull(message, settingsItem);
 
-        settingsItem.click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doClickActionAndWait(settingsItem);
     }
 
 }

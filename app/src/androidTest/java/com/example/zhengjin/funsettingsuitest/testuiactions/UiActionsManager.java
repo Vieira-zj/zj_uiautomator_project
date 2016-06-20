@@ -2,6 +2,7 @@ package com.example.zhengjin.funsettingsuitest.testuiactions;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
@@ -31,7 +32,7 @@ public final class UiActionsManager {
         return instance;
     }
 
-    public boolean doUiActionAndWait(DeviceAction action, long wait) {
+    public boolean doDeviceActionAndWait(DeviceAction action, long wait) {
 
         boolean ret = action.doDeviceAction(mDevice);
         ShellUtils.systemWait(wait);
@@ -39,11 +40,11 @@ public final class UiActionsManager {
     }
 
     // default wait time is 1 second
-    public boolean doUiActionAndWait(DeviceAction action) {
-        return doUiActionAndWait(action, SHORT_WAIT);
+    public boolean doDeviceActionAndWait(DeviceAction action) {
+        return doDeviceActionAndWait(action, SHORT_WAIT);
     }
 
-    public void doRepeatUiActionAndWait(DeviceAction action, int repeatTimes, long wait) {
+    public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
 
         for (int i = 0; i < repeatTimes; ++i) {
             action.doDeviceAction(mDevice);
@@ -51,19 +52,25 @@ public final class UiActionsManager {
         }
     }
 
-    public void doRepeatUiActionAndWait(DeviceAction action, int repeatTimes) {
-        doRepeatUiActionAndWait(action, repeatTimes, SHORT_WAIT);
+    public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes) {
+        doRepeatDeviceActionAndWait(action, repeatTimes, SHORT_WAIT);
     }
 
-    public UiActionsManager doMultipleUiActionAndWait(DeviceAction action, long wait) {
+    public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action, long wait) {
 
         action.doDeviceAction(mDevice);
         ShellUtils.systemWait(wait);
         return this;
     }
 
-    public UiActionsManager doMultipleUiActionAndWait(DeviceAction action) {
-        return doMultipleUiActionAndWait(action, SHORT_WAIT);
+    public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action) {
+        return doMultipleDeviceActionAndWait(action, SHORT_WAIT);
+    }
+
+    public void doClickActionAndWait(UiObject2 uiObj) {
+
+        uiObj.click();
+        ShellUtils.systemWait(SHORT_WAIT);
     }
 
 }

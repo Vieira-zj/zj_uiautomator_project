@@ -14,7 +14,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
@@ -27,7 +26,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.settingsPkg;
 
 /**
@@ -50,13 +48,13 @@ public final class TestCommonSettings {
         TaskLauncher.backToLauncher(mDevice);
         TaskLauncher.clickOnQuickAccessButtonFromTopBar(
                 mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), settingsPkg);
-        ACTION.doUiActionAndWait(new DeviceActionMoveUp());  // request focus
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     @After
     public void clearUp() {
         int repeatTimes = 2;
-        ACTION.doRepeatUiActionAndWait(new DeviceActionBack(), repeatTimes);
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     @Test
@@ -101,7 +99,7 @@ public final class TestCommonSettings {
         String[] subDeviceNames = {"风行电视", "客厅的电视", "卧室的电视", "书房的电视", "自定义"};
         final String message = "Verify the item %s in device name menu.";
 
-        ACTION.doUiActionAndWait(new DeviceActionEnter());
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
         for (String deviceName : subDeviceNames) {
             UiObject2 subDeviceName = mDevice.findObject(By.text(deviceName));
             Assert.assertNotNull(String.format(message, deviceName), subDeviceName);
@@ -112,12 +110,11 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test14SelectDeviceName() {
 
-        ACTION.doUiActionAndWait(new DeviceActionEnter());  // open device name menu
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
         // select a sub device name and back
         final String subDeviceName = "书房的电视";
         UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
-        deviceName.getParent().click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doClickActionAndWait(deviceName);
 
         final String containerId = "tv.fun.settings:id/setting_item_name";
         String message = "Verify select a pre-defined device name.";
@@ -137,12 +134,12 @@ public final class TestCommonSettings {
         UiObject2 defaultText = sleepContainer.findObject(By.text(DefaultSleepValue));
         Assert.assertNotNull(message, defaultText);
 
-        TaskSettings.moveToSpecifiedSettingsItem(mDevice, sleepContainer);
+        TaskSettings.moveToSpecifiedSettingsItem(sleepContainer);
 
         message = "Verify the sub values %s of sleep setting.";
         String[] subSleepValues = {"15分钟","30分钟","60分钟","90分钟","120分钟","永不休眠"};
         for (String value : subSleepValues) {
-            ACTION.doUiActionAndWait(new DeviceActionMoveRight());
+            ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
             UiObject2 container =
                     mDevice.findObject(TaskSettings.getSleepTimeSettingItemContainerSelector());
             UiObject2 subSleepText = container.findObject(By.text(value));
@@ -171,8 +168,7 @@ public final class TestCommonSettings {
                 mDevice.findObject(TaskSettings.getCancelBtnOfSystemRecoverDialogSelector());
         Assert.assertNotNull(message, cancelBtn);
 
-        cancelBtn.click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doClickActionAndWait(cancelBtn);
     }
 
     @Ignore

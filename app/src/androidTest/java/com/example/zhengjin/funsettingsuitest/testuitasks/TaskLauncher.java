@@ -14,14 +14,12 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionHome;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
 import java.util.List;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
@@ -52,7 +50,7 @@ public final class TaskLauncher {
 
     public static void backToLauncher(UiDevice device) {
 
-        ACTION.doUiActionAndWait(new DeviceActionHome());
+        ACTION.doDeviceActionAndWait(new DeviceActionHome());
 //        String pkgName = getLauncherPackageName();
         String pkgName = device.getLauncherPackageName();
 
@@ -82,7 +80,7 @@ public final class TaskLauncher {
     public static void navigateToVideoTab(UiDevice device) {
 
         backToLauncher(device);
-        ACTION.doUiActionAndWait(new DeviceActionMoveUp());
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
         final String textVideoTab = ("视频");
         UiObject2 tabVideo = getSpecifiedTab(device, textVideoTab);
@@ -98,7 +96,7 @@ public final class TaskLauncher {
 
         navigateToVideoTab(device);
         int repeatTwoTimes = 2;
-        ACTION.doRepeatUiActionAndWait(new DeviceActionMoveRight(), repeatTwoTimes);
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), repeatTwoTimes);
 
         final String textAppTab = ("应用");
         UiObject2 tabApp = getSpecifiedTab(device, textAppTab);
@@ -132,14 +130,14 @@ public final class TaskLauncher {
     public static void openSpecifiedApp(UiDevice device, String appName, String pkgName) {
 
         focusOnSpecifiedApp(device, appName);
-        ACTION.doUiActionAndWait(new DeviceActionEnter());
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
         Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
     public static void openSpecifiedApp(UiDevice device, String appName) {
 
         focusOnSpecifiedApp(device, appName);
-        Assert.assertTrue(ACTION.doUiActionAndWait(new DeviceActionEnter(), WAIT));
+        Assert.assertTrue(ACTION.doDeviceActionAndWait(new DeviceActionEnter(), WAIT));
     }
 
     private static void focusOnSpecifiedApp(UiDevice device, String appName) {
@@ -155,8 +153,7 @@ public final class TaskLauncher {
                 "Error in openSpecifiedApp(), the app container %s is NOT found.", appName);
         Assert.assertNotNull(message, appContainer);
 
-        appContainer.click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doClickActionAndWait(appContainer);
     }
 
     public static void clickOnQuickAccessButtonFromTopBar(
@@ -167,9 +164,8 @@ public final class TaskLauncher {
                 "Error in clickOnQuickAccessButtonFromTopBar(), the settings button from top bar is NOT found.";
         Assert.assertNotNull(message, quickAccessBtn);
 
-        quickAccessBtn.click();
-        ShellUtils.systemWait(SHORT_WAIT);
-        ACTION.doUiActionAndWait(new DeviceActionEnter());
+        ACTION.doClickActionAndWait(quickAccessBtn);
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
         Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
@@ -177,7 +173,7 @@ public final class TaskLauncher {
 
         backToLauncher(device);
         int repeatTimes = 2;
-        ACTION.doRepeatUiActionAndWait(new DeviceActionMoveUp(), repeatTimes);
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), repeatTimes);
 
         UiObject2 bar = device.findObject(getLauncherTopBarSelector());
 

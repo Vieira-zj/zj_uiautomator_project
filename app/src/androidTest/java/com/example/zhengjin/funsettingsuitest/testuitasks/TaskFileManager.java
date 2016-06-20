@@ -108,13 +108,11 @@ public final class TaskFileManager {
         }
 
         UiObject2 dir = device.findObject(By.text(dirName));
-        dir.click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doClickActionAndWait(dir);
     }
 
     public static void clickOnSpecifiedDirFromCurrentDir(UiDevice device, String dirName) {
-        boolean flag_bottom = false;
-        clickOnSpecifiedDirFromCurrentDir(device, dirName, flag_bottom);
+        clickOnSpecifiedDirFromCurrentDir(device, dirName, false);
     }
 
     public static void clickOnSpecifiedFileFromCurrentDir(
@@ -123,8 +121,7 @@ public final class TaskFileManager {
     }
 
     public static void clickOnSpecifiedFileFromCurrentDir(UiDevice device, String fileName) {
-        boolean flag_bottom = false;
-        clickOnSpecifiedDirFromCurrentDir(device, fileName, flag_bottom);
+        clickOnSpecifiedDirFromCurrentDir(device, fileName, false);
     }
 
     // path like: android/data/tv.fun.filemanager
@@ -149,20 +146,20 @@ public final class TaskFileManager {
         return dirs;
     }
 
-    public static void showMenuAndRequestFocus(UiDevice device) {
-        ACTION.doUiActionAndWait(new DeviceActionMenu());
-        ACTION.doUiActionAndWait(new DeviceActionMoveDown());  // request focus
+    public static void showMenuAndRequestFocus() {
+        ACTION.doDeviceActionAndWait(new DeviceActionMenu());
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());  // request focus
     }
 
-    public static void showMenuAndClickRemoveBtn(UiDevice device) {
-        showMenuAndRequestFocus(device);
-        ACTION.doUiActionAndWait(new DeviceActionEnter());
+    public static void showMenuAndClickRemoveBtn() {
+        showMenuAndRequestFocus();
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
     }
 
-    public static void showMenuAndClickHideBtn(UiDevice device) {
-        showMenuAndRequestFocus(device);
-        ACTION.doUiActionAndWait(new DeviceActionMoveRight());
-        ACTION.doUiActionAndWait(new DeviceActionEnter());
+    public static void showMenuAndClickHideBtn() {
+        showMenuAndRequestFocus();
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
     }
 
 }

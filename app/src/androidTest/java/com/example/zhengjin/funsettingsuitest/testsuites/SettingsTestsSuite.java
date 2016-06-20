@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 /**
  * Created by zhengjin on 2016/6/17.
  *
- * Runt est cases for testing common settings module.
+ * Run test cases for testing common settings module.
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory(CategorySettingsTests.class)

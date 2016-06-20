@@ -12,7 +12,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
@@ -25,7 +24,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.fileManagerPkg;
 
 /**
@@ -52,7 +50,7 @@ public final class TestFileManager {
     @After
     public void clearUp() {
         int repeatTimes = 3;
-        ACTION.doRepeatUiActionAndWait(new DeviceActionBack(), repeatTimes);
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     // Error: ddmlib.SyncException: Remote object doesn't exist!
@@ -170,7 +168,7 @@ public final class TestFileManager {
         // verification 2
         final String dirName = "testfiles";
         TaskFileManager.clickOnSpecifiedDirFromCurrentDir(mDevice, dirName);
-        TaskFileManager.showMenuAndRequestFocus(mDevice);
+        TaskFileManager.showMenuAndRequestFocus();
 
         UiObject2 menuHideBtnContainer =
                 mDevice.findObject(TaskFileManager.getMenuHideBtnContainerSelector());
@@ -192,8 +190,8 @@ public final class TestFileManager {
 
         final String fileName = "applog";
         TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
-        ACTION.doUiActionAndWait(new DeviceActionEnter());  // request focus
-        TaskFileManager.showMenuAndRequestFocus(mDevice);
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());  // request focus
+        TaskFileManager.showMenuAndRequestFocus();
 
         // verification 1
         UiObject2 menuRemoveBtnContainer =
@@ -217,22 +215,27 @@ public final class TestFileManager {
         Assert.assertEquals(message, expectedText, menuHideBtn.getText());
     }
 
+    @Ignore
+    @Category(CategoryFileManagerTests.class)
+    public void test22RemoveFileAndCancel() {
+        // TODO: 2016/6/20
+    }
+
+
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test22RemoveFile() {
+    public void test23RemoveFile() {
         String path = "/testfiles/testpics";
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
         TaskFileManager.navigateToSpecifiedPath(mDevice, path);
 
-        String fileName = "990727-1421-59.jpg";
-        boolean flag_bottom = false;
-        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName, flag_bottom);
+        String fileName = "990522-1548-32.jpg";
+        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
 
-        final long waitTimeForPicBarDisappear = 6000;
-        ShellUtils.systemWait(waitTimeForPicBarDisappear);
-        ACTION.doMultipleUiActionAndWait(new DeviceActionBack())
-                .doMultipleUiActionAndWait(new DeviceActionEnter());
-        TaskFileManager.showMenuAndClickRemoveBtn(mDevice);
+        ACTION.doMultipleDeviceActionAndWait(new DeviceActionBack())  // disappear pic bar
+                .doMultipleDeviceActionAndWait(new DeviceActionBack())  // exit pic browser
+                .doMultipleDeviceActionAndWait(new DeviceActionEnter());  // request focus
+        TaskFileManager.showMenuAndClickRemoveBtn();
 
         // verification 1
         String message = "Verify the Yes button of confirm dialog.";
@@ -241,22 +244,21 @@ public final class TestFileManager {
 
         // verification 2
         message = "Verify remove a file.";
-        yesBtn.click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ACTION.doClickActionAndWait(yesBtn);
         UiObject2 fileRemoved = mDevice.findObject(By.text(fileName));
         Assert.assertNull(message, fileRemoved);
     }
 
     @Ignore
     @Category(CategoryFileManagerTests.class)
-    public void test23HideFile() {
-        // TODO: 2016/6/14
+    public void test24HideFile() {
+        // TODO: 2016/6/20
     }
 
     @Ignore
     @Category(CategoryFileManagerTests.class)
-    public void test24ShowHiddenFiles() {
-        // TODO: 2016/6/14
+    public void test25ShowHiddenFiles() {
+        // TODO: 2016/6/20
     }
 
 
