@@ -7,10 +7,10 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Wrapped UI action for down key.
  */
-public class UiActionMoveDown implements UiAction {
+public class DeviceActionMoveDown implements DeviceAction {
 
     @Override
-    public boolean doUiAction(UiDevice device) {
+    public boolean doDeviceAction(UiDevice device) {
         return device.pressDPadDown();
     }
 

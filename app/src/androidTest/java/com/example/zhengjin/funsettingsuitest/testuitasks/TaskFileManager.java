@@ -8,6 +8,11 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
@@ -15,8 +20,8 @@ import junit.framework.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2016/6/14.
@@ -24,6 +29,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
  * Include the tasks for file manager apk.
  */
 public final class TaskFileManager {
+
+    private static UiActionsManager ACTION = UiActionsManager.getInstance();
 
     public static BySelector getMainTitleSelector() {
         return By.res("tv.fun.filemanager:id/activity_sub_title_main");
@@ -49,6 +56,14 @@ public final class TaskFileManager {
         return By.res("android:id/tv_fun_menu_text");
     }
 
+    public static BySelector getYesBtnOfConfirmDialog() {
+        return By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm");
+    }
+
+    public static BySelector getCancelBtnOfConfirmDialog() {
+        return By.res("tv.fun.filemanager:id/confirm_dialog_btn_cancel");
+    }
+
     public static void openSdcardLocalFilesCard(UiDevice device) {
 
         final int positionX = 1348;
@@ -70,8 +85,10 @@ public final class TaskFileManager {
         navigateToSpecifiedPath(device, fileAbsPath);
     }
 
-    public static void clickOnSpecifiedDirFromCurrentDir(UiDevice device, String dirName) {
+    public static void clickOnSpecifiedDirFromCurrentDir(
+            UiDevice device, String dirName, boolean flag_bottom) {
 
+        final int ScrollSteps = 5;
         String scrollViewId = "tv.fun.filemanager:id/activity_sub_grid";
         UiScrollable fileList = new UiScrollable(new UiSelector().resourceId(scrollViewId));
         fileList.setAsVerticalList();
@@ -80,9 +97,13 @@ public final class TaskFileManager {
         try {
             fileList.scrollTextIntoView(dirName);
             ShellUtils.systemWait(SHORT_WAIT);
+            if (flag_bottom) {
+                fileList.scrollForward(ScrollSteps);
+                ShellUtils.systemWait(SHORT_WAIT);
+            }
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            message = String.format("Error in clickOnSpecifiedDirFromCurrentDir(), scroll to directory %s.", dirName);
+            message = String.format("Error in clickOnSpecifiedDirFromCurrentDir(), scroll to UI object %s.", dirName);
             Assert.assertTrue(message, false);
         }
 
@@ -91,8 +112,19 @@ public final class TaskFileManager {
         ShellUtils.systemWait(SHORT_WAIT);
     }
 
+    public static void clickOnSpecifiedDirFromCurrentDir(UiDevice device, String dirName) {
+        boolean flag_bottom = false;
+        clickOnSpecifiedDirFromCurrentDir(device, dirName, flag_bottom);
+    }
+
+    public static void clickOnSpecifiedFileFromCurrentDir(
+            UiDevice device, String fileName, boolean flag_bottom) {
+        clickOnSpecifiedDirFromCurrentDir(device, fileName, flag_bottom);
+    }
+
     public static void clickOnSpecifiedFileFromCurrentDir(UiDevice device, String fileName) {
-        clickOnSpecifiedDirFromCurrentDir(device, fileName);
+        boolean flag_bottom = false;
+        clickOnSpecifiedDirFromCurrentDir(device, fileName, flag_bottom);
     }
 
     // path like: android/data/tv.fun.filemanager
@@ -117,5 +149,20 @@ public final class TaskFileManager {
         return dirs;
     }
 
+    public static void showMenuAndRequestFocus(UiDevice device) {
+        ACTION.doUiActionAndWait(new DeviceActionMenu());
+        ACTION.doUiActionAndWait(new DeviceActionMoveDown());  // request focus
+    }
+
+    public static void showMenuAndClickRemoveBtn(UiDevice device) {
+        showMenuAndRequestFocus(device);
+        ACTION.doUiActionAndWait(new DeviceActionEnter());
+    }
+
+    public static void showMenuAndClickHideBtn(UiDevice device) {
+        showMenuAndRequestFocus(device);
+        ACTION.doUiActionAndWait(new DeviceActionMoveRight());
+        ACTION.doUiActionAndWait(new DeviceActionEnter());
+    }
 
 }

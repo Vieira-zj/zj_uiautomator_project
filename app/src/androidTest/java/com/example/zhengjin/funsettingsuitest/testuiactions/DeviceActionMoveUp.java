@@ -7,10 +7,10 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Wrapped UI action for up key.
  */
-public final class UiActionMoveUp implements UiAction {
+public final class DeviceActionMoveUp implements DeviceAction {
 
     @Override
-    public boolean doUiAction(UiDevice device) {
+    public boolean doDeviceAction(UiDevice device) {
         return device.pressDPadUp();
     }
 }

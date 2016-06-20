@@ -7,10 +7,10 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Wrapped UI action for enter key.
  */
-public final class UiActionEnter implements UiAction {
+public final class DeviceActionEnter implements DeviceAction {
 
     @Override
-    public boolean doUiAction(UiDevice device) {
+    public boolean doDeviceAction(UiDevice device) {
         return device.pressEnter();
     }
 

@@ -8,7 +8,7 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
@@ -51,7 +51,7 @@ public final class TaskSettings {
         final int maxMoveTimes = 15;
         int i = 0;
         while (!item.isFocused() && ((i++) < maxMoveTimes)) {
-            ACTION.doUiActionAndWait(device, new UiActionMoveDown());
+            ACTION.doUiActionAndWait(new DeviceActionMoveDown());
         }
 
         String message =

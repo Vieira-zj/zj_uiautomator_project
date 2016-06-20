@@ -7,10 +7,10 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Wrapped UI action for menu key.
  */
-public final class UiActionMenu implements UiAction {
+public final class DeviceActionMenu implements DeviceAction {
 
     @Override
-    public boolean doUiAction(UiDevice device) {
+    public boolean doDeviceAction(UiDevice device) {
         return device.pressMenu();
     }
 

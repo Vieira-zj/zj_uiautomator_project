@@ -7,7 +7,7 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Interface for all wrapped UI actions.
  */
-public interface UiAction {
+public interface DeviceAction {
 
-    boolean doUiAction(UiDevice device);
+    boolean doDeviceAction(UiDevice device);
 }

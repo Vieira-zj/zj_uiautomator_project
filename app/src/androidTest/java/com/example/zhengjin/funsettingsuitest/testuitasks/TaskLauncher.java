@@ -9,10 +9,10 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionEnter;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionHome;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveUp;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionHome;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -52,7 +52,7 @@ public final class TaskLauncher {
 
     public static void backToLauncher(UiDevice device) {
 
-        ACTION.doUiActionAndWait(device, new UiActionHome());
+        ACTION.doUiActionAndWait(new DeviceActionHome());
 //        String pkgName = getLauncherPackageName();
         String pkgName = device.getLauncherPackageName();
 
@@ -82,7 +82,7 @@ public final class TaskLauncher {
     public static void navigateToVideoTab(UiDevice device) {
 
         backToLauncher(device);
-        ACTION.doUiActionAndWait(device, new UiActionMoveUp());
+        ACTION.doUiActionAndWait(new DeviceActionMoveUp());
 
         final String textVideoTab = ("视频");
         UiObject2 tabVideo = getSpecifiedTab(device, textVideoTab);
@@ -98,7 +98,7 @@ public final class TaskLauncher {
 
         navigateToVideoTab(device);
         int repeatTwoTimes = 2;
-        ACTION.doRepeatUiActionAndWait(device, new UiActionMoveRight(), repeatTwoTimes);
+        ACTION.doRepeatUiActionAndWait(new DeviceActionMoveRight(), repeatTwoTimes);
 
         final String textAppTab = ("应用");
         UiObject2 tabApp = getSpecifiedTab(device, textAppTab);
@@ -132,14 +132,14 @@ public final class TaskLauncher {
     public static void openSpecifiedApp(UiDevice device, String appName, String pkgName) {
 
         focusOnSpecifiedApp(device, appName);
-        ACTION.doUiActionAndWait(device, new UiActionEnter());
+        ACTION.doUiActionAndWait(new DeviceActionEnter());
         Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
     public static void openSpecifiedApp(UiDevice device, String appName) {
 
         focusOnSpecifiedApp(device, appName);
-        Assert.assertTrue(ACTION.doUiActionAndWait(device, new UiActionEnter(), WAIT));
+        Assert.assertTrue(ACTION.doUiActionAndWait(new DeviceActionEnter(), WAIT));
     }
 
     private static void focusOnSpecifiedApp(UiDevice device, String appName) {
@@ -169,7 +169,7 @@ public final class TaskLauncher {
 
         quickAccessBtn.click();
         ShellUtils.systemWait(SHORT_WAIT);
-        ACTION.doUiActionAndWait(device, new UiActionEnter());
+        ACTION.doUiActionAndWait(new DeviceActionEnter());
         Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
@@ -177,7 +177,7 @@ public final class TaskLauncher {
 
         backToLauncher(device);
         int repeatTimes = 2;
-        ACTION.doRepeatUiActionAndWait(device, new UiActionMoveUp(), repeatTimes);
+        ACTION.doRepeatUiActionAndWait(new DeviceActionMoveUp(), repeatTimes);
 
         UiObject2 bar = device.findObject(getLauncherTopBarSelector());
 

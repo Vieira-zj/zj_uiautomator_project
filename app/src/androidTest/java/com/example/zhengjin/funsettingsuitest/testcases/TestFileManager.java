@@ -7,13 +7,12 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionBack;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionEnter;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMenu;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
@@ -26,6 +25,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.fileManagerPkg;
 
 /**
@@ -52,7 +52,7 @@ public final class TestFileManager {
     @After
     public void clearUp() {
         int repeatTimes = 3;
-        ACTION.doRepeatUiActionAndWait(mDevice, new UiActionBack(), repeatTimes);
+        ACTION.doRepeatUiActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     // Error: ddmlib.SyncException: Remote object doesn't exist!
@@ -170,8 +170,7 @@ public final class TestFileManager {
         // verification 2
         final String dirName = "testfiles";
         TaskFileManager.clickOnSpecifiedDirFromCurrentDir(mDevice, dirName);
-        ACTION.doUiActionAndWait(mDevice, new UiActionMenu());
-        ACTION.doUiActionAndWait(mDevice, new UiActionMoveDown());  // request focus
+        TaskFileManager.showMenuAndRequestFocus(mDevice);
 
         UiObject2 menuHideBtnContainer =
                 mDevice.findObject(TaskFileManager.getMenuHideBtnContainerSelector());
@@ -187,16 +186,14 @@ public final class TestFileManager {
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test21MenuHideAndRemoveBtnForFile() {
+    public void test21MenuRemoveAndHideBtnForFile() {
 
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
 
         final String fileName = "applog";
         TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
-        ACTION.doUiActionAndWait(mDevice, new UiActionEnter());  // request focus
-
-        ACTION.doUiActionAndWait(mDevice, new UiActionMenu());  // show menu and request focus
-        ACTION.doUiActionAndWait(mDevice, new UiActionMoveDown());
+        ACTION.doUiActionAndWait(new DeviceActionEnter());  // request focus
+        TaskFileManager.showMenuAndRequestFocus(mDevice);
 
         // verification 1
         UiObject2 menuRemoveBtnContainer =
@@ -220,21 +217,45 @@ public final class TestFileManager {
         Assert.assertEquals(message, expectedText, menuHideBtn.getText());
     }
 
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test22RemoveFile() {
+        String path = "/testfiles/testpics";
+        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.navigateToSpecifiedPath(mDevice, path);
+
+        String fileName = "990727-1421-59.jpg";
+        boolean flag_bottom = false;
+        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName, flag_bottom);
+
+        final long waitTimeForPicBarDisappear = 6000;
+        ShellUtils.systemWait(waitTimeForPicBarDisappear);
+        ACTION.doMultipleUiActionAndWait(new DeviceActionBack())
+                .doMultipleUiActionAndWait(new DeviceActionEnter());
+        TaskFileManager.showMenuAndClickRemoveBtn(mDevice);
+
+        // verification 1
+        String message = "Verify the Yes button of confirm dialog.";
+        UiObject2 yesBtn = mDevice.findObject(TaskFileManager.getYesBtnOfConfirmDialog());
+        Assert.assertNotNull(message, yesBtn);
+
+        // verification 2
+        message = "Verify remove a file.";
+        yesBtn.click();
+        ShellUtils.systemWait(SHORT_WAIT);
+        UiObject2 fileRemoved = mDevice.findObject(By.text(fileName));
+        Assert.assertNull(message, fileRemoved);
+    }
+
     @Ignore
     @Category(CategoryFileManagerTests.class)
-    public void test22HideFiles() {
+    public void test23HideFile() {
         // TODO: 2016/6/14
     }
 
     @Ignore
     @Category(CategoryFileManagerTests.class)
-    public void test23ShowHiddenFiles() {
-        // TODO: 2016/6/14
-    }
-
-    @Ignore
-    @Category(CategoryFileManagerTests.class)
-    public void test24RemoveFiles() {
+    public void test24ShowHiddenFiles() {
         // TODO: 2016/6/14
     }
 

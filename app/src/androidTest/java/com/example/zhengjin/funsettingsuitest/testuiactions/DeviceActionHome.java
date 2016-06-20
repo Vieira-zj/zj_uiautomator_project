@@ -7,10 +7,10 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Wrapped UI action for home key.
  */
-public final class UiActionHome implements UiAction {
+public final class DeviceActionHome implements DeviceAction {
 
     @Override
-    public boolean doUiAction(UiDevice device) {
+    public boolean doDeviceAction(UiDevice device) {
         return device.pressHome();
     }
 

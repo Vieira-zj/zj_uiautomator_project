@@ -7,10 +7,10 @@ import android.support.test.uiautomator.UiDevice;
  *
  * Wrapped UI action for right key.
  */
-public final class UiActionMoveRight implements UiAction {
+public final class DeviceActionMoveRight implements DeviceAction {
 
     @Override
-    public boolean doUiAction(UiDevice device) {
+    public boolean doDeviceAction(UiDevice device) {
         return device.pressDPadRight();
     }
 }
