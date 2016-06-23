@@ -26,6 +26,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.settingsPkg;
 
 /**
@@ -127,23 +128,23 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test15SleepSettingSubValues() {
 
-        final String DefaultSleepValue = "永不休眠";
-        String message = "Verify the default value of sleep setting.";
-        UiObject2 sleepContainer =
-                mDevice.findObject(TaskSettings.getSleepTimeSettingItemContainerSelector());
-        UiObject2 defaultText = sleepContainer.findObject(By.text(DefaultSleepValue));
-        Assert.assertNotNull(message, defaultText);
+        TaskSettings.moveToSpecifiedSettingsItem(
+                mDevice, TaskSettings.getSleepTimeSettingItemContainerSelector());
 
-        TaskSettings.moveToSpecifiedSettingsItem(sleepContainer);
+        String message = "Verify the key text of sleep setting.";
+        String expectedKeyText = "休眠设置";
+        UiObject2 sleepSettingContainer =
+                mDevice.findObject(TaskSettings.getSleepTimeSettingItemContainerSelector());
+        UiObject2 itemKey =
+                sleepSettingContainer.findObject(TaskSettings.getSettingItemKeySelector());
+        Assert.assertEquals(message, expectedKeyText, itemKey.getText());
 
         message = "Verify the sub values %s of sleep setting.";
-        String[] subSleepValues = {"15分钟","30分钟","60分钟","90分钟","120分钟","永不休眠"};
+        String[] subSleepValues = {"永不休眠","15分钟","30分钟","60分钟","90分钟","120分钟"};
         for (String value : subSleepValues) {
-            ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-            UiObject2 container =
-                    mDevice.findObject(TaskSettings.getSleepTimeSettingItemContainerSelector());
-            UiObject2 subSleepText = container.findObject(By.text(value));
+            UiObject2 subSleepText = mDevice.findObject(By.text(value));
             Assert.assertNotNull(String.format(message, value), subSleepText);
+            ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
     }
 
@@ -171,9 +172,116 @@ public final class TestCommonSettings {
         ACTION.doClickActionAndWait(cancelBtn);
     }
 
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test17DefaultLocationOnSettings() {
+
+        UiObject2 locationItemContainer =
+                mDevice.findObject(TaskSettings.getLocationSettingItemContainerSelector());
+
+        String message = "Verify the location item key text.";
+        String expectedItemKeyText = "天气位置";
+        UiObject2 locationItemKey =
+                locationItemContainer.findObject(TaskSettings.getSettingItemKeySelector());
+        Assert.assertEquals(message, expectedItemKeyText, locationItemKey.getText());
+
+        message = "Verify the location item default value text on Common Settings.";
+        String expectedItemValueText= "湖北 武汉";
+        UiObject2 locationItemValue =
+                locationItemContainer.findObject(TaskSettings.getSettingItemValueSelector());
+        Assert.assertEquals(message, expectedItemValueText, locationItemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test18DefaultLocationOnSubPage() {
+
+        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+
+        String message = "Verify the default province text on location page.";
+        String expectedProvinceText = "湖北";
+        UiObject2 provinceList = mDevice.findObject(TaskSettings.getProvinceListSelector());
+        UiObject2 middleProvince =
+                provinceList.findObject(TaskSettings.getMiddleItemFromProvinceCityList());
+        Assert.assertEquals(message, expectedProvinceText, middleProvince.getText());
+
+        message = "Verify the default city text on location page.";
+        String expectedCityText = "武汉";
+        UiObject2 cityList = mDevice.findObject(TaskSettings.getCityListSelector());
+        UiObject2 middleCity =
+                cityList.findObject(TaskSettings.getMiddleItemFromProvinceCityList());
+        Assert.assertEquals(message, expectedCityText, middleCity.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test19SelectLocationOnSubPage() {
+
+        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+
+        // select a location from sub page
+        String province = "江西";
+        String city = "九江";
+        TaskSettings.selectSpecifiedLocationProvince(mDevice, province, false);
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+        TaskSettings.selectSpecifiedLocationCity(mDevice, city, false);
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        String message = "Verify the selected location item value text on Common Settings.";
+        String expectedItemValueText = String.format("%s %s", province, city);
+        UiObject2 locationItemContainer =
+                mDevice.findObject(TaskSettings.getLocationSettingItemContainerSelector());
+        UiObject2 locationItemValue =
+                locationItemContainer.findObject(TaskSettings.getSettingItemValueSelector());
+        Assert.assertEquals(message, expectedItemValueText, locationItemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test21InstallUnknownAppDefaultValue() {
+
+        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "安装未知来源应用");
+
+        String message = "Verify the key text of install unknown app settings item.";
+        String expectedText = "安装未知来源应用";
+        UiObject2 installUnknownAppItemContainer =
+                mDevice.findObject(TaskSettings.getInstallUnknownAppSettingItemContainerSelector());
+        UiObject2 itemKey =
+                installUnknownAppItemContainer.findObject(TaskSettings.getSettingItemKeySelector());
+        Assert.assertEquals(message, expectedText, itemKey.getText());
+
+        message = "Verify the default value text of install unknown app settings item.";
+        expectedText = "禁止";
+        UiObject2 itemValue = installUnknownAppItemContainer.findObject(
+                TaskSettings.getInstallUnknownAppSettingItemValueSelector());
+        UiObject2 valueText = itemValue.findObject(By.clazz("android.widget.TextView"));
+        Assert.assertEquals(message, expectedText, valueText.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test22SelectPermitFromInstallUnknownAppItem() {
+        TaskSettings.moveToSpecifiedSettingsItem(
+                mDevice, TaskSettings.getInstallUnknownAppSettingItemContainerSelector());
+
+        // TODO: 2016/6/23
+    }
+
     @Ignore
     @Category(CategorySettingsTests.class)
-    public void test17DefaultWallpaper() {
+    public void test31DefaultWallpaper() {
+        // TODO: 2016/6/7
+    }
+
+    @Ignore
+    @Category(CategorySettingsTests.class)
+    public void test32SubWallpapers() {
+        // TODO: 2016/6/7
+    }
+
+    @Ignore
+    @Category(CategorySettingsTests.class)
+    public void test33SelectAWallpapers() {
         // TODO: 2016/6/7
     }
 }
