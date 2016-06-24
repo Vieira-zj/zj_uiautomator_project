@@ -21,6 +21,9 @@ import org.junit.runner.RunWith;
 
 /**
  * Created by zhengjin on 2016/6/24.
+ *
+ * It's a demo 1) use the wait(until) APIs for test case stability,
+ * and 2) use the "context" to start the specified activity.
  */
 @RunWith(AndroidJUnit4.class)
 public final class TestLaunchApp {

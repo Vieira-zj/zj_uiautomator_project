@@ -14,6 +14,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
  */
 public final class TestHelper {
 
+    // TODO: 2016/6/24, use the wait(until) APIs replace current functions.
+
     public static boolean waitForAppOpened(
             UiDevice device, String pkgName, long timeOut, long interval) {
 
