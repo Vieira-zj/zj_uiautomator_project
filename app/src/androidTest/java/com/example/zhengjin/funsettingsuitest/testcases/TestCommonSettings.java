@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
@@ -100,6 +101,7 @@ public final class TestCommonSettings {
     public void test13SettingsSubDeviceNames() {
 
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
+        mDevice.wait(Until.findObject(TaskSettings.getDialogDeviceNameListSelector()), WAIT);
 
         String message = "Verify the item %s in device name menu.";
         String[] subDeviceNames = {"风行电视", "客厅的电视", "卧室的电视", "书房的电视", "自定义"};
@@ -117,11 +119,13 @@ public final class TestCommonSettings {
         // select a sub device name and back
         final String subDeviceName = "书房的电视";
         UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
+        deviceName.wait(Until.clickable(true), WAIT);
         ACTION.doClickActionAndWait(deviceName);
 
         String message = "Verify select a pre-defined device name.";
         UiObject2 deviceNameContainer =
                 mDevice.findObject(TaskSettings.getDeviceNameSettingItemContainerSelector());
+        deviceNameContainer.wait(Until.enabled(true), WAIT);
         UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
         Assert.assertNotNull(message, deviceNameValue);
     }

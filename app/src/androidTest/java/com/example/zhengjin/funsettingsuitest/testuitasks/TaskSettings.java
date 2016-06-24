@@ -32,6 +32,10 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_name");
     }
 
+    public static BySelector getDialogDeviceNameListSelector() {
+        return By.res("tv.fun.settings:id/dialog_list_list");
+    }
+
     public static BySelector getSleepTimeSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_sleep");
     }
