@@ -78,30 +78,29 @@ public final class TaskSettings {
 
     public static void moveToSpecifiedSettingsItem(UiDevice device, BySelector selector) {
 
-        boolean directionDown = true;
         UiObject2 item = device.findObject(selector);  // find the item from top
         if (item == null) {  // find the item from bottom
-            moveToCommonSettingsPageBottom();
+            moveToBottomOnCommonSettingsPage();
             item = device.findObject(selector);
             if (item == null) {
                 Assert.assertTrue("The settings item is NOT found in common settings page.", false);
             }
-            directionDown = false;
+            moveUpUntilSettingsItemFocused(item);
+        } else {
+            moveDownUntilSettingsItemFocused(item);
         }
-
-        moveUntilSettingsItemFocused(item, directionDown);
     }
 
-    private static void moveToCommonSettingsPageBottom() {
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 9);
+    private static void moveToBottomOnCommonSettingsPage() {
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 10);
     }
 
-    private static void moveUntilSettingsItemFocused(UiObject2 item, boolean directionDown) {
+    private static void moveUntilSettingsItemFocused(UiObject2 item, boolean flagDirectionDown) {
 
         final int maxMoveTimes = 15;
         int i = 0;
         while (!item.isFocused() && ((i++) < maxMoveTimes)) {
-            if (directionDown) {
+            if (flagDirectionDown) {
                 ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());
             } else {
                 ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
@@ -113,6 +112,14 @@ public final class TaskSettings {
                     "Error in moveUntilSettingsItemFocused(), the settings item is NOT focused.";
             Assert.assertTrue(message, false);
         }
+    }
+
+    private static void moveDownUntilSettingsItemFocused(UiObject2 item) {
+        moveUntilSettingsItemFocused(item, true);
+    }
+
+    private static void moveUpUntilSettingsItemFocused(UiObject2 item) {
+        moveUntilSettingsItemFocused(item, false);
     }
 
     public static void scrollMoveToAndClickSettingsItem(UiDevice device, String itemText) {

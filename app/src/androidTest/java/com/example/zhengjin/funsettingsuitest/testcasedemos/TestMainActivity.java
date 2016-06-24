@@ -1,14 +1,11 @@
 package com.example.zhengjin.funsettingsuitest.testcasedemos;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
+import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.MainActivity;
@@ -19,43 +16,41 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2016/6/1.
  *
  * Include test cases for Main activity.
+ * Use both tools Espresso and Uiautomator.
  */
-@RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestMainActivity {
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<MainActivity>(MainActivity.class);
-    private MainActivity mMainActivity;
-    private UiDevice mDevice;
+public final class TestMainActivity extends ActivityInstrumentationTestCase2 {
 
     private final static String TAG = TestMainActivity.class.getSimpleName();
+//    private UiDevice mDevice;
+
+    public TestMainActivity() {
+        super(MainActivity.class);
+    }
 
     @Before
     public void setUp() {
+
         Log.d(TAG, String.format("***** Test %s start.", TAG));
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        // launcher and open specified APP
-        mMainActivity = mActivityRule.getActivity();
+//        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        this.getActivity();  // launcher and open specified APP
         ShellUtils.systemWait(WAIT);
     }
 
     @After
     public void clearUp() {
+
         ViewInteraction btnBack = Espresso.onView(ViewMatchers.withId(R.id.buttonBack));
         btnBack.perform(ViewActions.click());
         ShellUtils.systemWait(SHORT_WAIT);

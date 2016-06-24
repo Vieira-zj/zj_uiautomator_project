@@ -66,30 +66,32 @@ public final class TestCommonSettings {
                 mDevice.findObject(TaskSettings.getTitleOfSettingsPageSelector());
         Assert.assertNotNull(settingsTitle);
 
-        String message = "Verify the title name of settings page.";
+        String message = "Verify the title name of common settings page.";
         final String expectedResult = "通用设置";
         Assert.assertEquals(message, expectedResult, settingsTitle.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test12SettingsDeviceName() {
+    public void test12DefaultSettingsDeviceName() {
 
         UiObject2 deviceNameContainer =
                 mDevice.findObject(TaskSettings.getDeviceNameSettingItemContainerSelector());
 
-        String message = "Verify the device name item and focused.";
+        String message = "Verify the device name item is focused as default.";
         Assert.assertNotNull(message, deviceNameContainer);
         Assert.assertTrue(deviceNameContainer.isFocused());
 
-        final String deviceNameKeyText = "设备名称";
+        final String expectedDeviceNameKeyText = "设备名称";
         message = "Verify the device name key text.";
-        UiObject2 deviceNameKey = deviceNameContainer.findObject(By.text(deviceNameKeyText));
+        UiObject2 deviceNameKey =
+                deviceNameContainer.findObject(By.text(expectedDeviceNameKeyText));
         Assert.assertNotNull(message, deviceNameKey);
 
-        final String deviceNameValueText = "风行电视";
+        final String expectedDeviceNameValueText = "风行电视";
         message = "Verify the device name value text.";
-        UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(deviceNameValueText));
+        UiObject2 deviceNameValue =
+                deviceNameContainer.findObject(By.text(expectedDeviceNameValueText));
         Assert.assertNotNull(message, deviceNameValue);
     }
 
@@ -97,10 +99,10 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test13SettingsSubDeviceNames() {
 
-        String[] subDeviceNames = {"风行电视", "客厅的电视", "卧室的电视", "书房的电视", "自定义"};
-        final String message = "Verify the item %s in device name menu.";
-
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
+
+        String message = "Verify the item %s in device name menu.";
+        String[] subDeviceNames = {"风行电视", "客厅的电视", "卧室的电视", "书房的电视", "自定义"};
         for (String deviceName : subDeviceNames) {
             UiObject2 subDeviceName = mDevice.findObject(By.text(deviceName));
             Assert.assertNotNull(String.format(message, deviceName), subDeviceName);
@@ -117,9 +119,9 @@ public final class TestCommonSettings {
         UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
         ACTION.doClickActionAndWait(deviceName);
 
-        final String containerId = "tv.fun.settings:id/setting_item_name";
         String message = "Verify select a pre-defined device name.";
-        UiObject2 deviceNameContainer = mDevice.findObject(By.res(containerId));
+        UiObject2 deviceNameContainer =
+                mDevice.findObject(TaskSettings.getDeviceNameSettingItemContainerSelector());
         UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
         Assert.assertNotNull(message, deviceNameValue);
     }
@@ -146,30 +148,6 @@ public final class TestCommonSettings {
             Assert.assertNotNull(String.format(message, value), subSleepText);
             ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
-    }
-
-    @Test
-    @Category(CategorySettingsTests.class)
-    public void test16SystemRecoverDialog() {
-
-        final String recoverText = "恢复出厂设置";
-        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, recoverText);  // open dialog
-
-        String message = "Verify the recover dialog title.";
-        UiObject2 title =
-                mDevice.findObject(TaskSettings.getSystemRecoverSettingItemKeySelector());
-        Assert.assertNotNull(message, title);
-
-        String expectText = "您的设备将恢复出厂设置";
-        message = "Verify the text of recover dialog title.";
-        Assert.assertEquals(message, expectText, title.getText());
-
-        message = "Verify the cancel button in recover dialog.";
-        UiObject2 cancelBtn =
-                mDevice.findObject(TaskSettings.getCancelBtnOfSystemRecoverDialogSelector());
-        Assert.assertNotNull(message, cancelBtn);
-
-        ACTION.doClickActionAndWait(cancelBtn);
     }
 
     @Test
@@ -261,10 +239,46 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test22SelectPermitFromInstallUnknownAppItem() {
+
         TaskSettings.moveToSpecifiedSettingsItem(
                 mDevice, TaskSettings.getInstallUnknownAppSettingItemContainerSelector());
 
         // TODO: 2016/6/23
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test24SystemRecoverDialog() {
+
+        final String recoverText = "恢复出厂设置";
+        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, recoverText);  // open dialog
+
+        // verification 1
+        String message = "Verify the text of recover dialog title.";
+        UiObject2 title =
+                mDevice.findObject(TaskSettings.getSystemRecoverSettingItemKeySelector());
+        Assert.assertNotNull(message, title);
+
+        String expectText = "您的设备将恢复出厂设置";
+        message = "Verify the content of recover dialog.";
+        Assert.assertEquals(message, expectText, title.getText());
+
+        // verification 2
+        message = "Verify the cancel button in recover dialog.";
+        UiObject2 cancelBtn =
+                mDevice.findObject(TaskSettings.getCancelBtnOfSystemRecoverDialogSelector());
+        Assert.assertNotNull(message, cancelBtn);
+
+        message = "Verify back to common settings page after click the cancel button";
+        ACTION.doClickActionAndWait(cancelBtn);
+        UiObject2 recoverItem = mDevice.findObject(By.text(recoverText));
+        Assert.assertNotNull(message, recoverItem);
+    }
+
+    @Ignore
+    @Category(CategorySettingsTests.class)
+    public void test24SaveInfoOnSystemRecoverDialog() {
+        // TODO: 2016/6/24
     }
 
     @Ignore
