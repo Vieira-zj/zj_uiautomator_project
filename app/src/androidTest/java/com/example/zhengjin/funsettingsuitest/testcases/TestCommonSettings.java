@@ -15,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
@@ -119,13 +120,13 @@ public final class TestCommonSettings {
         // select a sub device name and back
         final String subDeviceName = "书房的电视";
         UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
-        deviceName.wait(Until.clickable(true), WAIT);
+        TestHelper.waitForUiObjectClickable(deviceName);
         ACTION.doClickActionAndWait(deviceName);
 
         String message = "Verify select a pre-defined device name.";
         UiObject2 deviceNameContainer =
                 mDevice.findObject(TaskSettings.getDeviceNameSettingItemContainerSelector());
-        deviceNameContainer.wait(Until.enabled(true), WAIT);
+        TestHelper.waitForUiObjectEnabled(deviceNameContainer);
         UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
         Assert.assertNotNull(message, deviceNameValue);
     }

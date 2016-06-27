@@ -8,7 +8,6 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
-import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionHome;
@@ -62,9 +61,8 @@ public final class TaskLauncher {
 
         // method 2
         ACTION.doDeviceActionAndWait(new DeviceActionHome());
-        boolean ret = device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), WAIT);
+        boolean ret = TestHelper.waitForAppOpened(device, launcherPackageName);
         Assert.assertTrue(message, ret);
-
     }
 
     public static String getLauncherPackageName() {
@@ -137,7 +135,7 @@ public final class TaskLauncher {
 
         focusOnSpecifiedApp(device, appName);
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
-        Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
+        Assert.assertTrue(TestHelper.waitForAppOpenedV1(device, pkgName));
     }
 
     public static void openSpecifiedApp(UiDevice device, String appName) {
@@ -173,7 +171,7 @@ public final class TaskLauncher {
 
         ACTION.doClickActionAndWait(quickAccessBtn);
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
-        Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
+        Assert.assertTrue(TestHelper.waitForAppOpenedV1(device, pkgName));
     }
 
     private static void showLauncherTopBar(UiDevice device) {
