@@ -50,6 +50,7 @@ public final class TestHelper {
     public static boolean waitForAppOpened(UiDevice device, String pkgName) {
 
         device.waitForIdle();
+//        device.hasObject(By.pkg(pkgName).depth(0));
         return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), LONG_WAIT);
     }
 
