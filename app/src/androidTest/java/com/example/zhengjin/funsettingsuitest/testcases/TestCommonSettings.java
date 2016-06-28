@@ -15,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -28,8 +29,9 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.settingsPkg;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -50,12 +52,16 @@ public final class TestCommonSettings {
 
         TaskLauncher.backToLauncher(mDevice);
         TaskLauncher.clickOnQuickAccessButtonFromTopBar(
-                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), settingsPkg);
+                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), SETTINGS_PKG);
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     @After
     public void clearUp() {
+
+        TestHelper.doScreenCapture(mDevice);
+        ShellUtils.systemWait(SHORT_WAIT);
+
         int repeatTimes = 2;
         ACTION.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }

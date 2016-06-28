@@ -24,7 +24,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.fileManagerPkg;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG;
 
 /**
  * Created by zhengjin on 2016/6/7.
@@ -150,7 +150,7 @@ public final class TestFileManager {
         final String fileName = "applog";
         String message = "Verify open unknown type file.";
         TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
-        Assert.assertEquals(message, fileManagerPkg, mDevice.getCurrentPackageName());
+        Assert.assertEquals(message, FILE_MANAGER_PKG, mDevice.getCurrentPackageName());
     }
 
     @Test

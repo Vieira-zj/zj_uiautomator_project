@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.settingsPkg;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG;
 
 /**
  * Created by zhengjin on 2016/6/1.
@@ -89,7 +89,7 @@ public class TestTaskLauncher {
     @Category(CategoryDemoTests.class)
     public void test6OpenSettingsFromTopBar() {
         TaskLauncher.clickOnQuickAccessButtonFromTopBar(
-                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), settingsPkg);
+                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), SETTINGS_PKG);
     }
 
 }

@@ -11,6 +11,8 @@ import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
@@ -63,5 +65,11 @@ public final class TestLaunchApp {
         Assert.assertNotNull(allFilesTitle);
     }
 
+    @Test
+    public void test2DoScreenCaptures() {
+
+        TaskLauncher.backToLauncher(mDevice);
+        TestHelper.doScreenCapture(mDevice);
+    }
 
 }

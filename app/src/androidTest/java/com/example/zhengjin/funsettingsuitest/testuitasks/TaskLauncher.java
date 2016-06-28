@@ -135,7 +135,7 @@ public final class TaskLauncher {
 
         focusOnSpecifiedApp(device, appName);
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
-        Assert.assertTrue(TestHelper.waitForAppOpenedV1(device, pkgName));
+        Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
     public static void openSpecifiedApp(UiDevice device, String appName) {
@@ -171,7 +171,7 @@ public final class TaskLauncher {
 
         ACTION.doClickActionAndWait(quickAccessBtn);
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
-        Assert.assertTrue(TestHelper.waitForAppOpenedV1(device, pkgName));
+        Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
     private static void showLauncherTopBar(UiDevice device) {

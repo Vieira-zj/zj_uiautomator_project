@@ -4,6 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
@@ -50,8 +51,6 @@ public final class TestShellUtils {
         boolean actResults = ShellUtils.execShellCommand(input);
         Assert.assertTrue(actResults);
     }
-
-
 
     @After
     public void clearUp() {

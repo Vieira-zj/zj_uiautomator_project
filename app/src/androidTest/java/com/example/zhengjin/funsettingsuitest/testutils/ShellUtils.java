@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by zhengjin on 2016/5/31.
@@ -125,6 +128,14 @@ public final class ShellUtils {
 
     public static void systemWait(long ms) {
         SystemClock.sleep(ms);
+    }
+
+    public static String getCurrentTime() {
+
+        SimpleDateFormat formatter =
+                new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss", Locale.getDefault());
+        Date curDate = new Date(System.currentTimeMillis());
+        return formatter.format(curDate);
     }
 
 }
