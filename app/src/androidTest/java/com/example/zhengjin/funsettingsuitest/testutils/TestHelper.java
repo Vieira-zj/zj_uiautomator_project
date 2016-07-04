@@ -91,7 +91,12 @@ public final class TestHelper {
         return uiObj.wait(Until.clickable(true), TIME_OUT);
     }
 
-    public static UiObject2 waitForUiObjectVisible(UiDevice device, BySelector selector) {
+    public static boolean waitForUiObjectVisible(UiDevice device, BySelector selector) {
+        device.waitForIdle();
+        return device.wait(Until.hasObject(selector),TIME_OUT);
+    }
+
+    public static UiObject2 waitForUiObjectVisibleAndReturn(UiDevice device, BySelector selector) {
         device.waitForIdle();
         return device.wait(Until.findObject(selector),TIME_OUT);
     }

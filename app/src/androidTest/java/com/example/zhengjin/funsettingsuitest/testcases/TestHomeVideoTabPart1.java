@@ -76,7 +76,7 @@ public final class TestHomeVideoTabPart1 {
         action.doClickActionAndWait(filmCards.get(1));
         action.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
 
-        UiObject2 tempContainer = TestHelper.waitForUiObjectVisible(
+        UiObject2 tempContainer = TestHelper.waitForUiObjectVisibleAndReturn(
                 device, TaskHomeVideoTab.getCardsContainerOfFilmDetailsSelector());
         TaskHomeVideoTab.verifyAllTextViewHasTextOfContainer(tempContainer);
     }
@@ -91,7 +91,7 @@ public final class TestHomeVideoTabPart1 {
         action.doClickActionAndWait(filmCards.get(0));
         action.doDeviceActionAndWait(new DeviceActionEnter());
 
-        UiObject2 tempContainer = TestHelper.waitForUiObjectVisible(
+        UiObject2 tempContainer = TestHelper.waitForUiObjectVisibleAndReturn(
                 device, TaskHomeVideoTab.getCardsContainerOfSpeicialSubjectSelector());
         TaskHomeVideoTab.verifyAllTextViewHasTextOfContainer(tempContainer);
     }
