@@ -35,7 +35,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
 
-    private static UiActionsManager ACTION = UiActionsManager.getInstance();
+    private static UiActionsManager action = UiActionsManager.getInstance();
     private UiDevice mDevice;
 
     @Before
@@ -50,7 +50,7 @@ public final class TestFileManager {
     @After
     public void clearUp() {
         int repeatTimes = 3;
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
+        action.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     // Error: ddmlib.SyncException: Remote object doesn't exist!
@@ -147,9 +147,8 @@ public final class TestFileManager {
 
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
 
-        final String fileName = "applog";
         String message = "Verify open unknown type file.";
-        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
+        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, "applog");
         Assert.assertEquals(message, FILE_MANAGER_PKG, mDevice.getCurrentPackageName());
     }
 
@@ -166,8 +165,7 @@ public final class TestFileManager {
         Assert.assertTrue(message, menuTips.getText().contains(expectedText));
 
         // verification 2
-        final String dirName = "testfiles";
-        TaskFileManager.clickOnSpecifiedDirFromCurrentDir(mDevice, dirName);
+        TaskFileManager.clickOnSpecifiedDirFromCurrentDir(mDevice, "testfiles");
         TaskFileManager.showMenuAndRequestFocus();
 
         UiObject2 menuHideBtnContainer =
@@ -188,9 +186,8 @@ public final class TestFileManager {
 
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
 
-        final String fileName = "applog";
-        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter());  // request focus
+        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, "applog");
+        action.doDeviceActionAndWait(new DeviceActionEnter());  // request focus
         TaskFileManager.showMenuAndRequestFocus();
 
         // verification 1
@@ -201,18 +198,16 @@ public final class TestFileManager {
 
         UiObject2 menuRemoveBtn =
                 menuRemoveBtnContainer.findObject(TaskFileManager.getMenuBtnTextSelector());
-        String expectedText = "删除";
         message = "Verify the text of remove button in the bottom menu.";
-        Assert.assertEquals(message, expectedText, menuRemoveBtn.getText());
+        Assert.assertEquals(message, "删除", menuRemoveBtn.getText());
 
         // verification 2
         UiObject2 menuHideBtnContainer =
                 mDevice.findObject(TaskFileManager.getMenuHideBtnContainerSelector());
         UiObject2 menuHideBtn =
                 menuHideBtnContainer.findObject(TaskFileManager.getMenuBtnTextSelector());
-        expectedText = "隐藏";
         message = "Verify the text of hide button in the bottom menu.";
-        Assert.assertEquals(message, expectedText, menuHideBtn.getText());
+        Assert.assertEquals(message, "隐藏", menuHideBtn.getText());
     }
 
     @Ignore
@@ -225,14 +220,13 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test23RemoveFile() {
-        String path = "/testfiles/testpics";
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
-        TaskFileManager.navigateToSpecifiedPath(mDevice, path);
+        TaskFileManager.navigateToSpecifiedPath(mDevice, "/testfiles/testpics");
 
         String fileName = "990522-1548-32.jpg";
         TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
 
-        ACTION.doMultipleDeviceActionAndWait(new DeviceActionBack())  // disappear pic bar
+        action.doMultipleDeviceActionAndWait(new DeviceActionBack())  // disappear pic bar
                 .doMultipleDeviceActionAndWait(new DeviceActionBack())  // exit pic browser
                 .doMultipleDeviceActionAndWait(new DeviceActionEnter());  // request focus
         TaskFileManager.showMenuAndClickRemoveBtn();
@@ -244,7 +238,7 @@ public final class TestFileManager {
 
         // verification 2
         message = "Verify remove a file.";
-        ACTION.doClickActionAndWait(yesBtn);
+        action.doClickActionAndWait(yesBtn);
         UiObject2 fileRemoved = mDevice.findObject(By.text(fileName));
         Assert.assertNull(message, fileRemoved);
     }

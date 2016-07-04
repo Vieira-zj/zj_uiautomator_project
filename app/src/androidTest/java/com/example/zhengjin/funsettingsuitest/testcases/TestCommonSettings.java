@@ -42,7 +42,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SET
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestCommonSettings {
 
-    private static UiActionsManager ACTION = UiActionsManager.getInstance();
+    private static UiActionsManager action = UiActionsManager.getInstance();
     private UiDevice mDevice;
 
     @Before
@@ -53,7 +53,7 @@ public final class TestCommonSettings {
         TaskLauncher.backToLauncher(mDevice);
         TaskLauncher.clickOnQuickAccessButtonFromTopBar(
                 mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), SETTINGS_PKG);
-        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+        action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     @After
@@ -63,7 +63,7 @@ public final class TestCommonSettings {
         ShellUtils.systemWait(SHORT_WAIT);
 
         int repeatTimes = 2;
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
+        action.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     @Test
@@ -75,8 +75,7 @@ public final class TestCommonSettings {
         Assert.assertNotNull(settingsTitle);
 
         String message = "Verify the title name of common settings page.";
-        final String expectedResult = "通用设置";
-        Assert.assertEquals(message, expectedResult, settingsTitle.getText());
+        Assert.assertEquals(message, "通用设置", settingsTitle.getText());
     }
 
     @Test
@@ -90,16 +89,12 @@ public final class TestCommonSettings {
         Assert.assertNotNull(message, deviceNameContainer);
         Assert.assertTrue(deviceNameContainer.isFocused());
 
-        final String expectedDeviceNameKeyText = "设备名称";
         message = "Verify the device name key text.";
-        UiObject2 deviceNameKey =
-                deviceNameContainer.findObject(By.text(expectedDeviceNameKeyText));
+        UiObject2 deviceNameKey = deviceNameContainer.findObject(By.text("设备名称"));
         Assert.assertNotNull(message, deviceNameKey);
 
-        final String expectedDeviceNameValueText = "风行电视";
         message = "Verify the device name value text.";
-        UiObject2 deviceNameValue =
-                deviceNameContainer.findObject(By.text(expectedDeviceNameValueText));
+        UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text("风行电视"));
         Assert.assertNotNull(message, deviceNameValue);
     }
 
@@ -107,7 +102,7 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test13SettingsSubDeviceNames() {
 
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
+        action.doDeviceActionAndWait(new DeviceActionEnter());
         mDevice.wait(Until.findObject(TaskSettings.getDialogDeviceNameListSelector()), WAIT);
 
         String message = "Verify the item %s in device name menu.";
@@ -122,12 +117,12 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test14SelectDeviceName() {
 
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
+        action.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
         // select a sub device name and back
-        final String subDeviceName = "书房的电视";
+        String subDeviceName = "书房的电视";
         UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
         TestHelper.waitForUiObjectClickable(deviceName);
-        ACTION.doClickActionAndWait(deviceName);
+        action.doClickActionAndWait(deviceName);
 
         String message = "Verify select a pre-defined device name.";
         UiObject2 deviceNameContainer =
@@ -157,7 +152,7 @@ public final class TestCommonSettings {
         for (String value : subSleepValues) {
             UiObject2 subSleepText = mDevice.findObject(By.text(value));
             Assert.assertNotNull(String.format(message, value), subSleepText);
-            ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
     }
 
@@ -212,9 +207,9 @@ public final class TestCommonSettings {
         String province = "江西";
         String city = "九江";
         TaskSettings.selectSpecifiedLocationProvince(mDevice, province, false);
-        ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+        action.doDeviceActionAndWait(new DeviceActionMoveRight());
         TaskSettings.selectSpecifiedLocationCity(mDevice, city, false);
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         String message = "Verify the selected location item value text on Common Settings.";
         String expectedItemValueText = String.format("%s %s", province, city);
@@ -281,7 +276,7 @@ public final class TestCommonSettings {
         Assert.assertNotNull(message, cancelBtn);
 
         message = "Verify back to common settings page after click the cancel button";
-        ACTION.doClickActionAndWait(cancelBtn);
+        action.doClickActionAndWait(cancelBtn);
         UiObject2 recoverItem = mDevice.findObject(By.text(recoverText));
         Assert.assertNotNull(message, recoverItem);
     }

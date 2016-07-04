@@ -3,6 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testutils;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
@@ -14,6 +15,7 @@ import java.io.File;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CAPTURES_PATH;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -22,6 +24,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
  */
 public final class TestHelper {
 
+    @Deprecated
     public static boolean waitForAppOpenedV1(
             UiDevice device, String pkgName, long timeOut, long interval) {
 
@@ -36,6 +39,7 @@ public final class TestHelper {
         return flag_app_opened;
     }
 
+    @Deprecated
     public static boolean waitForAppOpenedV1(UiDevice device, String pkgName, long timeOut) {
         final long interval = SHORT_WAIT;
         return waitForAppOpenedV1(device, pkgName, timeOut, interval);
@@ -50,9 +54,10 @@ public final class TestHelper {
     public static boolean waitForAppOpened(UiDevice device, String pkgName) {
 
         device.waitForIdle();
-        return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), LONG_WAIT);
+        return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), TIME_OUT);
     }
 
+    @Deprecated
     public static boolean waitForUiObjectEnabledV1(UiObject2 uiObj, long timeOut, long interval) {
 
         boolean flag_UiObj_enabled = false;
@@ -66,6 +71,7 @@ public final class TestHelper {
         return flag_UiObj_enabled;
     }
 
+    @Deprecated
     public static boolean waitForUiObjectEnabledV1(UiObject2 uiObj, long timeOut) {
         final long interval = SHORT_WAIT;
         return waitForUiObjectEnabledV1(uiObj, timeOut, interval);
@@ -78,11 +84,16 @@ public final class TestHelper {
     }
 
     public static boolean waitForUiObjectEnabled(UiObject2 uiObj) {
-        return uiObj.wait(Until.enabled(true), LONG_WAIT);
+        return uiObj.wait(Until.enabled(true), TIME_OUT);
     }
 
     public static boolean waitForUiObjectClickable(UiObject2 uiObj) {
-        return uiObj.wait(Until.clickable(true), LONG_WAIT);
+        return uiObj.wait(Until.clickable(true), TIME_OUT);
+    }
+
+    public static UiObject2 waitForUiObjectVisible(UiDevice device, BySelector selector) {
+        device.waitForIdle();
+        return device.wait(Until.findObject(selector),TIME_OUT);
     }
 
     public static void doScreenCapture(UiDevice device) {
@@ -90,7 +101,10 @@ public final class TestHelper {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File testDirPath = new File(CAPTURES_PATH);
             if (!testDirPath.exists()) {
-                testDirPath.mkdirs();
+                 if (!testDirPath.mkdirs()) {
+                     Assert.assertTrue(String.format(
+                             "Error, make directory(%s) for captures failed.", CAPTURES_PATH), false);
+                 }
             }
         } else {
             Assert.assertTrue("Error, the sdcard is NOT mount.", false);

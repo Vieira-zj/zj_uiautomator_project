@@ -26,7 +26,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 /**
  * Created by zhengjin on 2016/6/14.
  *
- * Include the tasks for file manager apk.
+ * Include the UI selectors and tasks for file manager apk.
  */
 public final class TaskFileManager {
 

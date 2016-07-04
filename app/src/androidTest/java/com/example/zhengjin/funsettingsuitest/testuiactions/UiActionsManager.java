@@ -16,7 +16,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
 public final class UiActionsManager {
 
     private static UiActionsManager instance = null;
-    private static UiDevice mDevice = null;
+    private static UiDevice device = null;
 
     private UiActionsManager() {}
 
@@ -25,8 +25,8 @@ public final class UiActionsManager {
         if (instance == null) {
             instance = new UiActionsManager();
         }
-        if (mDevice == null) {
-            mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        if (device == null) {
+            device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         }
 
         return instance;
@@ -34,7 +34,7 @@ public final class UiActionsManager {
 
     public boolean doDeviceActionAndWait(DeviceAction action, long wait) {
 
-        boolean ret = action.doDeviceAction(mDevice);
+        boolean ret = action.doDeviceAction(device);
         ShellUtils.systemWait(wait);
         return ret;
     }
@@ -47,7 +47,7 @@ public final class UiActionsManager {
     public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
 
         for (int i = 0; i < repeatTimes; ++i) {
-            action.doDeviceAction(mDevice);
+            action.doDeviceAction(device);
             ShellUtils.systemWait(wait);
         }
     }
@@ -58,7 +58,7 @@ public final class UiActionsManager {
 
     public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action, long wait) {
 
-        action.doDeviceAction(mDevice);
+        action.doDeviceAction(device);
         ShellUtils.systemWait(wait);
         return this;
     }

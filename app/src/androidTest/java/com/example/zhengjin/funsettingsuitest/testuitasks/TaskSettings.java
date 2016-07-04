@@ -17,7 +17,7 @@ import junit.framework.Assert;
 /**
  * Created by zhengjin on 2016/6/6.
  *
- * Include the tasks for settings apk.
+ * Include the UI selectors and tasks for settings apk.
  */
 public final class TaskSettings {
 
