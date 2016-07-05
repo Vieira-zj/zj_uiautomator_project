@@ -21,22 +21,6 @@ public final class ShellUtils {
 
     private final static String TAG = ShellUtils.class.getSimpleName();
 
-    private static String getShellCommandOutput(Process process) throws IOException {
-
-        InputStream inputstream = process.getInputStream();
-        InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
-        BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
-
-        String line = "";
-        StringBuilder sb = new StringBuilder(line);
-        while ((line = bufferedreader.readLine()) != null) {
-            sb.append(line);
-            sb.append("\n");
-        }
-
-        return sb.toString();  // not return null
-    }
-
     public static boolean execShellCommand(String cmd) {
 
         Runtime runtime = Runtime.getRuntime();
@@ -96,6 +80,40 @@ public final class ShellUtils {
         return output;
     }
 
+    private static String getShellCommandOutput(Process process) throws IOException {
+
+        InputStream inputstream = null;
+        InputStreamReader inputstreamreader = null;
+        BufferedReader bufferedreader = null;
+        StringBuilder sb = new StringBuilder("");
+
+        try {
+            inputstream = process.getInputStream();
+            inputstreamreader = new InputStreamReader(inputstream);
+            bufferedreader = new BufferedReader(inputstreamreader);
+
+            String line;
+            while ((line = bufferedreader.readLine()) != null) {
+                sb.append(line);
+                sb.append("\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedreader != null) {
+                bufferedreader.close();
+            }
+            if (inputstreamreader != null) {
+                inputstreamreader.close();
+            }
+            if (inputstream != null) {
+                inputstream.close();
+            }
+        }
+
+        return sb.toString();  // not return null
+    }
+
     @Deprecated
     public static void execShellRootCommand(String cmd) {
 
@@ -133,7 +151,7 @@ public final class ShellUtils {
     public static String getCurrentTime() {
 
         SimpleDateFormat formatter =
-                new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss", Locale.getDefault());
+                new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         return formatter.format(curDate);
     }

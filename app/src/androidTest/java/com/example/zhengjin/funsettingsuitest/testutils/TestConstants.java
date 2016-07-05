@@ -1,5 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
+import android.os.Environment;
+
 /**
  * Created by zhengjin on 2016/6/2.
  *
@@ -15,7 +17,15 @@ public final class TestConstants {
     public final static String FILE_MANAGER_PKG = "tv.fun.filemanager";
     public final static String SETTINGS_PKG = "tv.fun.settings";
 
-    public final static String TEST_ROOT_PATH = "/sdcard/testlogs/";
+    public final static String SDCARD_PATH = Environment.getExternalStorageDirectory().getPath();
+    public final static String TEST_ROOT_PATH = String.format("%s/testlogs/", SDCARD_PATH);
     public final static String CAPTURES_PATH = TEST_ROOT_PATH + "uiautomator_captures";
+
+    // cards text on launcher home left area
+    public final static String FILM_CARD_TEXT = "电影";
+    public final static String TV_SERIAL_CARD_TEXT = "电视剧";
+    public final static String CHILDREN_CARD_TEXT = "少儿";
+    public final static String VARIETY_CARD_TEXT = "综艺";
+
 
 }

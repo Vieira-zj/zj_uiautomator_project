@@ -11,6 +11,7 @@ import android.support.test.uiautomator.Until;
 import junit.framework.Assert;
 
 import java.io.File;
+import java.util.List;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CAPTURES_PATH;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
@@ -92,13 +93,39 @@ public final class TestHelper {
     }
 
     public static boolean waitForUiObjectVisible(UiDevice device, BySelector selector) {
+
         device.waitForIdle();
         return device.wait(Until.hasObject(selector),TIME_OUT);
     }
 
     public static UiObject2 waitForUiObjectVisibleAndReturn(UiDevice device, BySelector selector) {
+
         device.waitForIdle();
         return device.wait(Until.findObject(selector),TIME_OUT);
+    }
+
+    public static List<UiObject2> waitForMultipleUiObjectsVisibleAndReturn(
+            UiDevice device, BySelector selector) {
+
+        device.waitForIdle();
+        return device.wait(Until.findObjects(selector),TIME_OUT);
+    }
+
+    public static void verifyEachTextViewHasTextInUiContainer(UiObject2 container) {
+
+        List<UiObject2> listObj = container.findObjects(By.clazz("android.widget.TextView"));
+        for (UiObject2 uiObj : listObj) {
+            Assert.assertFalse("Verify the text in text view is not empty.",
+                    "".equals(uiObj.getText()));
+        }
+    }
+
+    public static void verifyEachTextViewHasTextInUiCollection(List<UiObject2> list) {
+
+        for (UiObject2 uiObj : list) {
+            Assert.assertFalse("Verify the text in text view is not empty.",
+                    "".equals(uiObj.getText()));
+        }
     }
 
     public static void doScreenCapture(UiDevice device) {
