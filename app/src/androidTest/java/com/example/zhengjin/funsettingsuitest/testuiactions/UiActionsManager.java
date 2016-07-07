@@ -44,6 +44,24 @@ public final class UiActionsManager {
         return doDeviceActionAndWait(action, SHORT_WAIT);
     }
 
+    public boolean doDeviceActionAndWaitForIdle(DeviceAction action, long wait) {
+
+        boolean ret = action.doDeviceAction(device);
+
+        if (wait > 0) {
+            device.waitForIdle(wait);
+        } else {
+            device.waitForIdle();
+        }
+        return ret;
+    }
+
+    public boolean doDeviceActionAndWaitForIdle(DeviceAction action) {
+
+        long defaultWait = 0;
+        return doDeviceActionAndWaitForIdle(action, defaultWait);
+    }
+
     public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
 
         for (int i = 0; i < repeatTimes; ++i) {

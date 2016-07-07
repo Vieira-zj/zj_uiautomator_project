@@ -32,15 +32,15 @@ public final class TaskHomeVideoTab {
         return By.res("com.bestv.ott:id/special_listview");
     }
 
-    public static BySelector getAllTabTextOfVideoRecommendPageSelector() {
+    public static BySelector getAllTabTextOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/tab_title");
     }
 
-    public static BySelector getAllCardsMainTitleOfVideoRecommendPageSelector() {
+    public static BySelector getAllCardsMainTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
-    public static BySelector getAllCardsSubTitleOfVideoRecommendPageSelector() {
+    public static BySelector getAllCardsSubTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/subtitle");
     }
 

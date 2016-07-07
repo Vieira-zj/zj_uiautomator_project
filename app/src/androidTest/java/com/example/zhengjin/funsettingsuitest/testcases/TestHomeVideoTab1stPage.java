@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ import java.util.List;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CHILDREN_CARD_TEXT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILM_CARD_TEXT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FOLLOWING_TV_SERIAL_TEXT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.NEWLY_ADD_IN_7_DAYS_TEXT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TV_SERIAL_CARD_TEXT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VARIETY_CARD_TEXT;
 
@@ -38,7 +41,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VAR
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestHomeVideoTabPart1 {
+public final class TestHomeVideoTab1stPage {
 
     private static UiActionsManager action;
     private UiDevice mDevice;
@@ -69,11 +72,11 @@ public final class TestHomeVideoTabPart1 {
         UiObject2 filmCard =
                 TaskHomeVideoTab.findSpecifiedCardFromLeftAreaByText(mDevice, FILM_CARD_TEXT);
         action.doClickActionAndWait(filmCard);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        action.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
         List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoRecommendPageSelector());
+                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card title
@@ -89,21 +92,21 @@ public final class TestHomeVideoTabPart1 {
         UiObject2 tvSerialCard =
                 TaskHomeVideoTab.findSpecifiedCardFromLeftAreaByText(mDevice, TV_SERIAL_CARD_TEXT);
         action.doClickActionAndWait(tvSerialCard);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        action.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
         List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoRecommendPageSelector());
+                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card main title
         List<UiObject2> listMainTitles = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, TaskHomeVideoTab.getAllCardsMainTitleOfVideoRecommendPageSelector());
+                mDevice, TaskHomeVideoTab.getAllCardsMainTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listMainTitles);
 
         // verify card sub title
         List<UiObject2> listSubTitles = mDevice.findObjects(
-                TaskHomeVideoTab.getAllCardsSubTitleOfVideoRecommendPageSelector());
+                TaskHomeVideoTab.getAllCardsSubTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listSubTitles);
     }
 
@@ -114,16 +117,16 @@ public final class TestHomeVideoTabPart1 {
         UiObject2 childrenCard =
                 TaskHomeVideoTab.findSpecifiedCardFromLeftAreaByText(mDevice, CHILDREN_CARD_TEXT);
         action.doClickActionAndWait(childrenCard);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        action.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
         List<UiObject2> tabTextList = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoRecommendPageSelector());
+                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(tabTextList);
 
-        // verify card title
+        // verify card main title
         List<UiObject2> cardTitleList = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, TaskHomeVideoTab.getAllCardsMainTitleOfVideoRecommendPageSelector());
+                mDevice, TaskHomeVideoTab.getAllCardsMainTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(cardTitleList);
     }
 
@@ -134,11 +137,11 @@ public final class TestHomeVideoTabPart1 {
         UiObject2 varietyCard =
                 TaskHomeVideoTab.findSpecifiedCardFromLeftAreaByText(mDevice, VARIETY_CARD_TEXT);
         action.doClickActionAndWait(varietyCard);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        action.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
         List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoRecommendPageSelector());
+                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card title
@@ -149,11 +152,12 @@ public final class TestHomeVideoTabPart1 {
 
     @Test
     @Category({CategoryHomeVideoTabTests.class, Category24x7LauncherTests.class})
-    public void test21OpenLatestTvSerialOfRightArea() {
+    public void test21OpenFollowingLatestTvSerialOfRightArea() {
 
-        UiObject2 card = TaskHomeVideoTab.findSpecifiedCardFromRightAreaByText(mDevice, "跟播");
+        UiObject2 card = TaskHomeVideoTab.findSpecifiedCardFromRightAreaByText(
+                mDevice, FOLLOWING_TV_SERIAL_TEXT);
         action.doClickActionAndWait(card);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        action.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify title
         UiObject2 title = TestHelper.waitForUiObjectVisibleAndReturn(
@@ -167,11 +171,31 @@ public final class TestHomeVideoTabPart1 {
         TestHelper.verifyEachTextViewHasTextInUiContainer(relatedVideoList);
     }
 
-    @Test
+    @Ignore
     @Category({CategoryHomeVideoTabTests.class, Category24x7LauncherTests.class})
     public void test22OpenDailyNewsOfRightArea() {
-        // TODO: 2016/7/5     
+        // it's a dynamic(not idle) page, and UI elements cannot be dumped by uiautomator
     }
-    
+
+    @Test
+    @Category({CategoryHomeVideoTabTests.class, Category24x7LauncherTests.class})
+    public void test23OpenNewlyUpdatesIn7DaysOfRightArea() {
+
+        UiObject2 card = TaskHomeVideoTab.findSpecifiedCardFromRightAreaByText(
+                mDevice, NEWLY_ADD_IN_7_DAYS_TEXT);
+        action.doClickActionAndWait(card);
+        action.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
+
+        // verify tab text
+        List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
+                mDevice, TaskHomeVideoTab.getAllTabTextOfVideoSubPageSelector());
+        TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
+
+        // verify card main title
+        List<UiObject2> listCardTitle = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
+                mDevice, TaskHomeVideoTab.getAllCardsMainTitleOfVideoSubPageSelector());
+        TestHelper.verifyEachTextViewHasTextInUiCollection(listCardTitle);
+    }
+
 
 }
