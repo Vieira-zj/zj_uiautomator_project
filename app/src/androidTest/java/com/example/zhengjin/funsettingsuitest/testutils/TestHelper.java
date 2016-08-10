@@ -128,7 +128,7 @@ public final class TestHelper {
         }
     }
 
-    public static void doScreenCapture(UiDevice device) {
+    public static void takeScreenCapture(UiDevice device) {
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File testDirPath = new File(CAPTURES_PATH);

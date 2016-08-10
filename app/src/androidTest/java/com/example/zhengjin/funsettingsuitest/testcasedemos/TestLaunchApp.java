@@ -69,7 +69,7 @@ public final class TestLaunchApp {
     public void test2DoScreenCaptures() {
 
         TaskLauncher.backToLauncher(mDevice);
-        TestHelper.doScreenCapture(mDevice);
+        TestHelper.takeScreenCapture(mDevice);
     }
 
 }

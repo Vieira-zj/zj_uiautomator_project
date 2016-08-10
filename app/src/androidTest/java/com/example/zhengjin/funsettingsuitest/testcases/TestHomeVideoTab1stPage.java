@@ -62,7 +62,7 @@ public final class TestHomeVideoTab1stPage {
 
     @After
     public void clearUp() {
-        TestHelper.doScreenCapture(mDevice);
+        TestHelper.takeScreenCapture(mDevice);
     }
 
     @Test
