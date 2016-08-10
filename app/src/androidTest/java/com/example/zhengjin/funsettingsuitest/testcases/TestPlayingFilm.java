@@ -37,7 +37,7 @@ import java.util.Random;
  * all methods are self-contained private.
  */
 @RunWith(AndroidJUnit4.class)
-public class TestPlayingFilm {
+public final class TestPlayingFilm {
 
     private static final String TAG = TestPlayingFilm.class.getSimpleName();
     private static final String CAPTURES_PATH = "/data/local/tmp/captures";
