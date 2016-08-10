@@ -59,17 +59,22 @@ public final class TestLaunchApp {
     @Test
     @Category(CategoryDemoTests.class)
     public void test1OpenAllFilesCard() {
-
         TaskFileManager.openSdcardLocalFilesCard(mDevice);
         UiObject2 allFilesTitle = mDevice.findObject(By.text("全部文件"));
         Assert.assertNotNull(allFilesTitle);
     }
 
     @Test
-    public void test2DoScreenCaptures() {
-
+    @Category(CategoryDemoTests.class)
+    public void test2TakeScreenCaptures() {
         TaskLauncher.backToLauncher(mDevice);
         TestHelper.takeScreenCapture(mDevice);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test3LongPressKey() {
+        // // TODO: 2016/8/10 long press action
     }
 
 }
