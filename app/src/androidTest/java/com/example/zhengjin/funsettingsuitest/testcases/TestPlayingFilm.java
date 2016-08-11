@@ -2,6 +2,8 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 
 /**
  * Created by zhengjin on 2016/8/10.
+ *
+ * Include 24 x 7 test cases for playing video film.
  */
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
@@ -61,11 +63,30 @@ public final class TestPlayingFilm {
 
     @Test
     @Category(Category24x7LauncherTests.class)
-    public void testPlayFilm() {
+    public void testOpenAndExitFilmPlayer() {
+        this.verifyOnLauncherHome(mDevice);
+
         UiObject2 tabText = this.getTabFromLauncherHomeByText(mDevice, "电影");
         this.openTabFromLauncherHomeByText(mDevice, tabText);
 
-        String filmTitle = this.randomSelectFilmAndOpenDetails(mDevice);
+        int randomInt = 30;
+        int playVideoTime = 5 * 60;  // play 5 minutes
+        this.randomSelectFilmAndOpenDetails(mDevice, randomInt);
+        this.verifyOpenVideoPlayer(mDevice);
+        this.systemWait(playVideoTime);
+        this.verifyVideoPlayerOnTop(mDevice);
+    }
+
+    @Test
+    @Category(Category24x7LauncherTests.class)
+    public void testPlayFilm() {
+        this.verifyOnLauncherHome(mDevice);
+
+        UiObject2 tabText = this.getTabFromLauncherHomeByText(mDevice, "电影");
+        this.openTabFromLauncherHomeByText(mDevice, tabText);
+
+        int randomInt = 15;
+        String filmTitle = this.randomSelectFilmAndOpenDetails(mDevice, randomInt);
         this.verifyOpenVideoPlayer(mDevice);
         this.verifyPauseVideoPlayer(mDevice, filmTitle);
 
@@ -103,7 +124,7 @@ public final class TestPlayingFilm {
         systemWait(LONG_WAIT);
     }
 
-    private String randomSelectFilmAndOpenDetails(UiDevice device) {
+    private String randomSelectFilmAndOpenDetails(UiDevice device, int randomInt) {
         device.pressDPadLeft();
         device.waitForIdle();
         systemWait(LONG_WAIT);
@@ -111,7 +132,8 @@ public final class TestPlayingFilm {
         device.pressDPadDown();
         systemWait(WAIT);
 
-        int moveTimes = new Random().nextInt(15);
+        int moveTimes = new Random().nextInt(randomInt);
+        Log.d(TAG, String.format("Select film at position: %d", moveTimes));
         for (int j = 0; j <= moveTimes; j++) {
             device.pressDPadRight();
             systemWait(SHORT_WAIT);
@@ -128,14 +150,27 @@ public final class TestPlayingFilm {
         return filmTitle;
     }
 
+    private void verifyOnLauncherHome(UiDevice device) {
+        boolean ret = device.wait(Until.hasObject(By.pkg("com.bestv.ott").depth(0)), WAIT);
+        Assert.assertTrue("Verify back to launcher home.", ret);
+    }
+
     private void verifyOpenVideoPlayer(UiDevice device) {
+        // open player and wait
         int waitPlayerOnTop = 15;
         device.pressEnter();
-        systemWait(waitPlayerOnTop);
+        this.systemWait(waitPlayerOnTop);
 
         boolean ret = device.wait(Until.hasObject(By.clazz(
                 "com.funshion.player.play.funshionplayer.VideoViewPlayer")), waitPlayerOnTop);
         assertAndCaptureForFailed(ret, "Verify player is open and on the top.");
+    }
+
+    private void verifyVideoPlayerOnTop(UiDevice device) {
+        UiObject2 player = device.findObject(By.clazz(
+                "com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+        boolean ret = (player != null) && player.isEnabled();
+        assertAndCaptureForFailed(ret, "Verify player is playing and on the top.");
     }
 
     private void verifyPauseVideoPlayer(UiDevice device, String filmTitle) {
@@ -198,9 +233,6 @@ public final class TestPlayingFilm {
         device.pressHome();
         device.waitForIdle();
         systemWait(WAIT);
-
-        boolean ret = device.wait(Until.hasObject(By.pkg("com.bestv.ott").depth(0)), WAIT);
-        Assert.assertTrue("Verify back to launcher home.", ret);
     }
 
     private void resetFilmProcess(UiDevice device) {
@@ -222,8 +254,8 @@ public final class TestPlayingFilm {
         Assert.assertTrue(message, ret);
     }
 
-    private int formatFilmPlayTime(String paramString) {
-        String[] items = paramString.split(":");
+    private int formatFilmPlayTime(String playTime) {
+        String[] items = playTime.split(":");
 
         if (items.length == 2) {
             return 60 * convertPlayTimeToInt(items[0]) +
@@ -237,18 +269,18 @@ public final class TestPlayingFilm {
         return 0;
     }
 
-    private int convertPlayTimeToInt(String paramString) {
-        if ("00".equals(paramString)) {
+    private int convertPlayTimeToInt(String playTime) {
+        if ("00".equals(playTime)) {
             return 0;
         }
-        if (paramString.startsWith("0")) {
-            return Integer.parseInt(paramString.substring(1));
+        if (playTime.startsWith("0")) {
+            return Integer.parseInt(playTime.substring(1));
         }
-        return Integer.parseInt(paramString);
+        return Integer.parseInt(playTime);
     }
 
-    private void systemWait(int paramInt) {
-        SystemClock.sleep(paramInt * 1000);
+    private void systemWait(int seconds) {
+        SystemClock.sleep(seconds * 1000);
     }
 
     private void takeScreenCapture() {
