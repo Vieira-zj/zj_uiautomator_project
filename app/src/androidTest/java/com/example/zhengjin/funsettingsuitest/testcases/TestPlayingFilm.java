@@ -72,9 +72,14 @@ public final class TestPlayingFilm {
         int randomInt = 30;
         int playVideoTime = 5 * 60;  // play 5 minutes
         this.randomSelectFilmAndOpenDetails(mDevice, randomInt);
+
         this.verifyOpenVideoPlayer(mDevice);
         this.systemWait(playVideoTime);
         this.verifyVideoPlayerOnTop(mDevice);
+
+        int resetTimes = 45;
+        this.resetFilmProcess(mDevice, resetTimes);
+        this.verifyPlayerProcessReset(mDevice);
     }
 
     @Test
@@ -96,7 +101,11 @@ public final class TestPlayingFilm {
             this.verifyFilmPlaying(mDevice, playTime);
         }
 
-        this.resetFilmProcess(mDevice);
+        // play film and reset process
+        int resetTimes = 45;
+        mDevice.pressEnter();
+        this.systemWait(SHORT_WAIT);
+        this.resetFilmProcess(mDevice, resetTimes);
         this.verifyPlayerProcessReset(mDevice);
     }
 
@@ -147,6 +156,7 @@ public final class TestPlayingFilm {
         boolean ret = ((filmTitle != null) && (!"".equals(filmTitle)));
         assertAndCaptureForFailed(ret, "Verify film title of details page.");
 
+        Log.d(TAG, String.format("Film title: %s", filmTitle));
         return filmTitle;
     }
 
@@ -224,9 +234,9 @@ public final class TestPlayingFilm {
         Log.d(TAG, String.format("The player process is reset to %s", curTime));
 
         int timeAfterReset = 30;
-        int playTime = this.formatFilmPlayTime(curTime);
+        int curPlayTime = this.formatFilmPlayTime(curTime);
         this.assertAndCaptureForFailed(
-                (playTime <= timeAfterReset), "Verify player process is reset.");
+                (curPlayTime <= timeAfterReset), "Verify player process is reset.");
     }
 
     private void backToLauncherHome(UiDevice device) {
@@ -235,13 +245,8 @@ public final class TestPlayingFilm {
         systemWait(WAIT);
     }
 
-    private void resetFilmProcess(UiDevice device) {
-        // play film
-        device.pressEnter();
-        this.systemWait(SHORT_WAIT);
-
-        int moveTimes = 60;
-        for (int i = 0; i <= moveTimes; i++) {
+    private void resetFilmProcess(UiDevice device, int resetTimes) {
+        for (int i = 0; i <= resetTimes; i++) {
             device.pressDPadLeft();
             SystemClock.sleep(500);
         }
