@@ -11,15 +11,18 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.UiWatcher;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -53,12 +56,19 @@ public final class TestPlayingFilm {
     @Before
     public void setUp() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mDevice.registerWatcher("BufferRefreshFailedWatcher", new BufferRefreshFailedWatcher());
         backToLauncherHome(mDevice);
     }
 
     @After
     public void clearUp() {
         backToLauncherHome(mDevice);
+    }
+
+    @Ignore
+    public void testDemo() {
+        // demo
+//        this.takeScreenCapture();
     }
 
     @Test
@@ -70,9 +80,9 @@ public final class TestPlayingFilm {
         this.openTabFromLauncherHomeByText(mDevice, tabText);
 
         int randomInt = 30;
-        int playVideoTime = 5 * 60;  // play 5 minutes
         this.randomSelectFilmAndOpenDetails(mDevice, randomInt);
 
+        int playVideoTime = 60;  // play 5 minutes
         this.verifyOpenVideoPlayer(mDevice);
         this.systemWait(playVideoTime);
         this.verifyVideoPlayerOnTop(mDevice);
@@ -134,6 +144,7 @@ public final class TestPlayingFilm {
     }
 
     private String randomSelectFilmAndOpenDetails(UiDevice device, int randomInt) {
+        // random select film
         device.pressDPadLeft();
         device.waitForIdle();
         systemWait(LONG_WAIT);
@@ -148,16 +159,20 @@ public final class TestPlayingFilm {
             systemWait(SHORT_WAIT);
         }
 
+        // open film details
         device.pressEnter();
         device.waitForIdle();
         systemWait(LONG_WAIT);
 
-        String filmTitle = device.findObject(By.res("com.bestv.ott:id/detail_title")).getText();
-        boolean ret = ((filmTitle != null) && (!"".equals(filmTitle)));
+        UiObject2 filmTitle = device.findObject(By.res("com.bestv.ott:id/detail_title"));
+        assertAndCaptureForFailed((filmTitle != null), "Verify film title of details page.");
+
+        String filmTitleText = filmTitle.getText();
+        boolean ret = ((filmTitleText != null) && (!"".equals(filmTitleText)));
         assertAndCaptureForFailed(ret, "Verify film title of details page.");
 
         Log.d(TAG, String.format("Film title: %s", filmTitle));
-        return filmTitle;
+        return filmTitleText;
     }
 
     private void verifyOnLauncherHome(UiDevice device) {
@@ -183,14 +198,17 @@ public final class TestPlayingFilm {
         assertAndCaptureForFailed(ret, "Verify player is playing and on the top.");
     }
 
-    private void verifyPauseVideoPlayer(UiDevice device, String filmTitle) {
+    private void verifyPauseVideoPlayer(UiDevice device, String filmTitleText) {
         // pause player
         device.pressEnter();
         systemWait(SHORT_WAIT);
 
-        String title = device.findObject(By.res("com.bestv.ott:id/video_player_title")).getText();
-        Log.d(TAG, String.format("Play film: %s", title));
-        boolean ret = (title.trim().equals(filmTitle.trim()));
+        UiObject2 title = device.findObject(By.res("com.bestv.ott:id/video_player_title"));
+        assertAndCaptureForFailed((title != null), "Verify film title when pause player.");
+
+        String titleText = title.getText();
+        Log.d(TAG, String.format("Play film: %s", titleText));
+        boolean ret = (titleText.trim().equals(filmTitleText.trim()));
         assertAndCaptureForFailed(ret, "Verify film title when pause player.");
 
         UiObject2 pauseBtn = device.findObject(
@@ -206,9 +224,10 @@ public final class TestPlayingFilm {
     }
 
     private void verifyFilmPlaying(UiDevice device, int playTime) {
-        String curTime = device.findObject(By.res("com.bestv.ott:id/time_current")).getText();
-        Log.d(TAG, String.format("Current play time: %s", curTime));
-        int startTime = formatFilmPlayTime(curTime);
+        UiObject2 curTime = device.findObject(By.res("com.bestv.ott:id/time_current"));
+        assertAndCaptureForFailed((curTime != null), "Verify film current play time.");
+        Log.d(TAG, String.format("Current play time: %s", curTime.getText()));
+        int startTime = formatFilmPlayTime(curTime.getText());
 
         // play film
         device.pressEnter();
@@ -217,8 +236,9 @@ public final class TestPlayingFilm {
         // pause player
         device.pressEnter();
         systemWait(SHORT_WAIT);
-        curTime = device.findObject(By.res("com.bestv.ott:id/time_current")).getText();
-        int endTime = formatFilmPlayTime(curTime);
+        curTime = device.findObject(By.res("com.bestv.ott:id/time_current"));
+        assertAndCaptureForFailed((curTime != null), "Verify film current play time.");
+        int endTime = formatFilmPlayTime(curTime.getText());
 
         int buffer = 5;
         boolean ret = ((endTime - startTime) >= (playTime - buffer));
@@ -230,11 +250,12 @@ public final class TestPlayingFilm {
         device.pressEnter();
         systemWait(SHORT_WAIT);
 
-        String curTime = device.findObject(By.res("com.bestv.ott:id/time_current")).getText();
-        Log.d(TAG, String.format("The player process is reset to %s", curTime));
+        UiObject2 curTime = device.findObject(By.res("com.bestv.ott:id/time_current"));
+        assertAndCaptureForFailed((curTime != null), "Verify film current play time.");
+        Log.d(TAG, String.format("The player process is reset to %s", curTime.getText()));
 
         int timeAfterReset = 30;
-        int curPlayTime = this.formatFilmPlayTime(curTime);
+        int curPlayTime = this.formatFilmPlayTime(curTime.getText());
         this.assertAndCaptureForFailed(
                 (curPlayTime <= timeAfterReset), "Verify player process is reset.");
     }
@@ -308,4 +329,22 @@ public final class TestPlayingFilm {
         return simpleDateFormat.format(new Date(System.currentTimeMillis()));
     }
 
+    private class BufferRefreshFailedWatcher implements UiWatcher {
+
+        @Override
+        public boolean checkForCondition() {
+            Log.d(TAG, "Invoke BufferRefreshFailedWatcher.checkForCondition().");
+
+            mDevice.wait(Until.hasObject(By.textContains("缓冲失败")), TestConstants.WAIT);
+            UiObject2 errorText = mDevice.findObject(By.textContains("缓冲失败"));
+            if (errorText != null) {
+                Log.d(TAG, "Found error(Buffer Refresh Failed), force exit testing process.");
+                int existCode = 0;
+                System.exit(existCode);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
