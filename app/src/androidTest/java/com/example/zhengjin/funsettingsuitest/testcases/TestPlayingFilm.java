@@ -338,6 +338,7 @@ public final class TestPlayingFilm {
             mDevice.wait(Until.hasObject(By.textContains("缓冲失败")), TestConstants.WAIT);
             UiObject2 errorText = mDevice.findObject(By.textContains("缓冲失败"));
             if (errorText != null) {
+                // if buffer refresh error, stop testing process
                 Log.d(TAG, "Found error(Buffer Refresh Failed), force exit testing process.");
                 int existCode = 0;
                 System.exit(existCode);
