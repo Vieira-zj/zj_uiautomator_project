@@ -16,7 +16,6 @@ import android.support.test.uiautomator.Until;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 
 import junit.framework.Assert;
 
@@ -67,8 +66,8 @@ public final class TestPlayingFilm {
 
     @Ignore
     public void testDemo() {
-        // demo
 //        this.takeScreenCapture();
+//        this.verifyVideoPlayerOnTop(mDevice);
     }
 
     @Test
@@ -311,8 +310,9 @@ public final class TestPlayingFilm {
 
     private void takeScreenCapture() {
         File localFile = new File("/data/local/tmp/captures");
-        if (!localFile.exists())
+        if (!localFile.exists()) {
             Assert.assertTrue(localFile.mkdirs());
+        }
 
         String path = String.format("%s/capture_%s.png", CAPTURES_PATH, this.getCurrentTime());
 
@@ -335,17 +335,16 @@ public final class TestPlayingFilm {
         public boolean checkForCondition() {
             Log.d(TAG, "Invoke BufferRefreshFailedWatcher.checkForCondition().");
 
-            mDevice.wait(Until.hasObject(By.textContains("缓冲失败")), TestConstants.WAIT);
             UiObject2 errorText = mDevice.findObject(By.textContains("缓冲失败"));
             if (errorText != null) {
-                // if buffer refresh error, stop testing process
+                // if buffer refresh error occur, stop testing process
                 Log.d(TAG, "Found error(Buffer Refresh Failed), force exit testing process.");
                 int existCode = 0;
                 System.exit(existCode);
                 return true;
-            } else {
-                return false;
             }
+
+            return false;
         }
     }
 }
