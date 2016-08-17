@@ -1,5 +1,7 @@
 package com.example.zhengjin.funsettingsuitest;
 
+import com.example.zhengjin.funsettingsuitest.Activity.ActivityMain;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,13 +12,13 @@ import org.junit.Test;
  */
 public final class MainActivityUnitTests {
 
-    MainActivity ma = null;
+    ActivityMain ma = null;
 
     @Before
     public void setUp() {
         System.out.println("In MainActivityUnitTest setup.");
 
-        ma = new MainActivity();
+        ma = new ActivityMain();
     }
 
     @After

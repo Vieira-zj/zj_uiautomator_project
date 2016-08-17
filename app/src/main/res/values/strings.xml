@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">FunSettingsUITest</string>
-    <string name="BtnOk">OK</string>
-    <string name="BtnBack">Back</string>
-    <string name="HelloWorld">Hello Message</string>
+    <string name="app_label">FunUITest</string>
+
+    <!-- main activity -->
+    <string name="demo_text">This a demo</string>
+    <string name="run_test_text">Run instrument ui test</string>
+    <string name="run_btn_text">Run</string>
+    <string name="btn_exit">Exit</string>
+
+    <!-- demo activity -->
+    <string name="title_activity_activity_demo">Demo Activity</string>
+    <string name="btn_ok">OK</string>
+    <string name="hello_world">Hello Message</string>
+    <string name="title_activity_activity_run_ui_test">ActivityRunUiTest</string>
 </resources>

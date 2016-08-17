@@ -8,7 +8,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.MainActivity;
+import com.example.zhengjin.funsettingsuitest.Activity.ActivityDemo;
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -33,17 +33,15 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 public final class TestMainActivity extends ActivityInstrumentationTestCase2 {
 
     private final static String TAG = TestMainActivity.class.getSimpleName();
-//    private UiDevice mDevice;
 
     public TestMainActivity() {
-        super(MainActivity.class);
+        super(ActivityDemo.class);
     }
 
     @Before
     public void setUp() {
 
         Log.d(TAG, String.format("***** Test %s start.", TAG));
-//        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         this.getActivity();  // launcher and open specified APP
         ShellUtils.systemWait(WAIT);
     }
@@ -51,7 +49,7 @@ public final class TestMainActivity extends ActivityInstrumentationTestCase2 {
     @After
     public void clearUp() {
 
-        ViewInteraction btnBack = Espresso.onView(ViewMatchers.withId(R.id.buttonBack));
+        ViewInteraction btnBack = Espresso.onView(ViewMatchers.withId(R.id.btnExit));
         btnBack.perform(ViewActions.click());
         ShellUtils.systemWait(SHORT_WAIT);
         Log.d(TAG, String.format("***** Test %s finished.", TAG));
