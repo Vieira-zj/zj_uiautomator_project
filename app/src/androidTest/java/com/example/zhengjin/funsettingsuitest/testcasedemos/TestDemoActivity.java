@@ -5,59 +5,44 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
+import android.support.test.rule.ActivityTestRule;
 
 import com.example.zhengjin.funsettingsuitest.Activity.ActivityDemo;
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-
 /**
  * Created by zhengjin on 2016/6/1.
  *
- * Include test cases for Main activity.
- * Use both tools Espresso and Uiautomator.
+ * Include UI test cases for demo activity by using Espresso.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestMainActivity extends ActivityInstrumentationTestCase2 {
+public final class TestDemoActivity {
 
-    private final static String TAG = TestMainActivity.class.getSimpleName();
+//    private final static String TAG = TestDemoActivity.class.getSimpleName();
 
-    public TestMainActivity() {
-        super(ActivityDemo.class);
-    }
+    @Rule
+    public ActivityTestRule mActivityRule = new ActivityTestRule(ActivityDemo.class);
 
     @Before
     public void setUp() {
-
-        Log.d(TAG, String.format("***** Test %s start.", TAG));
-        this.getActivity();  // launcher and open specified APP
-        ShellUtils.systemWait(WAIT);
     }
 
     @After
     public void clearUp() {
-
-        ViewInteraction btnBack = Espresso.onView(ViewMatchers.withId(R.id.btnExit));
-        btnBack.perform(ViewActions.click());
-        ShellUtils.systemWait(SHORT_WAIT);
-        Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test1MainActEditWithEmpty() {
+    public void test1ActDemoEditWithEmpty() {
 
         ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.edit1));
         edit.perform(ViewActions.clearText());
@@ -65,14 +50,14 @@ public final class TestMainActivity extends ActivityInstrumentationTestCase2 {
         ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOK));
         btnOk.perform(ViewActions.click());
 
-        String result = "Pls enter your name in edit text.";
+        String result = "Please enter your name.";
         ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.text1));
         text.check(ViewAssertions.matches(ViewMatchers.withText(result)));
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test2MainActEditWithString() {
+    public void test2ActDemoEditWithString() {
 
         String input = "ZhengJin";
         String result = "Hello, ZhengJin";

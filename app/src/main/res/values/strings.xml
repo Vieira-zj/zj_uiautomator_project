@@ -3,6 +3,7 @@
     <string name="app_label">FunUITest</string>
 
     <!-- main activity -->
+    <string name="title_activity_activity_run_ui_test">Main Activity</string>
     <string name="demo_text">This a demo</string>
     <string name="run_test_text">Run instrument ui test</string>
     <string name="run_btn_text">Run</string>
@@ -12,5 +13,5 @@
     <string name="title_activity_activity_demo">Demo Activity</string>
     <string name="btn_ok">OK</string>
     <string name="hello_world">Hello Message</string>
-    <string name="title_activity_activity_run_ui_test">ActivityRunUiTest</string>
+    <string name="hint_text">Your name</string>
 </resources>
