@@ -19,13 +19,13 @@
                 android:id="@+id/demoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/demo_text" />
+                android:text="@string/demo_desc" />
 
             <Button
                 android:id="@+id/btnRunDemo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/run_btn_text" />
+                android:text="@string/btn_run" />
         </TableRow>
 
         <TableRow
@@ -37,13 +37,13 @@
                 android:id="@+id/runTestText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/run_test_text" />
+                android:text="@string/run_instrument_desc" />
 
             <Button
                 android:id="@+id/btnRunTest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/run_btn_text" />
+                android:text="@string/btn_run" />
         </TableRow>
     </TableLayout>
 
