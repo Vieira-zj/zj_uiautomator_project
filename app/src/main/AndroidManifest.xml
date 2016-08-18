@@ -28,7 +28,11 @@
 
         <service
             android:name=".Service.ServiceUiTestRunner"
-            android:exported="false"></service>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.zhengjin.test.intentservice" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ package com.example.zhengjin.funsettingsuitest.testcases;
  *
  * Include 24 x 7 test cases for playing video film.
  */
+
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -66,6 +67,7 @@ public final class TestPlayingFilm {
 
     @Ignore
     public void testDemo() {
+        Log.d(TAG, "This is a test demo.");
 //        this.takeScreenCapture();
 //        this.verifyVideoPlayerOnTop(mDevice);
     }
@@ -81,7 +83,7 @@ public final class TestPlayingFilm {
         int randomInt = 30;
         this.randomSelectFilmAndOpenDetails(mDevice, randomInt);
 
-        int playVideoTime = 60;  // play 5 minutes
+        int playVideoTime = 5 * 60;  // play 5 minutes
         this.verifyOpenVideoPlayer(mDevice);
         this.systemWait(playVideoTime);
         this.verifyVideoPlayerOnTop(mDevice);

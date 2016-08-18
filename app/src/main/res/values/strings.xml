@@ -19,7 +19,7 @@
     <string name="full_test_name_to_run">Full instrument test name to run</string>
     <string name="btn_run_instrument">Run Test</string>
     <string name="label_run_test_method">Test Method</string>
-    <string name="hint_set_run_test_method">testXX</string>
+    <string name="hint_set_run_test_method">Class#Method</string>
     <string name="label_execution_time">Execution Time</string>
     <string name="hint_set_execution_time">minutes</string>
 

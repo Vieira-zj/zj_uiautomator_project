@@ -1,16 +1,21 @@
 package com.example.zhengjin.funsettingsuitest.Activity;
 
 import android.content.Intent;
+import android.content.pm.InstrumentationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.Service.ServiceUiTestRunner;
@@ -20,14 +25,16 @@ import java.util.List;
 
 public class ActivityRunUiTest extends AppCompatActivity {
 
-    private final static int INIT_LIST_SIZE = 15;
-    private List<String> mListInstrumentTests = new ArrayList<>(INIT_LIST_SIZE);
+    private static final String TAG = ActivityRunUiTest.class.getSimpleName();
+    private static final int INIT_LIST_SIZE = 15;
+    private List<InstrumentationInfo> mListInstrumentTests = new ArrayList<>(INIT_LIST_SIZE);
 
-    private String mInstrumentCommand;
+    private InstrumentationInfo mSelectInst;
 
     private ListView mListViewInstruments;
     private TextView mTextViewFullTestName;
     private Button mBtnRunTest;
+    private EditText mEditTestMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +48,25 @@ public class ActivityRunUiTest extends AppCompatActivity {
             mBtnRunTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (mEditTestMethod == null) {
+                        return;
+                    }
+                    String testMethod = mEditTestMethod.getText().toString();
+                    if ((testMethod == null) || ("".equals(testMethod))) {
+                        Toast.makeText(ActivityRunUiTest.this,
+                                "Please set the testing class and method", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (mSelectInst == null) {
+                        Toast.makeText(ActivityRunUiTest.this, "Please select a instrumentation!",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     Intent intent = new Intent(ActivityRunUiTest.this, ServiceUiTestRunner.class);
-                    intent.putExtra("InstCommand", mInstrumentCommand);
+//                    Intent intent = new Intent("com.zhengjin.test.intentservice");
+                    intent.putExtra("pkgName", mSelectInst.packageName);
+                    intent.putExtra("testRunner", mSelectInst.name);
                     ActivityRunUiTest.this.startService(intent);
                 }
             });
@@ -53,13 +77,27 @@ public class ActivityRunUiTest extends AppCompatActivity {
 
         mListViewInstruments = (ListView) this.findViewById(R.id.listInstrumentTests);
         mTextViewFullTestName = (TextView) this.findViewById(R.id.testFullNameToRun);
-        mBtnRunTest = (Button) this.findViewById(R.id.btnRunTest);
+        mEditTestMethod = (EditText) this.findViewById(R.id.setRunTestMethod);
+        mBtnRunTest = (Button) this.findViewById(R.id.btnRunInstrumentTest);
     }
 
     private void initInstrumentTests() {
 
-        mListInstrumentTests.add("com.example.zhengjin.funsettingsuitest.test");
-        mListInstrumentTests.add("com.example.android.apis");
+        PackageManager pm = this.getPackageManager();
+        List<InstrumentationInfo> listInsts =
+                pm.queryInstrumentation(null, PackageManager.GET_META_DATA);
+        if (listInsts != null) {
+            for (InstrumentationInfo inst : listInsts) {
+                Log.d(TAG, "Instrumentation package name: " + inst.packageName);
+                Log.d(TAG, "Instrumentation target package: " + inst.targetPackage);
+                Log.d(TAG, "Instrumentation runner: " + inst.name);
+
+//                if (inst.targetPackage.toLowerCase().contains("android")) {
+//                    continue;
+//                }
+                mListInstrumentTests.add(inst);
+            }
+        }
     }
 
     private class ListAdapter extends BaseAdapter {
@@ -113,7 +151,8 @@ public class ActivityRunUiTest extends AppCompatActivity {
                         }
                     }
                     mTempPosition = buttonView.getId();
-                    mTextViewFullTestName.setText(mListInstrumentTests.get(position));
+                    mSelectInst = mListInstrumentTests.get(position);
+                    mTextViewFullTestName.setText(mSelectInst.packageName);
                 }
             });
             if (mTempPosition == position) {
@@ -122,8 +161,7 @@ public class ActivityRunUiTest extends AppCompatActivity {
                 }
             }
 
-            mInstrumentCommand = mListInstrumentTests.get(position);
-            holder.instrumentTestName.setText(mListInstrumentTests.get(position));
+            holder.instrumentTestName.setText(mListInstrumentTests.get(position).packageName);
             return convertView;
         }
 
