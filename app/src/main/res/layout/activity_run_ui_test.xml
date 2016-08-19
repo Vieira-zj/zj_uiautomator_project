@@ -4,57 +4,57 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnRunInstrumentTest"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_run_instrument" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/labelInstTestMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_inst_test_method" />
+
+        <EditText
+            android:id="@+id/editorInstTestMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/editor_inst_test_method_hint" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/labelExecTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_exec_time" />
+
+        <EditText
+            android:id="@+id/editorExecTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/editor_exec_time_hint" />
+    </LinearLayout>
 
     <ListView
-        android:id="@+id/listInstrumentTests"
+        android:id="@+id/listInstTests"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnRunInstTest"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/labelRunTestMethod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_run_test_method" />
-
-        <EditText
-            android:id="@+id/setRunTestMethod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_set_run_test_method" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/labelExecutionTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_execution_time" />
-
-        <EditText
-            android:id="@+id/setExecutionTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_set_execution_time" />
-    </LinearLayout>
+        android:text="@string/btn_run_inst_test" />
 
     <TextView
         android:id="@+id/testFullNameToRun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/full_test_name_to_run" />
+        android:text="" />
 
 </LinearLayout>

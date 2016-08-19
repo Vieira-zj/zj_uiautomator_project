@@ -25,17 +25,11 @@ public class ServiceUiTestRunner extends IntentService {
         String testRunner = intent.getExtras().getString("testRunner");
         Log.d(TAG, String.format("The intent arguments: %s/%s", testPackage, testRunner));
 
-        // TODO: 2016/8/18  
+        // TODO: 2016/8/18 run instrument test
         Bundle arguments = new Bundle();
         arguments.putString("debug", "false");
         arguments.putString("class",
                 ".com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm#testDemo");
-        boolean ret =
-                this.startInstrumentation(new ComponentName(testPackage, testRunner), null, arguments);
-        if (ret) {
-            Log.d(TAG, "The instrument test run pass.");
-        } else {
-            Log.d(TAG, "The instrument test run failed.");
-        }
+        this.startInstrumentation(new ComponentName(testPackage, testRunner), null, arguments);
     }
 }

@@ -6,13 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.zhengjin.funsettingsuitest.R;
 
 public class ActivityDemo extends AppCompatActivity {
 
-    private EditText mEdit;
-    private TextView mText;
+    private EditText mEditUserName;
+    private TextView mTextHelloMsg;
     private Button mBtnOk;
 
     @Override
@@ -25,9 +26,15 @@ public class ActivityDemo extends AppCompatActivity {
             mBtnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mEdit != null && mText != null) {
-                        String tmp = mEdit.getText().toString();
-                        mText.setText(BuildHelloMessage(tmp));
+                    if (mEditUserName != null && mTextHelloMsg != null) {
+                        String input = mEditUserName.getText().toString();
+                        if ("".equals(input)) {
+                            Toast.makeText(ActivityDemo.this,
+                                    "Please input your name first!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        mTextHelloMsg.setText(String.format("Hello, %s", input));
                     }
                 }
             });
@@ -36,19 +43,9 @@ public class ActivityDemo extends AppCompatActivity {
 
     private void initViews() {
 
-        mEdit = (EditText) this.findViewById(R.id.edit1);
-        mText = (TextView) this.findViewById(R.id.text1);
-        mBtnOk = (Button) this.findViewById(R.id.buttonOK);
-    }
-
-    private String BuildHelloMessage (String msg) {
-
-        String helloMsg = "Please enter your name.";
-        if ("".equals(msg) || msg == null) {
-            return helloMsg;
-        }
-
-        return String.format("Hello, %s", msg);
+        mEditUserName = (EditText) findViewById(R.id.editorUserName);
+        mBtnOk = (Button) findViewById(R.id.buttonOK);
+        mTextHelloMsg = (TextView) findViewById(R.id.textHelloMsg);
     }
 
 }

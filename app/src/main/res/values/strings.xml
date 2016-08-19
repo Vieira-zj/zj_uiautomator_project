@@ -4,23 +4,22 @@
 
     <!-- main activity -->
     <string name="title_activity_activity_run_ui_test">Main Activity</string>
-    <string name="demo_desc">This a demo</string>
-    <string name="run_instrument_desc">Run instrument ui test</string>
-    <string name="btn_run">Run</string>
+    <string name="label_demo">This a test demo</string>
+    <string name="label_run_instruments">Run instrument ui tests</string>
+    <string name="btn_start">Start</string>
     <string name="btn_exit">Exit</string>
 
     <!-- demo activity -->
     <string name="title_activity_activity_demo">Demo Activity</string>
+    <string name="editor_user_name_hint">Your name</string>
     <string name="btn_ok">OK</string>
-    <string name="hello_world">Hello Message</string>
-    <string name="demo_hint_text">Your name</string>
+    <string name="hello_message">Hello Message</string>
 
     <!-- instrument test runner activity -->
-    <string name="full_test_name_to_run">Full instrument test name to run</string>
-    <string name="btn_run_instrument">Run Test</string>
-    <string name="label_run_test_method">Test Method</string>
-    <string name="hint_set_run_test_method">Class#Method</string>
-    <string name="label_execution_time">Execution Time</string>
-    <string name="hint_set_execution_time">minutes</string>
+    <string name="label_inst_test_method">Test Method</string>
+    <string name="editor_inst_test_method_hint">class#method</string>
+    <string name="label_exec_time">Execution Time</string>
+    <string name="editor_exec_time_hint">xx minutes</string>
+    <string name="btn_run_inst_test">Run Test</string>
 
 </resources>

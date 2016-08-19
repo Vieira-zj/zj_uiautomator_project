@@ -10,9 +10,9 @@ import com.example.zhengjin.funsettingsuitest.R;
 
 public final class ActivityMain extends AppCompatActivity {
 
-    private Button mBtnRunDemo;
-    private Button mBtnRunTest;
-    private Button mBtnExit;
+    private Button mBtnStartDemo = null;
+    private Button mBtnStartInstTest = null;
+    private Button mBtnExit = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +21,8 @@ public final class ActivityMain extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.initViews();
 
-        if (mBtnRunDemo != null) {
-            mBtnRunDemo.setOnClickListener(new View.OnClickListener() {
+        if (mBtnStartDemo != null) {
+            mBtnStartDemo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ActivityMain.this, ActivityDemo.class);
@@ -31,8 +31,8 @@ public final class ActivityMain extends AppCompatActivity {
             });
         }
 
-        if (mBtnRunTest != null) {
-            mBtnRunTest.setOnClickListener(new View.OnClickListener() {
+        if (mBtnStartInstTest != null) {
+            mBtnStartInstTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ActivityMain.this, ActivityRunUiTest.class);
@@ -53,9 +53,9 @@ public final class ActivityMain extends AppCompatActivity {
 
     private void initViews() {
 
-        mBtnRunDemo = (Button) this.findViewById(R.id.btnRunDemo);
-        mBtnRunTest = (Button) this.findViewById(R.id.btnRunTest);
-        mBtnExit = (Button) this.findViewById(R.id.btnExit);
+        mBtnStartDemo = (Button) findViewById(R.id.btnStartDemo);
+        mBtnStartInstTest = (Button) findViewById(R.id.btnStartInstTest);
+        mBtnExit = (Button) findViewById(R.id.btnExitApp);
     }
 
 }
