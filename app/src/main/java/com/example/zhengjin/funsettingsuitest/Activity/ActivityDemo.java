@@ -10,11 +10,11 @@ import android.widget.Toast;
 
 import com.example.zhengjin.funsettingsuitest.R;
 
-public class ActivityDemo extends AppCompatActivity {
+public final class ActivityDemo extends AppCompatActivity {
 
-    private EditText mEditUserName;
-    private TextView mTextHelloMsg;
-    private Button mBtnOk;
+    private EditText mEditorUserName = null;
+    private TextView mTextHelloMsg = null;
+    private Button mBtnOk = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,11 @@ public class ActivityDemo extends AppCompatActivity {
             mBtnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mEditUserName != null && mTextHelloMsg != null) {
-                        String input = mEditUserName.getText().toString();
+                    if (mEditorUserName != null && mTextHelloMsg != null) {
+                        String input = mEditorUserName.getText().toString();
                         if ("".equals(input)) {
                             Toast.makeText(ActivityDemo.this,
-                                    "Please input your name first!", Toast.LENGTH_LONG).show();
+                                    "Please input your name!", Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -43,8 +43,8 @@ public class ActivityDemo extends AppCompatActivity {
 
     private void initViews() {
 
-        mEditUserName = (EditText) findViewById(R.id.editorUserName);
-        mBtnOk = (Button) findViewById(R.id.buttonOK);
+        mEditorUserName = (EditText) findViewById(R.id.editorUserName);
+        mBtnOk = (Button) findViewById(R.id.buttonOk);
         mTextHelloMsg = (TextView) findViewById(R.id.textHelloMsg);
     }
 

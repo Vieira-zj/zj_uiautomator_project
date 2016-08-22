@@ -1,11 +1,13 @@
 package com.example.zhengjin.funsettingsuitest.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +24,15 @@ import com.example.zhengjin.funsettingsuitest.Service.ServiceUiTestRunner;
 
 import java.util.List;
 
-public class ActivityRunUiTest extends AppCompatActivity {
+public final class ActivityRunUiTest extends AppCompatActivity {
 
     private static final String TAG = ActivityRunUiTest.class.getSimpleName();
 
-    private EditText mEditInstTestMethod = null;
-    private EditText mEditExecTime = null;
+    private EditText mEditorInstTestMethod = null;
+    private EditText mEditorExecTime = null;
     private ListView mListViewInstTests = null;
     private Button mBtnRunInstTest = null;
-    private TextView mTextViewFullInstTestName = null;
+    private TextView mTextInstTestFullName = null;
 
     private List<InstrumentationInfo> mListInstInfo = null;
     private InstrumentationInfo mSelectInst = null;
@@ -42,26 +44,26 @@ public class ActivityRunUiTest extends AppCompatActivity {
         this.initViews();
 
         this.queryInstrumentTests();
-        mListViewInstTests.setAdapter(new ListAdapter(this, mListInstInfo));
+        mListViewInstTests.setAdapter(new ListAdapter(this));
 
         if (mBtnRunInstTest != null) {
             mBtnRunInstTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mEditInstTestMethod == null) {
+                    if (mEditorInstTestMethod == null) {
                         return;
                     }
-                    String instTestMethod = mEditInstTestMethod.getText().toString();
+                    String instTestMethod = mEditorInstTestMethod.getText().toString();
                     if ("".equals(instTestMethod)) {
-                        String msg = "Please input the instrument test class and method!";
+                        String msg = "Please input the instrument test method!";
                         Toast.makeText(ActivityRunUiTest.this, msg, Toast.LENGTH_LONG).show();
                         return;
                     }
 
-                    if (mEditExecTime == null) {
+                    if (mEditorExecTime == null) {
                         return;
                     }
-                    String execTime = mEditExecTime.getText().toString();
+                    String execTime = mEditorExecTime.getText().toString();
                     if ("".equals(execTime)) {
                         String msg = "Please input the execution time!";
                         Toast.makeText(ActivityRunUiTest.this, msg, Toast.LENGTH_LONG).show();
@@ -85,11 +87,11 @@ public class ActivityRunUiTest extends AppCompatActivity {
 
     private void initViews() {
 
-        mEditInstTestMethod = (EditText) findViewById(R.id.editorInstTestMethod);
-        mEditExecTime = (EditText) findViewById(R.id.editorExecTime);
+        mEditorInstTestMethod = (EditText) findViewById(R.id.editorInstTestMethod);
+        mEditorExecTime = (EditText) findViewById(R.id.editorExecTime);
         mListViewInstTests = (ListView) findViewById(R.id.listInstTests);
         mBtnRunInstTest = (Button) findViewById(R.id.btnRunInstTest);
-        mTextViewFullInstTestName = (TextView) findViewById(R.id.testFullNameToRun);
+        mTextInstTestFullName = (TextView) findViewById(R.id.instTestFullName);
     }
 
     private void queryInstrumentTests() {
@@ -97,35 +99,34 @@ public class ActivityRunUiTest extends AppCompatActivity {
         PackageManager pm = this.getPackageManager();
         mListInstInfo = pm.queryInstrumentation(null, PackageManager.GET_META_DATA);
 
-//        if ((mListInstInfo != null) && (mListInstInfo.size() > 0)) {
-//            for (InstrumentationInfo inst : mListInstInfo) {
-//                Log.d(TAG, "Instrumentation package name: " + inst.packageName);
-//                Log.d(TAG, "Instrumentation target package: " + inst.targetPackage);
-//                Log.d(TAG, "Instrumentation runner: " + inst.name);
-//            }
-//        }
+        if ((mListInstInfo != null) && (mListInstInfo.size() > 0)) {
+            for (InstrumentationInfo inst : mListInstInfo) {
+                Log.d(TAG, "Instrumentation package name: " + inst.packageName);
+                Log.d(TAG, "Instrumentation target package: " + inst.targetPackage);
+                Log.d(TAG, "Instrumentation runner: " + inst.name);
+            }
+        } else {
+            Log.e(TAG, "No instrument test cases found on target device!");
+        }
     }
 
     private class ListAdapter extends BaseAdapter {
 
-        private List<InstrumentationInfo> mListInstTests = null;
         private LayoutInflater inflater = null;
         private int mPrePosition = -1;
 
-        public ListAdapter(Context context, List<InstrumentationInfo> listInstInfo) {
-
+        public ListAdapter(Context context) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mListInstTests = listInstInfo;
         }
 
         @Override
         public int getCount() {
-            return mListInstTests.size();
+            return mListInstInfo.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return mListInstTests.get(position);
+            return mListInstInfo.get(position);
         }
 
         @Override
@@ -133,10 +134,11 @@ public class ActivityRunUiTest extends AppCompatActivity {
             return position;
         }
 
+        @SuppressLint("InflateParams")
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            final ViewHolder holder;
+            ViewHolder holder;
 
             if ((convertView == null) || (convertView.getTag() == null)) {
                 convertView = inflater.inflate(R.layout.list_item, null);
@@ -148,6 +150,7 @@ public class ActivityRunUiTest extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
+            holder.radioBtn.setId(position);
             holder.radioBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -162,18 +165,17 @@ public class ActivityRunUiTest extends AppCompatActivity {
                         RadioButton tmpBtn = (RadioButton) findViewById(mPrePosition);
                         tmpBtn.setChecked(false);
                     }
-                    mSelectInst = mListInstTests.get(curPosition);
-                    mTextViewFullInstTestName.setText(mSelectInst.packageName);
+                    mSelectInst = mListInstInfo.get(curPosition);
+                    mTextInstTestFullName.setText(mSelectInst.packageName);  // TODO: 2016/8/22
                     mPrePosition = curPosition;
                 }
             });
+            holder.instTestName.setText(mListInstInfo.get(position).packageName);
 
-            holder.radioBtn.setId(position);
-            holder.instTestName.setText(mListInstTests.get(position).packageName);
             return convertView;
         }
 
-        class ViewHolder {
+        private class ViewHolder {
             RadioButton radioBtn;
             TextView instTestName;
         }

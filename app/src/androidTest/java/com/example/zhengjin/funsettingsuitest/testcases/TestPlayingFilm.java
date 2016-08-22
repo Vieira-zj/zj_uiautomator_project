@@ -22,7 +22,6 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -65,7 +64,7 @@ public final class TestPlayingFilm {
         backToLauncherHome(mDevice);
     }
 
-    @Ignore
+    @Test
     public void testDemo() {
         Log.d(TAG, "This is a test demo.");
 //        this.takeScreenCapture();

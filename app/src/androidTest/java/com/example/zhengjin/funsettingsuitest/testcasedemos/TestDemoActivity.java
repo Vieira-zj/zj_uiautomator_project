@@ -47,7 +47,7 @@ public final class TestDemoActivity {
         ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.editorUserName));
         edit.perform(ViewActions.clearText());
 
-        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOK));
+        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOk));
         btnOk.perform(ViewActions.click());
 
         String result = "Please enter your name.";
@@ -66,7 +66,7 @@ public final class TestDemoActivity {
         edit.perform(ViewActions.clearText());
         edit.perform(ViewActions.typeText(input));
 
-        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOK));
+        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOk));
         btnOk.perform(ViewActions.click());
 
         ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.textHelloMsg));

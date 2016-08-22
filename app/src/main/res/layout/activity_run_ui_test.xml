@@ -52,7 +52,7 @@
         android:text="@string/btn_run_inst_test" />
 
     <TextView
-        android:id="@+id/testFullNameToRun"
+        android:id="@+id/instTestFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />

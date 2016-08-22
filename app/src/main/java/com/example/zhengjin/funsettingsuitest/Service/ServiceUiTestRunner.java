@@ -11,7 +11,7 @@ public class ServiceUiTestRunner extends IntentService {
     private static final String TAG = ServiceUiTestRunner.class.getSimpleName();
 
     public ServiceUiTestRunner() {
-        super("ServiceUiTestRunner");
+        super(TAG);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ServiceUiTestRunner extends IntentService {
         Bundle arguments = new Bundle();
         arguments.putString("debug", "false");
         arguments.putString("class",
-                ".com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm#testDemo");
+                "com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm#testDemo");
         this.startInstrumentation(new ComponentName(testPackage, testRunner), null, arguments);
     }
 }

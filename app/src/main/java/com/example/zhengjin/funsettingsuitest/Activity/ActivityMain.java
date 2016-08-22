@@ -26,7 +26,7 @@ public final class ActivityMain extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ActivityMain.this, ActivityDemo.class);
-                    ActivityMain.this.startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }
@@ -36,7 +36,7 @@ public final class ActivityMain extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ActivityMain.this, ActivityRunUiTest.class);
-                    ActivityMain.this.startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }
