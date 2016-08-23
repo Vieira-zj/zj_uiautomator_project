@@ -5,15 +5,27 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_utils_test"
+        android:id="@+id/btn_device_utils_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_utils_test" />
 
     <TextView
-        android:id="@+id/text_utils_test"
+        android:id="@+id/text_device_utils_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/message_utils_test" />
+        android:text="@string/message_device_utils_test" />
+
+    <Button
+        android:id="@+id/btn_shell_utils_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_utils_test" />
+
+    <TextView
+        android:id="@+id/text_shell_utils_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_shell_utils_test" />
 
 </LinearLayout>

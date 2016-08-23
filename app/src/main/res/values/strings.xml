@@ -26,6 +26,7 @@
 
     <!-- utils test activity -->
     <string name="btn_utils_test">Test</string>
-    <string name="message_utils_test">Device Utils Test</string>
+    <string name="message_device_utils_test">Device Utils Test</string>
+    <string name="message_shell_utils_test">Shell Utils Test</string>
 
 </resources>

@@ -10,13 +10,16 @@ import android.widget.TextView;
 
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.Utils.DeviceUtils;
+import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
 
 import java.util.Locale;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
 
-    Button mBtnUtilsTest = null;
-    TextView mTextUtilsTest = null;
+    Button mBtnDeviceUtilsTest = null;
+    TextView mTextDeviceUtilsTest = null;
+    Button mBtnShellUtilsTest = null;
+    TextView mTextShellUtilsTest = null;
 
     private static int DEVICE_UTILS = 1;
 
@@ -26,12 +29,28 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         setContentView(R.layout.activity_utils_test);
         this.initViews();
 
-        if (mBtnUtilsTest != null) {
-            mBtnUtilsTest.setOnClickListener(new View.OnClickListener() {
+        if (mBtnDeviceUtilsTest != null) {
+            mBtnDeviceUtilsTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mTextUtilsTest != null) {
+                    if (mTextDeviceUtilsTest != null) {
                         new Thread(new DeviceUtilsRunnable()).start();
+                    }
+                }
+            });
+        }
+
+        if (mBtnShellUtilsTest != null) {
+            mBtnShellUtilsTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mTextShellUtilsTest != null) {
+                        String command = "cat /system/build.prop | grep ro.product.model";
+                        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+                        String text = String.format(Locale.getDefault(),
+                                "Result code: %d\n Success message: %s\n Error message: %s",
+                                cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
+                        mTextShellUtilsTest.setText(text);
                     }
                 }
             });
@@ -39,8 +58,10 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private void initViews() {
-        mBtnUtilsTest = (Button) findViewById(R.id.btn_utils_test);
-        mTextUtilsTest = (TextView) findViewById(R.id.text_utils_test);
+        mBtnDeviceUtilsTest = (Button) findViewById(R.id.btn_device_utils_test);
+        mTextDeviceUtilsTest = (TextView) findViewById(R.id.text_device_utils_test);
+        mBtnShellUtilsTest = (Button) findViewById(R.id.btn_shell_utils_test);
+        mTextShellUtilsTest = (TextView) findViewById(R.id.text_shell_utils_test);
     }
 
     private Handler handler = new Handler() {
@@ -48,7 +69,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if (msg.what == DEVICE_UTILS) {
                 String text = (String) msg.obj;
-                mTextUtilsTest.setText(text);
+                mTextDeviceUtilsTest.setText(text);
             }
         }
     };
