@@ -33,6 +33,11 @@
                 <action android:name="com.zhengjin.test.intentservice" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".Activity.ActivityUtilsTest"
+            android:label="@string/title_activity_activity_utils_test"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

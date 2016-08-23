@@ -6,6 +6,7 @@
     <string name="title_activity_activity_run_ui_test">Main Activity</string>
     <string name="label_demo">This a test demo</string>
     <string name="label_run_instruments">Run instrument ui tests</string>
+    <string name="label_run_utils_test">Run utils test</string>
     <string name="btn_start">Start</string>
     <string name="btn_exit">Exit</string>
 
@@ -13,7 +14,7 @@
     <string name="title_activity_activity_demo">Demo Activity</string>
     <string name="editor_user_name_hint">Your name</string>
     <string name="btn_ok">OK</string>
-    <string name="hello_message">Hello Message</string>
+    <string name="message_hello">Hello Message</string>
 
     <!-- instrument test runner activity -->
     <string name="label_inst_test_method">Test Method</string>
@@ -21,5 +22,10 @@
     <string name="label_exec_time">Execution Time</string>
     <string name="editor_exec_time_hint">xx minutes</string>
     <string name="btn_run_inst_test">Run Test</string>
+    <string name="title_activity_activity_utils_test">ActivityUtilsTest</string>
+
+    <!-- utils test activity -->
+    <string name="btn_utils_test">Test</string>
+    <string name="message_utils_test">Utils Test</string>
 
 </resources>

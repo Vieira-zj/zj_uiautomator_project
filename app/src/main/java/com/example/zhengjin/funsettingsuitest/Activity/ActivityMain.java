@@ -12,6 +12,7 @@ public final class ActivityMain extends AppCompatActivity {
 
     private Button mBtnStartDemo = null;
     private Button mBtnStartInstTest = null;
+    private Button mBtnStartUtilsTest = null;
     private Button mBtnExit = null;
 
     @Override
@@ -41,6 +42,16 @@ public final class ActivityMain extends AppCompatActivity {
             });
         }
 
+        if (mBtnStartUtilsTest != null) {
+            mBtnStartUtilsTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ActivityMain.this, ActivityUtilsTest.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
         if (mBtnExit != null) {
             mBtnExit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,6 +66,7 @@ public final class ActivityMain extends AppCompatActivity {
 
         mBtnStartDemo = (Button) findViewById(R.id.btnStartDemo);
         mBtnStartInstTest = (Button) findViewById(R.id.btnStartInstTest);
+        mBtnStartUtilsTest = (Button) findViewById(R.id.btnStartUtilsTest);
         mBtnExit = (Button) findViewById(R.id.btnExitApp);
     }
 
