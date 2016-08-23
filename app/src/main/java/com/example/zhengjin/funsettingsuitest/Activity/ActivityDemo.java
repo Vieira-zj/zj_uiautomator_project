@@ -43,9 +43,9 @@ public final class ActivityDemo extends AppCompatActivity {
 
     private void initViews() {
 
-        mEditorUserName = (EditText) findViewById(R.id.editorUserName);
-        mBtnOk = (Button) findViewById(R.id.buttonOk);
-        mTextHelloMsg = (TextView) findViewById(R.id.textHelloMsg);
+        mEditorUserName = (EditText) findViewById(R.id.editor_user_name);
+        mBtnOk = (Button) findViewById(R.id.button_ok);
+        mTextHelloMsg = (TextView) findViewById(R.id.text_hello_msg);
     }
 
 }

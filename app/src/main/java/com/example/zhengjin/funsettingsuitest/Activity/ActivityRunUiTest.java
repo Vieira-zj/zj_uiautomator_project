@@ -87,11 +87,11 @@ public final class ActivityRunUiTest extends AppCompatActivity {
 
     private void initViews() {
 
-        mEditorInstTestMethod = (EditText) findViewById(R.id.editorInstTestMethod);
-        mEditorExecTime = (EditText) findViewById(R.id.editorExecTime);
-        mListViewInstTests = (ListView) findViewById(R.id.listInstTests);
-        mBtnRunInstTest = (Button) findViewById(R.id.btnRunInstTest);
-        mTextInstTestFullName = (TextView) findViewById(R.id.instTestFullName);
+        mEditorInstTestMethod = (EditText) findViewById(R.id.editor_inst_test_method);
+        mEditorExecTime = (EditText) findViewById(R.id.editor_exec_time);
+        mListViewInstTests = (ListView) findViewById(R.id.list_inst_tests);
+        mBtnRunInstTest = (Button) findViewById(R.id.btn_run_inst_test);
+        mTextInstTestFullName = (TextView) findViewById(R.id.inst_test_full_name);
     }
 
     private void queryInstrumentTests() {

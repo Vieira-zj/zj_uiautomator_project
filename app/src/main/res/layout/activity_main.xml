@@ -5,60 +5,57 @@
     android:orientation="vertical">
 
     <TableLayout
-        android:id="@+id/mainTable"
+        android:id="@+id/main_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start">
 
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/table_row1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/labelDemo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_demo" />
 
             <Button
-                android:id="@+id/btnStartDemo"
+                android:id="@+id/btn_start_demo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_start" />
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow2"
+            android:id="@+id/table_row2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/labelRunInstTest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_run_instruments" />
 
             <Button
-                android:id="@+id/btnStartInstTest"
+                android:id="@+id/btn_start_inst_test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_start" />
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow3"
+            android:id="@+id/table_row3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/labelRunUtilsTest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_run_utils_test" />
 
             <Button
-                android:id="@+id/btnStartUtilsTest"
+                android:id="@+id/btn_start_utils_test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_start" />
@@ -66,7 +63,7 @@
     </TableLayout>
 
     <Button
-        android:id="@+id/btnExitApp"
+        android:id="@+id/btn_exit_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_exit" />

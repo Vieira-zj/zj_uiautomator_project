@@ -5,13 +5,13 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btnUtilsTest"
+        android:id="@+id/btn_utils_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_utils_test" />
 
     <TextView
-        android:id="@+id/textUtilsTest"
+        android:id="@+id/text_utils_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/message_utils_test" />

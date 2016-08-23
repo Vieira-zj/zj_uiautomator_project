@@ -64,10 +64,10 @@ public final class ActivityMain extends AppCompatActivity {
 
     private void initViews() {
 
-        mBtnStartDemo = (Button) findViewById(R.id.btnStartDemo);
-        mBtnStartInstTest = (Button) findViewById(R.id.btnStartInstTest);
-        mBtnStartUtilsTest = (Button) findViewById(R.id.btnStartUtilsTest);
-        mBtnExit = (Button) findViewById(R.id.btnExitApp);
+        mBtnStartDemo = (Button) findViewById(R.id.btn_start_demo);
+        mBtnStartInstTest = (Button) findViewById(R.id.btn_start_inst_test);
+        mBtnStartUtilsTest = (Button) findViewById(R.id.btn_start_utils_test);
+        mBtnExit = (Button) findViewById(R.id.btn_exit_app);
     }
 
 }

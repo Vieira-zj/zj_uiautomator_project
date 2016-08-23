@@ -44,14 +44,14 @@ public final class TestDemoActivity {
     @Category(CategoryDemoTests.class)
     public void test1ActDemoEditWithEmpty() {
 
-        ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.editorUserName));
+        ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.editor_user_name));
         edit.perform(ViewActions.clearText());
 
-        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOk));
+        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.button_ok));
         btnOk.perform(ViewActions.click());
 
         String result = "Please enter your name.";
-        ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.textHelloMsg));
+        ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.text_hello_msg));
         text.check(ViewAssertions.matches(ViewMatchers.withText(result)));
     }
 
@@ -62,14 +62,14 @@ public final class TestDemoActivity {
         String input = "ZhengJin";
         String result = "Hello, ZhengJin";
 
-        ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.editorUserName));
+        ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.editor_user_name));
         edit.perform(ViewActions.clearText());
         edit.perform(ViewActions.typeText(input));
 
-        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.buttonOk));
+        ViewInteraction btnOk = Espresso.onView(ViewMatchers.withId(R.id.button_ok));
         btnOk.perform(ViewActions.click());
 
-        ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.textHelloMsg));
+        ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.text_hello_msg));
         text.check(ViewAssertions.matches(ViewMatchers.withText(result)));
     }
 }

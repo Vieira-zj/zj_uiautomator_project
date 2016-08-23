@@ -10,13 +10,12 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/labelInstTestMethod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_inst_test_method" />
 
         <EditText
-            android:id="@+id/editorInstTestMethod"
+            android:id="@+id/editor_inst_test_method"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/editor_inst_test_method_hint" />
@@ -28,31 +27,30 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/labelExecTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_exec_time" />
 
         <EditText
-            android:id="@+id/editorExecTime"
+            android:id="@+id/editor_exec_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/editor_exec_time_hint" />
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listInstTests"
+        android:id="@+id/list_inst_tests"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btnRunInstTest"
+        android:id="@+id/btn_run_inst_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_run_inst_test" />
 
     <TextView
-        android:id="@+id/instTestFullName"
+        android:id="@+id/inst_test_full_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />
