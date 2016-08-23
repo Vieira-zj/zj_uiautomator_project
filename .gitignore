@@ -8,3 +8,5 @@
 
 /.idea/*.xml
 #/.idea/workspace.xml
+
+debug.keystore
