@@ -77,8 +77,8 @@ public final class ActivityRunUiTest extends AppCompatActivity {
 
                     Intent intent = new Intent(ActivityRunUiTest.this, ServiceUiTestRunner.class);
 //                    Intent intent = new Intent("com.zhengjin.test.intentservice");
-                    intent.putExtra("pkgName", mSelectInst.packageName);
-                    intent.putExtra("testRunner", mSelectInst.name);
+                    intent.putExtra("TestPkgName", mSelectInst.packageName);
+                    intent.putExtra("TestRunner", mSelectInst.name);
                     ActivityRunUiTest.this.startService(intent);
                 }
             });

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.Utils.DeviceUtils;
+import com.example.zhengjin.funsettingsuitest.Utils.PackageUtils;
 import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
 
 import java.util.Locale;
@@ -20,6 +21,8 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     TextView mTextDeviceUtilsTest = null;
     Button mBtnShellUtilsTest = null;
     TextView mTextShellUtilsTest = null;
+    Button mBtnPkgUtilsTest = null;
+    TextView mTextPkgUtilsTest = null;
 
     private static int DEVICE_UTILS = 1;
 
@@ -55,13 +58,27 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 }
             });
         }
+
+        if (mBtnPkgUtilsTest != null) {
+            mBtnPkgUtilsTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mTextPkgUtilsTest != null) {
+                        String tmpStr = PackageUtils.getAppPackageName(ActivityUtilsTest.this);
+                        mTextPkgUtilsTest.setText(tmpStr);
+                    }
+                }
+            });
+        }
     }
 
     private void initViews() {
         mBtnDeviceUtilsTest = (Button) findViewById(R.id.btn_device_utils_test);
-        mTextDeviceUtilsTest = (TextView) findViewById(R.id.text_device_utils_test);
         mBtnShellUtilsTest = (Button) findViewById(R.id.btn_shell_utils_test);
+        mBtnPkgUtilsTest = (Button) findViewById(R.id.btn_pkg_utils_test);
+        mTextDeviceUtilsTest = (TextView) findViewById(R.id.text_device_utils_test);
         mTextShellUtilsTest = (TextView) findViewById(R.id.text_shell_utils_test);
+        mTextPkgUtilsTest = (TextView) findViewById(R.id.text_pkg_utils_test);
     }
 
     private Handler handler = new Handler() {

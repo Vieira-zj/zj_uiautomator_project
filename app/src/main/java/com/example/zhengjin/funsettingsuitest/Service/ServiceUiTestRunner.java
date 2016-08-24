@@ -23,14 +23,16 @@ public class ServiceUiTestRunner extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String testPackage = intent.getExtras().getString("pkgName");
-        String testRunner = intent.getExtras().getString("testRunner");
+        String testPkgName = intent.getExtras().getString("TestPkgName");
+        String testRunner = intent.getExtras().getString("TestRunner");
+        String testMethod = "testcases.TestPlayingFilm#testDemo";
 
         String commandInst = "am instrument -w -r --user 0";
         String commandExtraDebug = "-e debug false";
-        String commandExtraClass =
-                "-e class com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm#testDemo";
-        String commandRunner = String.format(Locale.getDefault(), "%s/%s", testPackage, testRunner);
+        String commandExtraClass = String.format(
+                Locale.getDefault(), "-e class %s.%s", this.getPackageName(), testMethod);
+        String commandRunner = String.format(
+                Locale.getDefault(), "%s/%s", testPkgName, testRunner);
         String command = String.format(Locale.getDefault(), "%s %s %s %s",
                 commandInst, commandExtraDebug, commandExtraClass, commandRunner);
         Log.d(TAG, String.format("The instrument command: %s", command));
@@ -48,4 +50,5 @@ public class ServiceUiTestRunner extends IntentService {
 //                "com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm#testDemo");
 //        this.startInstrumentation(new ComponentName(testPackage, testRunner), null, arguments);
     }
+
 }

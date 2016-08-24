@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 24
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.example.zhengjin.funsettingsuitest"
         minSdkVersion 19
@@ -12,7 +11,20 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        debugConfig {
+            // alias and key are android default
+            storeFile file('debug.keystore')
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
+        }
+    }
     buildTypes {
+        debug {
+            // build as system app
+            signingConfig signingConfigs.debugConfig
+        }
         release {
             minifyEnabled false
         }

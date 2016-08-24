@@ -28,4 +28,16 @@
         android:layout_height="wrap_content"
         android:text="@string/message_shell_utils_test" />
 
+    <Button
+        android:id="@+id/btn_pkg_utils_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_utils_test" />
+
+    <TextView
+        android:id="@+id/text_pkg_utils_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_package_utils_test" />
+
 </LinearLayout>
