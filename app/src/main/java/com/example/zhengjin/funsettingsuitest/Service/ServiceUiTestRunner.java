@@ -26,7 +26,7 @@ public class ServiceUiTestRunner extends IntentService {
         String testPackage = intent.getExtras().getString("pkgName");
         String testRunner = intent.getExtras().getString("testRunner");
 
-        String commandInst = "am instrument -w -r";
+        String commandInst = "am instrument -w -r --user 0";
         String commandExtraDebug = "-e debug false";
         String commandExtraClass =
                 "-e class com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm#testDemo";
@@ -35,12 +35,13 @@ public class ServiceUiTestRunner extends IntentService {
                 commandInst, commandExtraDebug, commandExtraClass, commandRunner);
         Log.d(TAG, String.format("The instrument command: %s", command));
 
-        // TODO: 2016/8/23 need root to run instrument command
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, true, true);
+        // need root to run instrument command
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
         Log.d(TAG, String.format("The instrument test result code: %d", cr.mResult));
         Log.d(TAG, String.format("The instrument test success message: %s", cr.mSuccessMsg));
         Log.d(TAG, String.format("The instrument test error message: %s", cr.mErrorMsg));
 
+        // error: null
 //        Bundle arguments = new Bundle();
 //        arguments.putString("debug", "false");
 //        arguments.putString("class",

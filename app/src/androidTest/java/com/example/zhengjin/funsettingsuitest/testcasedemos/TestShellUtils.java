@@ -4,10 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-
-import junit.framework.Assert;
+import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +13,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import java.util.Locale;
 
 /**
  * Created by zhengjin on 2016/6/1.
@@ -35,21 +34,25 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test1ExecShellCommandWithOutput() {
-
-        String input = "ls";
-        String actResults = ShellUtils.execShellCommandWithOutput(input);
-        Log.d(TAG, String.format("***** Shell output: \n %s", actResults));
-        Assert.assertNotNull(actResults);
+    public void testExecShellShCommand() {
+        String command = "cat /system/build.prop | grep ro.product.model";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+        String output = String.format(Locale.getDefault(),
+                "Result code: %d\n Success message: %s\n Error message: %s",
+                cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
+        Log.d(TAG, output);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test2ExecShellCommand() {
-
-        String input = "ls";
-        boolean actResults = ShellUtils.execShellCommand(input);
-        Assert.assertTrue(actResults);
+    public void testExecShellAmStartCommand() {
+        // add option --user 0
+        String command = "am start --user 0 tv.fun.filemanager/.FunFileManagerActivity";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+        String output = String.format(Locale.getDefault(),
+                "Result code: %d\n Success message: %s\n Error message: %s",
+                cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
+        Log.d(TAG, output);
     }
 
     @After
