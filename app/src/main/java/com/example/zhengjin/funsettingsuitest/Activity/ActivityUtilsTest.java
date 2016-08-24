@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.Activity;
 
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import com.example.zhengjin.funsettingsuitest.Utils.DeviceUtils;
 import com.example.zhengjin.funsettingsuitest.Utils.PackageUtils;
 import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
 
+import java.util.List;
 import java.util.Locale;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
@@ -64,8 +66,23 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (mTextPkgUtilsTest != null) {
-                        String tmpStr = PackageUtils.getAppPackageName(ActivityUtilsTest.this);
-                        mTextPkgUtilsTest.setText(tmpStr);
+                        mTextPkgUtilsTest.setText("");
+
+                        PackageInfo pkgInfo = PackageUtils.getAppPackageInfo(
+                                ActivityUtilsTest.this, getPackageName());
+                        String tmpLine = String.format(Locale.getDefault(),
+                                "Current package name: %s\n", pkgInfo.packageName);
+                        mTextPkgUtilsTest.append(tmpLine);
+
+                        List<String> installedApps =
+                                PackageUtils.getInstalledApps(ActivityUtilsTest.this, false);
+                        StringBuilder sb = new StringBuilder(20);
+                        for (String app : installedApps) {
+                            sb.append(app + "\n");
+                        }
+                        tmpLine = String.format(
+                                Locale.getDefault(), "Installed APPs: %s", sb.toString());
+                        mTextPkgUtilsTest.append(tmpLine);
                     }
                 }
             });
