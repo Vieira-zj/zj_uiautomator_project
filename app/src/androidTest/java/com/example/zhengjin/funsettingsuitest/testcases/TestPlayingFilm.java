@@ -171,7 +171,7 @@ public final class TestPlayingFilm {
         boolean ret = ((filmTitleText != null) && (!"".equals(filmTitleText)));
         assertAndCaptureForFailed(ret, "Verify film title of details page.");
 
-        Log.d(TAG, String.format("Film title: %s", filmTitle));
+        Log.d(TAG, String.format("Film title: %s", filmTitleText));
         return filmTitleText;
     }
 
