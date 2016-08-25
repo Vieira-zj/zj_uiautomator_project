@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Activity;
+package com.example.zhengjin.funsettingsuitest.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zhengjin.funsettingsuitest.R;
-import com.example.zhengjin.funsettingsuitest.Service.ServiceUiTestRunner;
+import com.example.zhengjin.funsettingsuitest.service.ServiceUiTestRunner;
 
 import java.util.List;
 
@@ -106,7 +106,7 @@ public final class ActivityRunUiTest extends AppCompatActivity {
                 Log.d(TAG, "Instrumentation runner: " + inst.name);
             }
         } else {
-            Log.e(TAG, "No instrument test cases found on target device!");
+            Log.i(TAG, "No instrument test cases found on target device!");
         }
     }
 

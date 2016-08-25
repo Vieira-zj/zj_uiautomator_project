@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Utils;
+package com.example.zhengjin.funsettingsuitest.utils;
 
 import android.content.Context;
 import android.os.Build;
@@ -19,9 +19,7 @@ import java.io.IOException;
  */
 public final class DeviceUtils {
 
-    private static String sDeviceModel = "";
     private static String sDeviceId = "";
-    private static String sOsVersion = "";
     private static String sCpuModel = "";
 
     private static int sDisplayWidth = 0;
@@ -32,10 +30,7 @@ public final class DeviceUtils {
     private static final String TAG = DeviceUtils.class.getSimpleName();
 
     public static String getDeviceModel() {
-        if (StringUtils.isEmpty(sDeviceModel)) {
-            sDeviceModel = Build.MODEL;
-        }
-        return sDeviceModel;
+        return Build.MODEL;
     }
 
     public static String getDeviceId(Context context) {
@@ -50,10 +45,7 @@ public final class DeviceUtils {
     }
 
     public static String getOsVersion() {
-        if (StringUtils.isEmpty(sOsVersion)) {
-            sOsVersion = Build.VERSION.RELEASE;
-        }
-        return sOsVersion;
+        return Build.VERSION.RELEASE;
     }
 
     public static int getDisplayHeight(Context context) {
@@ -124,7 +116,7 @@ public final class DeviceUtils {
                 while ((line = reader.readLine()) != null) {
                     if (line.contains("model")) {
                         String[] items = line.split(":");
-                        return items[1].trim();
+                        sCpuModel = items[1].trim();
                     }
                 }
             } catch (IOException e) {

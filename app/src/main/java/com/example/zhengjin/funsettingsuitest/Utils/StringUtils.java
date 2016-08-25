@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Utils;
+package com.example.zhengjin.funsettingsuitest.utils;
 
 /**
  * Created by zhengjin on 2016/8/23.

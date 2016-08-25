@@ -3,7 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testutils;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.Utils.StringUtils;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Utils;
+package com.example.zhengjin.funsettingsuitest.utils;
 
 import android.util.Log;
 
@@ -29,7 +29,7 @@ public final class ShellUtils {
 
     public static CommandResult execCommand(
             List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand((commands == null ? null : commands.toArray(new String[] {})),
+        return execCommand((commands == null ? null : (String[]) commands.toArray()),
                 isRoot, isNeedResultMsg);
     }
 

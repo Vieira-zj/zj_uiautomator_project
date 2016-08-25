@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Utils;
+package com.example.zhengjin.funsettingsuitest.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -21,15 +21,14 @@ public final class PackageUtils {
     private static final String TAG = PackageUtils.class.getSimpleName();
 
     public static PackageInfo getAppPackageInfo(Context context, String pkgName) {
-        PackageInfo pkgInfo;
+        PackageInfo pkgInfo = null;
         try {
             pkgInfo = context.getPackageManager().getPackageInfo(pkgName, 0);
-            return pkgInfo;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, e.getMessage());
         }
 
-        return null;
+        return pkgInfo;
     }
 
     public static List<String> getInstalledApps(Context context, boolean flagIncludeSystemApp) {
@@ -37,10 +36,12 @@ public final class PackageUtils {
         List<ApplicationInfo> installedApps =
                 context.getPackageManager().getInstalledApplications(0);
 
-        for (ApplicationInfo app : installedApps) {
-            if (flagIncludeSystemApp) {
+        if (flagIncludeSystemApp) {
+            for (ApplicationInfo app : installedApps) {
                 installedAppsName.add(app.packageName);
-            } else {
+            }
+        } else {
+            for (ApplicationInfo app : installedApps) {
                 if (!isSystemApp(app)) {
                     installedAppsName.add(app.packageName);
                 }
@@ -54,11 +55,10 @@ public final class PackageUtils {
         return (info != null) && ((info.flags & ApplicationInfo.FLAG_SYSTEM) > 0);
     }
 
-    public static List<ActivityManager.RunningAppProcessInfo> getRunningAppsInfo(Context context) {
-        List<ActivityManager.RunningAppProcessInfo> runApps;
+    public static List<ActivityManager.RunningAppProcessInfo> getRunningAppsProcessInfo(
+            Context context) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        runApps = am.getRunningAppProcesses();
-        return runApps;
+        return am.getRunningAppProcesses();
     }
 
     public static int getProcessMemPss(Context context, int pid) {

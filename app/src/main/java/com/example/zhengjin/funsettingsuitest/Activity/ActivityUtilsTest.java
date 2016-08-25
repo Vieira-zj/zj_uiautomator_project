@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Activity;
+package com.example.zhengjin.funsettingsuitest.activity;
 
 import android.app.ActivityManager;
 import android.content.pm.PackageInfo;
@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.zhengjin.funsettingsuitest.R;
-import com.example.zhengjin.funsettingsuitest.Utils.DeviceUtils;
-import com.example.zhengjin.funsettingsuitest.Utils.PackageUtils;
-import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.DeviceUtils;
+import com.example.zhengjin.funsettingsuitest.utils.PackageUtils;
+import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -184,7 +184,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
 
     private String getRunningProcessName() {
         List<ActivityManager.RunningAppProcessInfo> runningApps =
-                PackageUtils.getRunningAppsInfo(ActivityUtilsTest.this);
+                PackageUtils.getRunningAppsProcessInfo(ActivityUtilsTest.this);
         StringBuilder sb = new StringBuilder(40);
         sb.append(String.format(mLocale, "Running process: %d\n", runningApps.size()));
         for (ActivityManager.RunningAppProcessInfo app : runningApps) {

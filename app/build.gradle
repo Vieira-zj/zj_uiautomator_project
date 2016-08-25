@@ -12,7 +12,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-        debugConfig {
+        // http://stackoverflow.com/questions/28512684/android-studio-does-not-sign-the-code-for-debug-build
+        debug {
+            // for debug package, build as system app
             // alias and key are android default
             storeFile file('debug.keystore')
             keyAlias 'androiddebugkey'
@@ -21,10 +23,6 @@ android {
         }
     }
     buildTypes {
-        debug {
-            // build as system app
-            signingConfig signingConfigs.debugConfig
-        }
         release {
             minifyEnabled false
         }

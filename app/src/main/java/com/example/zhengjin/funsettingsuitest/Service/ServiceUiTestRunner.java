@@ -1,10 +1,10 @@
-package com.example.zhengjin.funsettingsuitest.Service;
+package com.example.zhengjin.funsettingsuitest.service;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
 
 import java.util.Locale;
 

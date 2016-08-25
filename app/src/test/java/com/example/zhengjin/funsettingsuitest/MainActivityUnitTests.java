@@ -1,6 +1,6 @@
 package com.example.zhengjin.funsettingsuitest;
 
-import com.example.zhengjin.funsettingsuitest.Activity.ActivityMain;
+import com.example.zhengjin.funsettingsuitest.activity.ActivityMain;
 
 import org.junit.After;
 import org.junit.Assert;

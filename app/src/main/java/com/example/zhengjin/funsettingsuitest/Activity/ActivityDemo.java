@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Activity;
+package com.example.zhengjin.funsettingsuitest.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zhengjin.funsettingsuitest.R;
+
+import java.util.Locale;
 
 public final class ActivityDemo extends AppCompatActivity {
 
@@ -34,7 +36,8 @@ public final class ActivityDemo extends AppCompatActivity {
                             return;
                         }
 
-                        mTextHelloMsg.setText(String.format("Hello, %s", input));
+                        mTextHelloMsg.setText(
+                                String.format(Locale.getDefault(), "Hello, %s", input));
                     }
                 }
             });

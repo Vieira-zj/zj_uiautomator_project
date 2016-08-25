@@ -7,7 +7,7 @@ import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
-import com.example.zhengjin.funsettingsuitest.Activity.ActivityDemo;
+import com.example.zhengjin.funsettingsuitest.activity.ActivityDemo;
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 

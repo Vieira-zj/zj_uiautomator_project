@@ -4,7 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.Utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.Activity;
+package com.example.zhengjin.funsettingsuitest.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
