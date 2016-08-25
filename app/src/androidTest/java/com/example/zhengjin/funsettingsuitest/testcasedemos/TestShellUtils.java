@@ -46,7 +46,7 @@ public final class TestShellUtils {
     @Test
     @Category(CategoryDemoTests.class)
     public void testExecShellAmStartCommand() {
-        // add option --user 0
+        // add extra option "--user 0"
         String command = "am start --user 0 tv.fun.filemanager/.FunFileManagerActivity";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
         String output = String.format(Locale.getDefault(),
