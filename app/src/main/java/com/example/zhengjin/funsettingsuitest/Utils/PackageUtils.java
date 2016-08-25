@@ -33,7 +33,7 @@ public final class PackageUtils {
     }
 
     public static List<String> getInstalledApps(Context context, boolean flagIncludeSystemApp) {
-        List<String> installedAppsName = new ArrayList<>(80);
+        List<String> installedAppsName = new ArrayList<>(50);
         List<ApplicationInfo> installedApps =
                 context.getPackageManager().getInstalledApplications(0);
 
@@ -54,33 +54,17 @@ public final class PackageUtils {
         return (info != null) && ((info.flags & ApplicationInfo.FLAG_SYSTEM) > 0);
     }
 
-    public List<ActivityManager.RunningAppProcessInfo> getRunningAppsInfo(Context context) {
+    public static List<ActivityManager.RunningAppProcessInfo> getRunningAppsInfo(Context context) {
         List<ActivityManager.RunningAppProcessInfo> runApps;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         runApps = am.getRunningAppProcesses();
         return runApps;
     }
 
-    public int getProcessPid(ActivityManager.RunningAppProcessInfo info) {
-        return info.pid;
-    }
-
-    public String getProcessName(Context context, ActivityManager.RunningAppProcessInfo info) {
-        List<ApplicationInfo> installedApps =
-                context.getPackageManager().getInstalledApplications(0);
-        for (ApplicationInfo app : installedApps) {
-            if (app.processName.equals(info.processName)) {
-                return app.packageName;
-            }
-        }
-
-        return info.processName;
-    }
-
-    public int getProcessMemPss(Context context, int pid) {
+    public static int getProcessMemPss(Context context, int pid) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        Debug.MemoryInfo[] infos = am.getProcessMemoryInfo(new int[] {pid});
-        return infos[0].getTotalPss();
+        Debug.MemoryInfo[] memoryInfo = am.getProcessMemoryInfo(new int[] {pid});
+        return memoryInfo[0].getTotalPss();
     }
 
     public static void getPackageCacheSize() {

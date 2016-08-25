@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.Activity;
 
+import android.app.ActivityManager;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,13 +27,17 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     Button mBtnPkgUtilsTest = null;
     TextView mTextPkgUtilsTest = null;
 
+    Locale mLocale = null;
+
     private static int DEVICE_UTILS = 1;
+    private static int PACKAGE_UTILS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utils_test);
         this.initViews();
+        mLocale = Locale.getDefault();
 
         if (mBtnDeviceUtilsTest != null) {
             mBtnDeviceUtilsTest.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +57,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                     if (mTextShellUtilsTest != null) {
                         String command = "cat /system/build.prop | grep ro.product.model";
                         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
-                        String text = String.format(Locale.getDefault(),
+                        String text = String.format(mLocale,
                                 "Result code: %d\n Success message: %s\n Error message: %s",
                                 cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
                         mTextShellUtilsTest.setText(text);
@@ -66,23 +71,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (mTextPkgUtilsTest != null) {
-                        mTextPkgUtilsTest.setText("");
-
-                        PackageInfo pkgInfo = PackageUtils.getAppPackageInfo(
-                                ActivityUtilsTest.this, getPackageName());
-                        String tmpLine = String.format(Locale.getDefault(),
-                                "Current package name: %s\n", pkgInfo.packageName);
-                        mTextPkgUtilsTest.append(tmpLine);
-
-                        List<String> installedApps =
-                                PackageUtils.getInstalledApps(ActivityUtilsTest.this, false);
-                        StringBuilder sb = new StringBuilder(20);
-                        for (String app : installedApps) {
-                            sb.append(app + "\n");
-                        }
-                        tmpLine = String.format(
-                                Locale.getDefault(), "Installed APPs: %s", sb.toString());
-                        mTextPkgUtilsTest.append(tmpLine);
+                        new Thread(new PackageUtilsRunnable()).start();
                     }
                 }
             });
@@ -101,9 +90,11 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            String text = (String) msg.obj;
             if (msg.what == DEVICE_UTILS) {
-                String text = (String) msg.obj;
                 mTextDeviceUtilsTest.setText(text);
+            } else if (msg.what == PACKAGE_UTILS) {
+                mTextPkgUtilsTest.setText(text);
             }
         }
     };
@@ -113,13 +104,13 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         public void run() {
             final int size = 15;
             StringBuilder sb = new StringBuilder(size);
-            sb.append(taskGetDeviceModel());
-            sb.append(taskGetDeviceId());
-            sb.append(taskGetOsVersion());
-            sb.append(taskGetDisplayMatrix());
-            sb.append(taskGetCpuModel());
-            sb.append(taskGetCpuCores());
-            sb.append(taskGetCpuFreq());
+            sb.append(getDeviceModel());
+            sb.append(getDeviceId());
+            sb.append(getOsVersion());
+            sb.append(getDisplayMatrix());
+            sb.append(getCpuModel());
+            sb.append(getCpuCores());
+            sb.append(getCpuFreq());
 
             Message msg = Message.obtain();
             msg.obj = sb.toString();
@@ -128,40 +119,80 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         }
     }
 
-    private String taskGetDeviceModel() {
-        return String.format(
-                Locale.getDefault(), "Device Model: %s\n", DeviceUtils.getDeviceModel());
+    private class PackageUtilsRunnable implements Runnable {
+        @Override
+        public void run() {
+            StringBuilder sb = new StringBuilder(10);
+            sb.append(getCurPkgName());
+            sb.append(getInstalledApps());
+            sb.append(getRunningProcessName());
+
+            Message msg = Message.obtain();
+            msg.obj = sb.toString();
+            msg.what = PACKAGE_UTILS;
+            handler.sendMessage(msg);
+        }
     }
 
-    private String taskGetDeviceId() {
-        return String.format(Locale.getDefault(),
-                "Device id: %s\n", DeviceUtils.getDeviceId(this));
+    private String getDeviceModel() {
+        return String.format(mLocale, "Device Model: %s\n", DeviceUtils.getDeviceModel());
     }
 
-    private String taskGetOsVersion() {
-        return String.format(Locale.getDefault(),
-                "Android OS version: %s\n", DeviceUtils.getOsVersion());
+    private String getDeviceId() {
+        return String.format(mLocale, "Device id: %s\n", DeviceUtils.getDeviceId(this));
     }
 
-    private String taskGetDisplayMatrix() {
+    private String getOsVersion() {
+        return String.format(mLocale, "Android OS version: %s\n", DeviceUtils.getOsVersion());
+    }
+
+    private String getDisplayMatrix() {
         int displayHeight = DeviceUtils.getDisplayHeight(this);
         int displayWidth = DeviceUtils.getDisplayWidth(this);
-        return String.format(Locale.getDefault(),
-                "Display: %d * %d\n", displayWidth, displayHeight);
+        return String.format(mLocale, "Display: %d * %d\n", displayWidth, displayHeight);
     }
 
-    private String taskGetCpuModel() {
-        return String.format(Locale.getDefault(), "CPU Model: %s\n", DeviceUtils.getCpuModel());
+    private String getCpuModel() {
+        return String.format(mLocale, "CPU Model: %s\n", DeviceUtils.getCpuModel());
     }
 
-    private String taskGetCpuCores() {
-        return String.format(Locale.getDefault(),
-                "CPU Cores: %d\n", DeviceUtils.getNumberOfCpuCores());
+    private String getCpuCores() {
+        return String.format(mLocale, "CPU Cores: %d\n", DeviceUtils.getNumberOfCpuCores());
     }
 
-    private String taskGetCpuFreq() {
+    private String getCpuFreq() {
         float freq = (DeviceUtils.getCpuFrequency() / 1000f / 1000f);
-        return String.format(Locale.getDefault(), "CPU Frequency: %.3f GHz\n", freq);
+        return String.format(mLocale, "CPU Frequency: %.3f GHz\n", freq);
+    }
+
+    private String getCurPkgName() {
+        PackageInfo pkgInfo = PackageUtils.getAppPackageInfo(this, getPackageName());
+        if (pkgInfo == null) {
+            return "null";
+        }
+        return String.format(mLocale, "Current package name: %s\n", pkgInfo.packageName);
+    }
+
+    private String getInstalledApps() {
+        List<String> installedApps = PackageUtils.getInstalledApps(this, false);
+        StringBuilder sb = new StringBuilder(30);
+        for (String app : installedApps) {
+            sb.append(String.format(mLocale, "%s \n", app));
+        }
+        return String.format(mLocale, "Installed APPs: %s", sb.toString());
+    }
+
+    private String getRunningProcessName() {
+        List<ActivityManager.RunningAppProcessInfo> runningApps =
+                PackageUtils.getRunningAppsInfo(ActivityUtilsTest.this);
+        StringBuilder sb = new StringBuilder(40);
+        sb.append(String.format(mLocale, "Running process: %d\n", runningApps.size()));
+        for (ActivityManager.RunningAppProcessInfo app : runningApps) {
+            int memPss = PackageUtils.getProcessMemPss(this, app.pid);
+            sb.append(String.format(mLocale, "%s : %s : %d \n", app.pid, app.processName, memPss));
+        }
+
+        return sb.toString();
     }
 
 }
