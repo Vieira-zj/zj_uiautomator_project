@@ -1,0 +1,26 @@
+package com.example.zhengjin.funsettingsuitest.activity;
+
+import android.app.Application;
+
+import java.util.Locale;
+
+/**
+ * Created by zhengjin on 2016/8/26.
+ *
+ * Application for global environment.
+ */
+public final class TestApplication extends Application {
+
+    private static TestApplication sInstance;
+    public final Locale mLocale = Locale.getDefault();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sInstance = this;
+    }
+
+    public static TestApplication getInstance() {
+        return sInstance;
+    }
+}

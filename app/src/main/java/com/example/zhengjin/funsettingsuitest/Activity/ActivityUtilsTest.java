@@ -20,24 +20,24 @@ import java.util.Locale;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
 
-    Button mBtnDeviceUtilsTest = null;
-    TextView mTextDeviceUtilsTest = null;
-    Button mBtnShellUtilsTest = null;
-    TextView mTextShellUtilsTest = null;
-    Button mBtnPkgUtilsTest = null;
-    TextView mTextPkgUtilsTest = null;
-
-    Locale mLocale = null;
-
     private static int DEVICE_UTILS = 1;
     private static int PACKAGE_UTILS = 2;
+
+    private Button mBtnDeviceUtilsTest = null;
+    private TextView mTextDeviceUtilsTest = null;
+    private Button mBtnShellUtilsTest = null;
+    private TextView mTextShellUtilsTest = null;
+    private Button mBtnPkgUtilsTest = null;
+    private TextView mTextPkgUtilsTest = null;
+    private Button mBtnStartActivityTest = null;
+
+    private final Locale mLocale = Locale.getDefault();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utils_test);
         this.initViews();
-        mLocale = Locale.getDefault();
 
         if (mBtnDeviceUtilsTest != null) {
             mBtnDeviceUtilsTest.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +76,23 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 }
             });
         }
+
+        if (mBtnStartActivityTest != null) {
+            mBtnStartActivityTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String pkgName = "tv.fun.filemanager";
+                    PackageUtils.startApp(pkgName);
+                }
+            });
+        }
     }
 
     private void initViews() {
         mBtnDeviceUtilsTest = (Button) findViewById(R.id.btn_device_utils_test);
         mBtnShellUtilsTest = (Button) findViewById(R.id.btn_shell_utils_test);
         mBtnPkgUtilsTest = (Button) findViewById(R.id.btn_pkg_utils_test);
+        mBtnStartActivityTest = (Button) findViewById(R.id.btn_start_activity_test);
         mTextDeviceUtilsTest = (TextView) findViewById(R.id.text_device_utils_test);
         mTextShellUtilsTest = (TextView) findViewById(R.id.text_shell_utils_test);
         mTextPkgUtilsTest = (TextView) findViewById(R.id.text_pkg_utils_test);
@@ -166,7 +177,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getCurPkgName() {
-        PackageInfo pkgInfo = PackageUtils.getAppPackageInfo(this, getPackageName());
+        PackageInfo pkgInfo = PackageUtils.getAppPackageInfo(getPackageName());
         if (pkgInfo == null) {
             return "null";
         }
@@ -174,7 +185,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getInstalledApps() {
-        List<String> installedApps = PackageUtils.getInstalledApps(this, false);
+        List<String> installedApps = PackageUtils.getInstalledApps(false);
         StringBuilder sb = new StringBuilder(30);
         for (String app : installedApps) {
             sb.append(String.format(mLocale, "%s \n", app));
@@ -184,11 +195,11 @@ public final class ActivityUtilsTest extends AppCompatActivity {
 
     private String getRunningProcessName() {
         List<ActivityManager.RunningAppProcessInfo> runningApps =
-                PackageUtils.getRunningAppsProcessInfo(ActivityUtilsTest.this);
+                PackageUtils.getRunningAppsProcessInfo();
         StringBuilder sb = new StringBuilder(40);
         sb.append(String.format(mLocale, "Running process: %d\n", runningApps.size()));
         for (ActivityManager.RunningAppProcessInfo app : runningApps) {
-            int memPss = PackageUtils.getProcessMemPss(this, app.pid);
+            int memPss = PackageUtils.getProcessMemPss(app.pid);
             sb.append(String.format(mLocale, "%s : %s : %d \n", app.pid, app.processName, memPss));
         }
 
