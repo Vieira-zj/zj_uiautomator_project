@@ -38,7 +38,6 @@ public class ServiceUiTestRunner extends IntentService {
         Log.d(TAG, String.format("The instrument command: %s", command));
 
         // need root to run instrument command
-
         // current process is killed after start instrument test, LOG:
         // I/ActivityManager(1651): Force stopping com.example.zhengjin.funsettingsuitest appid=1000 user=0: start instr
         // I/ActivityManager(1651): Killing 10979:com.example.zhengjin.funsettingsuitest/1000 (adj 0): stop com.example.zhengjin.funsettingsuitest

@@ -53,21 +53,21 @@ public final class ActivityRunUiTest extends AppCompatActivity {
                     if (mEditorInstTestMethod == null) {
                         return;
                     }
-                    String instTestMethod = mEditorInstTestMethod.getText().toString();
-                    if ("".equals(instTestMethod)) {
-                        String msg = "Please input the instrument test method!";
-                        Toast.makeText(ActivityRunUiTest.this, msg, Toast.LENGTH_LONG).show();
-                        return;
-                    }
+//                    String instTestMethod = mEditorInstTestMethod.getText().toString();
+//                    if ("".equals(instTestMethod)) {
+//                        String msg = "Please input the instrument test method!";
+//                        Toast.makeText(ActivityRunUiTest.this, msg, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
 
                     if (mEditorExecTime == null) {
                         return;
                     }
-                    String execTime = mEditorExecTime.getText().toString();
-                    if ("".equals(execTime)) {
-                        String msg = "Please input the execution time!";
-                        Toast.makeText(ActivityRunUiTest.this, msg, Toast.LENGTH_LONG).show();
-                    }
+//                    String execTime = mEditorExecTime.getText().toString();
+//                    if ("".equals(execTime)) {
+//                        String msg = "Please input the execution time!";
+//                        Toast.makeText(ActivityRunUiTest.this, msg, Toast.LENGTH_LONG).show();
+//                    }
 
                     if (mSelectInst == null) {
                         String msg = "Please select a instrument package!";
