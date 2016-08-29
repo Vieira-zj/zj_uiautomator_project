@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
+
+    private static final  String TAG = ActivityUtilsTest.class.getSimpleName();
 
     private static int DEVICE_UTILS = 1;
     private static int PACKAGE_UTILS = 2;
@@ -172,10 +175,14 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         public void run() {
             String path = String.format(mLocale, "%s/%s", getSdcardPath(), "test.log");
 
-            StringBuilder sb = new StringBuilder(5);
+            StringBuilder sb = new StringBuilder(10);
             sb.append("test\n");
             sb.append("test line one\n");
             sb.append("test line two\n");
+            sb.append(String.format(mLocale,
+                    "Sdcard total size: %d Mb\n", FileUtils.getDirTotalSize(getSdcardPath())));
+            sb.append(String.format(mLocale,
+                    "Sdcard free size: %d Mb\n", FileUtils.getDirFreeSize(getSdcardPath())));
             FileUtils.writeFileSdcard(path, sb.toString());
 
             String tmpStr = "test line three\n";
@@ -186,6 +193,8 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             msg.obj = FileUtils.readFileSdcard(path);
             msg.what = FILE_UTILS;
             handler.sendMessage(msg);
+
+            FileUtils.deleteFile(new File(path));
         }
     }
 
@@ -252,6 +261,10 @@ public final class ActivityUtilsTest extends AppCompatActivity {
 
     private String getSdcardPath() {
         File file = FileUtils.getExternalStorageDir();
+        if (file == null) {
+            Log.e(TAG, "The external storage (sdcard) is not available!");
+            return "";
+        }
         return file.getAbsolutePath();
     }
 

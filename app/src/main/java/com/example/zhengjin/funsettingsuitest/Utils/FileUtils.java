@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.utils;
 
 import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.activity.TestApplication;
@@ -86,6 +87,46 @@ public final class FileUtils {
                 } catch (IOException e) {
                     CONTEXT.logException(TAG, e);
                 }
+            }
+        }
+
+        return ret;
+    }
+
+    public static long getDirTotalSize(String dirPath) {
+        if (StringUtils.isEmpty(dirPath) || !isFileExist(new File(dirPath))) {
+            return 0L;
+        }
+        StatFs sf = new StatFs(dirPath);
+        return (sf.getBlockCountLong() * sf.getBlockSizeLong() / 1024L / 1024L);
+    }
+
+    public static long getDirFreeSize(String dirPath) {
+        if (StringUtils.isEmpty(dirPath) || !isFileExist(new File(dirPath))) {
+            return 0L;
+        }
+        StatFs sf = new StatFs(dirPath);
+        return (sf.getAvailableBlocksLong() * sf.getBlockSizeLong() / 1024L / 1024L);
+    }
+
+    private static boolean isFileExist(File file) {
+        if (file.exists()) {
+            return true;
+        } else {
+            Log.w(TAG, String.format(CONTEXT.mLocale,
+                    "The file (%s) is not found!", file.getAbsolutePath()));
+            return false;
+        }
+    }
+
+    public static boolean deleteFile(File file) {
+        boolean ret = false;
+        if (isFileExist(file)) {
+            if (file.delete()) {
+                ret = true;
+            } else {
+                Log.d(TAG, String.format(CONTEXT.mLocale,
+                        "File (%s) delete failed!", file.getAbsolutePath()));
             }
         }
 
