@@ -1,13 +1,13 @@
-package com.example.zhengjin.funsettingsuitest.activity;
+package com.example.zhengjin.funsettingsuitest;
 
-        import android.app.Application;
-        import android.util.Log;
+import android.app.Application;
+import android.util.Log;
 
-        import java.util.Locale;
+import java.util.Locale;
 
 /**
  * Created by zhengjin on 2016/8/26.
- *
+ * <p/>
  * Application for global environment.
  */
 public final class TestApplication extends Application {

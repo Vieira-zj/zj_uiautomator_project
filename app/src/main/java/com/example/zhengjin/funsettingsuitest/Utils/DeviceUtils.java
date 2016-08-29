@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.example.zhengjin.funsettingsuitest.activity.TestApplication;
+import com.example.zhengjin.funsettingsuitest.TestApplication;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

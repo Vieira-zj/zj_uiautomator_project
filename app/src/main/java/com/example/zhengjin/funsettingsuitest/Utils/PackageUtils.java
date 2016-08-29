@@ -11,7 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Debug;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.activity.TestApplication;
+import com.example.zhengjin.funsettingsuitest.TestApplication;
 
 import java.util.ArrayList;
 import java.util.List;

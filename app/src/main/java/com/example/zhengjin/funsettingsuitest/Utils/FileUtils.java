@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.activity.TestApplication;
+import com.example.zhengjin.funsettingsuitest.TestApplication;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -98,6 +98,7 @@ public final class FileUtils {
             return 0L;
         }
         StatFs sf = new StatFs(dirPath);
+        // bytes to Mb
         return (sf.getBlockCountLong() * sf.getBlockSizeLong() / 1024L / 1024L);
     }
 
@@ -106,6 +107,7 @@ public final class FileUtils {
             return 0L;
         }
         StatFs sf = new StatFs(dirPath);
+        // bytes to Mb
         return (sf.getAvailableBlocksLong() * sf.getBlockSizeLong() / 1024L / 1024L);
     }
 

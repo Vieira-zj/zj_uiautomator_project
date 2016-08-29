@@ -194,6 +194,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             msg.what = FILE_UTILS;
             handler.sendMessage(msg);
 
+            // clear after file utils test
             FileUtils.deleteFile(new File(path));
         }
     }

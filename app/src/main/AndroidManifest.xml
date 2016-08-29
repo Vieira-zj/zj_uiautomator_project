@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.RETRIEVE_WINDOW_CONTENT" />
 
     <application
-        android:name=".activity.TestApplication"
+        android:name=".TestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
