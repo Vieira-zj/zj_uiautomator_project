@@ -1,8 +1,9 @@
 package com.example.zhengjin.funsettingsuitest.activity;
 
-import android.app.Application;
+        import android.app.Application;
+        import android.util.Log;
 
-import java.util.Locale;
+        import java.util.Locale;
 
 /**
  * Created by zhengjin on 2016/8/26.
@@ -12,6 +13,7 @@ import java.util.Locale;
 public final class TestApplication extends Application {
 
     private static TestApplication sInstance;
+
     public final Locale mLocale = Locale.getDefault();
 
     @Override
@@ -22,5 +24,10 @@ public final class TestApplication extends Application {
 
     public static TestApplication getInstance() {
         return sInstance;
+    }
+
+    public void logException(String tag, Exception e) {
+        Log.e(tag, String.format(mLocale, "EXCEPTION: %s", e.getMessage()));
+        e.printStackTrace();
     }
 }

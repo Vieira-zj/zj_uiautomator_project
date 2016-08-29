@@ -31,5 +31,6 @@
     <string name="message_shell_utils_test">Shell Utils Test</string>
     <string name="message_package_utils_test">Package Utils Test</string>
     <string name="message_start_activity_test">Start Activity Test</string>
+    <string name="message_file_utils_test">File Utils Test</string>
 
 </resources>

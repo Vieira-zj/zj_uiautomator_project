@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.example.zhengjin.funsettingsuitest.activity.TestApplication;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +21,9 @@ import java.io.IOException;
  */
 public final class DeviceUtils {
 
+    private static final String TAG = DeviceUtils.class.getSimpleName();
+    private static final TestApplication CONTEXT = TestApplication.getInstance();
+
     private static String sDeviceId = "";
     private static String sCpuModel = "";
 
@@ -27,16 +32,15 @@ public final class DeviceUtils {
     private static int sNumberOfCpuCores = 0;
     private static int sCpuFrequency = 0;
 
-    private static final String TAG = DeviceUtils.class.getSimpleName();
 
     public static String getDeviceModel() {
         return Build.MODEL;
     }
 
-    public static String getDeviceId(Context context) {
+    public static String getDeviceId() {
         if (StringUtils.isEmpty(sDeviceId)) {
             TelephonyManager tm =
-                    (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                    (TelephonyManager) CONTEXT.getSystemService(Context.TELEPHONY_SERVICE);
             if (tm != null) {
                 sDeviceId = tm.getDeviceId();
             }
@@ -48,16 +52,16 @@ public final class DeviceUtils {
         return Build.VERSION.RELEASE;
     }
 
-    public static int getDisplayHeight(Context context) {
+    public static int getDisplayHeight() {
         if (sDisplayHeight <= 0) {
-            getDisplayMetrics(context);
+            getDisplayMetrics(CONTEXT);
         }
         return sDisplayHeight;
     }
 
-    public static int getDisplayWidth(Context context) {
+    public static int getDisplayWidth() {
         if (sDisplayWidth <= 0) {
-            getDisplayMetrics(context);
+            getDisplayMetrics(CONTEXT);
         }
         return sDisplayWidth;
     }

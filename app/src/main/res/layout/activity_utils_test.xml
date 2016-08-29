@@ -52,4 +52,16 @@
         android:layout_height="wrap_content"
         android:text="@string/message_start_activity_test" />
 
+    <Button
+        android:id="@+id/btn_file_utils_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_utils_test" />
+
+    <TextView
+        android:id="@+id/text_file_utils_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_file_utils_test" />
+
 </LinearLayout>

@@ -86,7 +86,6 @@ public final class ActivityRunUiTest extends AppCompatActivity {
     }
 
     private void initViews() {
-
         mEditorInstTestMethod = (EditText) findViewById(R.id.editor_inst_test_method);
         mEditorExecTime = (EditText) findViewById(R.id.editor_exec_time);
         mListViewInstTests = (ListView) findViewById(R.id.list_inst_tests);
@@ -95,7 +94,6 @@ public final class ActivityRunUiTest extends AppCompatActivity {
     }
 
     private void queryInstrumentTests() {
-
         PackageManager pm = this.getPackageManager();
         mListInstInfo = pm.queryInstrumentation(null, PackageManager.GET_META_DATA);
 
@@ -111,7 +109,6 @@ public final class ActivityRunUiTest extends AppCompatActivity {
     }
 
     private class ListAdapter extends BaseAdapter {
-
         private LayoutInflater inflater = null;
         private int mPrePosition = -1;
 
@@ -137,7 +134,6 @@ public final class ActivityRunUiTest extends AppCompatActivity {
         @SuppressLint("InflateParams")
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-
             ViewHolder holder;
 
             if ((convertView == null) || (convertView.getTag() == null)) {

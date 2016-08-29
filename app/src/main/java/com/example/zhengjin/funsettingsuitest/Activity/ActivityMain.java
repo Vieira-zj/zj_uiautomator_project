@@ -17,7 +17,6 @@ public final class ActivityMain extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.initViews();
@@ -63,7 +62,6 @@ public final class ActivityMain extends AppCompatActivity {
     }
 
     private void initViews() {
-
         mBtnStartDemo = (Button) findViewById(R.id.btn_start_demo);
         mBtnStartInstTest = (Button) findViewById(R.id.btn_start_inst_test);
         mBtnStartUtilsTest = (Button) findViewById(R.id.btn_start_utils_test);

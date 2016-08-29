@@ -19,18 +19,12 @@ import java.util.List;
 /**
  * Created by zhengjin on 2016/8/24.
  *
- * Include utils for app packages.
+ * Include utils for app package.
  */
 public final class PackageUtils {
 
     private static final String TAG = PackageUtils.class.getSimpleName();
-    private static final TestApplication TEST_APP;
-    private static final Context CONTEXT;
-
-    static {
-        TEST_APP = TestApplication.getInstance();
-        CONTEXT = TEST_APP.getApplicationContext();
-    }
+    private static final TestApplication CONTEXT = TestApplication.getInstance();
 
     public static PackageInfo getAppPackageInfo(String pkgName) {
         PackageInfo pkgInfo = null;
@@ -92,7 +86,7 @@ public final class PackageUtils {
                     CONTEXT.getPackageManager().queryIntentActivities(resolveIntent, 0);
             int size = apps.size();
             if (size != 1) {
-                Log.w(TAG, String.format(TEST_APP.mLocale, "The are (%d) packages are found.", size));
+                Log.w(TAG, String.format(CONTEXT.mLocale, "The are (%d) packages are found.", size));
                 return false;
             }
 

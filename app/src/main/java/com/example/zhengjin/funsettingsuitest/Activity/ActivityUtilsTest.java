@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +13,11 @@ import android.widget.TextView;
 
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.utils.DeviceUtils;
+import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
 import com.example.zhengjin.funsettingsuitest.utils.PackageUtils;
 import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,6 +25,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
 
     private static int DEVICE_UTILS = 1;
     private static int PACKAGE_UTILS = 2;
+    private static int FILE_UTILS = 3;
 
     private Button mBtnDeviceUtilsTest = null;
     private TextView mTextDeviceUtilsTest = null;
@@ -29,7 +33,10 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private TextView mTextShellUtilsTest = null;
     private Button mBtnPkgUtilsTest = null;
     private TextView mTextPkgUtilsTest = null;
+    private Button mBtnFileUtilsTest = null;
+    private TextView mTextFileUtilsTest = null;
     private Button mBtnStartActivityTest = null;
+
 
     private final Locale mLocale = Locale.getDefault();
 
@@ -77,6 +84,17 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             });
         }
 
+        if (mBtnFileUtilsTest != null) {
+            mBtnFileUtilsTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mTextFileUtilsTest != null) {
+                        new Thread(new FileUtilsRunnable()).start();
+                    }
+                }
+            });
+        }
+
         if (mBtnStartActivityTest != null) {
             mBtnStartActivityTest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,9 +111,11 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         mBtnShellUtilsTest = (Button) findViewById(R.id.btn_shell_utils_test);
         mBtnPkgUtilsTest = (Button) findViewById(R.id.btn_pkg_utils_test);
         mBtnStartActivityTest = (Button) findViewById(R.id.btn_start_activity_test);
+        mBtnFileUtilsTest = (Button) findViewById(R.id.btn_file_utils_test);
         mTextDeviceUtilsTest = (TextView) findViewById(R.id.text_device_utils_test);
         mTextShellUtilsTest = (TextView) findViewById(R.id.text_shell_utils_test);
         mTextPkgUtilsTest = (TextView) findViewById(R.id.text_pkg_utils_test);
+        mTextFileUtilsTest = (TextView) findViewById(R.id.text_file_utils_test);
     }
 
     private Handler handler = new Handler() {
@@ -106,6 +126,8 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 mTextDeviceUtilsTest.setText(text);
             } else if (msg.what == PACKAGE_UTILS) {
                 mTextPkgUtilsTest.setText(text);
+            } else if (msg.what == FILE_UTILS) {
+                mTextFileUtilsTest.setText(text);
             }
         }
     };
@@ -145,12 +167,34 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         }
     }
 
+    private class FileUtilsRunnable implements Runnable {
+        @Override
+        public void run() {
+            String path = String.format(mLocale, "%s/%s", getSdcardPath(), "test.log");
+
+            StringBuilder sb = new StringBuilder(5);
+            sb.append("test\n");
+            sb.append("test line one\n");
+            sb.append("test line two\n");
+            FileUtils.writeFileSdcard(path, sb.toString());
+
+            String tmpStr = "test line three\n";
+            FileUtils.writeFileSdcard(path, tmpStr, true);
+            SystemClock.sleep(1000);
+
+            Message msg = Message.obtain();
+            msg.obj = FileUtils.readFileSdcard(path);
+            msg.what = FILE_UTILS;
+            handler.sendMessage(msg);
+        }
+    }
+
     private String getDeviceModel() {
         return String.format(mLocale, "Device Model: %s\n", DeviceUtils.getDeviceModel());
     }
 
     private String getDeviceId() {
-        return String.format(mLocale, "Device id: %s\n", DeviceUtils.getDeviceId(this));
+        return String.format(mLocale, "Device id: %s\n", DeviceUtils.getDeviceId());
     }
 
     private String getOsVersion() {
@@ -158,8 +202,8 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getDisplayMatrix() {
-        int displayHeight = DeviceUtils.getDisplayHeight(this);
-        int displayWidth = DeviceUtils.getDisplayWidth(this);
+        int displayHeight = DeviceUtils.getDisplayHeight();
+        int displayWidth = DeviceUtils.getDisplayWidth();
         return String.format(mLocale, "Display: %d * %d\n", displayWidth, displayHeight);
     }
 
@@ -204,6 +248,11 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         }
 
         return sb.toString();
+    }
+
+    private String getSdcardPath() {
+        File file = FileUtils.getExternalStorageDir();
+        return file.getAbsolutePath();
     }
 
 }
