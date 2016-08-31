@@ -39,7 +39,9 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private Button mBtnFileUtilsTest = null;
     private TextView mTextFileUtilsTest = null;
     private Button mBtnStartActivityTest = null;
+    private TextView mTextStartActivityTest = null;
 
+    private boolean mFlagStartActivity = true;
 
     private final Locale mLocale = Locale.getDefault();
 
@@ -103,7 +105,21 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     String pkgName = "tv.fun.filemanager";
-                    PackageUtils.startApp(pkgName);
+                    if (mFlagStartActivity) {
+                        PackageUtils.startApp(pkgName);
+                        if (PackageUtils.isAppOnTop(pkgName)) {
+                            Log.d(TAG, String.format(mLocale, "The package (%s) is on top.", pkgName));
+                        }
+
+                        mFlagStartActivity = false;
+                        String killMessage = "Kill Background Process Test";
+                        mTextStartActivityTest.setText(killMessage);
+                    } else {
+                        PackageUtils.killBgProcess(pkgName);
+                        mFlagStartActivity = true;
+                        String startMessage = "Start Activity Test";
+                        mTextStartActivityTest.setText(startMessage);
+                    }
                 }
             });
         }
@@ -119,6 +135,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         mTextShellUtilsTest = (TextView) findViewById(R.id.text_shell_utils_test);
         mTextPkgUtilsTest = (TextView) findViewById(R.id.text_pkg_utils_test);
         mTextFileUtilsTest = (TextView) findViewById(R.id.text_file_utils_test);
+        mTextStartActivityTest = (TextView) findViewById(R.id.text_start_activity_test);
     }
 
     private Handler handler = new Handler() {
@@ -147,6 +164,8 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             sb.append(getCpuModel());
             sb.append(getCpuCores());
             sb.append(getCpuFreq());
+            sb.append(getTotalMemory());
+            sb.append(getFreeMemory());
 
             Message msg = Message.obtain();
             msg.obj = sb.toString();
@@ -228,6 +247,16 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private String getCpuFreq() {
         float freq = (DeviceUtils.getCpuFrequency() / 1000f / 1000f);
         return String.format(mLocale, "CPU Frequency: %.3f GHz\n", freq);
+    }
+
+    private String getTotalMemory() {
+        long total = (DeviceUtils.getTotalMemory() / 1024L);
+        return String.format(mLocale, "Total Memory: %d MB\n", total);
+    }
+
+    private String getFreeMemory() {
+        long free = (DeviceUtils.getFreeMemory() / 1024L / 1024L);
+        return String.format(mLocale, "Free Memory: %d MB\n", free);
     }
 
     private String getCurPkgName() {

@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.utils;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.TelephonyManager;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import com.example.zhengjin.funsettingsuitest.TestApplication;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -31,7 +33,8 @@ public final class DeviceUtils {
     private static int sDisplayHeight = 0;
     private static int sNumberOfCpuCores = 0;
     private static int sCpuFrequency = 0;
-
+    private static long sFreeMemory = 0L;
+    private static long sTotalMemory = 0L;
 
     public static String getDeviceModel() {
         return Build.MODEL;
@@ -139,4 +142,44 @@ public final class DeviceUtils {
         return sCpuModel;
     }
 
+    public static long getFreeMemory() {
+        if (sFreeMemory == 0) {
+            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+            ActivityManager am = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
+            am.getMemoryInfo(memoryInfo);
+            sFreeMemory = memoryInfo.availMem;
+        }
+        return sFreeMemory;  // Byte
+    }
+
+    public static long getTotalMemory() {
+        if (sTotalMemory == 0) {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new FileReader(new File("/proc/meminfo")));
+                String tempStr;
+                while ((tempStr = br.readLine()) != null) {
+                    if (tempStr.contains("MemTotal")) {
+                        String memory = tempStr.split(":")[1];
+                        memory = memory.trim().split(" ")[0];
+                        if (StringUtils.isNumeric(memory)) {
+                            sTotalMemory = Long.parseLong(memory);
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                CONTEXT.logException(TAG, e);
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        CONTEXT.logException(TAG, e);
+                    }
+                }
+            }
+        }
+
+        return sTotalMemory;  // KB
+    }
 }

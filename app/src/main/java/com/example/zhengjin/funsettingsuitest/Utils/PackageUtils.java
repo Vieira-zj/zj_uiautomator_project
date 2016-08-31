@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Debug;
 import android.util.Log;
 
@@ -24,7 +25,13 @@ import java.util.List;
 public final class PackageUtils {
 
     private static final String TAG = PackageUtils.class.getSimpleName();
-    private static final TestApplication CONTEXT = TestApplication.getInstance();
+    private static final TestApplication CONTEXT;
+    private static final ActivityManager AM;
+
+    static {
+        CONTEXT = TestApplication.getInstance();
+        AM = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
+    }
 
     public static PackageInfo getAppPackageInfo(String pkgName) {
         PackageInfo pkgInfo = null;
@@ -62,13 +69,11 @@ public final class PackageUtils {
     }
 
     public static List<ActivityManager.RunningAppProcessInfo> getRunningAppsProcessInfo() {
-        ActivityManager am = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
-        return am.getRunningAppProcesses();
+        return AM.getRunningAppProcesses();
     }
 
     public static int getProcessMemPss(int pid) {
-        ActivityManager am = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
-        Debug.MemoryInfo[] memoryInfo = am.getProcessMemoryInfo(new int[] {pid});
+        Debug.MemoryInfo[] memoryInfo = AM.getProcessMemoryInfo(new int[] {pid});
         return memoryInfo[0].getTotalPss();
     }
 
@@ -102,6 +107,34 @@ public final class PackageUtils {
             Log.e(TAG, e.getMessage());
             return false;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean isAppOnTop(String pkgName) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            List<ActivityManager.RunningTaskInfo> taskInfo = AM.getRunningTasks(5);
+            String top = taskInfo.get(0).topActivity.getPackageName();
+            if (pkgName.equals(top)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void killBgProcess(String pkgName) {
+        AM.killBackgroundProcesses(pkgName);
+    }
+
+    public static boolean isServiceRunning(ComponentName service) {
+        List<ActivityManager.RunningServiceInfo> runningServices = AM.getRunningServices(256);
+        for (ActivityManager.RunningServiceInfo serviceInfo : runningServices) {
+            if (serviceInfo.service.equals(service)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
