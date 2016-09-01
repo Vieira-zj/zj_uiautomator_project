@@ -180,7 +180,8 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             StringBuilder sb = new StringBuilder(10);
             sb.append(getCurPkgName());
             sb.append(getInstalledApps());
-            sb.append(getRunningProcessName());
+            sb.append(getPackageSize("tv.fun.filemanager"));
+            sb.append(getRunningProcessName(5));
 
             Message msg = Message.obtain();
             msg.obj = sb.toString();
@@ -276,16 +277,30 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         return String.format(mLocale, "Installed APPs: %s", sb.toString());
     }
 
-    private String getRunningProcessName() {
+    private String getRunningProcessName(int max) {
+        StringBuilder sb = new StringBuilder(40);
+
         List<ActivityManager.RunningAppProcessInfo> runningApps =
                 PackageUtils.getRunningAppsProcessInfo();
-        StringBuilder sb = new StringBuilder(40);
-        sb.append(String.format(mLocale, "Running process: %d\n", runningApps.size()));
-        for (ActivityManager.RunningAppProcessInfo app : runningApps) {
+        int size = runningApps.size();
+        sb.append(String.format(mLocale, "Running process: %d\n", size));
+
+        // TODO: 2016/9/1 sort for runningApps list 
+        for (int i = 0; i <= max; i++) {
+            ActivityManager.RunningAppProcessInfo app = runningApps.get(i);
             int memPss = PackageUtils.getProcessMemPss(app.pid);
             sb.append(String.format(mLocale, "%s : %s : %d \n", app.pid, app.processName, memPss));
         }
+        return sb.toString();
+    }
 
+    private String getPackageSize(String pkgName) {
+        PackageUtils.PackageSizeInfo sizeInfo = PackageUtils.getPackageUsedSizeInfo(pkgName);
+        StringBuilder sb = new StringBuilder(5);
+        sb.append(String.format(mLocale, "Package Size Information: %s\n", pkgName));
+        sb.append(String.format(mLocale, "Code Size: %s\n", sizeInfo.getCodeSize()));
+        sb.append(String.format(mLocale, "Data Size: %s\n", sizeInfo.getDataSize()));
+        sb.append(String.format(mLocale, "Cache Size: %s\n", sizeInfo.getCacheSize()));
         return sb.toString();
     }
 

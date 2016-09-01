@@ -5,15 +5,22 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageStats;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Debug;
+import android.os.RemoteException;
+import android.os.SystemClock;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.TestApplication;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +34,8 @@ public final class PackageUtils {
     private static final String TAG = PackageUtils.class.getSimpleName();
     private static final TestApplication CONTEXT;
     private static final ActivityManager AM;
+
+    private static PackageSizeInfo sPackageSizeInfo;
 
     static {
         CONTEXT = TestApplication.getInstance();
@@ -76,10 +85,6 @@ public final class PackageUtils {
         Debug.MemoryInfo[] memoryInfo = AM.getProcessMemoryInfo(new int[] {pid});
         return memoryInfo[0].getTotalPss();
     }
-
-    // TODO: 2016/8/26 Get cache size using reflection
-//    public static void getPackageCacheSize() {
-//    }
 
     public static boolean startApp(String pkgName) {
         try {
@@ -135,6 +140,68 @@ public final class PackageUtils {
         }
 
         return false;
+    }
+
+    private static void getPackageSizeInfo(String pkgName) {
+        if (sPackageSizeInfo != null) {
+            return;
+        }
+
+        PackageManager pm = CONTEXT.getPackageManager();
+        try {
+            Method getPackageSizeInfo = pm.getClass().getMethod(
+                    "getPackageSizeInfo", String.class, IPackageStatsObserver.class);
+            getPackageSizeInfo.invoke(pm, pkgName, new IPackageStatsObserver.Stub() {
+                @Override
+                public void onGetStatsCompleted(final PackageStats pStats, boolean succeeded)
+                        throws RemoteException {
+                    if (succeeded && pStats != null) {
+                        String codeSize = Formatter.formatFileSize(CONTEXT, pStats.codeSize);
+                        String dataSize = Formatter.formatFileSize(CONTEXT, pStats.dataSize);
+                        String cacheSize = Formatter.formatFileSize(CONTEXT, pStats.cacheSize);
+                        sPackageSizeInfo = new PackageSizeInfo(codeSize, dataSize, cacheSize);
+                    }
+                }
+            });
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            CONTEXT.logException(TAG, e);
+        }
+    }
+
+    public static PackageSizeInfo getPackageUsedSizeInfo(String pkgName) {
+        getPackageSizeInfo(pkgName);
+        for (int i = 0; i <= 5; i++) {
+            // wait for onGetStatsCompleted()
+            SystemClock.sleep(1000);
+            if (sPackageSizeInfo != null) {
+                break;
+            }
+        }
+        return sPackageSizeInfo;
+    }
+
+    public static class PackageSizeInfo {
+        private String codeSize;
+        private String dataSize;
+        private String cacheSize;
+
+        public PackageSizeInfo(String codeSize, String dataSize, String cacheSize) {
+            this.codeSize = codeSize;
+            this.dataSize = dataSize;
+            this.cacheSize = cacheSize;
+        }
+
+        public String getCodeSize() {
+            return codeSize;
+        }
+
+        public String getDataSize() {
+            return dataSize;
+        }
+
+        public String getCacheSize() {
+            return cacheSize;
+        }
     }
 
 }
