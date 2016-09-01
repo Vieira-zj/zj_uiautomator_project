@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,8 +45,6 @@ public final class FileUtils {
                 sb.append(line + "\n");
             }
             data = sb.toString();
-        } catch (FileNotFoundException e) {
-            Log.w(TAG, String.format(CONTEXT.mLocale, "The file (%s) is not found!", filePath));
         } catch (IOException e) {
             CONTEXT.logException(TAG, e);
         } finally {
@@ -76,8 +73,6 @@ public final class FileUtils {
                     new File(filePath), flagAppend)));
             bw.write(fileContent);
             ret = true;
-        } catch (FileNotFoundException e) {
-            Log.w(TAG, String.format(CONTEXT.mLocale, "The file (%s) is not found!", filePath));
         } catch (IOException e) {
             CONTEXT.logException(TAG, e);
         } finally {

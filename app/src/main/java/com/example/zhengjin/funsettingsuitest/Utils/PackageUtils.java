@@ -34,20 +34,22 @@ public final class PackageUtils {
     private static final String TAG = PackageUtils.class.getSimpleName();
     private static final TestApplication CONTEXT;
     private static final ActivityManager AM;
+    private static final PackageManager PM;
 
     private static PackageSizeInfo sPackageSizeInfo;
 
     static {
         CONTEXT = TestApplication.getInstance();
         AM = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
+        PM = CONTEXT.getPackageManager();
     }
 
     public static PackageInfo getAppPackageInfo(String pkgName) {
         PackageInfo pkgInfo = null;
         try {
-            pkgInfo = CONTEXT.getPackageManager().getPackageInfo(pkgName, 0);
+            pkgInfo = PM.getPackageInfo(pkgName, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, e.getMessage());
+            CONTEXT.logException(TAG, e);
         }
 
         return pkgInfo;
@@ -55,9 +57,8 @@ public final class PackageUtils {
 
     public static List<String> getInstalledApps(boolean flagIncludeSystemApp) {
         List<String> installedAppsName = new ArrayList<>(50);
-        List<ApplicationInfo> installedApps =
-                CONTEXT.getPackageManager().getInstalledApplications(0);
 
+        List<ApplicationInfo> installedApps = PM.getInstalledApplications(0);
         if (flagIncludeSystemApp) {
             for (ApplicationInfo app : installedApps) {
                 installedAppsName.add(app.packageName);
@@ -92,11 +93,10 @@ public final class PackageUtils {
             resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             resolveIntent.setPackage(pkgName);
 
-            List<ResolveInfo> apps =
-                    CONTEXT.getPackageManager().queryIntentActivities(resolveIntent, 0);
+            List<ResolveInfo> apps = PM.queryIntentActivities(resolveIntent, 0);
             int size = apps.size();
             if (size != 1) {
-                Log.w(TAG, String.format(CONTEXT.mLocale, "The are (%d) packages are found.", size));
+                Log.w(TAG, String.format(CONTEXT.mLocale, "The are (%d) packages found.", size));
                 return false;
             }
 
@@ -109,7 +109,7 @@ public final class PackageUtils {
             CONTEXT.startActivity(intent);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            CONTEXT.logException(TAG, e);
             return false;
         }
     }
@@ -147,11 +147,10 @@ public final class PackageUtils {
             return;
         }
 
-        PackageManager pm = CONTEXT.getPackageManager();
         try {
-            Method getPackageSizeInfo = pm.getClass().getMethod(
+            Method getPackageSizeInfo = PM.getClass().getMethod(
                     "getPackageSizeInfo", String.class, IPackageStatsObserver.class);
-            getPackageSizeInfo.invoke(pm, pkgName, new IPackageStatsObserver.Stub() {
+            getPackageSizeInfo.invoke(PM, pkgName, new IPackageStatsObserver.Stub() {
                 @Override
                 public void onGetStatsCompleted(final PackageStats pStats, boolean succeeded)
                         throws RemoteException {
@@ -168,7 +167,7 @@ public final class PackageUtils {
         }
     }
 
-    public static PackageSizeInfo getPackageUsedSizeInfo(String pkgName) {
+    public static PackageSizeInfo getPackageUsedSize(String pkgName) {
         getPackageSizeInfo(pkgName);
         for (int i = 0; i <= 5; i++) {
             // wait for onGetStatsCompleted()
@@ -177,10 +176,12 @@ public final class PackageUtils {
                 break;
             }
         }
+
         return sPackageSizeInfo;
     }
 
     public static class PackageSizeInfo {
+
         private String codeSize;
         private String dataSize;
         private String cacheSize;

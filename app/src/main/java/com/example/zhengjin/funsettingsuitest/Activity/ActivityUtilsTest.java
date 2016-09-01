@@ -278,7 +278,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getRunningProcessName(int max) {
-        StringBuilder sb = new StringBuilder(40);
+        StringBuilder sb = new StringBuilder(max + 5);
 
         List<ActivityManager.RunningAppProcessInfo> runningApps =
                 PackageUtils.getRunningAppsProcessInfo();
@@ -295,12 +295,13 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getPackageSize(String pkgName) {
-        PackageUtils.PackageSizeInfo sizeInfo = PackageUtils.getPackageUsedSizeInfo(pkgName);
+        PackageUtils.PackageSizeInfo sizeInfo = PackageUtils.getPackageUsedSize(pkgName);
         StringBuilder sb = new StringBuilder(5);
         sb.append(String.format(mLocale, "Package Size Information: %s\n", pkgName));
         sb.append(String.format(mLocale, "Code Size: %s\n", sizeInfo.getCodeSize()));
         sb.append(String.format(mLocale, "Data Size: %s\n", sizeInfo.getDataSize()));
         sb.append(String.format(mLocale, "Cache Size: %s\n", sizeInfo.getCacheSize()));
+
         return sb.toString();
     }
 

@@ -100,17 +100,18 @@ public final class DeviceUtils {
                     sCpuFrequency = Integer.parseInt(cpuFreq.trim());
                 }
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                CONTEXT.logException(TAG, e);
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        CONTEXT.logException(TAG, e);
                     }
                 }
             }
         }
+
         return sCpuFrequency;
     }
 
@@ -127,13 +128,13 @@ public final class DeviceUtils {
                     }
                 }
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                CONTEXT.logException(TAG, e);
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
+                        CONTEXT.logException(TAG, e);
                     }
                 }
             }
