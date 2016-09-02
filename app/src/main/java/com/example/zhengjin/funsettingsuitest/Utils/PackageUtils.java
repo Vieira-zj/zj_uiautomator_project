@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageStatsObserver;
+import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
@@ -58,21 +59,6 @@ public final class PackageUtils {
         return pkgInfo;
     }
 
-    public static Map<String, String> getLaunchedApps() {
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> resolveInfos =
-                PM.queryIntentActivities(mainIntent, PackageManager.MATCH_DEFAULT_ONLY);
-        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(PM));
-
-        Map<String, String> launchedApps = new HashMap<>(50);
-        for (ResolveInfo info : resolveInfos) {
-            launchedApps.put(info.activityInfo.packageName, info.activityInfo.name);
-        }
-
-        return launchedApps;
-    }
-
     public static List<String> getInstalledAppsName(boolean flagIncludeSystemApp) {
         List<ApplicationInfo> installedApps = PM.getInstalledApplications(0);
         Collections.sort(installedApps, new ApplicationInfo.DisplayNameComparator(PM));
@@ -95,6 +81,38 @@ public final class PackageUtils {
 
     private static boolean isSystemApp(ApplicationInfo info) {
         return (info != null) && ((info.flags & ApplicationInfo.FLAG_SYSTEM) > 0);
+    }
+
+    public static Map<String, String> queryLaunchedApps() {
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> resolveInfos =
+                PM.queryIntentActivities(mainIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(PM));
+
+        Map<String, String> launchedApps = new HashMap<>(50);
+        for (ResolveInfo info : resolveInfos) {
+            launchedApps.put(info.activityInfo.packageName, info.activityInfo.name);
+        }
+
+        return launchedApps;
+    }
+
+    public static List<InstrumentationInfo> queryInstrumentTests() {
+        List<InstrumentationInfo> listInstInfo =
+                PM.queryInstrumentation(null, PackageManager.GET_META_DATA);
+
+        if ((listInstInfo != null) && (listInstInfo.size() > 0)) {
+            for (InstrumentationInfo inst : listInstInfo) {
+                Log.d(TAG, "Instrumentation package name: " + inst.packageName);
+                Log.d(TAG, "Instrumentation target package: " + inst.targetPackage);
+                Log.d(TAG, "Instrumentation runner: " + inst.name);
+            }
+            return listInstInfo;
+        } else {
+            Log.w(TAG, "No instrument tests found on target device!");
+            return new ArrayList<>();
+        }
     }
 
     public static List<ActivityManager.RunningAppProcessInfo> getRunningAppsProcessInfo() {

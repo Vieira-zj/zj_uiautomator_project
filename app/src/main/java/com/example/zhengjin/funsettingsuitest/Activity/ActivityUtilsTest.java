@@ -195,29 +195,30 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private class FileUtilsRunnable implements Runnable {
         @Override
         public void run() {
-            String path = String.format(mLocale, "%s/%s", getSdcardPath(), "test.log");
+            String sdcardPath = FileUtils.getExternalStoragePath();
+            String filePath = String.format(mLocale, "%s/%s", sdcardPath, "test.log");
 
             StringBuilder sb = new StringBuilder(10);
             sb.append("test\n");
             sb.append("test line one\n");
             sb.append("test line two\n");
             sb.append(String.format(mLocale,
-                    "Sdcard total size: %d Mb\n", FileUtils.getDirTotalSize(getSdcardPath())));
+                    "Sdcard total size: %d Mb\n", FileUtils.getDirTotalSize(sdcardPath)));
             sb.append(String.format(mLocale,
-                    "Sdcard free size: %d Mb\n", FileUtils.getDirFreeSize(getSdcardPath())));
-            FileUtils.writeFileSdcard(path, sb.toString());
+                    "Sdcard free size: %d Mb\n", FileUtils.getDirFreeSize(sdcardPath)));
+            FileUtils.writeFileSdcard(filePath, sb.toString());
 
             String tmpStr = "test line three\n";
-            FileUtils.writeFileSdcard(path, tmpStr, true);
+            FileUtils.writeFileSdcard(filePath, tmpStr, true);
             SystemClock.sleep(1000);
 
             Message msg = Message.obtain();
-            msg.obj = FileUtils.readFileSdcard(path);
+            msg.obj = FileUtils.readFileSdcard(filePath);
             msg.what = FILE_UTILS;
             handler.sendMessage(msg);
 
             // clear after file utils test
-            FileUtils.deleteFile(new File(path));
+            FileUtils.deleteFile(new File(filePath));
         }
     }
 
@@ -280,7 +281,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getLaunchedApps() {
-        Map<String, String> launchApps = PackageUtils.getLaunchedApps();
+        Map<String, String> launchApps = PackageUtils.queryLaunchedApps();
         StringBuilder sb = new StringBuilder(30);
         String tmpStr;
         for (Map.Entry<String, String> entry : launchApps.entrySet()) {
@@ -318,15 +319,6 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         sb.append(String.format(mLocale, "Cache Size: %s\n", sizeInfo.getCacheSize()));
 
         return sb.toString();
-    }
-
-    private String getSdcardPath() {
-        File file = FileUtils.getExternalStorageDir();
-        if (file == null) {
-            Log.e(TAG, "The external storage (sdcard) is not available!");
-            return "";
-        }
-        return file.getAbsolutePath();
     }
 
 }

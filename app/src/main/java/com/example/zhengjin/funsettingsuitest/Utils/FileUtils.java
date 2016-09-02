@@ -29,8 +29,17 @@ public final class FileUtils {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    public static File getExternalStorageDir() {
+    private static File getExternalStorageDir() {
         return isExternalStorageAvailable() ? Environment.getExternalStorageDirectory() : null;
+    }
+
+    public static String getExternalStoragePath() {
+        File file = getExternalStorageDir();
+        if (file == null) {
+            Log.e(TAG, "The external storage (sdcard) is not available!");
+            return "";
+        }
+        return file.getAbsolutePath();
     }
 
     public static String readFileSdcard(String filePath) {

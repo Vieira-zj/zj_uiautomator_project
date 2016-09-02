@@ -21,7 +21,7 @@
     <string name="label_inst_test_method">Test Method</string>
     <string name="editor_inst_test_method_hint">class#method</string>
     <string name="label_exec_time">Execution Time</string>
-    <string name="editor_exec_time_hint">xx minutes</string>
+    <string name="editor_exec_time_hint">minutes</string>
     <string name="btn_run_inst_test">Run Test</string>
 
     <!-- utils test activity -->

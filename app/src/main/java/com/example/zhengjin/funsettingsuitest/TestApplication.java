@@ -14,6 +14,13 @@ public final class TestApplication extends Application {
 
     private static TestApplication sInstance;
 
+    public static final String EXTRA_KEY_EXEC_TIME = "ExecTime";
+    public static final String EXTRA_KEY_INST_METHOD = "TestInstMethod";
+    public static final String EXTRA_KEY_TEST_PACKAGE = "TestPkgName";
+    public static final String EXTRA_KEY_TEST_RUNNER = "TestRunner";
+
+    public static final String INST_LOG_FILE_NAME = "inst_test_log_%s.log";
+
     public final Locale mLocale = Locale.getDefault();
 
     @Override
