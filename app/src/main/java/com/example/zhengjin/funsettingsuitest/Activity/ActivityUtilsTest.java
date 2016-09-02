@@ -21,6 +21,7 @@ import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
 
@@ -182,6 +183,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             sb.append(getInstalledApps());
             sb.append(getPackageSize("tv.fun.filemanager"));
             sb.append(getRunningProcessName(5));
+            sb.append(getLaunchedApps());
 
             Message msg = Message.obtain();
             msg.obj = sb.toString();
@@ -269,12 +271,25 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     }
 
     private String getInstalledApps() {
-        List<String> installedApps = PackageUtils.getInstalledApps(false);
+        List<String> installedApps = PackageUtils.getInstalledAppsName(false);
         StringBuilder sb = new StringBuilder(30);
         for (String app : installedApps) {
             sb.append(String.format(mLocale, "%s \n", app));
         }
         return String.format(mLocale, "Installed APPs: %s", sb.toString());
+    }
+
+    private String getLaunchedApps() {
+        Map<String, String> launchApps = PackageUtils.getLaunchedApps();
+        StringBuilder sb = new StringBuilder(30);
+        String tmpStr;
+        for (Map.Entry<String, String> entry : launchApps.entrySet()) {
+            tmpStr = String.format(mLocale, "Launched Package: %s, Start Activity: %s\n",
+                    entry.getKey(), entry.getValue());
+            sb.append(tmpStr);
+        }
+
+        return sb.toString();
     }
 
     private String getRunningProcessName(int max) {

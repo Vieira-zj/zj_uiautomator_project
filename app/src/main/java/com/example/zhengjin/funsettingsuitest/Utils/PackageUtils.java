@@ -22,7 +22,10 @@ import com.example.zhengjin.funsettingsuitest.TestApplication;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengjin on 2016/8/24.
@@ -55,10 +58,26 @@ public final class PackageUtils {
         return pkgInfo;
     }
 
-    public static List<String> getInstalledApps(boolean flagIncludeSystemApp) {
-        List<String> installedAppsName = new ArrayList<>(50);
+    public static Map<String, String> getLaunchedApps() {
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> resolveInfos =
+                PM.queryIntentActivities(mainIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(PM));
 
+        Map<String, String> launchedApps = new HashMap<>(50);
+        for (ResolveInfo info : resolveInfos) {
+            launchedApps.put(info.activityInfo.packageName, info.activityInfo.name);
+        }
+
+        return launchedApps;
+    }
+
+    public static List<String> getInstalledAppsName(boolean flagIncludeSystemApp) {
         List<ApplicationInfo> installedApps = PM.getInstalledApplications(0);
+        Collections.sort(installedApps, new ApplicationInfo.DisplayNameComparator(PM));
+
+        List<String> installedAppsName = new ArrayList<>(50);
         if (flagIncludeSystemApp) {
             for (ApplicationInfo app : installedApps) {
                 installedAppsName.add(app.packageName);
