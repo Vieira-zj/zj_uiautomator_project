@@ -9,6 +9,7 @@ import com.example.zhengjin.funsettingsuitest.TestApplication;
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
 import com.example.zhengjin.funsettingsuitest.utils.HelperUtils;
 import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import java.util.Locale;
 
@@ -21,20 +22,23 @@ public class ServiceUiTestRunner extends IntentService {
 
     private static final String TAG = ServiceUiTestRunner.class.getSimpleName();
 
-    private final Locale mLocale = Locale.getDefault();
+    private final Locale mLocale;
+    private final String mTmpLogDir;
 
-    private String mTmpLogDir = null;
     private int mTotalRunTimes = 0;
     private int mTotalFailed = 0;
 
     public ServiceUiTestRunner() {
         super(TAG);
+        mLocale = Locale.getDefault();
+        String logFileName = String.format(mLocale, TestApplication.INST_LOG_FILE_NAME,
+                HelperUtils.getCurrentTime());
+        mTmpLogDir = String.format(mLocale, "%s/%s", FileUtils.getExternalStoragePath(), logFileName);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        logInstTestHeader();
-        initData();
+        this.logInstTestHeader();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -60,14 +64,7 @@ public class ServiceUiTestRunner extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        logInstTestFooter();
-    }
-
-    private void initData() {
-        String logFileName = String.format(mLocale, TestApplication.INST_LOG_FILE_NAME,
-                HelperUtils.getCurrentTime());
-        mTmpLogDir = String.format(mLocale, "%s/%s",
-                FileUtils.getExternalStoragePath(), logFileName);
+        this.logInstTestSummary();
     }
 
     private String buildInstCommand(Intent intent) {
@@ -100,7 +97,7 @@ public class ServiceUiTestRunner extends IntentService {
         // I/ActivityManager(1651): Killing 10979:com.example.zhengjin.funsettingsuitest/1000 (adj 0): stop com.example.zhengjin.funsettingsuitest
         // reason: test app and app under test are from the same AS project
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
-        if (cr.mResult != 0) {
+        if (cr.getReturnCode() != 0) {
             ++mTotalFailed;
         }
         logInstTestCmdResults(cr);
@@ -122,25 +119,38 @@ public class ServiceUiTestRunner extends IntentService {
     }
 
     private void logInstTestHeader() {
-        Log.d(TAG, "START -----> the instrument test start!\n");
+        this.printAndWriteLog("START -----> the instrument test start!\n");
     }
 
-    private void logInstTestFooter() {
-        Log.d(TAG, "END -----> the instrument test finished!\n");
-        Log.d(TAG, String.format(mLocale, "Total run times: %d", mTotalRunTimes));
-        Log.d(TAG, String.format(mLocale, "Total passed: %d", (mTotalRunTimes - mTotalFailed)));
-        Log.d(TAG, String.format(mLocale, "Total failed: %d", mTotalFailed));
+    private void logInstTestSummary() {
+        StringBuilder sb = new StringBuilder(5);
+        sb.append("END -----> the instrument test finished!\n");
+        sb.append(String.format(mLocale, "Total run times: %d\n", mTotalRunTimes));
+        sb.append(String.format(mLocale, "Total passed: %d\n", (mTotalRunTimes - mTotalFailed)));
+        sb.append(String.format(mLocale, "Total failed: %d\n", mTotalFailed));
+
+        this.printAndWriteLog(sb.toString());
     }
 
     private void logInstTestCmdResults(ShellUtils.CommandResult cr) {
         StringBuilder sb = new StringBuilder(5);
-        sb.append(String.format(mLocale, "The instrument test result code: %d\n", cr.mResult));
-        sb.append(String.format(mLocale, "The instrument test success message: %s\n", cr.mSuccessMsg));
-        sb.append(String.format(mLocale, "The instrument test error message: %s\n\n", cr.mErrorMsg));
+        sb.append(String.format(mLocale,
+                "The instrument test result code: %d\n", cr.getReturnCode()));
+        String tmpMsg = cr.getReturnSuccessMsg();
+        if (!StringUtils.isEmpty(tmpMsg)) {
+            sb.append(String.format(mLocale, "The instrument test success message: %s\n", tmpMsg));
+        }
+        tmpMsg = cr.getReturnErrorMsg();
+        if (!StringUtils.isEmpty(tmpMsg)) {
+            sb.append(String.format(mLocale, "The instrument test error message: %s\n\n", tmpMsg));
+        }
 
-        Log.d(TAG, sb.toString());
-        Log.d(TAG, "Save log file: " + mTmpLogDir);
-        FileUtils.writeFileSdcard(mTmpLogDir, sb.toString(), true);
+        printAndWriteLog(sb.toString());
+    }
+
+    private void printAndWriteLog(String content) {
+        Log.d(TAG, content);
+        FileUtils.writeFileSdcard(mTmpLogDir, content, true);
     }
 
 }

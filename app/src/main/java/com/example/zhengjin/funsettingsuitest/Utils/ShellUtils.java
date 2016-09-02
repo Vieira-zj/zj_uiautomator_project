@@ -97,20 +97,32 @@ public final class ShellUtils {
             }
         }
 
-        return new CommandResult(result,
-                (successMsg != null ? (StringUtils.isEmpty(successMsg.toString()) ? "null" : successMsg.toString()) : null),
-                (errorMsg != null ? (StringUtils.isEmpty(errorMsg.toString()) ? "null" : errorMsg.toString()) : null));
+        return new CommandResult(result, (successMsg != null ? successMsg.toString() : null),
+                (errorMsg != null ? errorMsg.toString() : null));
     }
 
     public static class CommandResult {
-        public int mResult;
-        public String mSuccessMsg;
-        public String mErrorMsg;
+
+        private int mResult;
+        private String mSuccessMsg;
+        private String mErrorMsg;
 
         public CommandResult(int results, String successMsg, String errorMsg) {
             mResult = results;
             mSuccessMsg = successMsg;
             mErrorMsg = errorMsg;
+        }
+
+        public int getReturnCode() {
+            return this.mResult;
+        }
+
+        public String getReturnSuccessMsg() {
+            return this.mSuccessMsg;
+        }
+
+        public String getReturnErrorMsg() {
+            return this.mErrorMsg;
         }
     }
 

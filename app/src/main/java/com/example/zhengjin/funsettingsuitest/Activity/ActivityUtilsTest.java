@@ -72,7 +72,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
                         String text = String.format(mLocale,
                                 "Result code: %d\n Success message: %s\n Error message: %s",
-                                cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
+                                cr.getReturnCode(), cr.getReturnSuccessMsg(), cr.getReturnErrorMsg());
                         mTextShellUtilsTest.setText(text);
                     }
                 }
@@ -301,7 +301,6 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         int size = runningApps.size();
         sb.append(String.format(mLocale, "Running process: %d\n", size));
 
-        // TODO: 2016/9/1 sort for runningApps list 
         for (int i = 0; i <= max; i++) {
             ActivityManager.RunningAppProcessInfo app = runningApps.get(i);
             int memPss = PackageUtils.getProcessMemPss(app.pid);

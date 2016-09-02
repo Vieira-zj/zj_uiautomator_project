@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.activity;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.InstrumentationInfo;
@@ -32,11 +33,13 @@ import static com.example.zhengjin.funsettingsuitest.TestApplication.EXTRA_KEY_T
 public final class ActivityRunUiTest extends AppCompatActivity {
 
 //    private static final String TAG = ActivityRunUiTest.class.getSimpleName();
+//    private static final TestApplication CONTEXT = TestApplication.getInstance();
 
     private EditText mEditorInstTestMethod = null;
     private EditText mEditorExecTime = null;
     private ListView mListViewInstTests = null;
     private Button mBtnRunInstTest = null;
+    private TextView mTextInstRunStatus = null;
 
     private List<InstrumentationInfo> mListInstInfo = null;
     private InstrumentationInfo mSelectInst = null;
@@ -53,13 +56,8 @@ public final class ActivityRunUiTest extends AppCompatActivity {
             mBtnRunInstTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!verifyTestMethodEditor()) {
-                        return;
-                    }
-                    if (!verifyExecTimeEditor()) {
-                        return;
-                    }
-                    if (!verifySelectedInstrument()) {
+                    if (!verifyTestMethodEditor() || !verifyExecTimeEditor() ||
+                            !verifySelectedInstrument()) {
                         return;
                     }
 
@@ -70,9 +68,35 @@ public final class ActivityRunUiTest extends AppCompatActivity {
                     intent.putExtra(EXTRA_KEY_TEST_PACKAGE, mSelectInst.packageName);
                     intent.putExtra(EXTRA_KEY_TEST_RUNNER, mSelectInst.name);
                     ActivityRunUiTest.this.startService(intent);
+
+                    ActivityRunUiTest.this.setRunningStatus();
                 }
             });
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ComponentName service = new ComponentName(this, ServiceUiTestRunner.class);
+        if (PackageUtils.isServiceRunning(service)) {
+            this.setRunningStatus();
+        } else {
+            if (!mBtnRunInstTest.isEnabled()) {
+                this.setStopStatus();
+            }
+        }
+    }
+
+    private void setRunningStatus() {
+        String tmpStr = "Instrument test is running...";
+        mBtnRunInstTest.setEnabled(false);
+        mTextInstRunStatus.setText(tmpStr);
+    }
+
+    private void setStopStatus() {
+        mBtnRunInstTest.setEnabled(true);
+        mTextInstRunStatus.setText("");
     }
 
     private boolean verifySelectedInstrument() {
@@ -122,12 +146,15 @@ public final class ActivityRunUiTest extends AppCompatActivity {
         mEditorInstTestMethod = (EditText) findViewById(R.id.editor_inst_test_method);
         mListViewInstTests = (ListView) findViewById(R.id.list_inst_tests);
         mBtnRunInstTest = (Button) findViewById(R.id.btn_run_inst_test);
+        mTextInstRunStatus = (TextView) findViewById(R.id.text_inst_run_status);
     }
 
     private void initData() {
         mListInstInfo = PackageUtils.queryInstrumentTests();
-        // set default value for test
-        mEditorInstTestMethod.setText("testCases.TestFunTvFilm#testDemo");
+
+        // for test, will be removed
+        String tmpTestMethod = "testCases.TestFunTvFilm#testDemo";
+        mEditorInstTestMethod.setText(tmpTestMethod);
     }
 
     private class ListAdapter extends BaseAdapter {
