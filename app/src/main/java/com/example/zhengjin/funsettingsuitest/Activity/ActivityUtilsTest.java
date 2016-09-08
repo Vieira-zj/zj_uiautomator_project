@@ -25,11 +25,13 @@ import java.util.Map;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
 
-    private static final  String TAG = ActivityUtilsTest.class.getSimpleName();
+    private static final String TAG = ActivityUtilsTest.class.getSimpleName();
 
-    private static int DEVICE_UTILS = 1;
-    private static int PACKAGE_UTILS = 2;
-    private static int FILE_UTILS = 3;
+    private static final int DEVICE_UTILS = 1;
+    private static final int PACKAGE_UTILS = 2;
+    private static final int FILE_UTILS = 3;
+
+    private final Locale mLocale = Locale.getDefault();
 
     private Button mBtnDeviceUtilsTest = null;
     private TextView mTextDeviceUtilsTest = null;
@@ -43,8 +45,6 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private TextView mTextStartActivityTest = null;
 
     private boolean mFlagStartActivity = true;
-
-    private final Locale mLocale = Locale.getDefault();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                     if (mFlagStartActivity) {
                         PackageUtils.startApp(pkgName);
                         if (PackageUtils.isAppOnTop(pkgName)) {
-                            Log.d(TAG, String.format(mLocale, "The package (%s) is on top.", pkgName));
+                            Log.d(TAG, String.format("The package (%s) is on top.", pkgName));
                         }
 
                         mFlagStartActivity = false;
@@ -196,7 +196,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         @Override
         public void run() {
             String sdcardPath = FileUtils.getExternalStoragePath();
-            String filePath = String.format(mLocale, "%s/%s", sdcardPath, "test.log");
+            String filePath = String.format("%s/%s", sdcardPath, "test.log");
 
             StringBuilder sb = new StringBuilder(10);
             sb.append("test\n");

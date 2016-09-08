@@ -33,7 +33,6 @@ import static com.example.zhengjin.funsettingsuitest.TestApplication.EXTRA_KEY_T
 public final class ActivityRunUiTest extends AppCompatActivity {
 
 //    private static final String TAG = ActivityRunUiTest.class.getSimpleName();
-//    private static final TestApplication CONTEXT = TestApplication.getInstance();
 
     private EditText mEditorInstTestMethod = null;
     private EditText mEditorExecTime = null;
@@ -89,7 +88,7 @@ public final class ActivityRunUiTest extends AppCompatActivity {
     }
 
     private void setRunningStatus() {
-        String tmpStr = "Instrument test is running...";
+        String tmpStr = "Instrument test is running ...";
         mBtnRunInstTest.setEnabled(false);
         mTextInstRunStatus.setText(tmpStr);
     }
@@ -152,9 +151,9 @@ public final class ActivityRunUiTest extends AppCompatActivity {
     private void initData() {
         mListInstInfo = PackageUtils.queryInstrumentTests();
 
-        // for test, will be removed
-        String tmpTestMethod = "testCases.TestFunTvFilm#testDemo";
-        mEditorInstTestMethod.setText(tmpTestMethod);
+        // for default
+        String defaultTestMethod = "testCases.TestFunTvFilm#testDemo";
+        mEditorInstTestMethod.setText(defaultTestMethod);
     }
 
     private class ListAdapter extends BaseAdapter {

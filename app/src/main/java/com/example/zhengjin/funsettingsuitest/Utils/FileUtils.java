@@ -51,17 +51,19 @@ public final class FileUtils {
             String line;
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(String.format("%s\n", line));
             }
             data = sb.toString();
         } catch (IOException e) {
-            CONTEXT.logException(TAG, e);
+            Log.e(TAG, "IOException from readFileSdcard()!");
+            e.printStackTrace();
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
-                    CONTEXT.logException(TAG, e);
+                    Log.e(TAG, "IOException when close buffer reader from readFileSdcard()!");
+                    e.printStackTrace();
                 }
             }
         }
@@ -83,13 +85,15 @@ public final class FileUtils {
             bw.write(fileContent);
             ret = true;
         } catch (IOException e) {
-            CONTEXT.logException(TAG, e);
+            Log.e(TAG, "IOException from writeFileSdcard()!");
+            e.printStackTrace();
         } finally {
             if (bw != null) {
                 try {
                     bw.close();
                 } catch (IOException e) {
-                    CONTEXT.logException(TAG, e);
+                    Log.e(TAG, "IOException when close buffer write from writeFileSdcard()!");
+                    e.printStackTrace();
                 }
             }
         }
@@ -119,8 +123,7 @@ public final class FileUtils {
         if (file.exists()) {
             return true;
         } else {
-            Log.w(TAG, String.format(CONTEXT.mLocale,
-                    "The file (%s) is not found!", file.getAbsolutePath()));
+            Log.w(TAG, String.format("The file (%s) is not found!", file.getAbsolutePath()));
             return false;
         }
     }
@@ -131,8 +134,7 @@ public final class FileUtils {
             if (file.delete()) {
                 ret = true;
             } else {
-                Log.d(TAG, String.format(CONTEXT.mLocale,
-                        "File (%s) delete failed!", file.getAbsolutePath()));
+                Log.d(TAG, String.format("File (%s) delete failed!", file.getAbsolutePath()));
             }
         }
 

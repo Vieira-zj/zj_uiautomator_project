@@ -1,7 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.utils;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,6 +25,7 @@ public final class ShellUtils {
         return execCommand(new String[] {command}, isRoot, isNeedResultMsg);
     }
 
+    @SuppressWarnings("unused")
     public static CommandResult execCommand(
             List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
         return execCommand((commands == null ? null : (String[]) commands.toArray()),
@@ -76,7 +75,7 @@ public final class ShellUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (os != null) {
@@ -89,7 +88,7 @@ public final class ShellUtils {
                     errorResult.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
 
             if (process != null) {

@@ -7,6 +7,7 @@ package com.example.zhengjin.funsettingsuitest.utils;
  */
 public final class StringUtils {
 
+    @SuppressWarnings("unused")
     public static boolean isBlank(String str) {
         return (str == null || str.trim().length() == 0);
     }
@@ -15,6 +16,7 @@ public final class StringUtils {
         return (str == null || str.length() == 0);
     }
 
+    @SuppressWarnings("unused")
     private static String objectToString(Object str) {
         if (str == null) {
             return "";

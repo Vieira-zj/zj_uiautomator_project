@@ -100,13 +100,15 @@ public final class DeviceUtils {
                     sCpuFrequency = Integer.parseInt(cpuFreq.trim());
                 }
             } catch (IOException e) {
-                CONTEXT.logException(TAG, e);
+                Log.e(TAG, "IOException from getCpuFrequency()!");
+                e.printStackTrace();
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        CONTEXT.logException(TAG, e);
+                        Log.e(TAG, "IOException when close reader from getCpuFrequency()!");
+                        e.printStackTrace();
                     }
                 }
             }
@@ -128,13 +130,15 @@ public final class DeviceUtils {
                     }
                 }
             } catch (IOException e) {
-                CONTEXT.logException(TAG, e);
+                Log.e(TAG, "IOException from getCpuModel()!");
+                e.printStackTrace();
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        CONTEXT.logException(TAG, e);
+                        Log.e(TAG, "IOException when close reader from getCpuModel()!");
+                        e.printStackTrace();
                     }
                 }
             }
@@ -169,13 +173,15 @@ public final class DeviceUtils {
                     }
                 }
             } catch (IOException e) {
-                CONTEXT.logException(TAG, e);
+                Log.e(TAG, "IOException from getTotalMemory()!");
+                e.printStackTrace();
             } finally {
                 if (br != null) {
                     try {
                         br.close();
                     } catch (IOException e) {
-                        CONTEXT.logException(TAG, e);
+                        Log.e(TAG, "IOException when close buffer reader from getTotalMemory()!");
+                        e.printStackTrace();
                     }
                 }
             }

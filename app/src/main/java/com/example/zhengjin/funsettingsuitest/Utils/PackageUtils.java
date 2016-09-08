@@ -53,7 +53,8 @@ public final class PackageUtils {
         try {
             pkgInfo = PM.getPackageInfo(pkgName, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            CONTEXT.logException(TAG, e);
+            Log.e(TAG, "NameNotFoundException from getAppPackageInfo()!");
+            e.printStackTrace();
         }
 
         return pkgInfo;
@@ -133,7 +134,7 @@ public final class PackageUtils {
             List<ResolveInfo> apps = PM.queryIntentActivities(resolveIntent, 0);
             int size = apps.size();
             if (size != 1) {
-                Log.w(TAG, String.format(CONTEXT.mLocale, "The are (%d) packages found.", size));
+                Log.w(TAG, String.format("The are (%d) packages found.", size));
                 return false;
             }
 
@@ -146,7 +147,8 @@ public final class PackageUtils {
             CONTEXT.startActivity(intent);
             return true;
         } catch (Exception e) {
-            CONTEXT.logException(TAG, e);
+            Log.e(TAG, "Exception from startApp()!");
+            e.printStackTrace();
             return false;
         }
     }
@@ -200,7 +202,8 @@ public final class PackageUtils {
                 }
             });
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            CONTEXT.logException(TAG, e);
+            Log.e(TAG, "Exception from getPackageSizeInfo()!");
+            e.printStackTrace();
         }
     }
 

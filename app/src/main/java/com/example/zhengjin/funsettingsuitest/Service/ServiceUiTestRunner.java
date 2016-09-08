@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.TestApplication;
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
 import com.example.zhengjin.funsettingsuitest.utils.HelperUtils;
 import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Locale;
 
 import static com.example.zhengjin.funsettingsuitest.TestApplication.EXTRA_KEY_EXEC_TIME;
@@ -21,19 +22,26 @@ import static com.example.zhengjin.funsettingsuitest.TestApplication.EXTRA_KEY_T
 public class ServiceUiTestRunner extends IntentService {
 
     private static final String TAG = ServiceUiTestRunner.class.getSimpleName();
+    private static final String INST_LOG_FILE_NAME = "inst_test_log_%s.log";
+    private static final String LOGCAT_FILE_NAME = "inst_logcat_log_%s.log";
 
-    private final Locale mLocale;
-    private final String mTmpLogDir;
+    private final Locale mLocale = Locale.getDefault();
+    private final String mInstTestLogPath = this.buildAbsFilePath(INST_LOG_FILE_NAME);
+    private final String mLogcatLogPath = this.buildAbsFilePath(LOGCAT_FILE_NAME);
+
+    private Process mLogcatProcess = null;
+    private DataOutputStream mOutputStream = null;
 
     private int mTotalRunTimes = 0;
     private int mTotalFailed = 0;
 
     public ServiceUiTestRunner() {
         super(TAG);
-        mLocale = Locale.getDefault();
-        String logFileName = String.format(mLocale, TestApplication.INST_LOG_FILE_NAME,
-                HelperUtils.getCurrentTime());
-        mTmpLogDir = String.format(mLocale, "%s/%s", FileUtils.getExternalStoragePath(), logFileName);
+    }
+
+    private String buildAbsFilePath(String fileName) {
+        String tmpFileName = String.format(fileName, HelperUtils.getCurrentTime());
+        return String.format("%s/%s", FileUtils.getExternalStoragePath(), tmpFileName);
     }
 
     @Override
@@ -44,27 +52,35 @@ public class ServiceUiTestRunner extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int execTime = Integer.parseInt(intent.getExtras().getString(EXTRA_KEY_EXEC_TIME));
+        int execTime = Integer.parseInt(intent.getExtras().getString(EXTRA_KEY_EXEC_TIME));  // minutes
         long execTimeLong = execTime * 60L * 1000L;
         String command = buildInstCommand(intent);
 
         long startTime = SystemClock.uptimeMillis();
         long during;
+        this.runLogcatProcess();
         do {
             runInstCommandByExecTime(command);
             SystemClock.sleep(3000);
             during = SystemClock.uptimeMillis() - startTime;
-            Log.d(TAG, String.format(mLocale, "Run instrument test %d times.", ++mTotalRunTimes));
-            Log.d(TAG, String.format(mLocale,
-                    "Run process percent: %.2f", getRunPercent(during, execTimeLong)) + "%");
+            Log.d(TAG, String.format("Run instrument test %d times.", ++mTotalRunTimes));
+            Log.d(TAG, String.format(mLocale, "Run process percent: %.2f",
+                    getRunPercent(during, execTimeLong)) + "%");
         }
         while (during <= execTimeLong);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        this.killLogcatProcess();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         this.logInstTestSummary();
+        this.killLogcatProcess();
     }
 
     private String buildInstCommand(Intent intent) {
@@ -81,12 +97,12 @@ public class ServiceUiTestRunner extends IntentService {
 
         String commandInst = "am instrument -w -r";
         String commandExtraDebug = "-e debug false";
-        String commandExtraClass = String.format(mLocale, "-e class %s.%s", testClass, testMethod);
-        String commandRunner = String.format(mLocale, "%s/%s", testPkgName, testRunner);
-        String command = String.format(mLocale, "%s %s %s %s",
+        String commandExtraClass = String.format("-e class %s.%s", testClass, testMethod);
+        String commandRunner = String.format("%s/%s", testPkgName, testRunner);
+        String command = String.format("%s %s %s %s",
                 commandInst, commandExtraDebug, commandExtraClass, commandRunner);
 
-        Log.d(TAG, String.format(mLocale, "The instrument command: %s", command));
+        Log.d(TAG, String.format("The instrument command: %s", command));
         return command;
     }
 
@@ -134,8 +150,7 @@ public class ServiceUiTestRunner extends IntentService {
 
     private void logInstTestCmdResults(ShellUtils.CommandResult cr) {
         StringBuilder sb = new StringBuilder(5);
-        sb.append(String.format(mLocale,
-                "The instrument test result code: %d\n", cr.getReturnCode()));
+        sb.append(String.format(mLocale, "The instrument test result code: %d\n", cr.getReturnCode()));
         String tmpMsg = cr.getReturnSuccessMsg();
         if (!StringUtils.isEmpty(tmpMsg)) {
             sb.append(String.format(mLocale, "The instrument test success message: %s\n", tmpMsg));
@@ -150,7 +165,34 @@ public class ServiceUiTestRunner extends IntentService {
 
     private void printAndWriteLog(String content) {
         Log.d(TAG, content);
-        FileUtils.writeFileSdcard(mTmpLogDir, content, true);
+        FileUtils.writeFileSdcard(mInstTestLogPath, content, true);
+    }
+
+    private void runLogcatProcess() {
+        String command = String.format("logcat -c && logcat *:E -v time > %s", mLogcatLogPath);
+        try {
+            mLogcatProcess = Runtime.getRuntime().exec("sh");
+            mOutputStream = new DataOutputStream(mLogcatProcess.getOutputStream());
+            mOutputStream.write(command.getBytes());
+            mOutputStream.writeBytes("\n");
+            mOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void killLogcatProcess() {
+        if (mLogcatProcess != null) {
+            mLogcatProcess.destroy();
+        }
+
+        if (mOutputStream != null) {
+            try {
+                mOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
