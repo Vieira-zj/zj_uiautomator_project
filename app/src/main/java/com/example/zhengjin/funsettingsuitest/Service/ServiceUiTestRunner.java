@@ -22,12 +22,10 @@ import static com.example.zhengjin.funsettingsuitest.TestApplication.EXTRA_KEY_T
 public class ServiceUiTestRunner extends IntentService {
 
     private static final String TAG = ServiceUiTestRunner.class.getSimpleName();
-    private static final String INST_LOG_FILE_NAME = "inst_test_log_%s.log";
-    private static final String LOGCAT_FILE_NAME = "inst_logcat_log_%s.log";
 
     private final Locale mLocale = Locale.getDefault();
-    private final String mInstTestLogPath = this.buildAbsFilePath(INST_LOG_FILE_NAME);
-    private final String mLogcatLogPath = this.buildAbsFilePath(LOGCAT_FILE_NAME);
+    private final String mInstTestLogPath = this.buildAbsFilePath("inst_test_log_%s.log");
+    private final String mLogcatLogPath = this.buildAbsFilePath("inst_logcat_log_%s.log");
 
     private Process mLogcatProcess = null;
     private DataOutputStream mOutputStream = null;
@@ -39,15 +37,11 @@ public class ServiceUiTestRunner extends IntentService {
         super(TAG);
     }
 
-    private String buildAbsFilePath(String fileName) {
-        String tmpFileName = String.format(fileName, HelperUtils.getCurrentTime());
-        return String.format("%s/%s", FileUtils.getExternalStoragePath(), tmpFileName);
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        int ret = super.onStartCommand(intent, flags, startId);
         this.logInstTestHeader();
-        return super.onStartCommand(intent, flags, startId);
+        return ret;
     }
 
     @Override
@@ -72,15 +66,20 @@ public class ServiceUiTestRunner extends IntentService {
 
     @Override
     public void onLowMemory() {
-        super.onLowMemory();
         this.killLogcatProcess();
+        super.onLowMemory();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         this.logInstTestSummary();
         this.killLogcatProcess();
+        super.onDestroy();
+    }
+
+    private String buildAbsFilePath(String fileName) {
+        String tmpFileName = String.format(fileName, HelperUtils.getCurrentTime());
+        return String.format("%s/%s", FileUtils.getExternalStoragePath(), tmpFileName);
     }
 
     private String buildInstCommand(Intent intent) {
@@ -164,7 +163,7 @@ public class ServiceUiTestRunner extends IntentService {
     }
 
     private void printAndWriteLog(String content) {
-        Log.d(TAG, content);
+        Log.i(TAG, content);
         FileUtils.writeFileSdcard(mInstTestLogPath, content, true);
     }
 
