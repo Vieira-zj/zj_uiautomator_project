@@ -120,6 +120,16 @@ public final class PackageUtils {
         return AM.getRunningAppProcesses();
     }
 
+    public static int getPidByPackageName(String pkgName) {
+        List<ActivityManager.RunningAppProcessInfo> apps = getRunningAppsProcessInfo();
+        for (ActivityManager.RunningAppProcessInfo app : apps) {
+            if (app.processName != null && app.processName.equals(pkgName)) {
+                return app.pid;
+            }
+        }
+        return -1;
+    }
+
     public static int getProcessMemPss(int pid) {
         Debug.MemoryInfo[] memoryInfo = AM.getProcessMemoryInfo(new int[] {pid});
         return memoryInfo[0].getTotalPss();
@@ -154,16 +164,16 @@ public final class PackageUtils {
     }
 
     @SuppressWarnings("deprecation")
-    public static boolean isAppOnTop(String pkgName) {
+    public static String getTopActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            List<ActivityManager.RunningTaskInfo> taskInfo = AM.getRunningTasks(5);
-            String top = taskInfo.get(0).topActivity.getPackageName();
-            if (pkgName.equals(top)) {
-                return true;
+            List<ActivityManager.RunningTaskInfo> taskInfo = AM.getRunningTasks(1);
+            if (taskInfo != null) {
+//                return taskInfo.get(0).topActivity.getPackageName();
+                return taskInfo.get(0).topActivity.toString();  // ComponentInfo {Package / Activity}
             }
         }
 
-        return false;
+        return null;
     }
 
     public static void killBgProcess(String pkgName) {

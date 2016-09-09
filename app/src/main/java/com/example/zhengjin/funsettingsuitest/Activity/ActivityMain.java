@@ -13,6 +13,7 @@ public final class ActivityMain extends AppCompatActivity {
     private Button mBtnStartDemo = null;
     private Button mBtnStartInstTest = null;
     private Button mBtnStartUtilsTest = null;
+    private Button mBtnStartUtilsTest2 = null;
     private Button mBtnExit = null;
 
     @Override
@@ -51,6 +52,16 @@ public final class ActivityMain extends AppCompatActivity {
             });
         }
 
+        if (mBtnStartUtilsTest2 != null) {
+            mBtnStartUtilsTest2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ActivityMain.this, ActivityUtilsTest2.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
         if (mBtnExit != null) {
             mBtnExit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,6 +76,7 @@ public final class ActivityMain extends AppCompatActivity {
         mBtnStartDemo = (Button) findViewById(R.id.btn_start_demo);
         mBtnStartInstTest = (Button) findViewById(R.id.btn_start_inst_test);
         mBtnStartUtilsTest = (Button) findViewById(R.id.btn_start_utils_test);
+        mBtnStartUtilsTest2 = (Button) findViewById(R.id.btn_start_utils_test2);
         mBtnExit = (Button) findViewById(R.id.btn_exit_app);
     }
 

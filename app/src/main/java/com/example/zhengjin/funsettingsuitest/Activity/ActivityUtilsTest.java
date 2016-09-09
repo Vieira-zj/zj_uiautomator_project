@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -108,9 +107,6 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                     String pkgName = "tv.fun.filemanager";
                     if (mFlagStartActivity) {
                         PackageUtils.startApp(pkgName);
-                        if (PackageUtils.isAppOnTop(pkgName)) {
-                            Log.d(TAG, String.format("The package (%s) is on top.", pkgName));
-                        }
 
                         mFlagStartActivity = false;
                         String killMessage = "Kill Background Process Test";

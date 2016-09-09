@@ -7,6 +7,7 @@
     <string name="label_demo">This a test demo</string>
     <string name="label_run_instruments">Run instrument ui tests</string>
     <string name="label_run_utils_test">Run utils test</string>
+    <string name="label_run_utils_test2">Run utils test2</string>
     <string name="btn_start">Start</string>
     <string name="btn_exit">Exit</string>
 
@@ -32,5 +33,9 @@
     <string name="message_package_utils_test">Package Utils Test</string>
     <string name="message_start_activity_test">Start Activity Test</string>
     <string name="message_file_utils_test">File Utils Test</string>
+
+    <!-- utils test activity2 -->
+    <string name="btn_utils_test2">Test</string>
+    <string name="message_process_utils_test">Process Utils Test</string>
 
 </resources>

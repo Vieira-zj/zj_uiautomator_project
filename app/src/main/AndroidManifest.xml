@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
         <activity
             android:name=".activity.ActivityMain"
             android:label="@string/title_activity_main">
@@ -47,6 +46,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".activity.ActivityUtilsTest2"></activity>
     </application>
 
 </manifest>
