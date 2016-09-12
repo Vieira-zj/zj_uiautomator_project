@@ -2,7 +2,9 @@ package com.example.zhengjin.funsettingsuitest.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.net.TrafficStats;
 import android.os.Build;
+import android.os.Debug;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -150,10 +152,12 @@ public final class DeviceUtils {
     public static long getFreeMemory() {
         if (sFreeMemory == 0) {
             ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-            ActivityManager am = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager am =
+                    (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
             am.getMemoryInfo(memoryInfo);
             sFreeMemory = memoryInfo.availMem;
         }
+
         return sFreeMemory;  // Byte
     }
 
@@ -161,12 +165,12 @@ public final class DeviceUtils {
         if (sTotalMemory == 0) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new FileReader(new File("/proc/meminfo")));
+                br = new BufferedReader(new FileReader(new File("/proc/meminfo")), 8192);
                 String tempStr;
                 while ((tempStr = br.readLine()) != null) {
                     if (tempStr.contains("MemTotal")) {
-                        String memory = tempStr.split(":")[1];
-                        memory = memory.trim().split(" ")[0];
+                        String memory = tempStr.split(":")[1].trim();
+                        memory = memory.split(" ")[0].trim();
                         if (StringUtils.isNumeric(memory)) {
                             sTotalMemory = Long.parseLong(memory);
                         }
@@ -189,4 +193,32 @@ public final class DeviceUtils {
 
         return sTotalMemory;  // KB
     }
+
+    public static int getMemorySizeByPid(int pid) {
+        ActivityManager am = (ActivityManager) CONTEXT.getSystemService(Context.ACTIVITY_SERVICE);
+        Debug.MemoryInfo[] memoryInfo = am.getProcessMemoryInfo(new int[] {pid});
+        if (memoryInfo != null) {
+            return memoryInfo[0].getTotalPss();  // KB
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get total network traffic, which is the sum of upload and download traffic.
+     * @param uid, shared id, from data/system/packages.list
+     * @return total traffic include received and send traffic.
+     */
+    public static long getTrafficInfoByUid(int uid) {
+        long rcvTraffic;
+        long sndTraffic;
+        rcvTraffic = TrafficStats.getUidRxBytes(uid);
+        sndTraffic = TrafficStats.getUidTxBytes(uid);
+        if (rcvTraffic == 0L || sndTraffic == 0L) {
+            return -1L;
+        }
+
+        return (rcvTraffic + sndTraffic);
+    }
+
 }

@@ -120,14 +120,31 @@ public final class PackageUtils {
         return AM.getRunningAppProcesses();
     }
 
-    public static int getPidByPackageName(String pkgName) {
+    private static ActivityManager.RunningAppProcessInfo getProcessInfoByPackageName(String pkgName) {
         List<ActivityManager.RunningAppProcessInfo> apps = getRunningAppsProcessInfo();
         for (ActivityManager.RunningAppProcessInfo app : apps) {
             if (app.processName != null && app.processName.equals(pkgName)) {
-                return app.pid;
+                return app;
             }
         }
-        return -1;
+
+        return null;
+    }
+
+    public static int getPidByPackageName(String pkgName) {
+        ActivityManager.RunningAppProcessInfo appProcessInfo = getProcessInfoByPackageName(pkgName);
+        if (appProcessInfo == null) {
+            return -1;
+        }
+        return appProcessInfo.pid;
+    }
+
+    public static int getUidByPackageName(String pkgName) {
+        ActivityManager.RunningAppProcessInfo appProcessInfo = getProcessInfoByPackageName(pkgName);
+        if (appProcessInfo == null) {
+            return -1;
+        }
+        return appProcessInfo.uid;
     }
 
     public static int getProcessMemPss(int pid) {
