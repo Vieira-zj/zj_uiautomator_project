@@ -30,21 +30,21 @@ import org.junit.runners.MethodSorters;
  * but failed on funshion TV because of start intent error.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestDemoActivity {
+public final class TestEspressoDemo {
 
-    private final static String TAG = TestDemoActivity.class.getSimpleName();
+    private final static String TAG = TestEspressoDemo.class.getSimpleName();
 
     @Rule
     public ActivityTestRule mActivityRule = new ActivityTestRule(ActivityDemo.class);
 
     @Before
     public void setUp() {
-        Log.d(TAG, "setUp in TestDemoActivity.");
+        Log.d(TAG, "setUp in TestEspressoDemo.");
     }
 
     @After
     public void clearUp() {
-        Log.d(TAG, "clearUp in TestDemoActivity.");
+        Log.d(TAG, "clearUp in TestEspressoDemo.");
     }
 
     @Test
