@@ -17,10 +17,6 @@ public final class TestConstants {
     public final static String FILE_MANAGER_PKG = "tv.fun.filemanager";
     public final static String SETTINGS_PKG = "tv.fun.settings";
 
-    public final static String SDCARD_PATH = Environment.getExternalStorageDirectory().getPath();
-    public final static String TEST_ROOT_PATH = String.format("%s/testlogs/", SDCARD_PATH);
-    public final static String CAPTURES_PATH = TEST_ROOT_PATH + "uiautomator_captures";
-
     // cards text on launcher home left area
     public final static String FILM_CARD_TEXT = "电影";
     public final static String TV_SERIAL_CARD_TEXT = "电视剧";
@@ -28,5 +24,15 @@ public final class TestConstants {
     public final static String VARIETY_CARD_TEXT = "综艺";
     public final static String FOLLOWING_TV_SERIAL_TEXT = "跟播";
     public final static String NEWLY_ADD_IN_7_DAYS_TEXT = "7日新增";
+
+    public final static String SDCARD_PATH;
+    public final static String TEST_ROOT_PATH;
+    public final static String CAPTURES_PATH;
+
+    static {
+        SDCARD_PATH = Environment.getExternalStorageDirectory().getPath();
+        TEST_ROOT_PATH = String.format("%s/testlogs/", SDCARD_PATH);
+        CAPTURES_PATH = TEST_ROOT_PATH + "uiautomator_captures";
+    }
 
 }
