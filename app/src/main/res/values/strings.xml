@@ -35,6 +35,7 @@
     <string name="message_file_utils_test">File Utils Test</string>
 
     <!-- utils test activity2 -->
+    <string name="title_activity_utils_test2">Utils Activity 2</string>
     <string name="btn_utils_test2">Test</string>
     <string name="message_process_utils_test">Process Utils Test</string>
 

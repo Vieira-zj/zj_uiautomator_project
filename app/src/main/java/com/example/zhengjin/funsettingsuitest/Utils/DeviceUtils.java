@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.utils;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.net.TrafficStats;
@@ -42,6 +43,7 @@ public final class DeviceUtils {
         return Build.MODEL;
     }
 
+    @SuppressLint("HardwareIds")
     public static String getDeviceId() {
         if (StringUtils.isEmpty(sDeviceId)) {
             TelephonyManager tm =
@@ -219,6 +221,11 @@ public final class DeviceUtils {
         }
 
         return (rcvTraffic + sndTraffic);
+    }
+
+    public static float getFramePerSecond() {
+        // TODO: 2016/9/27
+        return 0;
     }
 
 }

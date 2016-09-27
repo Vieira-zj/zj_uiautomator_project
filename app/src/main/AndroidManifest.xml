@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
         <activity
             android:name=".activity.ActivityMain"
             android:label="@string/title_activity_main">
@@ -30,12 +31,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ActivityRunUiTest"
-            android:label="@string/title_activity_inst_test"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_inst_test" />
         <activity
             android:name=".activity.ActivityUtilsTest"
-            android:label="@string/title_activity_utils_test"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_utils_test" />
+        <activity
+            android:name=".activity.ActivityUtilsTest2"
+            android:label="@string/title_activity_utils_test2" />
 
         <service
             android:name=".service.ServiceUiTestRunner"
@@ -45,8 +47,6 @@
                 <action android:name="com.zhengjin.test.intentservice" />
             </intent-filter>
         </service>
-
-        <activity android:name=".activity.ActivityUtilsTest2"></activity>
     </application>
 
 </manifest>
