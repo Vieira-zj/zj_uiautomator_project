@@ -1,18 +1,25 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
+import android.os.Environment;
 import android.os.SystemClock;
+import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
+import junit.framework.Assert;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CAPTURES_PATH;
 
 /**
  * Created by zhengjin on 2016/5/31.
@@ -128,6 +135,25 @@ public final class ShellUtils {
                 new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         return formatter.format(curDate);
+    }
+
+    public static void takeScreenCapture(UiDevice device) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File testDirPath = new File(CAPTURES_PATH);
+            if (!testDirPath.exists()) {
+                if (!testDirPath.mkdirs()) {
+                    Assert.assertTrue(String.format(
+                            "Error, make directory(%s) for captures failed.", CAPTURES_PATH), false);
+                }
+            }
+        } else {
+            Assert.assertTrue("Error, the sdcard is NOT mount.", false);
+        }
+
+        final String suffix = ".png";
+        String filePath = String.format(
+                "%s/capture_%s%s", CAPTURES_PATH, ShellUtils.getCurrentTime(), suffix);
+        Assert.assertTrue("Take screenshot.", device.takeScreenshot(new File(filePath)));
     }
 
 }

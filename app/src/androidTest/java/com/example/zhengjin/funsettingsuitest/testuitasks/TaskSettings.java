@@ -81,7 +81,6 @@ public final class TaskSettings {
     }
 
     public static void moveToSpecifiedSettingsItem(UiDevice device, BySelector selector) {
-
         UiObject2 item = device.findObject(selector);  // find the item from top
         if (item == null) {  // find the item from bottom
             moveToBottomOnCommonSettingsPage();
@@ -100,7 +99,6 @@ public final class TaskSettings {
     }
 
     private static void moveUntilSettingsItemFocused(UiObject2 item, boolean flagDirectionDown) {
-
         final int maxMoveTimes = 15;
         int i = 0;
         while (!item.isFocused() && ((i++) < maxMoveTimes)) {
@@ -127,7 +125,6 @@ public final class TaskSettings {
     }
 
     public static void scrollMoveToAndClickSettingsItem(UiDevice device, String itemText) {
-
         String message;
         final String scrollClass = "android.widget.ScrollView";
         UiScrollable scroll = new UiScrollable(new UiSelector().className(scrollClass));
@@ -151,7 +148,6 @@ public final class TaskSettings {
 
     public static void selectSpecifiedLocationProvince(
             UiDevice device, String provinceText, boolean directionUp) {
-
         UiObject2 provinceList = device.findObject(getProvinceListSelector());
         UiObject2 middleProvince =
                 provinceList.findObject(getMiddleItemFromProvinceCityList());
@@ -174,7 +170,6 @@ public final class TaskSettings {
 
     public static void selectSpecifiedLocationCity(
             UiDevice device, String cityText, boolean directionUp) {
-
         UiObject2 cityList = device.findObject(getCityListSelector());
         UiObject2 middleCity =
                 cityList.findObject(getMiddleItemFromProvinceCityList());

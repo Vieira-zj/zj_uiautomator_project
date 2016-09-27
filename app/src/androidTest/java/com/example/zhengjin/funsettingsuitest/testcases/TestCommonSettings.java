@@ -59,7 +59,7 @@ public final class TestCommonSettings {
     @After
     public void clearUp() {
 
-        TestHelper.takeScreenCapture(mDevice);
+        ShellUtils.takeScreenCapture(mDevice);
         ShellUtils.systemWait(SHORT_WAIT);
 
         int repeatTimes = 2;

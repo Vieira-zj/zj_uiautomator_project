@@ -94,7 +94,7 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test13OpenSdcardAllFilesCard() {
 
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
 
         // verification 1
         UiObject2 mainTitle = mDevice.findObject(TaskFileManager.getMainTitleSelector());
@@ -113,7 +113,7 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test14NavigateToSpecifiedPath() {
 
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
 
         String path = "/testfiles/testpics";
         TaskFileManager.navigateAndOpenSpecifiedFile(mDevice, path);
@@ -128,7 +128,7 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test15OpenSpecifiedPicture() {
 
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
 
         String filePath = "/testfiles/testpics/";
         String fileName = "4800x3600_5.jpg";
@@ -145,10 +145,10 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test16OpenUnknownTypeFile() {
 
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
 
         String message = "Verify open unknown type file.";
-        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, "applog");
+        TaskFileManager.clickOnSpecifiedItemFromCurrentDir(mDevice, "applog");
         Assert.assertEquals(message, FILE_MANAGER_PKG, mDevice.getCurrentPackageName());
     }
 
@@ -156,7 +156,7 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test20MenuHideBtnForDir() {
 
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
 
         // verification 1
         UiObject2 menuTips = mDevice.findObject(TaskFileManager.getMenuTipsSelector());
@@ -165,7 +165,7 @@ public final class TestFileManager {
         Assert.assertTrue(message, menuTips.getText().contains(expectedText));
 
         // verification 2
-        TaskFileManager.clickOnSpecifiedDirFromCurrentDir(mDevice, "testfiles");
+        TaskFileManager.clickOnSpecifiedItemFromCurrentDir(mDevice, "testfiles");
         TaskFileManager.showMenuAndRequestFocus();
 
         UiObject2 menuHideBtnContainer =
@@ -184,9 +184,9 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test21MenuRemoveAndHideBtnForFile() {
 
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
 
-        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, "applog");
+        TaskFileManager.clickOnSpecifiedItemFromCurrentDir(mDevice, "applog");
         action.doDeviceActionAndWait(new DeviceActionEnter());  // request focus
         TaskFileManager.showMenuAndRequestFocus();
 
@@ -216,15 +216,14 @@ public final class TestFileManager {
         // TODO: 2016/6/20
     }
 
-
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test23RemoveFile() {
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
         TaskFileManager.navigateToSpecifiedPath(mDevice, "/testfiles/testpics");
 
         String fileName = "990522-1548-32.jpg";
-        TaskFileManager.clickOnSpecifiedFileFromCurrentDir(mDevice, fileName);
+        TaskFileManager.clickOnSpecifiedItemFromCurrentDir(mDevice, fileName);
 
         action.doMultipleDeviceActionAndWait(new DeviceActionBack())  // disappear pic bar
                 .doMultipleDeviceActionAndWait(new DeviceActionBack())  // exit pic browser

@@ -11,6 +11,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskHomeVideoTab;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -62,7 +63,7 @@ public final class TestHomeVideoTab1stPage {
 
     @After
     public void clearUp() {
-        TestHelper.takeScreenCapture(mDevice);
+        ShellUtils.takeScreenCapture(mDevice);
     }
 
     @Test

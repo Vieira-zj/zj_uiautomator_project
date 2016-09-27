@@ -49,7 +49,6 @@ public final class TaskLauncher {
     }
 
     public static void backToLauncher(UiDevice device) {
-
 //        String pkgName = getLauncherPackageName();
         final String launcherPackageName = device.getLauncherPackageName();  //"com.bestv.ott"
         final String message = "Error, fail to back to the launcher.";
@@ -66,7 +65,6 @@ public final class TaskLauncher {
     }
 
     public static String getLauncherPackageName() {
-
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
 
@@ -84,7 +82,6 @@ public final class TaskLauncher {
     }
 
     public static void navigateToVideoTab(UiDevice device) {
-
         backToLauncher(device);
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
@@ -99,7 +96,6 @@ public final class TaskLauncher {
     }
 
     public static void navigateToAppTab(UiDevice device) {
-
         navigateToVideoTab(device);
         int repeatTwoTimes = 2;
         ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), repeatTwoTimes);
@@ -113,7 +109,6 @@ public final class TaskLauncher {
     }
 
     private static UiObject2 getSpecifiedTab(UiDevice device, String tabName) {
-
         List<UiObject2> tabs = device.findObjects(getAllLauncherTabsSelector());
         if (tabs.size() == 0) {
             return null;
@@ -132,20 +127,17 @@ public final class TaskLauncher {
     }
 
     public static void openSpecifiedApp(UiDevice device, String appName, String pkgName) {
-
         focusOnSpecifiedApp(device, appName);
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
         Assert.assertTrue(TestHelper.waitForAppOpened(device, pkgName));
     }
 
     public static void openSpecifiedApp(UiDevice device, String appName) {
-
         focusOnSpecifiedApp(device, appName);
         Assert.assertTrue(ACTION.doDeviceActionAndWait(new DeviceActionEnter(), WAIT));
     }
 
     private static void focusOnSpecifiedApp(UiDevice device, String appName) {
-
         navigateToAppTab(device);
 
         String message = String.format(
@@ -163,7 +155,6 @@ public final class TaskLauncher {
 
     public static void clickOnQuickAccessButtonFromTopBar(
             UiDevice device, BySelector selector, String pkgName) {
-
         String message =
                 "Error in clickOnQuickAccessButtonFromTopBar(), the settings button from top bar is NOT found.";
         UiObject2 quickAccessBtn = getQuickAccessButtonFromTopBar(device, selector);
@@ -175,7 +166,6 @@ public final class TaskLauncher {
     }
 
     private static void showLauncherTopBar(UiDevice device) {
-
         backToLauncher(device);
         int repeatTimes = 2;
         ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), repeatTimes);
@@ -192,4 +182,5 @@ public final class TaskLauncher {
         showLauncherTopBar(device);
         return device.findObject(selector);
     }
+
 }

@@ -12,7 +12,7 @@ import android.support.test.uiautomator.Until;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
-import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
@@ -58,7 +58,7 @@ public final class TestLauncherApp {
     @Test
     @Category(CategoryDemoTests.class)
     public void test1OpenAllFilesCard() {
-        TaskFileManager.openSdcardLocalFilesCard(mDevice);
+        TaskFileManager.openLocalFilesCard(mDevice);
         UiObject2 allFilesTitle = mDevice.findObject(By.text("全部文件"));
         Assert.assertNotNull(allFilesTitle);
     }
@@ -67,7 +67,7 @@ public final class TestLauncherApp {
     @Category(CategoryDemoTests.class)
     public void test2TakeScreenCaptures() {
         TaskLauncher.backToLauncher(mDevice);
-        TestHelper.takeScreenCapture(mDevice);
+        ShellUtils.takeScreenCapture(mDevice);
     }
 
     @Test

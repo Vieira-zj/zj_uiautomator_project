@@ -64,20 +64,18 @@ public final class TaskFileManager {
         return By.res("tv.fun.filemanager:id/confirm_dialog_btn_cancel");
     }
 
-    public static void openSdcardLocalFilesCard(UiDevice device) {
-
+    public static void openLocalFilesCard(UiDevice device) {
         final int positionX = 1348;
         final int positionY = 408;
-        String message = "Error in openSdcardLocalFilesCard(), click on AllFiles card.";
+        String message = "Error in openLocalFilesCard(), click on AllFiles card.";
         Assert.assertTrue(message, device.click(positionX, positionY));
         ShellUtils.systemWait(WAIT);
     }
 
     public static void navigateToSpecifiedPath(UiDevice device, String path) {
         List<String> dirs = parsePath(path);
-
         for (String dir : dirs) {
-            clickOnSpecifiedDirFromCurrentDir(device, dir);
+            clickOnSpecifiedItemFromCurrentDir(device, dir);
         }
     }
 
@@ -85,15 +83,14 @@ public final class TaskFileManager {
         navigateToSpecifiedPath(device, fileAbsPath);
     }
 
-    public static void clickOnSpecifiedDirFromCurrentDir(
+    // Item for directory and file
+    public static void clickOnSpecifiedItemFromCurrentDir(
             UiDevice device, String dirName, boolean flag_bottom) {
-
         final int ScrollSteps = 5;
         String scrollViewId = "tv.fun.filemanager:id/activity_sub_grid";
         UiScrollable fileList = new UiScrollable(new UiSelector().resourceId(scrollViewId));
         fileList.setAsVerticalList();
 
-        String message;
         try {
             fileList.scrollTextIntoView(dirName);
             ShellUtils.systemWait(SHORT_WAIT);
@@ -103,7 +100,8 @@ public final class TaskFileManager {
             }
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            message = String.format("Error in clickOnSpecifiedDirFromCurrentDir(), scroll to UI object %s.", dirName);
+            String message = String.format(
+                    "Error in clickOnSpecifiedItemFromCurrentDir(), scroll to UI object %s.", dirName);
             Assert.assertTrue(message, false);
         }
 
@@ -111,33 +109,22 @@ public final class TaskFileManager {
         ACTION.doClickActionAndWait(dir);
     }
 
-    public static void clickOnSpecifiedDirFromCurrentDir(UiDevice device, String dirName) {
-        clickOnSpecifiedDirFromCurrentDir(device, dirName, false);
-    }
-
-    public static void clickOnSpecifiedFileFromCurrentDir(
-            UiDevice device, String fileName, boolean flag_bottom) {
-        clickOnSpecifiedDirFromCurrentDir(device, fileName, flag_bottom);
-    }
-
-    public static void clickOnSpecifiedFileFromCurrentDir(UiDevice device, String fileName) {
-        clickOnSpecifiedDirFromCurrentDir(device, fileName, false);
+    public static void clickOnSpecifiedItemFromCurrentDir(UiDevice device, String dirName) {
+        clickOnSpecifiedItemFromCurrentDir(device, dirName, false);
     }
 
     // path like: android/data/tv.fun.filemanager
     // or: /android/data/tv.fun.filemanager/
     private static List<String> parsePath(String path) {
-
-        String[] tempDirs = path.split("/");
-
         int levels = 20;
         List<String> dirs = new ArrayList<>(levels);
+
+        String[] tempDirs = path.split("/");
         for (String dir : tempDirs) {
             if (!"".equals(dir)) {
                 dirs.add(dir);
             }
         }
-
         if (dirs.size() == 0) {
             String message = "Error in parsePath(), the dirs size is 0.";
             Assert.assertTrue(message, false);

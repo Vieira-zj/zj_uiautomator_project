@@ -53,7 +53,6 @@ public final class TaskHomeVideoTab {
     }
 
     public static UiObject2 findSpecifiedCardFromLeftAreaByText(UiDevice device, String search) {
-
         List<UiObject2> textList =
                 device.findObjects(getAllCardsTitleOfLauncherHomeLeftAreaSelector());
 
@@ -61,7 +60,6 @@ public final class TaskHomeVideoTab {
     }
 
     public static UiObject2 findSpecifiedCardFromRightAreaByText(UiDevice device, String search) {
-
         List<UiObject2> textList =
                 device.findObjects(getAllCardsMainTitleOfLauncherHomeRightAreaSelector());
 
@@ -70,7 +68,6 @@ public final class TaskHomeVideoTab {
 
     private static UiObject2 findSpecifiedTextViewFromUiCollection(
             List<UiObject2> list, String search) {
-
         if (list.size() == 0) {
             Assert.assertTrue("Error, the UI collection size is zero.", false);
         }
