@@ -4,7 +4,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,10 +17,11 @@ import org.junit.runners.MethodSorters;
 
 import java.util.Locale;
 
+
 /**
  * Created by zhengjin on 2016/6/1.
  *
- * Include test cases for ShellUtils.java
+ * Include test cases for ShellCmdUtils.java
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -37,9 +39,12 @@ public final class TestShellUtils {
     public void testExecShellShCommand() {
         String command = "cat /system/build.prop | grep ro.product.model";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+
         String output = String.format(Locale.getDefault(),
                 "Result code: %d\n Success message: %s\n Error message: %s",
-                cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
+                cr.mResult,
+                (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
+                (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
     }
 
@@ -51,7 +56,9 @@ public final class TestShellUtils {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
         String output = String.format(Locale.getDefault(),
                 "Result code: %d\n Success message: %s\n Error message: %s",
-                cr.mResult, cr.mSuccessMsg, cr.mErrorMsg);
+                cr.mResult,
+                (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
+                (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
     }
 

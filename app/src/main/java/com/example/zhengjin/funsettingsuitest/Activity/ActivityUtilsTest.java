@@ -15,7 +15,7 @@ import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.utils.DeviceUtils;
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
 import com.example.zhengjin.funsettingsuitest.utils.PackageUtils;
-import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils;
 
 import java.io.File;
 import java.util.List;
@@ -68,7 +68,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 public void onClick(View view) {
                     if (mTextShellUtilsTest != null) {
                         String command = "cat /system/build.prop | grep ro.product.model";
-                        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+                        ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, false, true);
                         String text = String.format(mLocale,
                                 "Result code: %d\n Success message: %s\n Error message: %s",
                                 cr.getReturnCode(), cr.getReturnSuccessMsg(), cr.getReturnErrorMsg());

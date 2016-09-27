@@ -28,7 +28,7 @@ import org.junit.runner.RunWith;
  * and 2) use the "context" to start the specified activity.
  */
 @RunWith(AndroidJUnit4.class)
-public final class TestLaunchApp {
+public final class TestLauncherApp {
 
     private static final String PACKAGE_NAME = "tv.fun.filemanager";
     private static final int LAUNCH_TIMEOUT = 5000;
@@ -36,7 +36,6 @@ public final class TestLaunchApp {
 
     @Before
     public void startMainActivityFromHomeScreen() {
-
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
         // go to home

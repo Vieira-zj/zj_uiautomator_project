@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
 import com.example.zhengjin.funsettingsuitest.utils.HelperUtils;
-import com.example.zhengjin.funsettingsuitest.utils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import java.io.DataOutputStream;
@@ -111,7 +111,7 @@ public class ServiceUiTestRunner extends IntentService {
         // I/ActivityManager(1651): Force stopping com.example.zhengjin.funsettingsuitest appid=1000 user=0: start instr
         // I/ActivityManager(1651): Killing 10979:com.example.zhengjin.funsettingsuitest/1000 (adj 0): stop com.example.zhengjin.funsettingsuitest
         // reason: test app and app under test are from the same AS project
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+        ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, false, true);
         if (cr.getReturnCode() != 0) {
             ++mTotalFailed;
         }
@@ -147,7 +147,7 @@ public class ServiceUiTestRunner extends IntentService {
         this.printAndWriteLog(sb.toString());
     }
 
-    private void logInstTestCmdResults(ShellUtils.CommandResult cr) {
+    private void logInstTestCmdResults(ShellCmdUtils.CommandResult cr) {
         StringBuilder sb = new StringBuilder(5);
         sb.append(String.format(mLocale, "The instrument test result code: %d\n", cr.getReturnCode()));
         String tmpMsg = cr.getReturnSuccessMsg();

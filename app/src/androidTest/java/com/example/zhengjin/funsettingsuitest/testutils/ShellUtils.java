@@ -23,10 +23,10 @@ public final class ShellUtils {
 
     private final static String TAG = ShellUtils.class.getSimpleName();
 
-    public static final String COMMAND_SU = "su";
-    public static final String COMMAND_SH = "sh";
-    public static final String COMMAND_EXIT = "exit\n";
-    public static final String COMMAND_LINE_END = "\n";
+    private static final String COMMAND_SU = "su";
+    private static final String COMMAND_SH = "sh";
+    private static final String COMMAND_EXIT = "exit\n";
+    private static final String COMMAND_LINE_END = "\n";
 
     public static CommandResult execCommand(
             String command, boolean isRoot, boolean isNeedResultMsg) {
@@ -103,9 +103,8 @@ public final class ShellUtils {
             }
         }
 
-        return new CommandResult(result,
-                (successMsg != null ? (StringUtils.isEmpty(successMsg.toString()) ? "null" : successMsg.toString()) : null),
-                (errorMsg != null ? (StringUtils.isEmpty(errorMsg.toString()) ? "null" : errorMsg.toString()) : null));
+        return new CommandResult(result, (successMsg != null ? successMsg.toString() : null),
+                (errorMsg != null ? errorMsg.toString() : null));
     }
 
     public static class CommandResult {
@@ -113,7 +112,7 @@ public final class ShellUtils {
         public String mSuccessMsg;
         public String mErrorMsg;
 
-        public CommandResult(int results, String successMsg, String errorMsg) {
+        CommandResult(int results, String successMsg, String errorMsg) {
             mResult = results;
             mSuccessMsg = successMsg;
             mErrorMsg = errorMsg;

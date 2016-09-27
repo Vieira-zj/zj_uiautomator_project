@@ -11,14 +11,14 @@ import java.util.List;
  *
  * Includes utils for android shell ENV.
  */
-public final class ShellUtils {
+public final class ShellCmdUtils {
 
-    public static final String TAG = ShellUtils.class.getSimpleName();
+    public static final String TAG = ShellCmdUtils.class.getSimpleName();
 
-    public static final String COMMAND_SU = "su";
-    public static final String COMMAND_SH = "sh";
-    public static final String COMMAND_EXIT = "exit\n";
-    public static final String COMMAND_LINE_END = "\n";
+    private static final String COMMAND_SU = "su";
+    private static final String COMMAND_SH = "sh";
+    private static final String COMMAND_EXIT = "exit\n";
+    private static final String COMMAND_LINE_END = "\n";
 
     public static CommandResult execCommand(
             String command, boolean isRoot, boolean isNeedResultMsg) {
@@ -106,7 +106,7 @@ public final class ShellUtils {
         private String mSuccessMsg;
         private String mErrorMsg;
 
-        public CommandResult(int results, String successMsg, String errorMsg) {
+        CommandResult(int results, String successMsg, String errorMsg) {
             mResult = results;
             mSuccessMsg = successMsg;
             mErrorMsg = errorMsg;
