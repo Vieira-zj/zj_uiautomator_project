@@ -14,7 +14,7 @@ import java.util.List;
  *
  * Include UI selectors and tasks on video tab of home page.
  */
-public final class TaskHomeVideoTab {
+public final class TaskVideoHomeTab {
 
     public static BySelector getAllCardsTitleOfLauncherHomeLeftAreaSelector() {
         return By.res("com.bestv.ott:id/title");
@@ -55,31 +55,29 @@ public final class TaskHomeVideoTab {
     public static UiObject2 findSpecifiedCardFromLeftAreaByText(UiDevice device, String search) {
         List<UiObject2> textList =
                 device.findObjects(getAllCardsTitleOfLauncherHomeLeftAreaSelector());
-
         return findSpecifiedTextViewFromUiCollection(textList, search);
     }
 
     public static UiObject2 findSpecifiedCardFromRightAreaByText(UiDevice device, String search) {
         List<UiObject2> textList =
                 device.findObjects(getAllCardsMainTitleOfLauncherHomeRightAreaSelector());
-
         return findSpecifiedTextViewFromUiCollection(textList, search);
     }
 
     private static UiObject2 findSpecifiedTextViewFromUiCollection(
             List<UiObject2> list, String search) {
-        if (list.size() == 0) {
-            Assert.assertTrue("Error, the UI collection size is zero.", false);
-        }
+        Assert.assertFalse("Error, the UI collection size is zero.", (list.size() == 0));
+        UiObject2 retObj = null;
 
         for (UiObject2 uiText : list) {
             if (search.equals(uiText.getText())) {
-                return uiText.getParent();
+                retObj = uiText.getParent();
             }
         }
+        Assert.assertNotNull(String.format(
+                "The text(%s) is NOT found on launcher home page.", search), retObj);
 
-        Assert.assertTrue(String.format(
-                "The text(%s) is NOT found on launcher home page.", search), false);
-        return null;
+        return retObj;
     }
+
 }

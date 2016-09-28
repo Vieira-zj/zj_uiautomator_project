@@ -5,5 +5,5 @@ package com.example.zhengjin.funsettingsuitest.testcategory;
  *
  * Test group for home video tab.
  */
-public interface CategoryHomeVideoTabTests {
+public interface CategoryVideoHomeTabTests {
 }

@@ -7,6 +7,8 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
+
 import junit.framework.Assert;
 
 import java.util.List;
@@ -89,7 +91,6 @@ public final class TestHelper {
     }
 
     public static boolean waitForUiObjectVisible(UiDevice device, BySelector selector) {
-
         device.waitForIdle();
         return device.wait(Until.hasObject(selector), TIME_OUT);
     }
@@ -106,17 +107,14 @@ public final class TestHelper {
     }
 
     public static void verifyEachTextViewHasTextInUiContainer(UiObject2 container) {
-        List<UiObject2> listObj = container.findObjects(By.clazz("android.widget.TextView"));
-        for (UiObject2 uiObj : listObj) {
-            Assert.assertFalse("Verify the text in text view is not empty.",
-                    "".equals(uiObj.getText()));
-        }
+        List<UiObject2> listTexts = container.findObjects(By.clazz("android.widget.TextView"));
+        verifyEachTextViewHasTextInUiCollection(listTexts);
     }
 
     public static void verifyEachTextViewHasTextInUiCollection(List<UiObject2> list) {
         for (UiObject2 uiObj : list) {
             Assert.assertFalse("Verify the text in text view is not empty.",
-                    "".equals(uiObj.getText()));
+                    StringUtils.isEmpty(uiObj.getText()));
         }
     }
 

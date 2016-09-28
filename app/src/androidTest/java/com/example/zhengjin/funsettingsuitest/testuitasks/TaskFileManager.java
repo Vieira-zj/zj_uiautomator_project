@@ -14,6 +14,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
@@ -121,7 +122,7 @@ public final class TaskFileManager {
 
         String[] tempDirs = path.split("/");
         for (String dir : tempDirs) {
-            if (!"".equals(dir)) {
+            if (!StringUtils.isEmpty(dir)) {
                 dirs.add(dir);
             }
         }
