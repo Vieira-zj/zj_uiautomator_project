@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG;
 
 /**
  * Created by zhengjin on 2016/6/1.
@@ -81,15 +80,14 @@ public class TestTaskLauncher {
     @Category(CategoryDemoTests.class)
     public void test5OpenSpecifiedApp() {
         String appName = "唯品会";
-        String pkgName = "com.vip.vstv";
-        TaskLauncher.openSpecifiedApp(mDevice, appName, pkgName);
+        TaskLauncher.openSpecifiedAppFromAppTab(mDevice, appName);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void test6OpenSettingsFromTopBar() {
-        TaskLauncher.clickOnQuickAccessButtonFromTopBar(
-                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), SETTINGS_PKG);
+        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
+                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector());
     }
 
 }

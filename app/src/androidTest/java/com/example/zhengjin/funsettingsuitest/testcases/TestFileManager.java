@@ -44,7 +44,7 @@ public final class TestFileManager {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
         String appName = "文件管理";
-        TaskLauncher.openSpecifiedApp(mDevice, appName);
+        TaskLauncher.openSpecifiedAppFromAppTab(mDevice, appName);
     }
 
     @After

@@ -8,6 +8,7 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
@@ -56,6 +57,18 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/recovery_title");
     }
 
+    public static BySelector getTitleOfCommonDialogSelector() {
+        return By.res("tv.fun.settings:id/dialog_title");
+    }
+
+    public static BySelector getConfirmBtnOfCommonDialogSelector() {
+        return By.res("tv.fun.settings:id/dialog_btn_confirm");
+    }
+
+    public static BySelector getCancelBtnOfCommonDialogSelector() {
+        return By.res("tv.fun.settings:id/dialog_btn_cancel");
+    }
+
     public static BySelector getCancelBtnOfSystemRecoverDialogSelector() {
         return By.res("tv.fun.settings:id/recovery_btn_cancel");
     }
@@ -82,15 +95,13 @@ public final class TaskSettings {
 
     public static void moveToSpecifiedSettingsItem(UiDevice device, BySelector selector) {
         UiObject2 item = device.findObject(selector);  // find the item from top
-        if (item == null) {  // find the item from bottom
+        if (item != null) {
+            moveDownUntilSettingsItemFocused(item);
+        } else {  // find the item from bottom
             moveToBottomOnCommonSettingsPage();
             item = device.findObject(selector);
-            if (item == null) {
-                Assert.assertTrue("The settings item is NOT found in common settings page.", false);
-            }
+            Assert.assertNotNull("The settings item is NOT found on common settings page.", item);
             moveUpUntilSettingsItemFocused(item);
-        } else {
-            moveDownUntilSettingsItemFocused(item);
         }
     }
 
@@ -99,21 +110,23 @@ public final class TaskSettings {
     }
 
     private static void moveUntilSettingsItemFocused(UiObject2 item, boolean flagDirectionDown) {
-        final int maxMoveTimes = 15;
-        int i = 0;
-        while (!item.isFocused() && ((i++) < maxMoveTimes)) {
-            if (flagDirectionDown) {
-                ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());
-            } else {
-                ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
-            }
+        DeviceAction moveAction;
+        if (flagDirectionDown) {
+            moveAction = new DeviceActionMoveDown();
+        } else {
+            moveAction = new DeviceActionMoveUp();
         }
 
-        if (i == maxMoveTimes) {
-            String message =
-                    "Error in moveUntilSettingsItemFocused(), the settings item is NOT focused.";
-            Assert.assertTrue(message, false);
+        for (int i = 0, maxMoveTimes = 15; i < maxMoveTimes; i++) {
+            if (item.isFocused()) {
+                return;
+            }
+            ACTION.doDeviceActionAndWait(moveAction);
         }
+
+        String message =
+                "Error in moveUntilSettingsItemFocused(), the settings item is NOT focused.";
+        Assert.assertTrue(message, false);
     }
 
     private static void moveDownUntilSettingsItemFocused(UiObject2 item) {
@@ -126,68 +139,70 @@ public final class TaskSettings {
 
     public static void scrollMoveToAndClickSettingsItem(UiDevice device, String itemText) {
         String message;
-        final String scrollClass = "android.widget.ScrollView";
-        UiScrollable scroll = new UiScrollable(new UiSelector().className(scrollClass));
-        scroll.setAsVerticalList();
 
+        UiScrollable scroll =
+                new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
+        scroll.setAsVerticalList();
         try {
             scroll.scrollTextIntoView(itemText);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             message = String.format(
-                    "Error in scrollMoveToAndClickSettingsItem(), the scrollable ui object %s is NOT found.", itemText);
+                    "Error in scrollMoveToAndClickSettingsItem(), the ui object %s is NOT found.",
+                    itemText);
             Assert.assertTrue(message, false);
         }
 
         UiObject2 settingsItem = device.findObject(By.text(itemText)).getParent();
         message = "Error in scrollMoveToAndClickSettingsItem(), the settings item is NOT found.";
         Assert.assertNotNull(message, settingsItem);
-
         ACTION.doClickActionAndWait(settingsItem);
     }
 
     public static void selectSpecifiedLocationProvince(
             UiDevice device, String provinceText, boolean directionUp) {
+        DeviceAction moveAction;
+        if (directionUp) {
+            moveAction = new DeviceActionMoveUp();
+        } else {
+            moveAction = new DeviceActionMoveDown();
+        }
+
         UiObject2 provinceList = device.findObject(getProvinceListSelector());
         UiObject2 middleProvince =
                 provinceList.findObject(getMiddleItemFromProvinceCityList());
-
-        int maxMoveTimes = 30;
-        int i = 0;
-        while (!provinceText.equals(middleProvince.getText()) && ((i++) < maxMoveTimes)) {
-            if (directionUp) {
-                ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
-            } else {
-                ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());
+        for (int i = 0, maxMoveTimes = 30; i < maxMoveTimes; i++) {
+            if (provinceText.equals(middleProvince.getText())) {
+                return;
             }
+            ACTION.doDeviceActionAndWait(moveAction);
             middleProvince = provinceList.findObject(getMiddleItemFromProvinceCityList());
         }
 
-        if (i == maxMoveTimes) {
-            Assert.assertTrue("The specified province is NOT found!", false);
-        }
+        Assert.assertTrue("The specified province is NOT found!", false);
     }
 
     public static void selectSpecifiedLocationCity(
             UiDevice device, String cityText, boolean directionUp) {
+        DeviceAction moveAction;
+        if (directionUp) {
+            moveAction = new DeviceActionMoveUp();
+        } else {
+            moveAction = new DeviceActionMoveDown();
+        }
+
         UiObject2 cityList = device.findObject(getCityListSelector());
         UiObject2 middleCity =
                 cityList.findObject(getMiddleItemFromProvinceCityList());
-
-        int maxMoveTimes = 30;
-        int i = 0;
-        while (!cityText.equals(middleCity.getText()) && ((i++) < maxMoveTimes)) {
-            if (directionUp) {
-                ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
-            } else {
-                ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());
+        for (int i = 0, maxMoveTimes = 30; i < maxMoveTimes; i++) {
+            if (cityText.equals(middleCity.getText())) {
+                return;
             }
+            ACTION.doDeviceActionAndWait(moveAction);
             middleCity = cityList.findObject(getMiddleItemFromProvinceCityList());
         }
 
-        if (i == maxMoveTimes) {
-            Assert.assertTrue("The specified city is NOT found!", false);
-        }
+        Assert.assertTrue("The specified city is NOT found!", false);
     }
 
 }

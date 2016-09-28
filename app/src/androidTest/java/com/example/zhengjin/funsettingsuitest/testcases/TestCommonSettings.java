@@ -31,7 +31,6 @@ import org.junit.runners.MethodSorters;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -42,34 +41,31 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SET
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestCommonSettings {
 
-    private static UiActionsManager action = UiActionsManager.getInstance();
+    private static UiActionsManager sAction = UiActionsManager.getInstance();
     private UiDevice mDevice;
 
     @Before
     public void setUp() {
-
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
         TaskLauncher.backToLauncher(mDevice);
-        TaskLauncher.clickOnQuickAccessButtonFromTopBar(
-                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector(), SETTINGS_PKG);
-        action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
+                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector());
+        sAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     @After
     public void clearUp() {
-
         ShellUtils.takeScreenCapture(mDevice);
         ShellUtils.systemWait(SHORT_WAIT);
 
         int repeatTimes = 2;
-        action.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
+        sAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test11TitleNameOfSettingsPage() {
-
         UiObject2 settingsTitle =
                 mDevice.findObject(TaskSettings.getTitleOfSettingsPageSelector());
         Assert.assertNotNull(settingsTitle);
@@ -81,29 +77,29 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test12DefaultSettingsDeviceName() {
+        String message;
 
         UiObject2 deviceNameContainer =
                 mDevice.findObject(TaskSettings.getDeviceNameSettingItemContainerSelector());
-
-        String message = "Verify the device name item is focused as default.";
+        message = "Verify the device name item is NOT null.";
         Assert.assertNotNull(message, deviceNameContainer);
-        Assert.assertTrue(deviceNameContainer.isFocused());
+        message = "Verify the device name item is focused as default.";
+        Assert.assertTrue(message, deviceNameContainer.isFocused());
 
-        message = "Verify the device name key text.";
         UiObject2 deviceNameKey = deviceNameContainer.findObject(By.text("设备名称"));
+        message = "Verify the device name key text.";
         Assert.assertNotNull(message, deviceNameKey);
 
-        message = "Verify the device name value text.";
         UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text("风行电视"));
+        message = "Verify the device name value text.";
         Assert.assertNotNull(message, deviceNameValue);
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test13SettingsSubDeviceNames() {
-
-        action.doDeviceActionAndWait(new DeviceActionEnter());
-        mDevice.wait(Until.findObject(TaskSettings.getDialogDeviceNameListSelector()), WAIT);
+        sAction.doDeviceActionAndWait(new DeviceActionEnter());
+        mDevice.wait(Until.hasObject(TaskSettings.getDialogDeviceNameListSelector()), WAIT);
 
         String message = "Verify the item %s in device name menu.";
         String[] subDeviceNames = {"风行电视", "客厅的电视", "卧室的电视", "书房的电视", "自定义"};
@@ -116,13 +112,12 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test14SelectDeviceName() {
-
-        action.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
+        sAction.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
         // select a sub device name and back
         String subDeviceName = "书房的电视";
         UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
         TestHelper.waitForUiObjectClickable(deviceName);
-        action.doClickActionAndWait(deviceName);
+        sAction.doClickActionAndWait(deviceName);
 
         String message = "Verify select a pre-defined device name.";
         UiObject2 deviceNameContainer =
@@ -135,83 +130,83 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test15SleepSettingSubValues() {
+        String message;
 
         TaskSettings.moveToSpecifiedSettingsItem(
                 mDevice, TaskSettings.getSleepTimeSettingItemContainerSelector());
 
-        String message = "Verify the key text of sleep setting.";
-        String expectedKeyText = "休眠设置";
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(TaskSettings.getSleepTimeSettingItemContainerSelector());
         UiObject2 itemKey =
                 sleepSettingContainer.findObject(TaskSettings.getSettingItemKeySelector());
-        Assert.assertEquals(message, expectedKeyText, itemKey.getText());
+        message = "Verify the key text of sleep setting.";
+        Assert.assertEquals(message,  "休眠设置", itemKey.getText());
 
         message = "Verify the sub values %s of sleep setting.";
         String[] subSleepValues = {"永不休眠","15分钟","30分钟","60分钟","90分钟","120分钟"};
         for (String value : subSleepValues) {
             UiObject2 subSleepText = mDevice.findObject(By.text(value));
             Assert.assertNotNull(String.format(message, value), subSleepText);
-            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+            sAction.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test17DefaultLocationOnSettings() {
+        String message;
 
         UiObject2 locationItemContainer =
                 mDevice.findObject(TaskSettings.getLocationSettingItemContainerSelector());
 
-        String message = "Verify the location item key text.";
-        String expectedItemKeyText = "天气位置";
         UiObject2 locationItemKey =
                 locationItemContainer.findObject(TaskSettings.getSettingItemKeySelector());
-        Assert.assertEquals(message, expectedItemKeyText, locationItemKey.getText());
+        message = "Verify the location item key text.";
+        Assert.assertEquals(message, "天气位置", locationItemKey.getText());
 
-        message = "Verify the location item default value text on Common Settings.";
-        String expectedItemValueText= "湖北 武汉";
         UiObject2 locationItemValue =
                 locationItemContainer.findObject(TaskSettings.getSettingItemValueSelector());
-        Assert.assertEquals(message, expectedItemValueText, locationItemValue.getText());
+        message = "Verify the location item default value text on Common Settings.";
+        Assert.assertEquals(message, "湖北 武汉", locationItemValue.getText());
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
+    // requirement is update
     public void test18DefaultLocationOnSubPage() {
+        String message;
 
         TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
 
-        String message = "Verify the default province text on location page.";
-        String expectedProvinceText = "湖北";
         UiObject2 provinceList = mDevice.findObject(TaskSettings.getProvinceListSelector());
         UiObject2 middleProvince =
                 provinceList.findObject(TaskSettings.getMiddleItemFromProvinceCityList());
-        Assert.assertEquals(message, expectedProvinceText, middleProvince.getText());
+        message = "Verify the default province text on location page.";
+        Assert.assertEquals(message, "湖北", middleProvince.getText());
 
-        message = "Verify the default city text on location page.";
-        String expectedCityText = "武汉";
         UiObject2 cityList = mDevice.findObject(TaskSettings.getCityListSelector());
         UiObject2 middleCity =
                 cityList.findObject(TaskSettings.getMiddleItemFromProvinceCityList());
-        Assert.assertEquals(message, expectedCityText, middleCity.getText());
+        message = "Verify the default city text on location page.";
+        Assert.assertEquals(message, "武汉", middleCity.getText());
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
+    // requirement is update
     public void test19SelectLocationOnSubPage() {
-
-        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
-
-        // select a location from sub page
+        String message;
         String province = "江西";
         String city = "九江";
-        TaskSettings.selectSpecifiedLocationProvince(mDevice, province, false);
-        action.doDeviceActionAndWait(new DeviceActionMoveRight());
-        TaskSettings.selectSpecifiedLocationCity(mDevice, city, false);
-        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
-        String message = "Verify the selected location item value text on Common Settings.";
+        TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+        // select a location from sub page
+        TaskSettings.selectSpecifiedLocationProvince(mDevice, province, false);
+        sAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        TaskSettings.selectSpecifiedLocationCity(mDevice, city, false);
+        sAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        message = "Verify the selected location item value text on Common Settings.";
         String expectedItemValueText = String.format("%s %s", province, city);
         UiObject2 locationItemContainer =
                 mDevice.findObject(TaskSettings.getLocationSettingItemContainerSelector());
@@ -223,67 +218,92 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test21InstallUnknownAppDefaultValue() {
+        String message;
 
         TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, "安装未知来源应用");
 
-        String message = "Verify the key text of install unknown app settings item.";
-        String expectedText = "安装未知来源应用";
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(TaskSettings.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 itemKey =
                 installUnknownAppItemContainer.findObject(TaskSettings.getSettingItemKeySelector());
-        Assert.assertEquals(message, expectedText, itemKey.getText());
+        message = "Verify the key text of install unknown app settings item.";
+        Assert.assertEquals(message, "安装未知来源应用", itemKey.getText());
 
-        message = "Verify the default value text of install unknown app settings item.";
-        expectedText = "禁止";
         UiObject2 itemValue = installUnknownAppItemContainer.findObject(
                 TaskSettings.getInstallUnknownAppSettingItemValueSelector());
         UiObject2 valueText = itemValue.findObject(By.clazz("android.widget.TextView"));
-        Assert.assertEquals(message, expectedText, valueText.getText());
+        message = "Verify the default value text of install unknown app settings item.";
+        Assert.assertEquals(message, "禁止", valueText.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test22SelectPermitFromInstallUnknownAppItem() {
+    public void test22SelectAllowedFromInstallUnknownAppItem() {
+        String message;
 
         TaskSettings.moveToSpecifiedSettingsItem(
                 mDevice, TaskSettings.getInstallUnknownAppSettingItemContainerSelector());
 
-        // TODO: 2016/6/23
+        // verify title
+        sAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        UiObject2 dialogTitle = mDevice.findObject(TaskSettings.getTitleOfCommonDialogSelector());
+        message = "Verify the common dialog title is enabled.";
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(dialogTitle));
+        message = "Verify the text of common dialog title.";
+        Assert.assertEquals(message, "安装未知应用", dialogTitle.getText());
+
+        // verify click confirm button
+        UiObject2 confirmBtn = mDevice.findObject(TaskSettings.getConfirmBtnOfCommonDialogSelector());
+        message = "Verify the confirm button on common dialog is enabled.";
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(confirmBtn));
+        sAction.doClickActionAndWait(confirmBtn);
+
+        UiObject2 installUnknownAppItemContainer =
+                mDevice.findObject(TaskSettings.getInstallUnknownAppSettingItemContainerSelector());
+        UiObject2 itemValue = installUnknownAppItemContainer.findObject(
+                TaskSettings.getInstallUnknownAppSettingItemValueSelector());
+        UiObject2 valueText = itemValue.findObject(By.clazz("android.widget.TextView"));
+        message = "Verify the value text of install unknown app settings item.";
+        Assert.assertEquals(message, "允许", valueText.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test23SelectForbiddenFromInstallUnknownAppItem() {
+        // TODO: 2016/9/28
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test24SystemRecoverDialog() {
+        String message;
+        String recoverText = "恢复出厂设置";
 
-        final String recoverText = "恢复出厂设置";
         TaskSettings.scrollMoveToAndClickSettingsItem(mDevice, recoverText);  // open dialog
 
         // verification 1
-        String message = "Verify the text of recover dialog title.";
         UiObject2 title =
                 mDevice.findObject(TaskSettings.getSystemRecoverSettingItemKeySelector());
+        message = "Verify the text of recover dialog title.";
         Assert.assertNotNull(message, title);
-
-        String expectText = "您的设备将恢复出厂设置";
         message = "Verify the content of recover dialog.";
-        Assert.assertEquals(message, expectText, title.getText());
+        Assert.assertEquals(message, "您的设备将恢复出厂设置", title.getText());
 
         // verification 2
-        message = "Verify the cancel button in recover dialog.";
         UiObject2 cancelBtn =
                 mDevice.findObject(TaskSettings.getCancelBtnOfSystemRecoverDialogSelector());
+        message = "Verify the cancel button in recover dialog.";
         Assert.assertNotNull(message, cancelBtn);
 
-        message = "Verify back to common settings page after click the cancel button";
-        action.doClickActionAndWait(cancelBtn);
+        sAction.doClickActionAndWait(cancelBtn);
         UiObject2 recoverItem = mDevice.findObject(By.text(recoverText));
+        message = "Verify back to common settings page after click the cancel button";
         Assert.assertNotNull(message, recoverItem);
     }
 
     @Ignore
     @Category(CategorySettingsTests.class)
-    public void test24SaveInfoOnSystemRecoverDialog() {
+    public void test25SaveInfoOnSystemRecoverDialog() {
         // TODO: 2016/6/24
     }
 
