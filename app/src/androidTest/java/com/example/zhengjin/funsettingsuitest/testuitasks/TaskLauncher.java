@@ -95,7 +95,7 @@ public final class TaskLauncher {
         String message;
 
         navigateToVideoTab(device);
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 3);
 
         UiObject2 tabApp = getSpecifiedTab(device, "应用");
         message = "Error in navigateToAppTab(), the UI object textAppTab is NOT found.";

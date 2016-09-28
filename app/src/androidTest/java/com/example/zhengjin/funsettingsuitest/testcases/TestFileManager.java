@@ -12,11 +12,14 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,34 +38,51 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
 
-    private static UiActionsManager action = UiActionsManager.getInstance();
+    private static UiActionsManager sAction = UiActionsManager.getInstance();
     private UiDevice mDevice;
+
+    @BeforeClass
+    public static void setUpClass() {
+        prepareData();
+    }
+
+    @AfterClass
+    public static void clearUpClass() {
+        removeData();
+    }
+
+    private static void prepareData() {
+        // TODO: 2016/9/28  
+    }
+
+    private static void removeData() {
+        // TODO: 2016/9/28  
+    }
 
     @Before
     public void setUp() {
-
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-
-        String appName = "文件管理";
-        TaskLauncher.openSpecifiedAppFromAppTab(mDevice, appName);
+        TaskLauncher.openSpecifiedAppFromAppTab(mDevice, "文件管理");
     }
 
     @After
     public void clearUp() {
         int repeatTimes = 3;
-        action.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
+        sAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
     }
 
     // Error: ddmlib.SyncException: Remote object doesn't exist!
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test11SdcardTabNameAndFocused() {
+        String message;
 
-        String tabContainerId = "tv.fun.filemanager:id/activity_fun_fm_tab";
-        UiObject2 tabContainer = mDevice.findObject(By.res(tabContainerId));
-        Assert.assertNotNull(tabContainer);
+        message = "Verify the sdcard tab name is enabled.";
+        UiObject2 tabContainer =
+                mDevice.findObject(By.res("tv.fun.filemanager:id/activity_fun_fm_tab"));
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(tabContainer));
 
-        String message = "Verify the sdcard tab name and is focused.";
+        message = "Verify the sdcard tab name is focused.";
         Assert.assertTrue(message, tabContainer.isFocused());
     }
 
@@ -70,43 +90,38 @@ public final class TestFileManager {
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test12VideoCardNameAndItemCount() {
+        String message;
 
-        String videoCardId = "category_video";
-        UiObject2 videoCard = mDevice.findObject(By.res(videoCardId));
-        Assert.assertNotNull(videoCard);
+        UiObject2 videoCard = mDevice.findObject(By.res("tv.fun.filemanager:id/category_video"));
+        message = "Verify the video card is enabled.";
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(videoCard));
 
-        String message = "Verify the video card name.";
-        String textId = "entity_name";
-        String expectedText = "视频";
-        UiObject2 videoCardText = videoCard.findObject(By.res(textId));
+        UiObject2 videoCardText = videoCard.findObject(By.res("tv.fun.filemanager:id/entity_name"));
+        message = "Verify the text of video card.";
         Assert.assertNotNull(videoCardText);
-        Assert.assertEquals(message, expectedText, videoCardText.getText());
+        Assert.assertEquals(message, "视频", videoCardText.getText());
 
-        message = "Verify the video card count.";
-        String countId = "entity_count";
-        expectedText = "(0项)";
-        UiObject2 videoCardCount = videoCard.findObject(By.res(countId));
+        UiObject2 videoCardCount = videoCard.findObject(By.res("tv.fun.filemanager:id/entity_count"));
+        message = "Verify the files count of video card.";
         Assert.assertNotNull(videoCardCount);
-        Assert.assertEquals(message, expectedText, videoCardCount.getText());
+        Assert.assertEquals(message, "(0项)", videoCardCount.getText());
     }
 
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test13OpenSdcardAllFilesCard() {
+        String message;
 
         TaskFileManager.openLocalFilesCard(mDevice);
 
-        // verification 1
         UiObject2 mainTitle = mDevice.findObject(TaskFileManager.getMainTitleSelector());
-        String expectedText = "本地存储";
-        String message = "Verify the text of main title from sdcard local files.";
-        Assert.assertEquals(message, expectedText, mainTitle.getText());
+        message = "Verify the text of main title from sdcard local files.";
+        Assert.assertNotNull(mainTitle);
+        Assert.assertEquals(message, "本地存储", mainTitle.getText());
 
-        // verification 2
         UiObject2 subTitle = mDevice.findObject(TaskFileManager.getSubTitleSelector());
-        expectedText = "全部文件";
         message = "Verify the text of sub title from sdcard local files.";
-        Assert.assertEquals(message, expectedText, subTitle.getText());
+        Assert.assertEquals(message, "全部文件", subTitle.getText());
     }
 
     @Test
@@ -187,7 +202,7 @@ public final class TestFileManager {
         TaskFileManager.openLocalFilesCard(mDevice);
 
         TaskFileManager.clickOnSpecifiedItemFromCurrentDir(mDevice, "applog");
-        action.doDeviceActionAndWait(new DeviceActionEnter());  // request focus
+        sAction.doDeviceActionAndWait(new DeviceActionEnter());  // request focus
         TaskFileManager.showMenuAndRequestFocus();
 
         // verification 1
@@ -225,7 +240,7 @@ public final class TestFileManager {
         String fileName = "990522-1548-32.jpg";
         TaskFileManager.clickOnSpecifiedItemFromCurrentDir(mDevice, fileName);
 
-        action.doMultipleDeviceActionAndWait(new DeviceActionBack())  // disappear pic bar
+        sAction.doMultipleDeviceActionAndWait(new DeviceActionBack())  // disappear pic bar
                 .doMultipleDeviceActionAndWait(new DeviceActionBack())  // exit pic browser
                 .doMultipleDeviceActionAndWait(new DeviceActionEnter());  // request focus
         TaskFileManager.showMenuAndClickRemoveBtn();
@@ -237,7 +252,7 @@ public final class TestFileManager {
 
         // verification 2
         message = "Verify remove a file.";
-        action.doClickActionAndWait(yesBtn);
+        sAction.doClickActionAndWait(yesBtn);
         UiObject2 fileRemoved = mDevice.findObject(By.text(fileName));
         Assert.assertNull(message, fileRemoved);
     }

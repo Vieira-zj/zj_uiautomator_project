@@ -255,7 +255,7 @@ public final class TestCommonSettings {
         // verify click confirm button
         UiObject2 confirmBtn = mDevice.findObject(TaskSettings.getConfirmBtnOfCommonDialogSelector());
         message = "Verify the confirm button on common dialog is enabled.";
-        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(confirmBtn));
+        Assert.assertTrue(message, TestHelper.waitForUiObjectClickable(confirmBtn));
         sAction.doClickActionAndWait(confirmBtn);
 
         UiObject2 installUnknownAppItemContainer =
