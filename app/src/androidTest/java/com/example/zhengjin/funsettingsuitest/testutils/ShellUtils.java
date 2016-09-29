@@ -126,6 +126,23 @@ public final class ShellUtils {
         }
     }
 
+    public static void stopProcess(String packageName) {
+        String message = "Force stop the app process.";
+        String cmdStopProcess = String.format("am force-stop %s", packageName);
+
+        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
+        Assert.assertTrue(message, (result.mResult == 0));
+    }
+
+    public static void stopAndClearPackage(String packageName) {
+        String message = "Clear the app package.";
+        String cmdStopProcess = String.format("pm clear %s", packageName);
+
+        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
+        Assert.assertTrue(message, (result.mResult == 0));
+    }
+
+
     public static void systemWait(long ms) {
         SystemClock.sleep(ms);
     }
@@ -141,10 +158,9 @@ public final class ShellUtils {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File testDirPath = new File(CAPTURES_PATH);
             if (!testDirPath.exists()) {
-                if (!testDirPath.mkdirs()) {
-                    Assert.assertTrue(String.format(
-                            "Error, make directory(%s) for captures failed.", CAPTURES_PATH), false);
-                }
+                Assert.assertTrue(String.format(
+                        "Error, make directory(%s) for screenshot failed.", CAPTURES_PATH),
+                        testDirPath.mkdirs());
             }
         } else {
             Assert.assertTrue("Error, the sdcard is NOT mount.", false);

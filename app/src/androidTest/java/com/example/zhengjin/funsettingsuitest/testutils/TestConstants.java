@@ -14,8 +14,8 @@ public final class TestConstants {
     public final static long LONG_WAIT = 5000;
     public final static long TIME_OUT = 8000;
 
-    public final static String FILE_MANAGER_PKG = "tv.fun.filemanager";
-    public final static String SETTINGS_PKG = "tv.fun.settings";
+    public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";
+    public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
 
     // cards text on launcher home left area
     public final static String FILM_CARD_TEXT = "电影";

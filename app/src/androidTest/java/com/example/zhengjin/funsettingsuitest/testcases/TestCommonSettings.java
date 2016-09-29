@@ -8,7 +8,6 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
@@ -16,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -59,8 +59,8 @@ public final class TestCommonSettings {
         ShellUtils.takeScreenCapture(mDevice);
         ShellUtils.systemWait(SHORT_WAIT);
 
-        int repeatTimes = 2;
-        sAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), repeatTimes);
+//        sAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
+        ShellUtils.stopProcess(TestConstants.SETTINGS_PKG_NAME);
     }
 
     @Test

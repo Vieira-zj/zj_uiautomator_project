@@ -76,6 +76,9 @@ public final class TaskFileManager {
     public static void navigateToSpecifiedPath(UiDevice device, String path) {
         List<String> dirs = parsePath(path);
         for (String dir : dirs) {
+            if (dir.toLowerCase().equals("mnt") || dir.toLowerCase().equals("sdcard")) {
+                continue;
+            }
             clickOnSpecifiedItemFromCurrentDir(device, dir);
         }
     }
@@ -88,10 +91,10 @@ public final class TaskFileManager {
     public static void clickOnSpecifiedItemFromCurrentDir(
             UiDevice device, String dirName, boolean flag_bottom) {
         final int ScrollSteps = 5;
+
         String scrollViewId = "tv.fun.filemanager:id/activity_sub_grid";
         UiScrollable fileList = new UiScrollable(new UiSelector().resourceId(scrollViewId));
         fileList.setAsVerticalList();
-
         try {
             fileList.scrollTextIntoView(dirName);
             ShellUtils.systemWait(SHORT_WAIT);
@@ -147,6 +150,12 @@ public final class TaskFileManager {
     public static void showMenuAndClickHideBtn() {
         showMenuAndRequestFocus();
         ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    public static void showMenuAndClickShowAllBtn() {
+        showMenuAndRequestFocus();
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
         ACTION.doDeviceActionAndWait(new DeviceActionEnter());
     }
 

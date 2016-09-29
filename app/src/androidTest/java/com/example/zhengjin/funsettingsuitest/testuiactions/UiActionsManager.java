@@ -21,7 +21,6 @@ public final class UiActionsManager {
     private UiActionsManager() {}
 
     public static synchronized UiActionsManager getInstance() {
-
         if (instance == null) {
             instance = new UiActionsManager();
         }
@@ -33,7 +32,6 @@ public final class UiActionsManager {
     }
 
     public boolean doDeviceActionAndWait(DeviceAction action, long wait) {
-
         boolean ret = action.doDeviceAction(device);
         ShellUtils.systemWait(wait);
         return ret;
@@ -45,7 +43,6 @@ public final class UiActionsManager {
     }
 
     public boolean doDeviceActionAndWaitForIdle(DeviceAction action, long wait) {
-
         boolean ret = action.doDeviceAction(device);
 
         if (wait > 0) {
@@ -57,13 +54,11 @@ public final class UiActionsManager {
     }
 
     public boolean doDeviceActionAndWaitForIdle(DeviceAction action) {
-
         long defaultWait = 0;
         return doDeviceActionAndWaitForIdle(action, defaultWait);
     }
 
     public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
-
         for (int i = 0; i < repeatTimes; ++i) {
             action.doDeviceAction(device);
             ShellUtils.systemWait(wait);
@@ -75,7 +70,6 @@ public final class UiActionsManager {
     }
 
     public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action, long wait) {
-
         action.doDeviceAction(device);
         ShellUtils.systemWait(wait);
         return this;
@@ -86,7 +80,6 @@ public final class UiActionsManager {
     }
 
     public void doClickActionAndWait(UiObject2 uiObj) {
-
         uiObj.click();
         ShellUtils.systemWait(SHORT_WAIT);
     }
