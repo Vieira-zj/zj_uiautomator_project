@@ -28,6 +28,12 @@ public final class TaskVideoHomeTab {
         return instance;
     }
 
+    public void destroyInstance() {
+        if (instance != null) {
+            instance = null;
+        }
+    }
+
     public BySelector getAllCardsTitleOfLauncherHomeLeftAreaSelector() {
         return By.res("com.bestv.ott:id/title");
     }

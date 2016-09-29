@@ -21,6 +21,11 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import static android.provider.ContactsContract.Directory.PACKAGE_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
+
 /**
  * Created by zhengjin on 2016/6/24.
  *
@@ -29,9 +34,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 public final class TestLauncherApp {
-
-    private static final String PACKAGE_NAME = "tv.fun.filemanager";
-    private static final int LAUNCH_TIMEOUT = 5000;
 
     private TaskFileManager mFileManagerTask;
     private UiDevice mDevice;
@@ -45,17 +47,18 @@ public final class TestLauncherApp {
         mDevice.pressHome();
         String launcherPkg = mDevice.getLauncherPackageName();
         Assert.assertNotNull(launcherPkg);
-        boolean ret = mDevice.wait(Until.hasObject(By.pkg(launcherPkg).depth(0)), LAUNCH_TIMEOUT);
+        boolean ret = mDevice.wait(Until.hasObject(By.pkg(launcherPkg).depth(0)), LONG_WAIT);
         if (!ret) {
             throw new RuntimeException("Error, back to home failed.");
         }
 
         // start app
         Context context = InstrumentationRegistry.getContext();
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(PACKAGE_NAME);
+        Intent intent =
+                context.getPackageManager().getLaunchIntentForPackage(FILE_MANAGER_PKG_NAME);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
-        mDevice.wait(Until.hasObject(By.pkg(PACKAGE_NAME)), LAUNCH_TIMEOUT);
+        mDevice.wait(Until.hasObject(By.pkg(PACKAGE_NAME)), TIME_OUT);
     }
 
     @Test
@@ -76,7 +79,7 @@ public final class TestLauncherApp {
     @Test
     @Category(CategoryDemoTests.class)
     public void test3LongPressKey() {
-        // // TODO: 2016/8/10 long press action
+        // TODO: 2016/8/10 long press action
     }
 
 }

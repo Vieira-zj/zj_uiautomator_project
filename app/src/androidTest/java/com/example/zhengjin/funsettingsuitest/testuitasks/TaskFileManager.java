@@ -44,6 +44,12 @@ public final class TaskFileManager {
         return instance;
     }
 
+    public void destroyInstance() {
+        if (instance != null) {
+            instance = null;
+        }
+    }
+
     public BySelector getMainTitleSelector() {
         return By.res("tv.fun.filemanager:id/activity_sub_title_main");
     }

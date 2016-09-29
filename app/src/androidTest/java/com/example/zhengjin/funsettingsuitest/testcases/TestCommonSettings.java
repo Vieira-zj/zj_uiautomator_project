@@ -35,7 +35,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 
 /**
  * Created by zhengjin on 2016/6/2.
- *
+ * <p>
  * Include test cases for common settings module.
  */
 @RunWith(AndroidJUnit4.class)
@@ -81,7 +81,7 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test12DefaultSettingsDeviceName() {
+    public void test12DeviceNameDefaultValue() {
         String message;
 
         UiObject2 deviceNameContainer =
@@ -102,7 +102,7 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test13SettingsSubDeviceNames() {
+    public void test13DeviceNameSubValues() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
         mDevice.wait(Until.hasObject(mTask.getDialogDeviceNameListSelector()), WAIT);
 
@@ -132,9 +132,16 @@ public final class TestCommonSettings {
         Assert.assertNotNull(message, deviceNameValue);
     }
 
+
     @Test
     @Category(CategorySettingsTests.class)
-    public void test15SleepSettingSubValues() {
+    public void test15SleepTimeDefaultValue() {
+        // TODO: 2016/9/29
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test16SelectSleepTime() {
         String message;
 
         mTask.moveToSpecifiedSettingsItem(mDevice, mTask.getSleepTimeSettingItemContainerSelector());
@@ -144,79 +151,25 @@ public final class TestCommonSettings {
         UiObject2 itemKey =
                 sleepSettingContainer.findObject(mTask.getSettingItemKeySelector());
         message = "Verify the key text of sleep setting.";
-        Assert.assertEquals(message,  "休眠设置", itemKey.getText());
+        Assert.assertEquals(message, "休眠设置", itemKey.getText());
 
-        message = "Verify the sub values %s of sleep setting.";
-        String[] subSleepValues = {"永不休眠","15分钟","30分钟","60分钟","90分钟","120分钟"};
-        for (String value : subSleepValues) {
-            UiObject2 subSleepText = mDevice.findObject(By.text(value));
-            Assert.assertNotNull(String.format(message, value), subSleepText);
-            mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        }
+        // TODO: 2016/9/30  
+        message = "Verify the select sleep time.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
+        UiObject2 subSleepText = mDevice.findObject(By.text("30分钟"));
+        Assert.assertNotNull(message, subSleepText);
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test17DefaultLocationOnSettings() {
-        String message;
-
-        UiObject2 locationItemContainer =
-                mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
-
-        UiObject2 locationItemKey =
-                locationItemContainer.findObject(mTask.getSettingItemKeySelector());
-        message = "Verify the location item key text.";
-        Assert.assertEquals(message, "天气位置", locationItemKey.getText());
-
-        UiObject2 locationItemValue =
-                locationItemContainer.findObject(mTask.getSettingItemValueSelector());
-        message = "Verify the location item default value text on Common Settings.";
-        Assert.assertEquals(message, "湖北 武汉", locationItemValue.getText());
+    public void test17ScreenSaverDefaultValue() {
+        // TODO: 2016/9/30
     }
 
-    @Ignore
+    @Test
     @Category(CategorySettingsTests.class)
-    // requirement is update
-    public void test18DefaultLocationOnSubPage() {
-        String message;
-
-        mTask.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
-
-        UiObject2 provinceList = mDevice.findObject(mTask.getProvinceListSelector());
-        UiObject2 middleProvince =
-                provinceList.findObject(mTask.getMiddleItemFromProvinceCityList());
-        message = "Verify the default province text on location page.";
-        Assert.assertEquals(message, "湖北", middleProvince.getText());
-
-        UiObject2 cityList = mDevice.findObject(mTask.getCityListSelector());
-        UiObject2 middleCity =
-                cityList.findObject(mTask.getMiddleItemFromProvinceCityList());
-        message = "Verify the default city text on location page.";
-        Assert.assertEquals(message, "武汉", middleCity.getText());
-    }
-
-    @Ignore
-    @Category(CategorySettingsTests.class)
-    // requirement is update
-    public void test19SelectLocationOnSubPage() {
-        String message;
-        String province = "江西";
-        String city = "九江";
-
-        mTask.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
-        // select a location from sub page
-        mTask.selectSpecifiedLocationProvince(mDevice, province, false);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(mDevice, city, false);
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-
-        message = "Verify the selected location item value text on Common Settings.";
-        String expectedItemValueText = String.format("%s %s", province, city);
-        UiObject2 locationItemContainer =
-                mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
-        UiObject2 locationItemValue =
-                locationItemContainer.findObject(mTask.getSettingItemValueSelector());
-        Assert.assertEquals(message, expectedItemValueText, locationItemValue.getText());
+    public void test18SelectScreenSaver() {
+        // TODO: 2016/9/30
     }
 
     @Test
@@ -242,7 +195,13 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test22SelectAllowedFromInstallUnknownAppItem() {
+    public void test22CancelAllowedInstallUnknownApp() {
+        // TODO: 2016/9/30
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test23SelectAllowedInstallUnknownApp() {
         String message;
 
         mTask.moveToSpecifiedSettingsItem(
@@ -273,13 +232,13 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test23SelectForbiddenFromInstallUnknownAppItem() {
+    public void test24SelectForbidInstallUnknownApp() {
         // TODO: 2016/9/28
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test24SystemRecoverDialog() {
+    public void test25SystemRecoverDialogAndClickCancel() {
         String message;
         String recoverText = "恢复出厂设置";
 
@@ -307,7 +266,7 @@ public final class TestCommonSettings {
 
     @Ignore
     @Category(CategorySettingsTests.class)
-    public void test25SaveInfoOnSystemRecoverDialog() {
+    public void test26SaveInfoOnSystemRecoverDialog() {
         // TODO: 2016/6/24
     }
 
@@ -325,8 +284,84 @@ public final class TestCommonSettings {
 
     @Ignore
     @Category(CategorySettingsTests.class)
-    public void test33SelectAWallpapers() {
+    public void test33SelectWallpaper() {
         // TODO: 2016/6/7
     }
-}
 
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test41DefaultLocationOnSettings() {
+        String message;
+
+        UiObject2 locationItemContainer =
+                mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
+
+        UiObject2 locationItemKey =
+                locationItemContainer.findObject(mTask.getSettingItemKeySelector());
+        message = "Verify the location item key text.";
+        Assert.assertEquals(message, "天气位置", locationItemKey.getText());
+
+        UiObject2 locationItemValue =
+                locationItemContainer.findObject(mTask.getSettingItemValueSelector());
+        message = "Verify the location item default value text on Common Settings.";
+        Assert.assertEquals(message, "湖北 武汉", locationItemValue.getText());
+    }
+
+    @Ignore
+    @Category(CategorySettingsTests.class)
+    // requirement is update
+    public void test42DefaultLocationOnSubPage() {
+        String message;
+
+        mTask.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+
+        UiObject2 provinceList = mDevice.findObject(mTask.getProvinceListSelector());
+        UiObject2 middleProvince =
+                provinceList.findObject(mTask.getMiddleItemFromProvinceCityList());
+        message = "Verify the default province text on location page.";
+        Assert.assertEquals(message, "湖北", middleProvince.getText());
+
+        UiObject2 cityList = mDevice.findObject(mTask.getCityListSelector());
+        UiObject2 middleCity =
+                cityList.findObject(mTask.getMiddleItemFromProvinceCityList());
+        message = "Verify the default city text on location page.";
+        Assert.assertEquals(message, "武汉", middleCity.getText());
+    }
+
+    @Ignore
+    @Category(CategorySettingsTests.class)
+    // requirement is update
+    public void test43SelectLocationOnSubPage() {
+        String message;
+        String province = "江西";
+        String city = "九江";
+
+        mTask.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+        // select a location from sub page
+        mTask.selectSpecifiedLocationProvince(mDevice, province, false);
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        mTask.selectSpecifiedLocationCity(mDevice, city, false);
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        message = "Verify the selected location item value text on Common Settings.";
+        String expectedItemValueText = String.format("%s %s", province, city);
+        UiObject2 locationItemContainer =
+                mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
+        UiObject2 locationItemValue =
+                locationItemContainer.findObject(mTask.getSettingItemValueSelector());
+        Assert.assertEquals(message, expectedItemValueText, locationItemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test44OpenWeatherAppAndBackToSettings() {
+        // TODO: 2016/9/30
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test99ClearUpAfterAllTestCasesDone() {
+        mTask.destroyInstance();
+    }
+
+}

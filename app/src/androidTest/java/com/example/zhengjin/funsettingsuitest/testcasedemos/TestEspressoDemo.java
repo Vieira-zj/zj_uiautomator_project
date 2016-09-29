@@ -8,16 +8,14 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.activity.ActivityDemo;
 import com.example.zhengjin.funsettingsuitest.R;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
+import com.example.zhengjin.funsettingsuitest.activity.ActivityDemo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 /**
@@ -48,7 +46,6 @@ public final class TestEspressoDemo {
     }
 
     @Test
-    @Category(CategoryDemoTests.class)
     public void test1ActDemoEditWithEmpty() {
         String result = "Hello Message";
         ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.text_hello_msg));
@@ -56,7 +53,6 @@ public final class TestEspressoDemo {
     }
 
     @Test
-    @Category(CategoryDemoTests.class)
     public void test2ActDemoEditWithString() {
         String input = "ZhengJin";
         String result = "Hello, ZhengJin";

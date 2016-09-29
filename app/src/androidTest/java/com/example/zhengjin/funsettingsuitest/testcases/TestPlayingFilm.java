@@ -1,11 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
-/**
- * Created by zhengjin on 2016/8/10.
- *
- * Include 24 x 7 test cases for playing video film.
- */
-
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;

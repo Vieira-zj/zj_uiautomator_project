@@ -35,6 +35,12 @@ public final class TaskSettings {
         return instance;
     }
 
+    public void destroyInstance() {
+        if (instance != null) {
+            instance = null;
+        }
+    }
+
     public BySelector getTitleOfSettingsPageSelector() {
         return By.res("tv.fun.settings:id/setting_title");
     }

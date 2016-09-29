@@ -34,6 +34,11 @@ public final class TestShellUtils {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
     }
 
+    @After
+    public void clearUp() {
+        Log.d(TAG, String.format("***** Test %s finished.", TAG));
+    }
+
     @Test
     @Category(CategoryDemoTests.class)
     public void testExecShellShCommand() {
@@ -54,17 +59,13 @@ public final class TestShellUtils {
         // add extra option "--user 0"
         String command = "am start --user 0 tv.fun.filemanager/.FunFileManagerActivity";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+
         String output = String.format(Locale.getDefault(),
                 "Result code: %d\n Success message: %s\n Error message: %s",
                 cr.mResult,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
-    }
-
-    @After
-    public void clearUp() {
-        Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 
 }

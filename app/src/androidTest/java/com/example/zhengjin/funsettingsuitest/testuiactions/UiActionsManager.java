@@ -16,23 +16,22 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
 public final class UiActionsManager {
 
     private static UiActionsManager instance = null;
-    private static UiDevice device = null;
+    private UiDevice mDevice = null;
 
-    private UiActionsManager() {}
+    private UiActionsManager() {
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    }
 
     public static synchronized UiActionsManager getInstance() {
         if (instance == null) {
             instance = new UiActionsManager();
-        }
-        if (device == null) {
-            device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         }
 
         return instance;
     }
 
     public boolean doDeviceActionAndWait(DeviceAction action, long wait) {
-        boolean ret = action.doDeviceAction(device);
+        boolean ret = action.doDeviceAction(mDevice);
         ShellUtils.systemWait(wait);
         return ret;
     }
@@ -43,12 +42,12 @@ public final class UiActionsManager {
     }
 
     public boolean doDeviceActionAndWaitForIdle(DeviceAction action, long wait) {
-        boolean ret = action.doDeviceAction(device);
+        boolean ret = action.doDeviceAction(mDevice);
 
         if (wait > 0) {
-            device.waitForIdle(wait);
+            mDevice.waitForIdle(wait);
         } else {
-            device.waitForIdle();
+            mDevice.waitForIdle();
         }
         return ret;
     }
@@ -60,7 +59,7 @@ public final class UiActionsManager {
 
     public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
         for (int i = 0; i < repeatTimes; ++i) {
-            action.doDeviceAction(device);
+            action.doDeviceAction(mDevice);
             ShellUtils.systemWait(wait);
         }
     }
@@ -70,7 +69,7 @@ public final class UiActionsManager {
     }
 
     public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action, long wait) {
-        action.doDeviceAction(device);
+        action.doDeviceAction(mDevice);
         ShellUtils.systemWait(wait);
         return this;
     }

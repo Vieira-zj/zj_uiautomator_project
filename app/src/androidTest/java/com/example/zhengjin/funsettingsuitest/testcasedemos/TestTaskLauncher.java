@@ -51,11 +51,9 @@ public class TestTaskLauncher {
     @Test
     @Category(CategoryDemoTests.class)
     public void test1GetLauncherPackageName() {
-        final String results = "com.bestv.ott";
         String pkg = TaskLauncher.getLauncherPackageName();
-
         Assert.assertNotNull(pkg);
-        Assert.assertEquals(results, pkg);
+        Assert.assertEquals("com.bestv.ott", pkg);
     }
 
     @Test

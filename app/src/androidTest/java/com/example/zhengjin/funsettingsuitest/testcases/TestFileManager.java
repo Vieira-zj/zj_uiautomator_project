@@ -48,45 +48,48 @@ public final class TestFileManager {
     private static final String TEXT_HIDDEN_BUTTON = "隐藏";
     private static final String TEXT_SHOWALL_BUTTON = "显示全部";
 
-    private static final String TEST_DIR_NAME = "testfile";
+    private static final String TEST_ROOT_DIR_NAME = "TestFile";
+    private static final String TEST_ROOT_DIR_PATH;
+    private static final String TEST_DIR_NAME = "TestDirectory";
     private static final String TEST_DIR_PATH;
-    private static final String TEST_HIDDEN_DIR_NAME = "hidden";
-    private static final String TEST_HIDDEN_DIR_PATH;
-    private static final String TEST_TXT_FILE_NAME = "test.txt";
-    private static final String TEST_TXT_FILE_PATH;
+    private static final String TEST1_FILE_NAME = "TestFile1.log";
+    private static final String TEST1_FILE_PATH;
+    private static final String TEST2_FILE_NAME = "TestFile2.log";
+    private static final String TEST2_FILE_PATH;
 
     static {
-        TEST_DIR_PATH = String.format("%s/%s/", FileUtils.getExternalStoragePath(), "testfile");
-        TEST_HIDDEN_DIR_PATH = String.format("%s/%s", TEST_DIR_PATH, TEST_HIDDEN_DIR_NAME);
-        TEST_TXT_FILE_PATH = String.format("%s/%s", TEST_DIR_PATH, TEST_TXT_FILE_NAME);
+        TEST_ROOT_DIR_PATH = String.format("%s/%s", FileUtils.getExternalStoragePath(), "testfile");
+        TEST_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_DIR_NAME);
+        TEST1_FILE_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST1_FILE_NAME);
+        TEST2_FILE_PATH = String.format("%s/%s", TEST_DIR_PATH, TEST2_FILE_NAME);
     }
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void classSetUp() {
         prepareData();
     }
 
     @AfterClass
-    public static void clearUpClass() {
+    public static void classClearUp() {
         removeData();
     }
 
     private static void prepareData() {
         String message = "Prepare files for file manager test.";
-        String cmdCreateDir = String.format("mkdir %s", TEST_DIR_PATH);
-        String cmdCreateHiddenDir = String.format("mkdir %s", TEST_HIDDEN_DIR_PATH);
-        String cmdCreateTxtFile = String.format("touch %s", TEST_TXT_FILE_PATH);
+        String cmdCreateDir = String.format("mkdir %s", TEST_ROOT_DIR_PATH);
+        String cmdCreateHiddenDir = String.format("mkdir %s", TEST_DIR_PATH);
+        String cmdCreateTxtFile1 = String.format("touch %s", TEST1_FILE_PATH);
+        String cmdCreateTxtFile2 = String.format("touch %s", TEST2_FILE_PATH);
+        String commands[] = {cmdCreateDir, cmdCreateHiddenDir,
+                cmdCreateTxtFile1, cmdCreateTxtFile2};
 
-        ShellUtils.CommandResult result =
-                ShellUtils.execCommand(
-                        new String[]{cmdCreateDir, cmdCreateHiddenDir, cmdCreateTxtFile},
-                        false, false);
+        ShellUtils.CommandResult result = ShellUtils.execCommand(commands, false, false);
         Assert.assertTrue(message, (result.mResult == 0));
     }
 
     private static void removeData() {
         String message = "Clear files for file manager test.";
-        String removeAllFiles = String.format("rm -rf %s", TEST_DIR_PATH);
+        String removeAllFiles = String.format("rm -rf %s", TEST_ROOT_DIR_PATH);
 
         ShellUtils.CommandResult result = ShellUtils.execCommand(removeAllFiles, false, false);
         Assert.assertTrue(message, (result.mResult == 0));
@@ -107,10 +110,10 @@ public final class TestFileManager {
         ShellUtils.stopAndClearPackage(FILE_MANAGER_PKG_NAME);
     }
 
-    // Error: ddmlib.SyncException: Remote object doesn't exist!
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test11SdcardTabNameAndFocused() {
+        // Error: ddmlib.SyncException: Remote object doesn't exist!
         String message;
 
         message = "Verify the sdcard tab name is enabled.";
@@ -122,10 +125,10 @@ public final class TestFileManager {
         Assert.assertTrue(message, tabContainer.isFocused());
     }
 
-    // Error: ddmlib.SyncException: Remote object doesn't exist!
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test12VideoCardNameAndItemCount() {
+        // Error: ddmlib.SyncException: Remote object doesn't exist!
         String message;
 
         UiObject2 videoCard = mDevice.findObject(By.res("tv.fun.filemanager:id/category_video"));
@@ -164,11 +167,11 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test14NavigateToSpecifiedPath() {
         mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
 
         UiObject2 subTitle = mDevice.findObject(mTask.getSubTitleSelector());
         String message = "Verify navigate to the specified path.";
-        Assert.assertEquals(message, TEST_DIR_NAME, subTitle.getText());
+        Assert.assertEquals(message, TEST_ROOT_DIR_NAME, subTitle.getText());
     }
 
     @Ignore
@@ -178,7 +181,7 @@ public final class TestFileManager {
         mTask.openLocalFilesCard(mDevice);
 
         String fileName = "4800x3600_5.jpg";
-        mTask.navigateAndOpenSpecifiedFile(mDevice, (TEST_DIR_PATH + fileName));
+        mTask.navigateAndOpenSpecifiedFile(mDevice, (TEST_ROOT_DIR_PATH + fileName));
 
         String titleId = "tv.fun.filemanager:id/image_name_display";
         UiObject2 fileTitle = mDevice.findObject(By.res(titleId));
@@ -193,9 +196,9 @@ public final class TestFileManager {
         mTask.openLocalFilesCard(mDevice);
 
         String message = "Verify open unknown type file.";
-        mTask.navigateAndOpenSpecifiedFile(mDevice, TEST_TXT_FILE_PATH);
+        mTask.navigateAndOpenSpecifiedFile(mDevice, TEST1_FILE_PATH);
         Assert.assertTrue(message,
-                TestHelper.waitForUiObjectExist(mDevice, By.text(TEST_TXT_FILE_NAME)));
+                TestHelper.waitForUiObjectExist(mDevice, By.text(TEST1_FILE_NAME)));
     }
 
     @Test
@@ -210,7 +213,7 @@ public final class TestFileManager {
         Assert.assertTrue(message, menuTips.getText().contains("查看更多操作"));
 
         // verification 2
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
         mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
                 .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
         mTask.showMenuAndRequestFocus();
@@ -234,7 +237,7 @@ public final class TestFileManager {
         String message;
 
         mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
         mTask.showMenuAndRequestFocus();
 
@@ -261,11 +264,56 @@ public final class TestFileManager {
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test23RemoveFileAndCancel() {
+    public void test23HideAndShowDirectory() {
         String message;
 
         mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
+                .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
+
+        // verification 1
+        mTask.showMenuAndClickBtn(mDevice, TEXT_HIDDEN_BUTTON);
+        message = "Verify the directory is hidden.";
+        UiObject2 fileHidden = mDevice.findObject(By.text(TEST_DIR_NAME));
+        Assert.assertNull(message, fileHidden);
+
+        // verification 2
+        mTask.showMenuAndClickBtn(mDevice, TEXT_SHOWALL_BUTTON);
+        message = "Verify the directory is show.";
+        UiObject2 fileShow = mDevice.findObject(By.text(TEST_DIR_NAME));
+        Assert.assertNotNull(message, fileShow);
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test24HideAndShowFile() {
+        String message;
+
+        mTask.openLocalFilesCard(mDevice);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
+
+        // verification 1
+        mTask.showMenuAndClickBtn(mDevice, TEXT_HIDDEN_BUTTON);
+        message = "Verify the file is hidden.";
+        UiObject2 fileHidden = mDevice.findObject(By.text(TEST1_FILE_NAME));
+        Assert.assertNull(message, fileHidden);
+
+        // verification 2
+        mTask.showMenuAndClickBtn(mDevice, TEXT_SHOWALL_BUTTON);
+        message = "Verify the file is show.";
+        UiObject2 fileShow = mDevice.findObject(By.text(TEST1_FILE_NAME));
+        Assert.assertNotNull(message, fileShow);
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test25RemoveFileAndCancel() {
+        String message;
+
+        mTask.openLocalFilesCard(mDevice);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
         mTask.showMenuAndClickBtn(mDevice, TEXT_REMOVE_BUTTON);
 
@@ -277,17 +325,17 @@ public final class TestFileManager {
         // verification 2
         message = "Verify click cancel and do not remove a file.";
         mAction.doClickActionAndWait(cancelBtn);
-        UiObject2 fileDeleted = mDevice.findObject(By.text(TEST_TXT_FILE_NAME));
+        UiObject2 fileDeleted = mDevice.findObject(By.text(TEST1_FILE_NAME));
         Assert.assertNotNull(message, fileDeleted);
     }
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test24RemoveFile() {
+    public void test26RemoveFile() {
         String message;
 
         mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
+        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
         mTask.showMenuAndClickBtn(mDevice, TEXT_REMOVE_BUTTON);
 
@@ -299,53 +347,20 @@ public final class TestFileManager {
         // verification 2
         message = "Verify click yes and remove a file.";
         mAction.doClickActionAndWait(yesBtn);
-        UiObject2 fileDeleted = mDevice.findObject(By.text(TEST_TXT_FILE_NAME));
+        UiObject2 fileDeleted = mDevice.findObject(By.text(TEST1_FILE_NAME));
         Assert.assertNull(message, fileDeleted);
     }
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test25HideAndShowDirectory() {
-        String message;
-
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
-        mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
-                .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
-
-        // verification 1
-        mTask.showMenuAndClickBtn(mDevice, TEXT_HIDDEN_BUTTON);
-        message = "Verify the directory is hidden.";
-        UiObject2 fileHidden = mDevice.findObject(By.text(TEST_HIDDEN_DIR_NAME));
-        Assert.assertNull(message, fileHidden);
-
-        // verification 2
-        mTask.showMenuAndClickBtn(mDevice, TEXT_SHOWALL_BUTTON);
-        message = "Verify the directory is show.";
-        UiObject2 fileShow = mDevice.findObject(By.text(TEST_HIDDEN_DIR_NAME));
-        Assert.assertNotNull(message, fileShow);
+    public void test27RemoveOnlyFileOfDirectory() {
+        // TODO: 2016/9/30  
     }
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test26HideAndShowFile() {
-        String message;
-
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_DIR_PATH);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
-
-        // verification 1
-        mTask.showMenuAndClickBtn(mDevice, TEXT_HIDDEN_BUTTON);
-        message = "Verify the file is hidden.";
-        UiObject2 fileHidden = mDevice.findObject(By.text(TEST_TXT_FILE_NAME));
-        Assert.assertNull(message, fileHidden);
-
-        // verification 2
-        mTask.showMenuAndClickBtn(mDevice, TEXT_SHOWALL_BUTTON);
-        message = "Verify the file is show.";
-        UiObject2 fileShow = mDevice.findObject(By.text(TEST_TXT_FILE_NAME));
-        Assert.assertNotNull(message, fileShow);
+    public void test99ClearUpAfterAllTestCasesDone() {
+        mTask.destroyInstance();
     }
 
 }

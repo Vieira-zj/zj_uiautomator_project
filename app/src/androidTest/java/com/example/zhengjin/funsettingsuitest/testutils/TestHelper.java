@@ -20,7 +20,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
 /**
  * Created by zhengjin on 2016/6/2.
  *
- * Include the shared functions for test cases.
+ * Include the shared UI functions for test cases.
  */
 public final class TestHelper {
 

@@ -36,7 +36,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VAR
 /**
  * Created by Vieira on 2016/7/4.
  *
- * Include the test cases to test launcher home page basic functions for 24 x 7.
+ * Include the test cases to test the tabs of launcher home.
+ * These test cases are unstable (video 2nd level page).
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -185,5 +186,9 @@ public final class TestVideoHomeTab {
                 mDevice, mTask.getAllCardsMainTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listCardTitle);
     }
+
+    @Test
+    @Category({CategoryVideoHomeTabTests.class})
+    public void test99ClearUpAfterAllTestCasesDone() { mTask.destroyInstance(); }
 
 }
