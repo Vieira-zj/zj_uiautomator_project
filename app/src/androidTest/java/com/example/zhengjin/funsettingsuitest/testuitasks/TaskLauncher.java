@@ -25,13 +25,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LON
 
 /**
  * Created by zhengjin on 2016/6/1.
- *
+ * <p>
  * Include the UI tasks on Launcher.
+ * This task is used by each module, so keep static.
  */
 public final class TaskLauncher {
-
-//    private final static String TAG = TaskLauncher.class.getSimpleName();
-    private static UiActionsManager ACTION = UiActionsManager.getInstance();
+    //    private final static String TAG = TaskLauncher.class.getSimpleName();
+    private static UiActionsManager action = UiActionsManager.getInstance();
 
     public static BySelector getAllLauncherTabsSelector() {
         return By.res("com.bestv.ott:id/tab_title");
@@ -52,14 +52,14 @@ public final class TaskLauncher {
     public static void backToLauncher(UiDevice device) {
         // method 1
 //        String pkgName = getLauncherPackageName();
-//        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
+//        action.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
 //        String pkgName = device.getCurrentPackageName();
 //        Assert.assertTrue(message, launcherPackageName.equals(pkgName));
 
         // method 2
         String launcherPackageName = device.getLauncherPackageName();  //"com.bestv.ott"
         String message = "Error in backToLauncher(), fail to back to the launcher.";
-        ACTION.doDeviceActionAndWait(new DeviceActionHome());
+        action.doDeviceActionAndWait(new DeviceActionHome());
         Assert.assertTrue(message, TestHelper.waitForAppOpened(device, launcherPackageName));
     }
 
@@ -81,7 +81,7 @@ public final class TaskLauncher {
         String message;
 
         backToLauncher(device);
-        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
+        action.doDeviceActionAndWait(new DeviceActionMoveUp());
 
         String textVideoTab = ("视频");
         UiObject2 tabVideo = getSpecifiedTab(device, textVideoTab);
@@ -95,7 +95,7 @@ public final class TaskLauncher {
         String message;
 
         navigateToVideoTab(device);
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 3);
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 3);
 
         UiObject2 tabApp = getSpecifiedTab(device, "应用");
         message = "Error in navigateToAppTab(), the UI object textAppTab is NOT found.";
@@ -121,7 +121,7 @@ public final class TaskLauncher {
 
     public static void openSpecifiedAppFromAppTab(UiDevice device, String appName) {
         focusOnSpecifiedAppFromAppTab(device, appName);
-        Assert.assertTrue(ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT));
+        Assert.assertTrue(action.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT));
     }
 
     private static void focusOnSpecifiedAppFromAppTab(UiDevice device, String appName) {
@@ -139,7 +139,7 @@ public final class TaskLauncher {
                 "Error in openSpecifiedAppFromAppTab(), the app container %s is NOT found.", appName);
         Assert.assertNotNull(message, appContainer);
 
-        ACTION.doClickActionAndWait(appContainer);
+        action.doClickActionAndWait(appContainer);
     }
 
     public static void clickOnButtonFromTopQuickAccessBar(UiDevice device, BySelector selector) {
@@ -150,15 +150,15 @@ public final class TaskLauncher {
         UiObject2 quickAccessBtn = device.findObject(selector);
         Assert.assertNotNull(message, quickAccessBtn);
 
-        ACTION.doClickActionAndWait(quickAccessBtn);
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
+        action.doClickActionAndWait(quickAccessBtn);
+        action.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
     }
 
     private static void showLauncherTopBar(UiDevice device) {
         String message;
 
         backToLauncher(device);
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), 2);
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), 2);
 
         UiObject2 bar = device.findObject(getLauncherTopBarSelector());
         message = "Error in showLauncherTopBar(), the top bar on launcher is NOT found.";

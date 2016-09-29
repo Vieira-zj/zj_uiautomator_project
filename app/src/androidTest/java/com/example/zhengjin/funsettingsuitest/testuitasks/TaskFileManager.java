@@ -31,41 +31,56 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskFileManager {
 
-    private static UiActionsManager ACTION = UiActionsManager.getInstance();
+    private static TaskFileManager instance = null;
+    private static UiActionsManager action = UiActionsManager.getInstance();
 
-    public static BySelector getMainTitleSelector() {
+    private TaskFileManager() {
+    }
+
+    public static synchronized TaskFileManager getInstance() {
+        if (instance == null) {
+            instance = new TaskFileManager();
+        }
+        return instance;
+    }
+
+    public BySelector getMainTitleSelector() {
         return By.res("tv.fun.filemanager:id/activity_sub_title_main");
     }
 
-    public static BySelector getSubTitleSelector() {
+    public BySelector getSubTitleSelector() {
         return By.res("tv.fun.filemanager:id/activity_sub_title_sub");
     }
 
-    public static BySelector getMenuTipsSelector() {
+    public BySelector getMenuTipsSelector() {
         return By.res("tv.fun.filemanager:id/activity_sub_menu_tips");
     }
 
-    public static BySelector getMenuRemoveBtnContainerSelector() {
+    public BySelector getMenuRemoveBtnContainerSelector() {
         return By.res("tv.fun.filemanager:id/menu_item_del_id");
     }
 
-    public static BySelector getMenuHideBtnContainerSelector() {
+    public BySelector getMenuHideBtnContainerSelector() {
         return By.res("tv.fun.filemanager:id/menu_item_hide_id");
     }
 
-    public static BySelector getMenuBtnTextSelector() {
+    public BySelector getMenuShowAllBtnContainerSelector() {
+        return By.res("tv.fun.filemanager:id/menu_item_hide_id");
+    }
+
+    public BySelector getMenuBtnTextSelector() {
         return By.res("android:id/tv_fun_menu_text");
     }
 
-    public static BySelector getYesBtnOfConfirmDialog() {
+    public BySelector getYesBtnOfConfirmDialog() {
         return By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm");
     }
 
-    public static BySelector getCancelBtnOfConfirmDialog() {
+    public BySelector getCancelBtnOfConfirmDialog() {
         return By.res("tv.fun.filemanager:id/confirm_dialog_btn_cancel");
     }
 
-    public static void openLocalFilesCard(UiDevice device) {
+    public void openLocalFilesCard(UiDevice device) {
         final int positionX = 1348;
         final int positionY = 408;
         String message = "Error in openLocalFilesCard(), click on AllFiles card.";
@@ -73,22 +88,22 @@ public final class TaskFileManager {
         ShellUtils.systemWait(WAIT);
     }
 
-    public static void navigateToSpecifiedPath(UiDevice device, String path) {
+    public void navigateToSpecifiedPath(UiDevice device, String path) {
         List<String> dirs = parsePath(path);
         for (String dir : dirs) {
             if (dir.toLowerCase().equals("mnt") || dir.toLowerCase().equals("sdcard")) {
                 continue;
             }
-            clickOnSpecifiedItemFromCurrentDir(device, dir);
+            this.clickOnSpecifiedItemFromCurrentDir(device, dir);
         }
     }
 
-    public static void navigateAndOpenSpecifiedFile(UiDevice device, String fileAbsPath) {
-        navigateToSpecifiedPath(device, fileAbsPath);
+    public void navigateAndOpenSpecifiedFile(UiDevice device, String fileAbsPath) {
+        this.navigateToSpecifiedPath(device, fileAbsPath);
     }
 
     // Item for directory and file
-    public static void clickOnSpecifiedItemFromCurrentDir(
+    private void clickOnSpecifiedItemFromCurrentDir(
             UiDevice device, String dirName, boolean flag_bottom) {
         final int ScrollSteps = 5;
 
@@ -110,16 +125,16 @@ public final class TaskFileManager {
         }
 
         UiObject2 dir = device.findObject(By.text(dirName));
-        ACTION.doClickActionAndWait(dir);
+        action.doClickActionAndWait(dir);
     }
 
-    public static void clickOnSpecifiedItemFromCurrentDir(UiDevice device, String dirName) {
-        clickOnSpecifiedItemFromCurrentDir(device, dirName, false);
+    private void clickOnSpecifiedItemFromCurrentDir(UiDevice device, String dirName) {
+        this.clickOnSpecifiedItemFromCurrentDir(device, dirName, false);
     }
 
     // path like: android/data/tv.fun.filemanager
     // or: /android/data/tv.fun.filemanager/
-    private static List<String> parsePath(String path) {
+    private List<String> parsePath(String path) {
         int levels = 20;
         List<String> dirs = new ArrayList<>(levels);
 
@@ -137,26 +152,32 @@ public final class TaskFileManager {
         return dirs;
     }
 
-    public static void showMenuAndRequestFocus() {
-        ACTION.doDeviceActionAndWait(new DeviceActionMenu());
-        ACTION.doDeviceActionAndWait(new DeviceActionMoveDown());  // request focus
-    }
+    public void showMenuAndClickBtn(UiDevice device, String btnText) {
+        String message;
+        boolean isFocused = false;
 
-    public static void showMenuAndClickRemoveBtn() {
         showMenuAndRequestFocus();
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
+
+        UiObject2 btn = device.findObject(By.text(btnText));
+        message = "Button is not found in showMenuAndClickBtn()";
+        Assert.assertNotNull(message, btn);
+        UiObject2 btnContainer = btn.getParent();
+
+        for (int i = 0, maxMove = 5; i < maxMove; i++) {
+            if (btnContainer.isFocused()) {
+                isFocused = true;
+                break;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+        message = "Button is not focused in showMenuAndClickBtn()";
+        Assert.assertTrue(message, isFocused);
+
+        action.doDeviceActionAndWait(new DeviceActionEnter());
     }
 
-    public static void showMenuAndClickHideBtn() {
-        showMenuAndRequestFocus();
-        ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
+    public void showMenuAndRequestFocus() {
+        action.doDeviceActionAndWait(new DeviceActionMenu());
+        action.doDeviceActionAndWait(new DeviceActionMoveDown());  // request focus
     }
-
-    public static void showMenuAndClickShowAllBtn() {
-        showMenuAndRequestFocus();
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter());
-    }
-
 }

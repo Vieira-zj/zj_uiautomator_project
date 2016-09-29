@@ -73,7 +73,7 @@ public final class TestPlayingFilm {
 
     @Test
     @Category(Category24x7LauncherTests.class)
-    public void testOpenAndExitFilmPlayer() {
+    public void test11OpenAndExitFilmPlayer() {
         this.verifyOnLauncherHome(mDevice);
 
         UiObject2 tabText = this.getTabFromLauncherHomeByText(mDevice, "电影");
@@ -94,7 +94,7 @@ public final class TestPlayingFilm {
 
     @Test
     @Category(Category24x7LauncherTests.class)
-    public void testPlayFilm() {
+    public void test12PlayFilm() {
         this.verifyOnLauncherHome(mDevice);
 
         UiObject2 tabText = this.getTabFromLauncherHomeByText(mDevice, "电影");

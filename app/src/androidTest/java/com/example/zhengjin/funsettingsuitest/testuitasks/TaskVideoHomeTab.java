@@ -16,55 +16,67 @@ import java.util.List;
  */
 public final class TaskVideoHomeTab {
 
-    public static BySelector getAllCardsTitleOfLauncherHomeLeftAreaSelector() {
+    private static TaskVideoHomeTab instance = null;
+
+    private TaskVideoHomeTab() {
+    }
+
+    public static synchronized TaskVideoHomeTab getInstance() {
+        if (instance == null) {
+            instance = new TaskVideoHomeTab();
+        }
+        return instance;
+    }
+
+    public BySelector getAllCardsTitleOfLauncherHomeLeftAreaSelector() {
         return By.res("com.bestv.ott:id/title");
     }
 
-    public static BySelector getAllCardsMainTitleOfLauncherHomeRightAreaSelector() {
+    public BySelector getAllCardsMainTitleOfLauncherHomeRightAreaSelector() {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
-    public static BySelector getCardsContainerOfVideoRecommendPageSelector() {
+    public BySelector getCardsContainerOfVideoRecommendPageSelector() {
         return By.res("com.bestv.ott:id/grid");
     }
 
-    public static BySelector getSpecialSubjectContainerSelector() {
+    public BySelector getSpecialSubjectContainerSelector() {
         return By.res("com.bestv.ott:id/special_listview");
     }
 
-    public static BySelector getAllTabTextOfVideoSubPageSelector() {
+    public BySelector getAllTabTextOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/tab_title");
     }
 
-    public static BySelector getAllCardsMainTitleOfVideoSubPageSelector() {
+    public BySelector getAllCardsMainTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
-    public static BySelector getAllCardsSubTitleOfVideoSubPageSelector() {
+    public BySelector getAllCardsSubTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/subtitle");
     }
 
-    public static BySelector getTitleTextOfVideoDetailsPageSelector() {
+    public BySelector getTitleTextOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/detail_title");
     }
 
-    public static BySelector getRelatedVideoListOfVideoDetailsPageSelector() {
+    public BySelector getRelatedVideoListOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/relate_list_view");
     }
 
-    public static UiObject2 findSpecifiedCardFromLeftAreaByText(UiDevice device, String search) {
+    public UiObject2 findSpecifiedCardFromLeftAreaByText(UiDevice device, String search) {
         List<UiObject2> textList =
-                device.findObjects(getAllCardsTitleOfLauncherHomeLeftAreaSelector());
-        return findSpecifiedTextViewFromUiCollection(textList, search);
+                device.findObjects(this.getAllCardsTitleOfLauncherHomeLeftAreaSelector());
+        return this.findSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    public static UiObject2 findSpecifiedCardFromRightAreaByText(UiDevice device, String search) {
+    public UiObject2 findSpecifiedCardFromRightAreaByText(UiDevice device, String search) {
         List<UiObject2> textList =
-                device.findObjects(getAllCardsMainTitleOfLauncherHomeRightAreaSelector());
-        return findSpecifiedTextViewFromUiCollection(textList, search);
+                device.findObjects(this.getAllCardsMainTitleOfLauncherHomeRightAreaSelector());
+        return this.findSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    private static UiObject2 findSpecifiedTextViewFromUiCollection(
+    private UiObject2 findSpecifiedTextViewFromUiCollection(
             List<UiObject2> list, String search) {
         Assert.assertFalse("Error, the UI collection size is zero.", (list.size() == 0));
         UiObject2 retObj = null;

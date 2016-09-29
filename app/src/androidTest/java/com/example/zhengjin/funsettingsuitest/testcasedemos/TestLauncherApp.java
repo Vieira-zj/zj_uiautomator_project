@@ -32,11 +32,14 @@ public final class TestLauncherApp {
 
     private static final String PACKAGE_NAME = "tv.fun.filemanager";
     private static final int LAUNCH_TIMEOUT = 5000;
+
+    private TaskFileManager mFileManagerTask;
     private UiDevice mDevice;
 
     @Before
     public void startMainActivityFromHomeScreen() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mFileManagerTask = TaskFileManager.getInstance();
 
         // go to home
         mDevice.pressHome();
@@ -58,7 +61,7 @@ public final class TestLauncherApp {
     @Test
     @Category(CategoryDemoTests.class)
     public void test1OpenAllFilesCard() {
-        TaskFileManager.openLocalFilesCard(mDevice);
+        mFileManagerTask.openLocalFilesCard(mDevice);
         UiObject2 allFilesTitle = mDevice.findObject(By.text("全部文件"));
         Assert.assertNotNull(allFilesTitle);
     }
