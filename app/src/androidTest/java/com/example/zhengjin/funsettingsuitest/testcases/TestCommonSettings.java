@@ -8,6 +8,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
@@ -59,8 +60,10 @@ public final class TestCommonSettings {
 
     @After
     public void clearUp() {
-        ShellUtils.takeScreenCapture(mDevice);
-        ShellUtils.systemWait(SHORT_WAIT);
+        if (RunnerProfile.isTakeScreenshot) {
+            ShellUtils.takeScreenCapture(mDevice);
+            ShellUtils.systemWait(SHORT_WAIT);
+        }
 
 //        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
         ShellUtils.stopProcess(TestConstants.SETTINGS_PKG_NAME);

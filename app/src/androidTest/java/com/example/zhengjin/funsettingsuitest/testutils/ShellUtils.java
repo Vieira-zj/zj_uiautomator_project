@@ -142,7 +142,6 @@ public final class ShellUtils {
         Assert.assertTrue(message, (result.mResult == 0));
     }
 
-
     public static void systemWait(long ms) {
         SystemClock.sleep(ms);
     }

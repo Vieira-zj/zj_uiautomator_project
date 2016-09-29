@@ -103,7 +103,7 @@ public final class TestFileManager {
 
     @After
     public void clearUp() {
-//        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 3);
+//        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
         ShellUtils.stopAndClearPackage(FILE_MANAGER_PKG_NAME);
     }
 
