@@ -136,15 +136,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test15SleepTimeDefaultValue() {
-        // TODO: 2016/9/29
-    }
-
-    @Test
-    @Category(CategorySettingsTests.class)
-    public void test16SelectSleepTime() {
         String message;
-
-        mTask.moveToSpecifiedSettingsItem(mTask.getSleepTimeSettingItemContainerSelector());
 
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
@@ -153,11 +145,31 @@ public final class TestCommonSettings {
         message = "Verify the key text of sleep setting.";
         Assert.assertEquals(message, "休眠设置", itemKey.getText());
 
-        // TODO: 2016/9/30  
-        message = "Verify the select sleep time.";
+        UiObject2 itemValueContainer =
+                sleepSettingContainer.findObject(mTask.getSettingSwitcherItemValueSelector());
+        UiObject2 itemValue = itemValueContainer.findObject(By.clazz("android.widget.TextView"));
+        message = "Verify the default value of sleep setting.";
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(itemValue));
+        Assert.assertEquals(message, "永不休眠", itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test16SelectSleepTime() {
+        String message;
+
+        mTask.moveToSpecifiedSettingsItem(mTask.getSleepTimeSettingItemContainerSelector());
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
-        UiObject2 subSleepText = mDevice.findObject(By.text("30分钟"));
-        Assert.assertNotNull(message, subSleepText);
+
+        message = "Verify select the sleep time.";
+        UiObject2 sleepSettingContainer =
+                mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
+        UiObject2 itemValueContainer =
+                sleepSettingContainer.findObject(mTask.getSettingSwitcherItemValueSelector());
+        UiObject2 itemValue = itemValueContainer.findObject(By.clazz("android.widget.TextView"));
+
+        Assert.assertNotNull(itemValue);
+        Assert.assertEquals(message, "30分钟", itemValue.getText());
     }
 
     @Test

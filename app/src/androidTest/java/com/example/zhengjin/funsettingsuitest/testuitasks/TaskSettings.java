@@ -101,6 +101,10 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/item_value");
     }
 
+    public BySelector getSettingSwitcherItemValueSelector() {
+        return By.res("tv.fun.settings:id/setting_item_value");
+    }
+
     public BySelector getProvinceListSelector() {
         return By.res("tv.fun.settings:id/ws_province");
     }
