@@ -16,6 +16,9 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 
 import junit.framework.Assert;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_SCROLL_VIEW;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
+
 /**
  * Created by zhengjin on 2016/6/6.
  *
@@ -61,6 +64,10 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_sleep");
     }
 
+    public BySelector getScreenSaverSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_screen_saver");
+    }
+
     public BySelector getLocationSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_locate");
     }
@@ -69,12 +76,24 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_unkown_source");
     }
 
-    public BySelector getInstallUnknownAppSettingItemValueSelector() {
-        return By.res("tv.fun.settings:id/setting_item_value");
+    public BySelector getSystemRecoverSettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_recovery");
     }
 
-    public BySelector getSystemRecoverSettingItemKeySelector() {
+    public BySelector getSystemRecoverDialogTitleSelector() {
         return By.res("tv.fun.settings:id/recovery_title");
+    }
+
+    public BySelector getSaveInfoOfRecoverDialogSelector() {
+        return By.res("tv.fun.settings:id/recovery_cbx_save_network_info");
+    }
+
+    public BySelector getConfirmBtnOfSystemRecoverDialogSelector() {
+        return By.res("tv.fun.settings:id/recovery_btn_confirm");
+    }
+
+    public BySelector getCancelBtnOfSystemRecoverDialogSelector() {
+        return By.res("tv.fun.settings:id/recovery_btn_cancel");
     }
 
     public BySelector getTitleOfCommonDialogSelector() {
@@ -87,10 +106,6 @@ public final class TaskSettings {
 
     public BySelector getCancelBtnOfCommonDialogSelector() {
         return By.res("tv.fun.settings:id/dialog_btn_cancel");
-    }
-
-    public BySelector getCancelBtnOfSystemRecoverDialogSelector() {
-        return By.res("tv.fun.settings:id/recovery_btn_cancel");
     }
 
     public BySelector getSettingItemKeySelector() {
@@ -115,6 +130,13 @@ public final class TaskSettings {
 
     public BySelector getMiddleItemInProvinceCityListSelector() {
         return By.res("tv.fun.settings:id/wheel_view_tx3");
+    }
+
+    public UiObject2 getTextViewOfSwitcher(UiObject2 container) {
+        UiObject2 switcher =
+                container.findObject(this.getSettingSwitcherItemValueSelector());
+        UiObject2 text = switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
+        return text;
     }
 
     public void moveToSpecifiedSettingsItem(BySelector selector) {
@@ -161,26 +183,21 @@ public final class TaskSettings {
         this.moveUntilSettingsItemFocused(item, false);
     }
 
-    public void scrollMoveToAndClickSettingsItem(String itemText) {
+    public void scrollMoveToSpecificSettingsItem(String itemText) {
         String message;
 
         UiScrollable scroll =
-                new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
+                new UiScrollable(new UiSelector().className(CLASS_SCROLL_VIEW));
         scroll.setAsVerticalList();
         try {
             scroll.scrollTextIntoView(itemText);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             message = String.format(
-                    "Error in scrollMoveToAndClickSettingsItem(), the ui object %s is NOT found.",
+                    "Error in scrollMoveToSpecificSettingsItem(), the ui object %s is NOT found.",
                     itemText);
             Assert.assertTrue(message, false);
         }
-
-        UiObject2 settingsItem = device.findObject(By.text(itemText)).getParent();
-        message = "Error in scrollMoveToAndClickSettingsItem(), the settings item is NOT found.";
-        Assert.assertNotNull(message, settingsItem);
-        action.doClickActionAndWait(settingsItem);
     }
 
     public void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {

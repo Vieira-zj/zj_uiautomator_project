@@ -17,6 +17,9 @@ public final class TestConstants {
     public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
 
+    public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
+    public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
+
     // cards text on launcher home left area
     public final static String FILM_CARD_TEXT = "电影";
     public final static String TV_SERIAL_CARD_TEXT = "电视剧";

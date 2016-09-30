@@ -14,6 +14,7 @@ import junit.framework.Assert;
 
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
@@ -109,7 +110,7 @@ public final class TestHelper {
     }
 
     public static void verifyEachTextViewHasTextInUiContainer(UiObject2 container) {
-        List<UiObject2> listTexts = container.findObjects(By.clazz("android.widget.TextView"));
+        List<UiObject2> listTexts = container.findObjects(By.clazz(CLASS_TEXT_VIEW));
         verifyEachTextViewHasTextInUiCollection(listTexts);
     }
 
