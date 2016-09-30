@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
@@ -22,10 +23,13 @@ import junit.framework.Assert;
  */
 public final class TaskSettings {
 
-    private static UiActionsManager action = UiActionsManager.getInstance();
     private static TaskSettings instance = null;
+    private UiDevice device;
+    private UiActionsManager action;
 
     private TaskSettings() {
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        action = UiActionsManager.getInstance();
     }
 
     public static synchronized TaskSettings getInstance() {
@@ -105,11 +109,11 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/ws_city");
     }
 
-    public BySelector getMiddleItemFromProvinceCityList() {
+    public BySelector getMiddleItemInProvinceCityListSelector() {
         return By.res("tv.fun.settings:id/wheel_view_tx3");
     }
 
-    public void moveToSpecifiedSettingsItem(UiDevice device, BySelector selector) {
+    public void moveToSpecifiedSettingsItem(BySelector selector) {
         UiObject2 item = device.findObject(selector);  // find the item from top
         if (item != null) {
             this.moveDownUntilSettingsItemFocused(item);
@@ -153,7 +157,7 @@ public final class TaskSettings {
         this.moveUntilSettingsItemFocused(item, false);
     }
 
-    public void scrollMoveToAndClickSettingsItem(UiDevice device, String itemText) {
+    public void scrollMoveToAndClickSettingsItem(String itemText) {
         String message;
 
         UiScrollable scroll =
@@ -175,8 +179,7 @@ public final class TaskSettings {
         action.doClickActionAndWait(settingsItem);
     }
 
-    public void selectSpecifiedLocationProvince(
-            UiDevice device, String provinceText, boolean directionUp) {
+    public void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
         DeviceAction moveAction;
         if (directionUp) {
             moveAction = new DeviceActionMoveUp();
@@ -186,20 +189,19 @@ public final class TaskSettings {
 
         UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
         UiObject2 middleProvince =
-                provinceList.findObject(this.getMiddleItemFromProvinceCityList());
+                provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
         for (int i = 0, maxMoveTimes = 30; i < maxMoveTimes; i++) {
             if (provinceText.equals(middleProvince.getText())) {
                 return;
             }
             action.doDeviceActionAndWait(moveAction);
-            middleProvince = provinceList.findObject(this.getMiddleItemFromProvinceCityList());
+            middleProvince = provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
         }
 
         Assert.assertTrue("The specified province is NOT found!", false);
     }
 
-    public void selectSpecifiedLocationCity(
-            UiDevice device, String cityText, boolean directionUp) {
+    public void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
         DeviceAction moveAction;
         if (directionUp) {
             moveAction = new DeviceActionMoveUp();
@@ -209,13 +211,13 @@ public final class TaskSettings {
 
         UiObject2 cityList = device.findObject(this.getCityListSelector());
         UiObject2 middleCity =
-                cityList.findObject(this.getMiddleItemFromProvinceCityList());
+                cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
         for (int i = 0, maxMoveTimes = 30; i < maxMoveTimes; i++) {
             if (cityText.equals(middleCity.getText())) {
                 return;
             }
             action.doDeviceActionAndWait(moveAction);
-            middleCity = cityList.findObject(this.getMiddleItemFromProvinceCityList());
+            middleCity = cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
         }
 
         Assert.assertTrue("The specified city is NOT found!", false);

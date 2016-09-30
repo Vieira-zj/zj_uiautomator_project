@@ -31,7 +31,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LON
  */
 public final class TaskLauncher {
     //    private final static String TAG = TaskLauncher.class.getSimpleName();
-    private static UiActionsManager action = UiActionsManager.getInstance();
+    private static UiActionsManager ACTION;
+    private static UiDevice DEVICE;
+
+    static {
+        ACTION = UiActionsManager.getInstance();
+        DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    }
 
     public static BySelector getAllLauncherTabsSelector() {
         return By.res("com.bestv.ott:id/tab_title");
@@ -49,18 +55,18 @@ public final class TaskLauncher {
         return By.res("com.bestv.ott:id/network");
     }
 
-    public static void backToLauncher(UiDevice device) {
+    public static void backToLauncher() {
         // method 1
 //        String pkgName = getLauncherPackageName();
-//        action.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
+//        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
 //        String pkgName = device.getCurrentPackageName();
 //        Assert.assertTrue(message, launcherPackageName.equals(pkgName));
 
         // method 2
-        String launcherPackageName = device.getLauncherPackageName();  //"com.bestv.ott"
+        String launcherPackageName = DEVICE.getLauncherPackageName();  //"com.bestv.ott"
         String message = "Error in backToLauncher(), fail to back to the launcher.";
-        action.doDeviceActionAndWait(new DeviceActionHome());
-        Assert.assertTrue(message, TestHelper.waitForAppOpened(device, launcherPackageName));
+        ACTION.doDeviceActionAndWait(new DeviceActionHome());
+        Assert.assertTrue(message, TestHelper.waitForAppOpened(launcherPackageName));
     }
 
     public static String getLauncherPackageName() {
@@ -77,35 +83,35 @@ public final class TaskLauncher {
         return pkgName;
     }
 
-    public static void navigateToVideoTab(UiDevice device) {
+    public static void navigateToVideoTab() {
         String message;
 
-        backToLauncher(device);
-        action.doDeviceActionAndWait(new DeviceActionMoveUp());
+        backToLauncher();
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
         String textVideoTab = ("视频");
-        UiObject2 tabVideo = getSpecifiedTab(device, textVideoTab);
+        UiObject2 tabVideo = getSpecifiedTab(textVideoTab);
         message = "Error in navigateToVideoTab(), the UI object textVideoTab is NOT found.";
         Assert.assertNotNull(message, tabVideo);
         message = "Error in navigateToVideoTab(), the UI object textVideoTab is NOT focused.";
         Assert.assertTrue(message, tabVideo.isFocused());
     }
 
-    public static void navigateToAppTab(UiDevice device) {
+    public static void navigateToAppTab() {
         String message;
 
-        navigateToVideoTab(device);
-        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 3);
+        navigateToVideoTab();
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 3);
 
-        UiObject2 tabApp = getSpecifiedTab(device, "应用");
+        UiObject2 tabApp = getSpecifiedTab("应用");
         message = "Error in navigateToAppTab(), the UI object textAppTab is NOT found.";
         Assert.assertNotNull(message, tabApp);
         message = "Error in navigateToAppTab(), the UI object textAppTab is NOT focused.";
         Assert.assertTrue(message, tabApp.isFocused());
     }
 
-    private static UiObject2 getSpecifiedTab(UiDevice device, String tabName) {
-        List<UiObject2> tabs = device.findObjects(getAllLauncherTabsSelector());
+    private static UiObject2 getSpecifiedTab(String tabName) {
+        List<UiObject2> tabs = DEVICE.findObjects(getAllLauncherTabsSelector());
         if (tabs.size() == 0) {
             return null;
         }
@@ -119,17 +125,17 @@ public final class TaskLauncher {
         return null;
     }
 
-    public static void openSpecifiedAppFromAppTab(UiDevice device, String appName) {
-        focusOnSpecifiedAppFromAppTab(device, appName);
-        Assert.assertTrue(action.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT));
+    public static void openSpecifiedAppFromAppTab(String appName) {
+        focusOnSpecifiedAppFromAppTab(appName);
+        Assert.assertTrue(ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT));
     }
 
-    private static void focusOnSpecifiedAppFromAppTab(UiDevice device, String appName) {
+    private static void focusOnSpecifiedAppFromAppTab(String appName) {
         String message;
 
-        navigateToAppTab(device);
+        navigateToAppTab();
 
-        UiObject2 appTest = device.findObject(By.text(appName));
+        UiObject2 appTest = DEVICE.findObject(By.text(appName));
         message = String.format(
                 "Error in openSpecifiedAppFromAppTab(), the app %s is NOT found.", appName);
         Assert.assertNotNull(message, appTest);
@@ -139,28 +145,28 @@ public final class TaskLauncher {
                 "Error in openSpecifiedAppFromAppTab(), the app container %s is NOT found.", appName);
         Assert.assertNotNull(message, appContainer);
 
-        action.doClickActionAndWait(appContainer);
+        ACTION.doClickActionAndWait(appContainer);
     }
 
-    public static void clickOnButtonFromTopQuickAccessBar(UiDevice device, BySelector selector) {
+    public static void clickOnButtonFromTopQuickAccessBar(BySelector selector) {
         String message = "Error in clickOnButtonFromTopQuickAccessBar(), " +
                 "the settings button from top bar is NOT found.";
 
-        showLauncherTopBar(device);
-        UiObject2 quickAccessBtn = device.findObject(selector);
+        showLauncherTopBar();
+        UiObject2 quickAccessBtn = DEVICE.findObject(selector);
         Assert.assertNotNull(message, quickAccessBtn);
 
-        action.doClickActionAndWait(quickAccessBtn);
-        action.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
+        ACTION.doClickActionAndWait(quickAccessBtn);
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
     }
 
-    private static void showLauncherTopBar(UiDevice device) {
+    private static void showLauncherTopBar() {
         String message;
 
-        backToLauncher(device);
-        action.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), 2);
+        backToLauncher();
+        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), 2);
 
-        UiObject2 bar = device.findObject(getLauncherTopBarSelector());
+        UiObject2 bar = DEVICE.findObject(getLauncherTopBarSelector());
         message = "Error in showLauncherTopBar(), the top bar on launcher is NOT found.";
         Assert.assertNotNull(message, bar);
         message = "Error in showLauncherTopBar(), the top bar is NOT enabled.";

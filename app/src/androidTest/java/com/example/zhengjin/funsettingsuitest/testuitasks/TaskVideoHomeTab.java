@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
@@ -17,8 +18,10 @@ import java.util.List;
 public final class TaskVideoHomeTab {
 
     private static TaskVideoHomeTab instance = null;
+    private UiDevice device;
 
     private TaskVideoHomeTab() {
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
     public static synchronized TaskVideoHomeTab getInstance() {
@@ -70,13 +73,13 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/relate_list_view");
     }
 
-    public UiObject2 findSpecifiedCardFromLeftAreaByText(UiDevice device, String search) {
+    public UiObject2 findSpecifiedCardFromLeftAreaByText(String search) {
         List<UiObject2> textList =
                 device.findObjects(this.getAllCardsTitleOfLauncherHomeLeftAreaSelector());
         return this.findSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    public UiObject2 findSpecifiedCardFromRightAreaByText(UiDevice device, String search) {
+    public UiObject2 findSpecifiedCardFromRightAreaByText(String search) {
         List<UiObject2> textList =
                 device.findObjects(this.getAllCardsMainTitleOfLauncherHomeRightAreaSelector());
         return this.findSpecifiedTextViewFromUiCollection(textList, search);

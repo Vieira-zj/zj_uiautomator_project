@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
@@ -32,9 +33,12 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 public final class TaskFileManager {
 
     private static TaskFileManager instance = null;
-    private static UiActionsManager action = UiActionsManager.getInstance();
+    private UiDevice device;
+    private UiActionsManager action;
 
     private TaskFileManager() {
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        action = UiActionsManager.getInstance();
     }
 
     public static synchronized TaskFileManager getInstance() {
@@ -78,39 +82,46 @@ public final class TaskFileManager {
         return By.res("android:id/tv_fun_menu_text");
     }
 
-    public BySelector getYesBtnOfConfirmDialog() {
+    public BySelector getYesBtnOfConfirmDialogSelector() {
         return By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm");
     }
 
-    public BySelector getCancelBtnOfConfirmDialog() {
+    public BySelector getCancelBtnOfConfirmDialogSelector() {
         return By.res("tv.fun.filemanager:id/confirm_dialog_btn_cancel");
     }
 
-    public void openLocalFilesCard(UiDevice device) {
+    public BySelector getTipsOfEmptyDirFromLocalFilesCardSelector() {
+        return By.res("tv.fun.filemanager:id/sub_blank_tips");
+    }
+
+    public void openLocalFilesCard() {
         final int positionX = 1348;
         final int positionY = 408;
+        openCardFromFileManagerHomePage(positionX, positionY);
+    }
+
+    public void openCardFromFileManagerHomePage(int positionX, int positionY) {
         String message = "Error in openLocalFilesCard(), click on AllFiles card.";
         Assert.assertTrue(message, device.click(positionX, positionY));
         ShellUtils.systemWait(WAIT);
     }
 
-    public void navigateToSpecifiedPath(UiDevice device, String path) {
+    public void navigateToSpecifiedPath(String path) {
         List<String> dirs = parsePath(path);
         for (String dir : dirs) {
             if (dir.toLowerCase().equals("mnt") || dir.toLowerCase().equals("sdcard")) {
                 continue;
             }
-            this.clickOnSpecifiedItemFromCurrentDir(device, dir);
+            this.clickOnSpecifiedItemFromCurrentDir(dir);
         }
     }
 
-    public void navigateAndOpenSpecifiedFile(UiDevice device, String fileAbsPath) {
-        this.navigateToSpecifiedPath(device, fileAbsPath);
+    public void navigateAndOpenSpecifiedFile(String fileAbsPath) {
+        this.navigateToSpecifiedPath(fileAbsPath);
     }
 
     // Item for directory and file
-    private void clickOnSpecifiedItemFromCurrentDir(
-            UiDevice device, String dirName, boolean flag_bottom) {
+    private void clickOnSpecifiedItemFromCurrentDir(String dirName, boolean flag_bottom) {
         final int ScrollSteps = 5;
 
         String scrollViewId = "tv.fun.filemanager:id/activity_sub_grid";
@@ -134,8 +145,8 @@ public final class TaskFileManager {
         action.doClickActionAndWait(dir);
     }
 
-    private void clickOnSpecifiedItemFromCurrentDir(UiDevice device, String dirName) {
-        this.clickOnSpecifiedItemFromCurrentDir(device, dirName, false);
+    private void clickOnSpecifiedItemFromCurrentDir(String dirName) {
+        this.clickOnSpecifiedItemFromCurrentDir(dirName, false);
     }
 
     // path like: android/data/tv.fun.filemanager
@@ -158,7 +169,7 @@ public final class TaskFileManager {
         return dirs;
     }
 
-    public void showMenuAndClickBtn(UiDevice device, String btnText) {
+    public void showMenuAndClickBtn(String btnText) {
         String message;
         boolean isFocused = false;
 

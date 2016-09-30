@@ -59,33 +59,33 @@ public class TestTaskLauncher {
     @Test
     @Category(CategoryDemoTests.class)
     public void test2BackToLauncher() {
-        TaskLauncher.backToLauncher(mDevice);
+        TaskLauncher.backToLauncher();
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void test3NavigateToVideoTab() {
-        TaskLauncher.navigateToVideoTab(mDevice);
+        TaskLauncher.navigateToVideoTab();
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void test4NavigateToAppTab() {
-        TaskLauncher.navigateToAppTab(mDevice);
+        TaskLauncher.navigateToAppTab();
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void test5OpenSpecifiedApp() {
         String appName = "唯品会";
-        TaskLauncher.openSpecifiedAppFromAppTab(mDevice, appName);
+        TaskLauncher.openSpecifiedAppFromAppTab(appName);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void test6OpenSettingsFromTopBar() {
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
-                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector());
+                TaskLauncher.getQuickAccessBtnSettingsSelector());
     }
 
 }

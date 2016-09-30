@@ -64,7 +64,7 @@ public final class TestLauncherApp {
     @Test
     @Category(CategoryDemoTests.class)
     public void test1OpenAllFilesCard() {
-        mFileManagerTask.openLocalFilesCard(mDevice);
+        mFileManagerTask.openLocalFilesCard();
         UiObject2 allFilesTitle = mDevice.findObject(By.text("全部文件"));
         Assert.assertNotNull(allFilesTitle);
     }
@@ -72,7 +72,7 @@ public final class TestLauncherApp {
     @Test
     @Category(CategoryDemoTests.class)
     public void test2TakeScreenCaptures() {
-        TaskLauncher.backToLauncher(mDevice);
+        TaskLauncher.backToLauncher();
         ShellUtils.takeScreenCapture(mDevice);
     }
 

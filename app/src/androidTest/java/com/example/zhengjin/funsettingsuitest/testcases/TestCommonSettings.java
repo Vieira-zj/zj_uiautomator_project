@@ -52,9 +52,9 @@ public final class TestCommonSettings {
         mAction = UiActionsManager.getInstance();
         mTask = TaskSettings.getInstance();
 
-        TaskLauncher.backToLauncher(mDevice);
+        TaskLauncher.backToLauncher();
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
-                mDevice, TaskLauncher.getQuickAccessBtnSettingsSelector());
+                TaskLauncher.getQuickAccessBtnSettingsSelector());
         mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
@@ -144,7 +144,7 @@ public final class TestCommonSettings {
     public void test16SelectSleepTime() {
         String message;
 
-        mTask.moveToSpecifiedSettingsItem(mDevice, mTask.getSleepTimeSettingItemContainerSelector());
+        mTask.moveToSpecifiedSettingsItem(mTask.getSleepTimeSettingItemContainerSelector());
 
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
@@ -177,7 +177,7 @@ public final class TestCommonSettings {
     public void test21InstallUnknownAppDefaultValue() {
         String message;
 
-        mTask.scrollMoveToAndClickSettingsItem(mDevice, "安装未知来源应用");
+        mTask.scrollMoveToAndClickSettingsItem("安装未知来源应用");
 
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
@@ -204,8 +204,7 @@ public final class TestCommonSettings {
     public void test23SelectAllowedInstallUnknownApp() {
         String message;
 
-        mTask.moveToSpecifiedSettingsItem(
-                mDevice, mTask.getInstallUnknownAppSettingItemContainerSelector());
+        mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
 
         // verify title
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
@@ -242,7 +241,7 @@ public final class TestCommonSettings {
         String message;
         String recoverText = "恢复出厂设置";
 
-        mTask.scrollMoveToAndClickSettingsItem(mDevice, recoverText);  // open dialog
+        mTask.scrollMoveToAndClickSettingsItem(recoverText);  // open dialog
 
         // verification 1
         UiObject2 title =
@@ -313,17 +312,17 @@ public final class TestCommonSettings {
     public void test42DefaultLocationOnSubPage() {
         String message;
 
-        mTask.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+        mTask.scrollMoveToAndClickSettingsItem("天气位置");
 
         UiObject2 provinceList = mDevice.findObject(mTask.getProvinceListSelector());
         UiObject2 middleProvince =
-                provinceList.findObject(mTask.getMiddleItemFromProvinceCityList());
+                provinceList.findObject(mTask.getMiddleItemInProvinceCityListSelector());
         message = "Verify the default province text on location page.";
         Assert.assertEquals(message, "湖北", middleProvince.getText());
 
         UiObject2 cityList = mDevice.findObject(mTask.getCityListSelector());
         UiObject2 middleCity =
-                cityList.findObject(mTask.getMiddleItemFromProvinceCityList());
+                cityList.findObject(mTask.getMiddleItemInProvinceCityListSelector());
         message = "Verify the default city text on location page.";
         Assert.assertEquals(message, "武汉", middleCity.getText());
     }
@@ -336,11 +335,11 @@ public final class TestCommonSettings {
         String province = "江西";
         String city = "九江";
 
-        mTask.scrollMoveToAndClickSettingsItem(mDevice, "天气位置");
+        mTask.scrollMoveToAndClickSettingsItem("天气位置");
         // select a location from sub page
-        mTask.selectSpecifiedLocationProvince(mDevice, province, false);
+        mTask.selectSpecifiedLocationProvince(province, false);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(mDevice, city, false);
+        mTask.selectSpecifiedLocationCity(city, false);
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         message = "Verify the selected location item value text on Common Settings.";

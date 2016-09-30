@@ -53,7 +53,7 @@ public final class TestVideoHomeTab {
         mAction = UiActionsManager.getInstance();
         mTask = TaskVideoHomeTab.getInstance();
 
-        TaskLauncher.backToLauncher(mDevice);
+        TaskLauncher.backToLauncher();
     }
 
     @After
@@ -65,18 +65,18 @@ public final class TestVideoHomeTab {
     @Category({CategoryVideoHomeTabTests.class})
     public void test11OpenFilmCardOfLeftArea() {
         UiObject2 filmCard =
-                mTask.findSpecifiedCardFromLeftAreaByText(mDevice, FILM_CARD_TEXT);
+                mTask.findSpecifiedCardFromLeftAreaByText(FILM_CARD_TEXT);
         mAction.doClickActionAndWait(filmCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
-        List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllTabTextOfVideoSubPageSelector());
+        List<UiObject2> listTabText = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card title
-        UiObject2 tmpContainer = TestHelper.waitForUiObjectVisibleAndReturn(
-                mDevice, mTask.getCardsContainerOfVideoRecommendPageSelector());
+        UiObject2 tmpContainer = TestHelper.waitForUiObjectExistAndReturn(
+                mTask.getCardsContainerOfVideoRecommendPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiContainer(tmpContainer);
     }
 
@@ -84,18 +84,18 @@ public final class TestVideoHomeTab {
     @Category({CategoryVideoHomeTabTests.class})
     public void test12OpenTvSerialCardOfLeftArea() {
         UiObject2 tvSerialCard =
-                mTask.findSpecifiedCardFromLeftAreaByText(mDevice, TV_SERIAL_CARD_TEXT);
+                mTask.findSpecifiedCardFromLeftAreaByText(TV_SERIAL_CARD_TEXT);
         mAction.doClickActionAndWait(tvSerialCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
-        List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllTabTextOfVideoSubPageSelector());
+        List<UiObject2> listTabText = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card main title
-        List<UiObject2> listMainTitles = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllCardsMainTitleOfVideoSubPageSelector());
+        List<UiObject2> listMainTitles = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllCardsMainTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listMainTitles);
 
         // verify card sub title
@@ -108,18 +108,18 @@ public final class TestVideoHomeTab {
     @Category({CategoryVideoHomeTabTests.class})
     public void test13OpenChildrenCardOfLeftArea() {
         UiObject2 childrenCard =
-                mTask.findSpecifiedCardFromLeftAreaByText(mDevice, CHILDREN_CARD_TEXT);
+                mTask.findSpecifiedCardFromLeftAreaByText(CHILDREN_CARD_TEXT);
         mAction.doClickActionAndWait(childrenCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
-        List<UiObject2> tabTextList = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllTabTextOfVideoSubPageSelector());
+        List<UiObject2> tabTextList = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(tabTextList);
 
         // verify card main title
-        List<UiObject2> cardTitleList = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllCardsMainTitleOfVideoSubPageSelector());
+        List<UiObject2> cardTitleList = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllCardsMainTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(cardTitleList);
     }
 
@@ -127,38 +127,37 @@ public final class TestVideoHomeTab {
     @Category({CategoryVideoHomeTabTests.class})
     public void test14OpenVarietyCardOfLeftArea() {
         UiObject2 varietyCard =
-                mTask.findSpecifiedCardFromLeftAreaByText(mDevice, VARIETY_CARD_TEXT);
+                mTask.findSpecifiedCardFromLeftAreaByText(VARIETY_CARD_TEXT);
         mAction.doClickActionAndWait(varietyCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
-        List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllTabTextOfVideoSubPageSelector());
+        List<UiObject2> listTabText = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card title
-        UiObject2 tmpContainer = TestHelper.waitForUiObjectVisibleAndReturn(
-                mDevice, mTask.getCardsContainerOfVideoRecommendPageSelector());
+        UiObject2 tmpContainer = TestHelper.waitForUiObjectExistAndReturn(
+                mTask.getCardsContainerOfVideoRecommendPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiContainer(tmpContainer);
     }
 
     @Test
     @Category({CategoryVideoHomeTabTests.class})
     public void test21OpenFollowingLatestTvSerialOfRightArea() {
-        UiObject2 card = mTask.findSpecifiedCardFromRightAreaByText(
-                mDevice, FOLLOWING_TV_SERIAL_TEXT);
+        UiObject2 card = mTask.findSpecifiedCardFromRightAreaByText(FOLLOWING_TV_SERIAL_TEXT);
         mAction.doClickActionAndWait(card);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify title
-        UiObject2 title = TestHelper.waitForUiObjectVisibleAndReturn(
-                mDevice, mTask.getTitleTextOfVideoDetailsPageSelector());
+        UiObject2 title = TestHelper.waitForUiObjectExistAndReturn(
+                mTask.getTitleTextOfVideoDetailsPageSelector());
         Assert.assertFalse("Verify the title of video details page is NOT empty.",
                 "".equals(title.getText()));
 
         // verify each card of bottom related video list
-        UiObject2 relatedVideoList = TestHelper.waitForUiObjectVisibleAndReturn(
-                mDevice, mTask.getRelatedVideoListOfVideoDetailsPageSelector());
+        UiObject2 relatedVideoList = TestHelper.waitForUiObjectExistAndReturn(
+                mTask.getRelatedVideoListOfVideoDetailsPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiContainer(relatedVideoList);
     }
 
@@ -171,19 +170,18 @@ public final class TestVideoHomeTab {
     @Test
     @Category({CategoryVideoHomeTabTests.class})
     public void test23OpenNewlyUpdatesIn7DaysOfRightArea() {
-        UiObject2 card = mTask.findSpecifiedCardFromRightAreaByText(
-                mDevice, NEWLY_ADD_IN_7_DAYS_TEXT);
+        UiObject2 card = mTask.findSpecifiedCardFromRightAreaByText(NEWLY_ADD_IN_7_DAYS_TEXT);
         mAction.doClickActionAndWait(card);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
         // verify tab text
-        List<UiObject2> listTabText = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllTabTextOfVideoSubPageSelector());
+        List<UiObject2> listTabText = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllTabTextOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listTabText);
 
         // verify card main title
-        List<UiObject2> listCardTitle = TestHelper.waitForMultipleUiObjectsVisibleAndReturn(
-                mDevice, mTask.getAllCardsMainTitleOfVideoSubPageSelector());
+        List<UiObject2> listCardTitle = TestHelper.waitForUiObjectsExistAndReturn(
+                mTask.getAllCardsMainTitleOfVideoSubPageSelector());
         TestHelper.verifyEachTextViewHasTextInUiCollection(listCardTitle);
     }
 

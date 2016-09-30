@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiObject2;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -58,7 +59,8 @@ public final class TestFileManager {
     private static final String TEST2_FILE_PATH;
 
     static {
-        TEST_ROOT_DIR_PATH = String.format("%s/%s", FileUtils.getExternalStoragePath(), "testfile");
+        TEST_ROOT_DIR_PATH =
+                String.format("%s/%s", FileUtils.getExternalStoragePath(), TEST_ROOT_DIR_NAME);
         TEST_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_DIR_NAME);
         TEST1_FILE_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST1_FILE_NAME);
         TEST2_FILE_PATH = String.format("%s/%s", TEST_DIR_PATH, TEST2_FILE_NAME);
@@ -76,12 +78,10 @@ public final class TestFileManager {
 
     private static void prepareData() {
         String message = "Prepare files for file manager test.";
-        String cmdCreateDir = String.format("mkdir %s", TEST_ROOT_DIR_PATH);
-        String cmdCreateHiddenDir = String.format("mkdir %s", TEST_DIR_PATH);
+        String cmdCreateHiddenDir = String.format("mkdir -p %s", TEST_DIR_PATH);
         String cmdCreateTxtFile1 = String.format("touch %s", TEST1_FILE_PATH);
         String cmdCreateTxtFile2 = String.format("touch %s", TEST2_FILE_PATH);
-        String commands[] = {cmdCreateDir, cmdCreateHiddenDir,
-                cmdCreateTxtFile1, cmdCreateTxtFile2};
+        String commands[] = {cmdCreateHiddenDir, cmdCreateTxtFile1, cmdCreateTxtFile2};
 
         ShellUtils.CommandResult result = ShellUtils.execCommand(commands, false, false);
         Assert.assertTrue(message, (result.mResult == 0));
@@ -101,7 +101,7 @@ public final class TestFileManager {
         mAction = UiActionsManager.getInstance();
         mTask = TaskFileManager.getInstance();
 
-        TaskLauncher.openSpecifiedAppFromAppTab(mDevice, "文件管理");
+        TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
     }
 
     @After
@@ -151,7 +151,7 @@ public final class TestFileManager {
     public void test13OpenAllFilesCardFromSdcardTab() {
         String message;
 
-        mTask.openLocalFilesCard(mDevice);
+        mTask.openLocalFilesCard();
 
         UiObject2 mainTitle = mDevice.findObject(mTask.getMainTitleSelector());
         message = "Verify the text of main title from sdcard local files.";
@@ -166,8 +166,8 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test14NavigateToSpecifiedPath() {
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
 
         UiObject2 subTitle = mDevice.findObject(mTask.getSubTitleSelector());
         String message = "Verify navigate to the specified path.";
@@ -178,10 +178,10 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test15OpenSpecifiedPicture() {
         // need push pic file to the device
-        mTask.openLocalFilesCard(mDevice);
+        mTask.openLocalFilesCard();
 
         String fileName = "4800x3600_5.jpg";
-        mTask.navigateAndOpenSpecifiedFile(mDevice, (TEST_ROOT_DIR_PATH + fileName));
+        mTask.navigateAndOpenSpecifiedFile((TEST_ROOT_DIR_PATH + fileName));
 
         String titleId = "tv.fun.filemanager:id/image_name_display";
         UiObject2 fileTitle = mDevice.findObject(By.res(titleId));
@@ -193,12 +193,11 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test16OpenUnknownTypeFile() {
-        mTask.openLocalFilesCard(mDevice);
+        mTask.openLocalFilesCard();
 
         String message = "Verify open unknown type file.";
-        mTask.navigateAndOpenSpecifiedFile(mDevice, TEST1_FILE_PATH);
-        Assert.assertTrue(message,
-                TestHelper.waitForUiObjectExist(mDevice, By.text(TEST1_FILE_NAME)));
+        mTask.navigateAndOpenSpecifiedFile(TEST1_FILE_PATH);
+        Assert.assertTrue(message, TestHelper.waitForUiObjectExist(By.text(TEST1_FILE_NAME)));
     }
 
     @Test
@@ -207,13 +206,13 @@ public final class TestFileManager {
         String message;
 
         // verification 1
-        mTask.openLocalFilesCard(mDevice);
+        mTask.openLocalFilesCard();
         UiObject2 menuTips = mDevice.findObject(mTask.getMenuTipsSelector());
         message = "Verify the menu tips is displayed.";
         Assert.assertTrue(message, menuTips.getText().contains("查看更多操作"));
 
         // verification 2
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
         mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
                 .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
         mTask.showMenuAndRequestFocus();
@@ -236,8 +235,8 @@ public final class TestFileManager {
     public void test22MenuRemoveAndHideBtnExistForFile() {
         String message;
 
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
         mTask.showMenuAndRequestFocus();
 
@@ -267,19 +266,19 @@ public final class TestFileManager {
     public void test23HideAndShowDirectory() {
         String message;
 
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
         mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
                 .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
 
         // verification 1
-        mTask.showMenuAndClickBtn(mDevice, TEXT_HIDDEN_BUTTON);
+        mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
         message = "Verify the directory is hidden.";
         UiObject2 fileHidden = mDevice.findObject(By.text(TEST_DIR_NAME));
         Assert.assertNull(message, fileHidden);
 
         // verification 2
-        mTask.showMenuAndClickBtn(mDevice, TEXT_SHOWALL_BUTTON);
+        mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
         message = "Verify the directory is show.";
         UiObject2 fileShow = mDevice.findObject(By.text(TEST_DIR_NAME));
         Assert.assertNotNull(message, fileShow);
@@ -290,18 +289,18 @@ public final class TestFileManager {
     public void test24HideAndShowFile() {
         String message;
 
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
 
         // verification 1
-        mTask.showMenuAndClickBtn(mDevice, TEXT_HIDDEN_BUTTON);
+        mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
         message = "Verify the file is hidden.";
         UiObject2 fileHidden = mDevice.findObject(By.text(TEST1_FILE_NAME));
         Assert.assertNull(message, fileHidden);
 
         // verification 2
-        mTask.showMenuAndClickBtn(mDevice, TEXT_SHOWALL_BUTTON);
+        mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
         message = "Verify the file is show.";
         UiObject2 fileShow = mDevice.findObject(By.text(TEST1_FILE_NAME));
         Assert.assertNotNull(message, fileShow);
@@ -312,14 +311,14 @@ public final class TestFileManager {
     public void test25RemoveFileAndCancel() {
         String message;
 
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
-        mTask.showMenuAndClickBtn(mDevice, TEXT_REMOVE_BUTTON);
+        mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
 
         // verification 1
         message = "Verify the Cancel button of confirm dialog.";
-        UiObject2 cancelBtn = mDevice.findObject(mTask.getCancelBtnOfConfirmDialog());
+        UiObject2 cancelBtn = mDevice.findObject(mTask.getCancelBtnOfConfirmDialogSelector());
         Assert.assertNotNull(message, cancelBtn);
 
         // verification 2
@@ -334,27 +333,88 @@ public final class TestFileManager {
     public void test26RemoveFile() {
         String message;
 
-        mTask.openLocalFilesCard(mDevice);
-        mTask.navigateToSpecifiedPath(mDevice, TEST_ROOT_DIR_PATH);
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
-        mTask.showMenuAndClickBtn(mDevice, TEXT_REMOVE_BUTTON);
+        mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
 
         // verification 1
         message = "Verify the Yes button of confirm dialog.";
-        UiObject2 yesBtn = mDevice.findObject(mTask.getYesBtnOfConfirmDialog());
-        Assert.assertNotNull(message, yesBtn);
+        UiObject2 confirmBtn = mDevice.findObject(mTask.getYesBtnOfConfirmDialogSelector());
+        Assert.assertNotNull(message, confirmBtn);
 
         // verification 2
         message = "Verify click yes and remove a file.";
-        mAction.doClickActionAndWait(yesBtn);
+        mAction.doClickActionAndWait(confirmBtn);
         UiObject2 fileDeleted = mDevice.findObject(By.text(TEST1_FILE_NAME));
         Assert.assertNull(message, fileDeleted);
     }
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test27RemoveOnlyFileOfDirectory() {
-        // TODO: 2016/9/30  
+    public void test27HideAndShowOnlyFileOfDirectory() {
+        String message;
+
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_DIR_PATH);
+        mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+
+        // verification 1
+        mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+        message = "Verify the tips of empty directory from all files card.";
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(message, "未发现可显示的文件", tips.getText());
+
+        // verification 2
+        message = "Verify the file is show after click Show All.";
+        mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+        UiObject2 hiddenFile = mDevice.findObject(By.text(TEST2_FILE_NAME));
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(hiddenFile));
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test28RemoveOnlyFileOfDirectory() {
+        String message;
+
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_DIR_PATH);
+
+        // remove file
+        mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+        mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
+        UiObject2 confirmBtn = mDevice.findObject(mTask.getYesBtnOfConfirmDialogSelector());
+        mAction.doClickActionAndWait(confirmBtn);
+
+        message = "Verify the tips of empty directory from all files card.";
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(message, "未发现可显示的文件", tips.getText());
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test31EmptyTipsInVideoCard() {
+        // TODO: 2016/9/30
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test32EmptyTipsInAppCard() {
+        // TODO: 2016/9/30
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test33EmptyTipsInMusicCard() {
+        // TODO: 2016/9/30
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test34EmptyTipsInPictureCard() {
+        // TODO: 2016/9/30
     }
 
     @Test
