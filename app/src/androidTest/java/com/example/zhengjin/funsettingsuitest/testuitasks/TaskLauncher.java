@@ -51,6 +51,10 @@ public final class TaskLauncher {
         return By.res("com.bestv.ott:id/setting");
     }
 
+    public static BySelector getQuickAccessBtnWeatherSelector() {
+        return By.res("com.bestv.ott:id/weather");
+    }
+
     public static BySelector getQuickAccessBtnNetworkSelector() {
         return By.res("com.bestv.ott:id/network");
     }
