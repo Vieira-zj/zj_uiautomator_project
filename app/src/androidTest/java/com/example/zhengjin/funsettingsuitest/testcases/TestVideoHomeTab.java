@@ -26,13 +26,6 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CHILDREN_CARD_TEXT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILM_CARD_TEXT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FOLLOWING_TV_SERIAL_TEXT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.NEWLY_ADD_IN_7_DAYS_TEXT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TV_SERIAL_CARD_TEXT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VARIETY_CARD_TEXT;
-
 /**
  * Created by Vieira on 2016/7/4.
  *
@@ -42,6 +35,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VAR
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestVideoHomeTab {
+
+    private final static String FILM_CARD_TEXT = "电影";
+    private final static String TV_SERIAL_CARD_TEXT = "电视剧";
+    private final static String CHILDREN_CARD_TEXT = "少儿";
+    private final static String VARIETY_CARD_TEXT = "综艺";
+    private final static String FOLLOWING_TV_SERIAL_TEXT = "跟播";
+    private final static String NEWLY_ADD_IN_7_DAYS_TEXT = "7日新增";
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
