@@ -102,6 +102,8 @@ public final class TestFileManager {
         mTask = TaskFileManager.getInstance();
 
         TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
+        Assert.assertTrue("Open File Manager app.",
+                TestHelper.waitForAppOpenedByUntil(FILE_MANAGER_PKG_NAME));
     }
 
     @After

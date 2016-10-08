@@ -32,7 +32,7 @@ public final class UiActionsManager {
 
     public boolean doDeviceActionAndWait(DeviceAction action, long wait) {
         boolean ret = action.doDeviceAction(mDevice);
-        ShellUtils.systemWait(wait);
+        ShellUtils.systemWaitByMillis(wait);
         return ret;
     }
 
@@ -60,7 +60,7 @@ public final class UiActionsManager {
     public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
         for (int i = 0; i < repeatTimes; ++i) {
             action.doDeviceAction(mDevice);
-            ShellUtils.systemWait(wait);
+            ShellUtils.systemWaitByMillis(wait);
         }
     }
 
@@ -70,7 +70,7 @@ public final class UiActionsManager {
 
     public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action, long wait) {
         action.doDeviceAction(mDevice);
-        ShellUtils.systemWait(wait);
+        ShellUtils.systemWaitByMillis(wait);
         return this;
     }
 
@@ -80,7 +80,7 @@ public final class UiActionsManager {
 
     public void doClickActionAndWait(UiObject2 uiObj) {
         uiObj.click();
-        ShellUtils.systemWait(SHORT_WAIT);
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
     }
 
 }

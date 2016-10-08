@@ -29,61 +29,57 @@ public final class TestHelper {
     private static UiDevice device =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
-    @Deprecated
-    private static boolean waitForAppOpenedV1(String pkgName, long timeOut, long interval) {
+    public static boolean waitForAppOpenedByCheckCurPackage(
+            String pkgName, long timeOut, long interval) {
         boolean flag_app_opened = false;
         long start = SystemClock.uptimeMillis();
 
         while (!flag_app_opened && ((SystemClock.uptimeMillis() - start) < timeOut)) {
             flag_app_opened = device.getCurrentPackageName().equals(pkgName);
-            ShellUtils.systemWait(interval);
+            ShellUtils.systemWaitByMillis(interval);
         }
 
         return flag_app_opened;
     }
 
-    @Deprecated
-    private static boolean waitForAppOpenedV1(String pkgName, long timeOut) {
+    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
         final long interval = SHORT_WAIT;
-        return waitForAppOpenedV1(pkgName, timeOut, interval);
+        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, interval);
     }
 
-    // use waitForAppOpened() instead
-    @Deprecated
-    private static boolean waitForAppOpenedV1(String pkgName) {
+    // Prefer to use waitForAppOpenedByUntil()
+    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {
         final long timeOut = LONG_WAIT;
-        return waitForAppOpenedV1(pkgName, timeOut);
+        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut);
     }
 
-    public static boolean waitForAppOpened(String pkgName) {
+    public static boolean waitForAppOpenedByUntil(String pkgName) {
         device.waitForIdle();
         return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), TIME_OUT);
     }
 
-    @Deprecated
-    private static boolean waitForUiObjectEnabledV1(UiObject2 uiObj, long timeOut, long interval) {
+    private static boolean waitForUiObjectEnabledByCheckProperty(
+            UiObject2 uiObj, long timeOut, long interval) {
         boolean flag_UiObj_enabled = false;
         long start = SystemClock.uptimeMillis();
 
         while (!uiObj.isEnabled() && ((SystemClock.uptimeMillis() - start) < timeOut)) {
             flag_UiObj_enabled = uiObj.isEnabled();
-            ShellUtils.systemWait(interval);
+            ShellUtils.systemWaitByMillis(interval);
         }
 
         return flag_UiObj_enabled;
     }
 
-    @Deprecated
-    private static boolean waitForUiObjectEnabledV1(UiObject2 uiObj, long timeOut) {
+    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj, long timeOut) {
         final long interval = SHORT_WAIT;
-        return waitForUiObjectEnabledV1(uiObj, timeOut, interval);
+        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut, interval);
     }
 
-    // use waitForUiObjectEnabled() instead
-    @Deprecated
-    private static boolean waitForUiObjectEnabledV1(UiObject2 uiObj) {
+    // Prefer to use waitForUiObjectEnabled()
+    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj) {
         final long timeOut = LONG_WAIT;
-        return waitForUiObjectEnabledV1(uiObj, timeOut);
+        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut);
     }
 
     public static boolean waitForUiObjectEnabled(UiObject2 uiObj) {

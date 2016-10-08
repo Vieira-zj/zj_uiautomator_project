@@ -4,8 +4,17 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
@@ -17,7 +26,7 @@ import java.util.Locale;
 
 /**
  * Created by zhengjin on 2016/9/30.
- *
+ * <p>
  * Include the UI selectors and tasks for weather app.
  */
 
@@ -26,6 +35,10 @@ public final class TaskWeather {
     private static TaskWeather instance;
     private UiDevice device;
     private UiActionsManager action;
+
+    public final String WEATHER_MENU_BUTTON_TEXT_UPDATE = "更新";
+    public final String WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT = "修改默认";
+    public final String WEATHER_MENU_BUTTON_TEXT_ADD_CITY = "添加城市";
 
     private TaskWeather() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -45,12 +58,36 @@ public final class TaskWeather {
         }
     }
 
-    public BySelector getLocationOfWeatherHomePageSelector() {
+    public BySelector getLocationOfWeatherHomeSelector() {
         return By.res("tv.fun.weather:id/tv_weather_day_addr");
+    }
+
+    public BySelector getTipTextAtBottomOfWeatherHomeSelector() {
+        return By.res("tv.fun.weather:id/tv_tip");
+    }
+
+    public BySelector getTopRefreshTimeOfWeatherHomeSelector() {
+        return By.res("tv.fun.weather:id/tv_weather_refresh_time");
     }
 
     public BySelector getWeatherForecastDateSelector() {
         return By.res("tv.fun.weather:id/tv_weather_date");
+    }
+
+    public BySelector getCityManagerTitleSelector() {
+        return By.res("tv.fun.weather:id/setting_title");
+    }
+
+    private BySelector getProvinceListSelector() {
+        return By.res("tv.fun.weather:id/ws_province");
+    }
+
+    private BySelector getCityListSelector() {
+        return By.res("tv.fun.weather:id/ws_city");
+    }
+
+    private BySelector getMiddleItemInProvinceCityListSelector() {
+        return By.res("tv.fun.weather:id/wheel_view_tx3");
     }
 
     public String getWeatherForecastDateFromUiText(String source) {
@@ -94,6 +131,84 @@ public final class TaskWeather {
                 new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date curDate = new Date(timeMillis);
         return formatter.format(curDate);
+    }
+
+    public void openBottomMenu() {
+        action.doDeviceActionAndWait(new DeviceActionMenu());
+        Assert.assertTrue(
+                TestHelper.waitForUiObjectExist(By.text(WEATHER_MENU_BUTTON_TEXT_UPDATE)));
+        action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+    }
+
+    public void focusOnSpecifiedMenuButtonAndEnter(String btnText) {
+        UiObject2 btn = device.findObject(By.text(btnText)).getParent();
+        for (int i = 0, moveTimes = 4; i < moveTimes; i++) {
+            if (btn.isFocused()) {
+                action.doDeviceActionAndWait(new DeviceActionEnter(), TestConstants.LONG_WAIT);
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+
+        Assert.assertTrue("Failed to focus on Specified menu button.", false);
+    }
+
+    public String getSelectedLocationProvince() {
+        UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
+        UiObject2 middleProvince =
+                provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
+        return middleProvince.getText();
+    }
+
+    public String getSelectedLocationCity() {
+        UiObject2 cityList = device.findObject(this.getCityListSelector());
+        UiObject2 middleCity =
+                cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
+        return middleCity.getText();
+    }
+
+    public void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
+        DeviceAction moveAction;
+        if (directionUp) {
+            moveAction = new DeviceActionMoveUp();
+        } else {
+            moveAction = new DeviceActionMoveDown();
+        }
+
+        UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
+        UiObject2 middleProvince =
+                provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
+        for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
+            if (provinceText.equals(middleProvince.getText())) {
+                return;
+            }
+            action.doDeviceActionAndWait(moveAction);
+            middleProvince = provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
+        }
+
+        Assert.assertTrue("The specified province is NOT found on city manager!", false);
+    }
+
+    public void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
+        DeviceAction moveAction;
+        if (directionUp) {
+            moveAction = new DeviceActionMoveUp();
+        } else {
+            moveAction = new DeviceActionMoveDown();
+        }
+
+        UiObject2 cityList = device.findObject(this.getCityListSelector());
+        UiObject2 middleCity =
+                cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
+        for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
+            if (cityText.equals(middleCity.getText())) {
+                return;
+            }
+            action.doDeviceActionAndWait(moveAction);
+            middleCity = cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
+        }
+
+        Assert.assertTrue("The specified city is NOT found on city manager!", false);
     }
 
 }

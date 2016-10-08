@@ -44,7 +44,7 @@ public class TestTaskLauncher {
 
     @After
     public void clearUp() {
-        ShellUtils.systemWait(WAIT);
+        ShellUtils.systemWaitByMillis(WAIT);
         Log.d(TAG, String.format("***** Test %s finished.", TAG));
     }
 

@@ -9,6 +9,7 @@ import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
@@ -16,6 +17,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
@@ -33,7 +35,9 @@ import org.junit.runners.MethodSorters;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEATHER_PKG_NAME;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -47,6 +51,7 @@ public final class TestCommonSettings {
     private UiDevice mDevice;
     private UiActionsManager mAction;
     private TaskSettings mTask;
+    private TaskWeather mWeatherTask;
 
     @BeforeClass
     public static void classSetUp() {
@@ -62,6 +67,9 @@ public final class TestCommonSettings {
         TaskLauncher.backToLauncher();
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
                 TaskLauncher.getQuickAccessBtnSettingsSelector());
+        Assert.assertTrue("Open Settings app.",
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
+
         mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
@@ -69,7 +77,7 @@ public final class TestCommonSettings {
     public void clearUp() {
         if (RunnerProfile.isTakeScreenshot) {
             ShellUtils.takeScreenCapture(mDevice);
-            ShellUtils.systemWait(SHORT_WAIT);
+            ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }
 
 //        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
@@ -319,11 +327,11 @@ public final class TestCommonSettings {
         Assert.assertNotNull(saveInfoCheckbox);
 
         mAction.doDeviceActionAndWait(new DeviceActionMoveUp());
-        message = "Verify the saver information checkbox is focused";
+        message = "Verify the saver information checkbox is focused.";
         Assert.assertTrue(message, saveInfoCheckbox.isFocused());
 
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        message = "Verify the saver information checkbox is checked";
+        message = "Verify the saver information checkbox is checked.";
         Assert.assertTrue(message, saveInfoCheckbox.isChecked());
     }
 
@@ -364,42 +372,64 @@ public final class TestCommonSettings {
         Assert.assertEquals(message, "湖北 武汉", locationItemValue.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategorySettingsTests.class)
-    // requirement is update
-    public void test42DefaultLocationOnSubPage() {
+    public void test42OpenWeatherAppAndBackToSettings() {
         String message;
 
-        mTask.scrollMoveToSpecificSettingsItem("天气位置");
+        mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        message = "Verify open Weather home.";
+        Assert.assertTrue(message,
+                TestHelper.waitForAppOpenedByCheckCurPackage(WEATHER_PKG_NAME, TIME_OUT));
 
-        UiObject2 provinceList = mDevice.findObject(mTask.getProvinceListSelector());
-        UiObject2 middleProvince =
-                provinceList.findObject(mTask.getMiddleItemInProvinceCityListSelector());
-        message = "Verify the default province text on location page.";
-        Assert.assertEquals(message, "湖北", middleProvince.getText());
+        mAction.doDeviceActionAndWait(new DeviceActionBack());
+        message = "Verify back to Settings home.";
+        Assert.assertTrue(message, TestHelper.waitForAppOpenedByCheckCurPackage(SETTINGS_PKG_NAME));
+    }
 
-        UiObject2 cityList = mDevice.findObject(mTask.getCityListSelector());
-        UiObject2 middleCity =
-                cityList.findObject(mTask.getMiddleItemInProvinceCityListSelector());
-        message = "Verify the default city text on location page.";
-        Assert.assertEquals(message, "武汉", middleCity.getText());
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test43DefaultLocationOnSubPage() {
+        // weather activities is not available for automation
+        String message;
+
+        mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        Assert.assertTrue(TestHelper.waitForAppOpenedByCheckCurPackage(WEATHER_PKG_NAME, TIME_OUT));
+
+        mWeatherTask.openBottomMenu();
+        mWeatherTask.focusOnSpecifiedMenuButtonAndEnter(
+                mWeatherTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
+
+        message = "Verify the default province text on city manager.";
+        Assert.assertEquals(message, "湖北", mWeatherTask.getSelectedLocationProvince());
+        message = "Verify the default city text on city manager.";
+        Assert.assertEquals(message, "武汉", mWeatherTask.getSelectedLocationCity());
     }
 
     @Ignore
     @Category(CategorySettingsTests.class)
-    // requirement is update
-    public void test43SelectLocationOnSubPage() {
+    public void test44SelectLocationOnSubPage() {
+        // weather activities is not available for automation
         String message;
         String province = "江西";
         String city = "九江";
 
-        mTask.scrollMoveToSpecificSettingsItem("天气位置");
+        mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+
+        mWeatherTask.openBottomMenu();
+        mWeatherTask.focusOnSpecifiedMenuButtonAndEnter(
+                mWeatherTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
+
         // select a location from sub page
-        mTask.selectSpecifiedLocationProvince(province, false);
+        mWeatherTask.selectSpecifiedLocationProvince(province, false);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(city, false);
+        mWeatherTask.selectSpecifiedLocationCity(city, false);
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
+        mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
         message = "Verify the selected location item value text on Common Settings.";
         String expectedItemValueText = String.format("%s %s", province, city);
         UiObject2 locationItemContainer =
@@ -407,12 +437,6 @@ public final class TestCommonSettings {
         UiObject2 locationItemValue =
                 locationItemContainer.findObject(mTask.getSettingItemValueSelector());
         Assert.assertEquals(message, expectedItemValueText, locationItemValue.getText());
-    }
-
-    @Test
-    @Category(CategorySettingsTests.class)
-    public void test44OpenWeatherAppAndBackToSettings() {
-        // TODO: 2016/9/30
     }
 
     @Test

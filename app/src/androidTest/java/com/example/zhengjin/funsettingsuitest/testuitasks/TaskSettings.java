@@ -120,18 +120,6 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_value");
     }
 
-    public BySelector getProvinceListSelector() {
-        return By.res("tv.fun.settings:id/ws_province");
-    }
-
-    public BySelector getCityListSelector() {
-        return By.res("tv.fun.settings:id/ws_city");
-    }
-
-    public BySelector getMiddleItemInProvinceCityListSelector() {
-        return By.res("tv.fun.settings:id/wheel_view_tx3");
-    }
-
     public UiObject2 getTextViewOfSwitcher(UiObject2 container) {
         UiObject2 switcher =
                 container.findObject(this.getSettingSwitcherItemValueSelector());
@@ -198,50 +186,6 @@ public final class TaskSettings {
                     itemText);
             Assert.assertTrue(message, false);
         }
-    }
-
-    public void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
-        DeviceAction moveAction;
-        if (directionUp) {
-            moveAction = new DeviceActionMoveUp();
-        } else {
-            moveAction = new DeviceActionMoveDown();
-        }
-
-        UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
-        UiObject2 middleProvince =
-                provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
-        for (int i = 0, maxMoveTimes = 30; i < maxMoveTimes; i++) {
-            if (provinceText.equals(middleProvince.getText())) {
-                return;
-            }
-            action.doDeviceActionAndWait(moveAction);
-            middleProvince = provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
-        }
-
-        Assert.assertTrue("The specified province is NOT found!", false);
-    }
-
-    public void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
-        DeviceAction moveAction;
-        if (directionUp) {
-            moveAction = new DeviceActionMoveUp();
-        } else {
-            moveAction = new DeviceActionMoveDown();
-        }
-
-        UiObject2 cityList = device.findObject(this.getCityListSelector());
-        UiObject2 middleCity =
-                cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
-        for (int i = 0, maxMoveTimes = 30; i < maxMoveTimes; i++) {
-            if (cityText.equals(middleCity.getText())) {
-                return;
-            }
-            action.doDeviceActionAndWait(moveAction);
-            middleCity = cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
-        }
-
-        Assert.assertTrue("The specified city is NOT found!", false);
     }
 
 }

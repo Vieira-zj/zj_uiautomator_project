@@ -103,7 +103,7 @@ public final class TaskFileManager {
     public void openCardFromFileManagerHomePage(int positionX, int positionY) {
         String message = "Error in openLocalFilesCard(), click on AllFiles card.";
         Assert.assertTrue(message, device.click(positionX, positionY));
-        ShellUtils.systemWait(WAIT);
+        ShellUtils.systemWaitByMillis(WAIT);
     }
 
     public void navigateToSpecifiedPath(String path) {
@@ -129,10 +129,10 @@ public final class TaskFileManager {
         fileList.setAsVerticalList();
         try {
             fileList.scrollTextIntoView(dirName);
-            ShellUtils.systemWait(SHORT_WAIT);
+            ShellUtils.systemWaitByMillis(SHORT_WAIT);
             if (flag_bottom) {
                 fileList.scrollForward(ScrollSteps);
-                ShellUtils.systemWait(SHORT_WAIT);
+                ShellUtils.systemWaitByMillis(SHORT_WAIT);
             }
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();

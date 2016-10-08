@@ -70,7 +70,7 @@ public final class TaskLauncher {
         String launcherPackageName = DEVICE.getLauncherPackageName();  //"com.bestv.ott"
         String message = "Error in backToLauncher(), fail to back to the launcher.";
         ACTION.doDeviceActionAndWait(new DeviceActionHome());
-        Assert.assertTrue(message, TestHelper.waitForAppOpened(launcherPackageName));
+        Assert.assertTrue(message, TestHelper.waitForAppOpenedByUntil(launcherPackageName));
     }
 
     public static String getLauncherPackageName() {
