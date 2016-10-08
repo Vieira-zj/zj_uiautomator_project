@@ -149,6 +149,13 @@ public final class ShellUtils {
     public static String getCurrentTime() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
+        Date curTime = new Date(System.currentTimeMillis());
+        return formatter.format(curTime);
+    }
+
+    public static String getCurrentDate() {
+        SimpleDateFormat formatter =
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         return formatter.format(curDate);
     }

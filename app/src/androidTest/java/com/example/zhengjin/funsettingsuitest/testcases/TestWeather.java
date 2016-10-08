@@ -10,6 +10,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
@@ -21,6 +22,12 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEATHER_PKG_NAME;
 
@@ -52,6 +59,7 @@ public final class TestWeather {
         TaskLauncher.backToLauncher();
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
                 TaskLauncher.getQuickAccessBtnWeatherSelector());
+        Assert.assertTrue(TestHelper.waitForAppOpened(WEATHER_PKG_NAME));
     }
 
     @After
@@ -72,21 +80,60 @@ public final class TestWeather {
 
     @Test
     @Category(CategoryWeatherTests.class)
-    public void test12FunctionButtonsInMenu() {
+    public void test12WeatherForecastDate() {
+        String message;
+
+        List<UiObject2> dates = mDevice.findObjects(mTask.getWeatherForecastDateSelector());
+        final int size = dates.size();
+        List<String> actualDates = new ArrayList<>(size);
+        for (UiObject2 date : dates) {
+            actualDates.add(mTask.getWeatherForecastDateFromUiText(date.getText()));
+        }
+        Collections.sort(actualDates, new dateComparator());
+//        for (String date : actualDates) {
+//            Log.d("ZJ", "Date test: " + date);
+//        }
+
+        List<String> expectedDates = mTask.getWeatherForecastDates();
+        Collections.sort(expectedDates, new dateComparator());
+
+        message = "Verify the length of weather forecast dates is 5.";
+        Assert.assertEquals(message, actualDates.size(), expectedDates.size());
+
+        for (int i = 0; i < size; i++) {
+            message = String.format(Locale.getDefault(),
+                    "Verify the forecast date at position %d", i);
+            Assert.assertEquals(message, expectedDates.get(i), actualDates.get(i));
+        }
+    }
+
+    @Test
+    @Category(CategoryWeatherTests.class)
+    public void test13FunctionButtonsInMenu() {
         // TODO: 2016/9/30
     }
 
     @Test
     @Category(CategoryWeatherTests.class)
-    public void test13UpdateWeatherData() {
+    public void test14UpdateWeatherData() {
         // TODO: 2016/9/30  
     }
-
 
     @Test
     @Category(CategoryWeatherTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
+    }
+
+    private class dateComparator implements Comparator<String> {
+        @Override
+        public int compare(String arg1, String arg2) {
+            int tmpInt1 =
+                    Integer.parseInt(arg1.substring((arg1.indexOf("月") + 1), (arg1.length() - 1)));
+            int tmpInt2 =
+                    Integer.parseInt(arg2.substring((arg2.indexOf("月") + 1), (arg2.length() - 1)));
+            return tmpInt1 - tmpInt2;
+        }
     }
 
 }
