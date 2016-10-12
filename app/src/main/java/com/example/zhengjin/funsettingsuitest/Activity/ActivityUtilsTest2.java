@@ -1,10 +1,14 @@
 package com.example.zhengjin.funsettingsuitest.activity;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,21 +24,23 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     //    private static final String TAG = ActivityUtilsTest2.class.getSimpleName();
 
     private final Locale mLocale = Locale.getDefault();
+    private final String SERVICE_TEXT_STATE_KEY = "SERVICE_TEXT_STATE_KEY";
 
     private Button mBtnProcessUtilsTest = null;
     private TextView mTextProcessUtilsTest = null;
+    private Button mBtnDialogTest = null;
+    private TextView mTextDialogTest = null;
     private Button mBtnFpsTest = null;
     private TextView mTextFpsTest = null;
-
-    private final String message_service_started = "monitor service started";
-    private final String message_service_stop = "monitor service stop";
-    private final String SERVICE_TEXT_STATE_KEY = "SERVICE_TEXT_STATE_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utils_test2);
         this.initViews();
+
+        final Dialog dialog = new Dialog(this);
+        this.initDialog(dialog);
 
         if (mBtnProcessUtilsTest != null) {
             mBtnProcessUtilsTest.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +58,17 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
             });
         }
 
+        if (mBtnDialogTest != null) {
+            mBtnDialogTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final String text = "Dialog is showing";
+                    mTextDialogTest.setText(text);
+                    dialog.show();
+                }
+            });
+        }
+
         if (mBtnFpsTest != null) {
             mBtnFpsTest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -62,10 +79,12 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
 
                     if (PackageUtils.isServiceRunning(service)) {
                         stopService(intent);
-                        mTextFpsTest.setText(message_service_stop);
+                        final String text = "monitor service stop";
+                        mTextFpsTest.setText(text);
                     } else {
+                        final String text = "monitor service started";
                         startService(intent);
-                        mTextFpsTest.setText(message_service_started);
+                        mTextFpsTest.setText(text);
                     }
                 }
             });
@@ -74,17 +93,37 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
         this.restoreSavedInstanceState(savedInstanceState);
     }
 
+    private void initViews() {
+        mBtnProcessUtilsTest = (Button) this.findViewById(R.id.btn_process_utils_test);
+        mBtnDialogTest = (Button) this.findViewById(R.id.btn_dialog_test);
+        mBtnFpsTest = (Button) this.findViewById(R.id.btn_fps_test);
+        mTextProcessUtilsTest = (TextView) this.findViewById(R.id.text_process_utils_test);
+        mTextDialogTest = (TextView) this.findViewById(R.id.text_dialog_test);
+        mTextFpsTest = (TextView) this.findViewById(R.id.text_fps_test);
+    }
+
+    private void initDialog(Dialog dialog) {
+        dialog.setContentView(R.layout.dialog_layout);
+        dialog.setTitle("fps");
+
+        Window dialogWindow = dialog.getWindow();
+        if (dialogWindow != null) {
+            dialogWindow.setGravity(Gravity.START | Gravity.TOP);
+
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.x = 50;
+            lp.y = 50;
+            lp.width = 300;
+            lp.height = 400;
+            lp.alpha = 0.7f;
+            dialogWindow.setAttributes(lp);
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(SERVICE_TEXT_STATE_KEY, mTextFpsTest.getText().toString());
         super.onSaveInstanceState(outState);
-    }
-
-    private void initViews() {
-        mBtnProcessUtilsTest = (Button) this.findViewById(R.id.btn_process_utils_test);
-        mBtnFpsTest = (Button) this.findViewById(R.id.btn_fps_test);
-        mTextProcessUtilsTest = (TextView) this.findViewById(R.id.text_process_utils_test);
-        mTextFpsTest = (TextView) this.findViewById(R.id.text_fps_test);
     }
 
     private void restoreSavedInstanceState(Bundle savedInstanceState) {
