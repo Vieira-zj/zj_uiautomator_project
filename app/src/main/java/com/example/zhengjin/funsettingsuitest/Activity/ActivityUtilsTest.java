@@ -68,7 +68,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 public void onClick(View view) {
                     if (mTextShellUtilsTest != null) {
                         String command = "cat /system/build.prop | grep ro.product.model";
-                        ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, false, true);
+                        ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, true);
                         String text = String.format(mLocale,
                                 "Result code: %d\n Success message: %s\n Error message: %s",
                                 cr.getReturnCode(), cr.getReturnSuccessMsg(), cr.getReturnErrorMsg());

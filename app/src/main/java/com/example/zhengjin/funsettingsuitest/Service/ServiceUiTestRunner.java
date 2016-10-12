@@ -111,7 +111,7 @@ public class ServiceUiTestRunner extends IntentService {
         // I/ActivityManager(1651): Force stopping com.example.zhengjin.funsettingsuitest appid=1000 user=0: start instr
         // I/ActivityManager(1651): Killing 10979:com.example.zhengjin.funsettingsuitest/1000 (adj 0): stop com.example.zhengjin.funsettingsuitest
         // reason: test app and app under test are from the same AS project
-        ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, false, true);
+        ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, true);
         if (cr.getReturnCode() != 0) {
             ++mTotalFailed;
         }

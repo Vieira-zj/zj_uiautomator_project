@@ -8,34 +8,31 @@ import java.util.List;
 
 /**
  * Created by zhengjin on 2016/8/23.
- *
+ * <p>
  * Includes utils for android shell ENV.
  */
 public final class ShellCmdUtils {
 
     public static final String TAG = ShellCmdUtils.class.getSimpleName();
 
-    private static final String COMMAND_SU = "su";
+//    private static final String COMMAND_SU = "su";
     private static final String COMMAND_SH = "sh";
     private static final String COMMAND_EXIT = "exit\n";
     private static final String COMMAND_LINE_END = "\n";
 
-    public static CommandResult execCommand(
-            String command, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand(new String[] {command}, isRoot, isNeedResultMsg);
+    public static CommandResult execCommand(String command, boolean isNeedResultMsg) {
+        return execCommand(new String[]{command}, isNeedResultMsg);
     }
 
     @SuppressWarnings("unused")
-    public static CommandResult execCommand(
-            List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
+    public static CommandResult execCommand(List<String> commands, boolean isNeedResultMsg) {
         return execCommand((commands == null ? null : (String[]) commands.toArray()),
-                isRoot, isNeedResultMsg);
+                isNeedResultMsg);
     }
 
-    public static CommandResult execCommand(
-            String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+    public static CommandResult execCommand(String[] commands, boolean isNeedResultMsg) {
         int result = -1;
-        if (commands == null || commands.length == 0 ) {
+        if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
         }
 
@@ -47,7 +44,7 @@ public final class ShellCmdUtils {
         DataOutputStream os = null;
 
         try {
-            process = Runtime.getRuntime().exec(isRoot ? COMMAND_SU : COMMAND_SH);
+            process = Runtime.getRuntime().exec(COMMAND_SH);
             os = new DataOutputStream(process.getOutputStream());
             for (String command : commands) {
                 if (StringUtils.isEmpty(command)) {

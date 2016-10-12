@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Debug;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -223,9 +224,48 @@ public final class DeviceUtils {
         return (rcvTraffic + sndTraffic);
     }
 
-    public static float getFramePerSecond() {
-        // TODO: 2016/9/27
-        return 0;
+    private static long startTime = 0L;
+    private static int lastFrames = 0;
+
+    public static float getFramesPerSeconds() {
+        float fps = -1f;
+        int nowFrames = getFramesNumber();
+        long nowTime = SystemClock.uptimeMillis();
+
+        if (nowFrames == -1) {
+            return -1f;
+        }
+
+        if (startTime != 0L) {
+            float periodTime = (float) (nowTime - startTime) / 1000.0f;
+            fps = Math.round(nowFrames - lastFrames) / periodTime;
+        }
+        startTime = nowTime;
+        lastFrames = nowFrames;
+
+        return fps;
+    }
+
+    private static int getFramesNumber() {
+        String cmd_su = "su";
+        String cmd_fps = "service call SurfaceFlinger 1013";
+        ShellCmdUtils.CommandResult result =
+                ShellCmdUtils.execCommand(new String[] {cmd_su, cmd_fps}, true); // isRoot = true
+
+        if (result.getReturnCode() >= 0) {
+            String line = result.getReturnSuccessMsg();
+            if (!StringUtils.isEmpty(line)) {
+                int start = line.indexOf("(");
+                int end = line.indexOf("  ");
+                if ((start != -1) && (end > start)) {
+                    String frames = line.substring((start + 1), end);
+                    Log.d(TAG, "frames number in hex: " + frames);
+                    return Integer.parseInt(frames, 16);
+                }
+            }
+        }
+
+        return -1;
     }
 
 }
