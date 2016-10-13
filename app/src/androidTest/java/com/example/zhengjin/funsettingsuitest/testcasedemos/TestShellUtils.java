@@ -1,9 +1,12 @@
 package com.example.zhengjin.funsettingsuitest.testcasedemos;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -29,9 +32,13 @@ public final class TestShellUtils {
 
     private final static String TAG = TestShellUtils.class.getSimpleName();
 
+    private UiDevice mDevice;
+
+
     @Before
     public void setUp() {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
     @After
@@ -41,7 +48,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testExecShellShCommand() {
+    public void test1ExecShellShCommand() {
         String command = "cat /system/build.prop | grep ro.product.model";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
 
@@ -55,7 +62,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testExecShellAmStartCommand() {
+    public void test2ExecShellAmStartCommand() {
         // add extra option "--user 0"
         String command = "am start --user 0 tv.fun.filemanager/.FunFileManagerActivity";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
@@ -66,6 +73,13 @@ public final class TestShellUtils {
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test3TakeScreenCaptures() {
+        TaskLauncher.backToLauncher();
+        ShellUtils.takeScreenCapture(mDevice);
     }
 
 }

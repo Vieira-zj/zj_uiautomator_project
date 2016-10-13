@@ -395,25 +395,25 @@ public final class TestFileManager {
         Assert.assertEquals(message, "未发现可显示的文件", tips.getText());
     }
 
-    @Test
+    @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test31EmptyTipsInVideoCard() {
         // TODO: 2016/9/30
     }
 
-    @Test
+    @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test32EmptyTipsInAppCard() {
         // TODO: 2016/9/30
     }
 
-    @Test
+    @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test33EmptyTipsInMusicCard() {
         // TODO: 2016/9/30
     }
 
-    @Test
+    @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test34EmptyTipsInPictureCard() {
         // TODO: 2016/9/30

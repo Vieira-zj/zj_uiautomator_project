@@ -335,19 +335,19 @@ public final class TestCommonSettings {
         Assert.assertTrue(message, saveInfoCheckbox.isChecked());
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
     public void test31DefaultWallpaper() {
         // TODO: 2016/6/7
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
     public void test32SubWallpapers() {
         // TODO: 2016/6/7
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
     public void test33SelectWallpaper() {
         // TODO: 2016/6/7

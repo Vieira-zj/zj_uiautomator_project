@@ -2,8 +2,10 @@ package com.example.zhengjin.funsettingsuitest.testsuites;
 
 import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
-import com.example.zhengjin.funsettingsuitest.testcases.TestVideoHomeTab;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVideoHomeTabTests;
+import com.example.zhengjin.funsettingsuitest.testcases.TestHomeVideoTab;
+import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm;
+import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
 
 import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
@@ -15,10 +17,13 @@ import org.junit.runners.Suite;
  * Run all test cases by include and exclude rules.
  */
 @RunWith(Categories.class)
-//@Categories.IncludeCategory({CategorySettingsTests.class, CategoryFileManagerTests.class})
-@Categories.ExcludeCategory({CategoryVideoHomeTabTests.class})
-@Suite.SuiteClasses({TestCommonSettings.class,
+//@Categories.IncludeCategory({CategorySettingsTests.class})
+@Categories.ExcludeCategory({CategoryHomeVideoTabTests.class})
+@Suite.SuiteClasses({
+        TestCommonSettings.class,
         TestFileManager.class,
-        TestVideoHomeTab.class})
+        TestWeather.class,
+        TestPlayingFilm.class,
+        TestHomeVideoTab.class})
 public class AllTestsSuite {
 }

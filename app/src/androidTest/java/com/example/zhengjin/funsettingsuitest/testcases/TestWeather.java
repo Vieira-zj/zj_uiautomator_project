@@ -20,6 +20,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -201,25 +202,25 @@ public final class TestWeather {
         // TODO: 2016/10/8
     }
 
-    @Test
+    @Ignore
     @Category(CategoryWeatherTests.class)
     public void test23AddDuplicatedCity() {
         // TODO: 2016/10/8  
     }
 
-    @Test
+    @Ignore
     @Category(CategoryWeatherTests.class)
     public void test24DeleteCityAndCancel() {
         // TODO: 2016/10/8
     }
 
-    @Test
+    @Ignore
     @Category(CategoryWeatherTests.class)
     public void test25DeleteCityAndConfirm() {
         // TODO: 2016/10/8  
     }
 
-    @Test
+    @Ignore
     @Category(CategoryWeatherTests.class)
     public void test31AddDefaultCityWeatherAndCancel() {
         // TODO: 2016/10/8  

@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
-import com.example.zhengjin.funsettingsuitest.testcasedemos.TestLauncherApp;
+import com.example.zhengjin.funsettingsuitest.testcasedemos.TestEspressoDemo;
+import com.example.zhengjin.funsettingsuitest.testcasedemos.TestTaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testcasedemos.TestShellUtils;
 import com.example.zhengjin.funsettingsuitest.testcasedemos.TestTaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
@@ -16,8 +17,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory(CategoryDemoTests.class)
-@Suite.SuiteClasses({TestTaskLauncher.class,
-        TestLauncherApp.class,
-        TestShellUtils.class})
+@Suite.SuiteClasses({
+        TestTaskLauncher.class,
+        TestTaskFileManager.class,
+        TestShellUtils.class,
+        TestEspressoDemo.class})
 public class DemoTestsSuite {
 }

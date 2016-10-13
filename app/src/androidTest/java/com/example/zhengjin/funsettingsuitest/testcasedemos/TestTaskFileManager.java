@@ -11,12 +11,11 @@ import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
-import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
-import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -33,13 +32,17 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
  * and 2) use the "context" to start the specified activity.
  */
 @RunWith(AndroidJUnit4.class)
-public final class TestLauncherApp {
+public final class TestTaskFileManager {
 
     private TaskFileManager mFileManagerTask;
     private UiDevice mDevice;
 
     @Before
-    public void startMainActivityFromHomeScreen() {
+    public void setUp() {
+        this.startFmMainActivityFromHomeScreen();
+    }
+
+    private void startFmMainActivityFromHomeScreen() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mFileManagerTask = TaskFileManager.getInstance();
 
@@ -69,16 +72,9 @@ public final class TestLauncherApp {
         Assert.assertNotNull(allFilesTitle);
     }
 
-    @Test
+    @Ignore
     @Category(CategoryDemoTests.class)
-    public void test2TakeScreenCaptures() {
-        TaskLauncher.backToLauncher();
-        ShellUtils.takeScreenCapture(mDevice);
-    }
-
-    @Test
-    @Category(CategoryDemoTests.class)
-    public void test3LongPressKey() {
+    public void test2LongPressKey() {
         // TODO: 2016/8/10 long press action
     }
 

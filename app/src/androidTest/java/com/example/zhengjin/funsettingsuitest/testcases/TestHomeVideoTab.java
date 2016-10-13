@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVideoHomeTabTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestVideoHomeTab {
+public final class TestHomeVideoTab {
 
     private final static String FILM_CARD_TEXT = "电影";
     private final static String TV_SERIAL_CARD_TEXT = "电视剧";
@@ -62,7 +62,7 @@ public final class TestVideoHomeTab {
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test11OpenFilmCardOfLeftArea() {
         UiObject2 filmCard =
                 mTask.findSpecifiedCardFromLeftAreaByText(FILM_CARD_TEXT);
@@ -81,7 +81,7 @@ public final class TestVideoHomeTab {
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test12OpenTvSerialCardOfLeftArea() {
         UiObject2 tvSerialCard =
                 mTask.findSpecifiedCardFromLeftAreaByText(TV_SERIAL_CARD_TEXT);
@@ -105,7 +105,7 @@ public final class TestVideoHomeTab {
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test13OpenChildrenCardOfLeftArea() {
         UiObject2 childrenCard =
                 mTask.findSpecifiedCardFromLeftAreaByText(CHILDREN_CARD_TEXT);
@@ -124,7 +124,7 @@ public final class TestVideoHomeTab {
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test14OpenVarietyCardOfLeftArea() {
         UiObject2 varietyCard =
                 mTask.findSpecifiedCardFromLeftAreaByText(VARIETY_CARD_TEXT);
@@ -143,7 +143,7 @@ public final class TestVideoHomeTab {
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test21OpenFollowingLatestTvSerialOfRightArea() {
         UiObject2 card = mTask.findSpecifiedCardFromRightAreaByText(FOLLOWING_TV_SERIAL_TEXT);
         mAction.doClickActionAndWait(card);
@@ -162,13 +162,13 @@ public final class TestVideoHomeTab {
     }
 
     @Ignore
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test22OpenDailyNewsOfRightArea() {
         // it's a dynamic(not idle) page, and UI elements cannot be dumped by uiautomator
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test23OpenNewlyUpdatesIn7DaysOfRightArea() {
         UiObject2 card = mTask.findSpecifiedCardFromRightAreaByText(NEWLY_ADD_IN_7_DAYS_TEXT);
         mAction.doClickActionAndWait(card);
@@ -186,7 +186,7 @@ public final class TestVideoHomeTab {
     }
 
     @Test
-    @Category({CategoryVideoHomeTabTests.class})
+    @Category({CategoryHomeVideoTabTests.class})
     public void test99ClearUpAfterAllTestCasesDone() { mTask.destroyInstance(); }
 
 }

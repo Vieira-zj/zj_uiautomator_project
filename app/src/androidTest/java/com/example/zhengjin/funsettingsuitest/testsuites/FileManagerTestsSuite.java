@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 
 import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import org.junit.runners.Suite;
  * Run test cases for testing file manager module.
  */
 @RunWith(Categories.class)
-@Categories.IncludeCategory(CategoryFileManagerTests.class)
 @Suite.SuiteClasses(TestFileManager.class)
 public class FileManagerTestsSuite {
 }
