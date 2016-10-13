@@ -14,7 +14,7 @@ public class ServiceMonitor extends Service {
 
     private final static String TAG = ServiceMonitor.class.getSimpleName();
 
-    private final int wait = 1000;
+    private final long wait = 1000;
     private Handler handler = new Handler();
 
     @Override

@@ -192,7 +192,7 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     }
 
     private void setBackgroundAlpha(float bgAlpha) {
-        // set Alpha for whole screen background
+        // set Alpha for full screen background
         WindowManager.LayoutParams lp = this.getWindow().getAttributes();
         lp.alpha = bgAlpha;  // 0.0~1.0
         this.getWindow().setAttributes(lp);

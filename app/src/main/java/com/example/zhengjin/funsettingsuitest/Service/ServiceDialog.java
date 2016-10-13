@@ -27,9 +27,20 @@ public final class ServiceDialog extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         this.initDialog();
         this.initHandler();
         mHandler.post(mRunnable);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mHandler != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
+
+        super.onDestroy();
+        this.stopForeground(true);
     }
 
     private void initDialog() {
@@ -63,13 +74,5 @@ public final class ServiceDialog extends Service {
                 mHandler.postDelayed(this, delay);
             }
         };
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mHandler != null) {
-            mHandler.removeCallbacks(mRunnable);
-        }
-        super.onDestroy();
     }
 }
