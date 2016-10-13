@@ -36,6 +36,18 @@
         android:text="@string/message_dialog_test" />
 
     <Button
+        android:id="@+id/btn_global_dialog_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_utils_test2" />
+
+    <TextView
+        android:id="@+id/text_global_dialog_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_global_dialog_test" />
+
+    <Button
         android:id="@+id/btn_popup_window_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

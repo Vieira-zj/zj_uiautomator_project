@@ -39,6 +39,7 @@
     <string name="btn_utils_test2">Test</string>
     <string name="message_process_utils_test">Process Utils Test</string>
     <string name="message_dialog_test">Dialog Test</string>
+    <string name="message_global_dialog_test">Global Dialog Test</string>
     <string name="message_popup_window_test">Popup Window Test</string>
     <string name="btn_fps_test">FPS Test</string>
     <string name="message_fps_test">Frames Per Second Test</string>

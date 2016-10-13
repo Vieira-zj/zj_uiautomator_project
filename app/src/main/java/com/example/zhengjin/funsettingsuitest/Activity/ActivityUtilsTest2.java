@@ -16,6 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.zhengjin.funsettingsuitest.R;
+import com.example.zhengjin.funsettingsuitest.service.ServiceDialog;
 import com.example.zhengjin.funsettingsuitest.service.ServiceMonitor;
 import com.example.zhengjin.funsettingsuitest.utils.DeviceUtils;
 import com.example.zhengjin.funsettingsuitest.utils.PackageUtils;
@@ -35,6 +36,8 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     private TextView mTextProcessUtilsTest = null;
     private Button mBtnDialogTest = null;
     private TextView mTextDialogTest = null;
+    private Button mBtnGlobalDialogTest = null;
+    private TextView mTextGlobalDialogTest = null;
     private Button mBtnPopupWindowTest = null;
     private TextView mTextPopupWindowTest = null;
     private Button mBtnFpsTest = null;
@@ -74,6 +77,26 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
                     final String text = "Dialog is showing";
                     mTextDialogTest.setText(text);
                     mDialog.show();
+                }
+            });
+        }
+
+        if (mBtnGlobalDialogTest != null) {
+            mBtnGlobalDialogTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ComponentName service =
+                            new ComponentName(ActivityUtilsTest2.this, ServiceDialog.class);
+                    Intent intent = new Intent(ActivityUtilsTest2.this, ServiceDialog.class);
+                    if (PackageUtils.isServiceRunning(service)) {
+                        stopService(intent);
+                        final String text = "Global dialog is dismiss";
+                        mTextGlobalDialogTest.setText(text);
+                    } else {
+                        startService(intent);
+                        final String text = "Global dialog is showing";
+                        mTextGlobalDialogTest.setText(text);
+                    }
                 }
             });
         }
@@ -122,10 +145,13 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     private void initViews() {
         mBtnProcessUtilsTest = (Button) this.findViewById(R.id.btn_process_utils_test);
         mBtnDialogTest = (Button) this.findViewById(R.id.btn_dialog_test);
+        mBtnGlobalDialogTest = (Button) this.findViewById(R.id.btn_global_dialog_test);
         mBtnPopupWindowTest = (Button) this.findViewById(R.id.btn_popup_window_test);
         mBtnFpsTest = (Button) this.findViewById(R.id.btn_fps_test);
+
         mTextProcessUtilsTest = (TextView) this.findViewById(R.id.text_process_utils_test);
         mTextDialogTest = (TextView) this.findViewById(R.id.text_dialog_test);
+        mTextGlobalDialogTest = (TextView) this.findViewById(R.id.text_global_dialog_test);
         mTextPopupWindowTest = (TextView) this.findViewById(R.id.text_popup_window_test);
         mTextFpsTest = (TextView) this.findViewById(R.id.text_fps_test);
     }
@@ -203,7 +229,7 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
         String topActivity = PackageUtils.getTopActivity();
         return String.format("The top activity: %s\n", (topActivity == null ? "null" : topActivity));
     }
-    
+
     private String getPackageMemorySize(String pkgName) {
         int pid = PackageUtils.getPidByPackageName(pkgName);
         if (pid == -1) {
