@@ -39,6 +39,7 @@ public final class TaskWeather {
     public final String WEATHER_MENU_BUTTON_TEXT_UPDATE = "更新";
     public final String WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT = "修改默认";
     public final String WEATHER_MENU_BUTTON_TEXT_ADD_CITY = "添加城市";
+    public final String WEATHER_MENU_BUTTON_TEXT_DELETE_CITY = "删除当前";
 
     private TaskWeather() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

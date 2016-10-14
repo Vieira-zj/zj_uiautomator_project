@@ -7,6 +7,8 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -32,6 +34,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEATHER_PKG_NAME;
 
 /**
@@ -47,6 +50,13 @@ public final class TestWeather {
     private UiDevice mDevice;
     private UiActionsManager mAction;
     private TaskWeather mTask;
+
+    private final String INIT_PROVINCE = "湖北";
+    private final String INIT_CITY = "武汉";
+    private final String ADD_PROVINCE = "山东";
+    private final String ADD_CITY = "青岛";
+    private final String ADD_DEFAULT_PROVINCE = "海南";
+    private final String ADD_DEFAULT_CITY = "三亚";
 
     @BeforeClass
     public static void classSetUp() {
@@ -76,10 +86,10 @@ public final class TestWeather {
     public void test11DefaultLocateCity() {
         String message;
 
+        message = "Verify the default location on weather home.";
         UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
         Assert.assertNotNull(location);
-        message = "Verify the default location on weather home.";
-        Assert.assertEquals(message, "武汉(默认)", location.getText());
+        Assert.assertEquals(message, String.format("%s(默认)", INIT_CITY), location.getText());
     }
 
     @Test
@@ -87,9 +97,9 @@ public final class TestWeather {
     public void test12TipAtBottomOfWeatherHome() {
         String message;
 
+        message = "Verify the tip at the bottom of weather home.";
         UiObject2 tip = mDevice.findObject(mTask.getTipTextAtBottomOfWeatherHomeSelector());
         Assert.assertNotNull(tip);
-        message = "Verify the tip at the bottom of weather home.";
         Assert.assertTrue(message, tip.getText().contains("菜单键管理城市"));
     }
 
@@ -133,7 +143,7 @@ public final class TestWeather {
         UiObject2 textUpdate = mDevice.findObject(By.text(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE));
         Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(textUpdate));
 
-        message = "Verify the update is default focused";
+        message = "Verify the update is default focused.";
         UiObject2 btnUpdate = textUpdate.getParent();
         Assert.assertTrue(message, btnUpdate.isFocused());
 
@@ -143,16 +153,21 @@ public final class TestWeather {
                 mDevice.findObject(By.text(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT));
         Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(textModifyDefault));
 
-        // verification 3
         message = "Verify the update button exist.";
         UiObject2 textAddCity =
                 mDevice.findObject(By.text(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY));
         Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(textAddCity));
+
+        // verification 3
+        message = "Verify the update button NOT exist.";
+        UiObject2 textDeleteCity =
+                mDevice.findObject(By.text(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY));
+        Assert.assertNull(message, textDeleteCity);
     }
 
     @Test
     @Category(CategoryWeatherTests.class)
-    public void test15UpdateWeatherData() {
+    public void test15UpdateAndRefreshWeatherData() {
         String message;
 
         mTask.openBottomMenu();
@@ -169,61 +184,159 @@ public final class TestWeather {
     public void test21OpenAddCityAndCancel() {
         String message;
 
+        // verification 1
         mTask.openBottomMenu();
         mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
-        // verification 1
-        message = "Verify the city manager activity is opened.";
+        message = "Verify the city manager page is opened.";
         Assert.assertTrue(message,
                 TestHelper.waitForUiObjectExist(mTask.getCityManagerTitleSelector()));
 
-        // verification 2
         message = "Verify the default selected province.";
-        Assert.assertEquals(message, "湖北", mTask.getSelectedLocationProvince());
+        Assert.assertEquals(message, INIT_PROVINCE, mTask.getSelectedLocationProvince());
         message = "Verify the default selected city.";
-        Assert.assertEquals(message, "武汉", mTask.getSelectedLocationCity());
+        Assert.assertEquals(message, INIT_CITY, mTask.getSelectedLocationCity());
 
-        // TODO: 2016/10/8
+        // verification 2
+        mTask.selectSpecifiedLocationProvince(ADD_PROVINCE, false);
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        mTask.selectSpecifiedLocationCity(ADD_CITY, false);
+        mAction.doDeviceActionAndWait(new DeviceActionBack());
+
+        message = "Verify the show city is not changed after cancel add city.";
+        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        Assert.assertNotNull(location);
+        Assert.assertEquals(message, String.format("%s(默认)", INIT_CITY), location.getText());
     }
 
     @Test
     @Category(CategoryWeatherTests.class)
-    public void test22AddNewCityWeatherAndDeleteMenuBtn() {
+    public void test22AddNewCityWeather() {
         String message;
 
         mTask.openBottomMenu();
         mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
 
-        // set location
-        mTask.selectSpecifiedLocationProvince("福建", true);
+        mTask.selectSpecifiedLocationProvince(ADD_PROVINCE, false);
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity("宁德", false);
+        mTask.selectSpecifiedLocationCity(ADD_CITY, false);
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
-        message = "Verify the newly added city weather.";
-        // TODO: 2016/10/8
+        message = "Verify the show city after add new city weather.";
+        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
+        Assert.assertEquals(message, ADD_CITY, location.getText());
+    }
+
+    @Test
+    @Category(CategoryWeatherTests.class)
+    public void test23AddNewDefaultCityWeather() {
+        String message;
+
+        mTask.openBottomMenu();
+        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+
+        mTask.selectSpecifiedLocationProvince(ADD_DEFAULT_PROVINCE, true);
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        mTask.selectSpecifiedLocationCity(ADD_DEFAULT_CITY, false);
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        message = "Verify the show city after add new default city.";
+        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
+        Assert.assertEquals(message,
+                String.format("%s(默认)", ADD_DEFAULT_CITY), location.getText());
+    }
+
+    @Test
+    @Category(CategoryWeatherTests.class)
+    public void test24FirstShowCityAfterAddNewDefaultCity() {
+        String message;
+
+        message = "Verify the 1st show city after add new default city.";
+        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
+        Assert.assertEquals(message,
+                String.format("%s(默认)", ADD_DEFAULT_CITY), location.getText());
+    }
+
+    @Test
+    @Category(CategoryWeatherTests.class)
+    public void test25ModifyDefaultCity() {
+        String message;
+
+        mTask.openBottomMenu();
+        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+
+        mTask.selectSpecifiedLocationProvince(INIT_PROVINCE, false);
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        mTask.selectSpecifiedLocationCity(INIT_CITY, false);
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        message = "Verify the show city after change default city.";
+        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
+        Assert.assertEquals(message,
+                String.format("%s(默认)", INIT_CITY), location.getText());
+    }
+
+    @Test
+    @Category(CategoryWeatherTests.class)
+    public void test26FirstShowCityAfterModifyDefaultCity() {
+        String message;
+
+        message = "Verify the 1st show city after change default city.";
+        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
+        Assert.assertEquals(message,
+                String.format("%s(默认)", INIT_CITY), location.getText());
     }
 
     @Ignore
     @Category(CategoryWeatherTests.class)
-    public void test23AddDuplicatedCity() {
-        // TODO: 2016/10/8  
+    public void test31AddDuplicatedCity() {
+        // TODO: 2016/10/14
     }
 
     @Ignore
     @Category(CategoryWeatherTests.class)
-    public void test24DeleteCityAndCancel() {
-        // TODO: 2016/10/8
+    public void test32AddDuplicatedDefaultCity() {
+        // TODO: 2016/10/14
     }
 
     @Ignore
     @Category(CategoryWeatherTests.class)
-    public void test25DeleteCityAndConfirm() {
-        // TODO: 2016/10/8  
+    public void test33SequenceOfAddedCities() {
+        // TODO: 2016/10/14
     }
 
     @Ignore
     @Category(CategoryWeatherTests.class)
-    public void test31AddDefaultCityWeatherAndCancel() {
-        // TODO: 2016/10/8  
+    public void test41DeleteCityAndCancel() {
+        // TODO: 2016/10/14
+    }
+
+    @Ignore
+    @Category(CategoryWeatherTests.class)
+    public void test42DeleteCityAndConfirm() {
+        // TODO: 2016/10/14
+    }
+
+    @Ignore
+    @Category(CategoryWeatherTests.class)
+    public void test43DeleteDefaultCityAndCancel() {
+        // TODO: 2016/10/14
+    }
+
+    @Ignore
+    @Category(CategoryWeatherTests.class)
+    public void test44DeleteDefaultCityAndConfirm() {
+        // TODO: 2016/10/14
+    }
+
+    @Ignore
+    @Category(CategoryWeatherTests.class)
+    public void test45DeleteWhenOnlyOneCity() {
+        // TODO: 2016/10/14
     }
 
     @Test
