@@ -268,6 +268,7 @@ public final class TestCommonSettings {
         mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
 
         // verify click confirm button
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
         UiObject2 confirmBtn = mDevice.findObject(mTask.getConfirmBtnOfCommonDialogSelector());
         message = "Verify the confirm button on common dialog is enabled.";
         Assert.assertTrue(message, TestHelper.waitForUiObjectClickable(confirmBtn));
@@ -388,7 +389,7 @@ public final class TestCommonSettings {
         Assert.assertTrue(message, TestHelper.waitForAppOpenedByCheckCurPackage(SETTINGS_PKG_NAME));
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
     public void test43DefaultLocationOnSubPage() {
         // weather activities is not available for automation
@@ -443,6 +444,7 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
+        mWeatherTask.destroyInstance();
     }
 
 }

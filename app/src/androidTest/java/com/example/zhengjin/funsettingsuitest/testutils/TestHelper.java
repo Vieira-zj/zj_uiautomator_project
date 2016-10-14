@@ -32,10 +32,11 @@ public final class TestHelper {
     public static boolean waitForAppOpenedByCheckCurPackage(
             String pkgName, long timeOut, long interval) {
         boolean flag_app_opened = false;
-        long start = SystemClock.uptimeMillis();
 
+        device.waitForIdle();
+        long start = SystemClock.uptimeMillis();
         while (!flag_app_opened && ((SystemClock.uptimeMillis() - start) < timeOut)) {
-            flag_app_opened = device.getCurrentPackageName().equals(pkgName);
+            flag_app_opened = pkgName.equals(device.getCurrentPackageName());
             ShellUtils.systemWaitByMillis(interval);
         }
 

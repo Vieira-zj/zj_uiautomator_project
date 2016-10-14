@@ -22,6 +22,7 @@ import junit.framework.Assert;
 import java.util.List;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2016/6/1.
@@ -67,9 +68,9 @@ public final class TaskLauncher {
 //        Assert.assertTrue(message, launcherPackageName.equals(pkgName));
 
         // method 2
-        String launcherPackageName = DEVICE.getLauncherPackageName();  //"com.bestv.ott"
-        String message = "Error in backToLauncher(), fail to back to the launcher.";
-        ACTION.doDeviceActionAndWait(new DeviceActionHome());
+        String launcherPackageName = DEVICE.getLauncherPackageName();
+        String message = "Error in backToLauncher(), fail to back to the launcher home.";
+        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
         Assert.assertTrue(message, TestHelper.waitForAppOpenedByUntil(launcherPackageName));
     }
 
@@ -98,7 +99,7 @@ public final class TaskLauncher {
         message = "Error in navigateToVideoTab(), the UI object textVideoTab is NOT found.";
         Assert.assertNotNull(message, tabVideo);
         message = "Error in navigateToVideoTab(), the UI object textVideoTab is NOT focused.";
-        Assert.assertTrue(message, tabVideo.isFocused());
+        Assert.assertTrue(message, tabVideo.getParent().isFocused());
     }
 
     public static void navigateToAppTab() {
@@ -111,7 +112,7 @@ public final class TaskLauncher {
         message = "Error in navigateToAppTab(), the UI object textAppTab is NOT found.";
         Assert.assertNotNull(message, tabApp);
         message = "Error in navigateToAppTab(), the UI object textAppTab is NOT focused.";
-        Assert.assertTrue(message, tabApp.isFocused());
+        Assert.assertTrue(message, tabApp.getParent().isFocused());
     }
 
     private static UiObject2 getSpecifiedTab(String tabName) {

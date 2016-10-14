@@ -54,6 +54,10 @@ public final class TaskFileManager {
         }
     }
 
+    public BySelector getFileManagerHomeTab() {
+        return By.res("tv.fun.filemanager:id/activity_fun_fm_tab");
+    }
+
     public BySelector getMainTitleSelector() {
         return By.res("tv.fun.filemanager:id/activity_sub_title_main");
     }
@@ -95,9 +99,37 @@ public final class TaskFileManager {
     }
 
     public void openLocalFilesCard() {
-        final int positionX = 1348;
-        final int positionY = 408;
+        final int positionX = 1350;
+        final int positionY = 450;
         openCardFromFileManagerHomePage(positionX, positionY);
+    }
+
+    public void openCategoryVideoCard() {
+        final int positionX = 450;
+        final int positionY = 450;
+        openCardFromFileManagerHomePage(positionX, positionY);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    public void openCategoryAppCard() {
+        final int positionX = 650;
+        final int positionY = 450;
+        openCardFromFileManagerHomePage(positionX, positionY);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    public void openCategoryMusicCard() {
+        final int positionX = 450;
+        final int positionY = 750;
+        openCardFromFileManagerHomePage(positionX, positionY);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    public void openCategoryPictureCard() {
+        final int positionX = 750;
+        final int positionY = 750;
+        openCardFromFileManagerHomePage(positionX, positionY);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
     }
 
     public void openCardFromFileManagerHomePage(int positionX, int positionY) {

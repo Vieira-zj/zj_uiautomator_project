@@ -101,51 +101,25 @@ public final class TestFileManager {
         mAction = UiActionsManager.getInstance();
         mTask = TaskFileManager.getInstance();
 
+        ShellUtils.stopAndClearPackage(FILE_MANAGER_PKG_NAME);
         TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
-        Assert.assertTrue("Open File Manager app.",
-                TestHelper.waitForAppOpenedByUntil(FILE_MANAGER_PKG_NAME));
+        TestHelper.waitForAppOpenedByCheckCurPackage(FILE_MANAGER_PKG_NAME);
     }
 
     @After
     public void clearUp() {
 //        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
-        ShellUtils.stopAndClearPackage(FILE_MANAGER_PKG_NAME);
     }
 
-    @Ignore
+    @Test
     @Category(CategoryFileManagerTests.class)
-    public void test11SdcardTabNameAndFocused() {
-        // Error: ddmlib.SyncException: Remote object doesn't exist!
+    public void test11FileManagerHomeTabShow() {
         String message;
 
         message = "Verify the sdcard tab name is enabled.";
-        UiObject2 tabContainer =
-                mDevice.findObject(By.res("tv.fun.filemanager:id/activity_fun_fm_tab"));
+        UiObject2 tabContainer = mDevice.findObject(mTask.getFileManagerHomeTab());
+        Assert.assertNotNull(tabContainer);
         Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(tabContainer));
-
-        message = "Verify the sdcard tab name is focused.";
-        Assert.assertTrue(message, tabContainer.isFocused());
-    }
-
-    @Ignore
-    @Category(CategoryFileManagerTests.class)
-    public void test12VideoCardNameAndItemCount() {
-        // Error: ddmlib.SyncException: Remote object doesn't exist!
-        String message;
-
-        UiObject2 videoCard = mDevice.findObject(By.res("tv.fun.filemanager:id/category_video"));
-        message = "Verify the video card is enabled.";
-        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(videoCard));
-
-        UiObject2 videoCardText = videoCard.findObject(By.res("tv.fun.filemanager:id/entity_name"));
-        message = "Verify the text of video card.";
-        Assert.assertNotNull(videoCardText);
-        Assert.assertEquals(message, "视频", videoCardText.getText());
-
-        UiObject2 videoCardCount = videoCard.findObject(By.res("tv.fun.filemanager:id/entity_count"));
-        message = "Verify the files count of video card.";
-        Assert.assertNotNull(videoCardCount);
-        Assert.assertEquals(message, "(0项)", videoCardCount.getText());
     }
 
     @Test
@@ -395,28 +369,76 @@ public final class TestFileManager {
         Assert.assertEquals(message, "未发现可显示的文件", tips.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategoryFileManagerTests.class)
     public void test31EmptyTipsInVideoCard() {
-        // TODO: 2016/9/30
+        String message;
+
+        message = "Verify the tips when no files in video card.";
+        mTask.openCategoryVideoCard();
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(message, "未发现可播放的视频", tips.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategoryFileManagerTests.class)
     public void test32EmptyTipsInAppCard() {
-        // TODO: 2016/9/30
+        String message;
+
+        message = "Verify the tips when no files in APP card.";
+        mTask.openCategoryAppCard();
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(message, "未发现可安装的应用", tips.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategoryFileManagerTests.class)
     public void test33EmptyTipsInMusicCard() {
-        // TODO: 2016/9/30
+        String message;
+
+        message = "Verify the tips when no files in music card.";
+        mTask.openCategoryMusicCard();
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(message, "未发现可播放的音乐", tips.getText());
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test34EmptyTipsInPictureCard() {
+        String message;
+
+        message = "Verify the tips when no files in picture card.";
+        mTask.openCategoryPictureCard();
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(message, "未发现可显示的图片", tips.getText());
     }
 
     @Ignore
     @Category(CategoryFileManagerTests.class)
-    public void test34EmptyTipsInPictureCard() {
-        // TODO: 2016/9/30
+    public void test35VideoCardNameAndItemsCount() {
+        // Error obtaining UI hierarchy
+        String message;
+
+        mDevice.waitForIdle();
+
+        UiObject2 videoCard = mDevice.findObject(By.res("tv.fun.filemanager:id/category_video"));
+        message = "Verify the video card is enabled.";
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(videoCard));
+
+        UiObject2 videoCardText = videoCard.findObject(By.res("tv.fun.filemanager:id/entity_name"));
+        message = "Verify the text of video card.";
+        Assert.assertNotNull(videoCardText);
+        Assert.assertEquals(message, "视频", videoCardText.getText());
+
+        UiObject2 videoCardCount =
+                videoCard.findObject(By.res("tv.fun.filemanager:id/entity_count"));
+        message = "Verify the files count of video card.";
+        Assert.assertNotNull(videoCardCount);
+        Assert.assertEquals(message, "(0项)", videoCardCount.getText());
     }
 
     @Test
