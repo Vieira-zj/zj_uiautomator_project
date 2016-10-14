@@ -54,9 +54,13 @@ public final class TestHelper {
         return waitForAppOpenedByCheckCurPackage(pkgName, timeOut);
     }
 
-    public static boolean waitForAppOpenedByUntil(String pkgName) {
+    public static boolean waitForAppOpenedByUntil(String pkgName, long wait) {
         device.waitForIdle();
-        return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), TIME_OUT);
+        return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), wait);
+    }
+
+    public static boolean waitForAppOpenedByUntil(String pkgName) {
+        return waitForAppOpenedByUntil(pkgName, LONG_WAIT);
     }
 
     private static boolean waitForUiObjectEnabledByCheckProperty(

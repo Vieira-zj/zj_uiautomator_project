@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2016/6/7.
@@ -103,7 +104,7 @@ public final class TestFileManager {
 
         ShellUtils.stopAndClearPackage(FILE_MANAGER_PKG_NAME);
         TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
-        TestHelper.waitForAppOpenedByCheckCurPackage(FILE_MANAGER_PKG_NAME);
+        TestHelper.waitForAppOpenedByCheckCurPackage(FILE_MANAGER_PKG_NAME, WAIT);
     }
 
     @After

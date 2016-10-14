@@ -7,6 +7,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
@@ -53,6 +54,9 @@ public final class TestCommonSettings {
     private TaskSettings mTask;
     private TaskWeather mWeatherTask;
 
+    private final String TEXT_ALLOWED = "允许";
+    private final String TEXT_FORBIDDEN = "禁止";
+
     @BeforeClass
     public static void classSetUp() {
         ShellUtils.stopAndClearPackage(SETTINGS_PKG_NAME);
@@ -63,12 +67,13 @@ public final class TestCommonSettings {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mAction = UiActionsManager.getInstance();
         mTask = TaskSettings.getInstance();
+        mWeatherTask = TaskWeather.getInstance();
 
         TaskLauncher.backToLauncher();
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
                 TaskLauncher.getQuickAccessBtnSettingsSelector());
         Assert.assertTrue("Open Settings app.",
-                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME, WAIT));
 
         mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
@@ -229,12 +234,12 @@ public final class TestCommonSettings {
 
         message = "Verify the default value text of install unknown app settings item.";
         Assert.assertNotNull(valueText);
-        Assert.assertEquals(message, "禁止", valueText.getText());
+        Assert.assertEquals(message, TEXT_FORBIDDEN, valueText.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test22CancelAllowedInstallUnknownApp() {
+    public void test22SelectAllowedInstallUnknownAppAndCancel() {
         String message;
 
         mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
@@ -257,12 +262,12 @@ public final class TestCommonSettings {
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
         message = "Verify the value text of install unknown app settings item.";
-        Assert.assertEquals(message, "禁止", valueText.getText());
+        Assert.assertEquals(message, TEXT_FORBIDDEN, valueText.getText());
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
-    public void test23SelectAllowedInstallUnknownApp() {
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
+    public void test23SelectAllowedInstallUnknownAppAndConfirm() {
         String message;
 
         mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
@@ -277,8 +282,23 @@ public final class TestCommonSettings {
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
-        message = "Verify the value text of install unknown app settings item.";
-        Assert.assertEquals(message, "允许", valueText.getText());
+        message = "Verify the value text of install unknown app settings item after allowed.";
+        Assert.assertEquals(message, TEXT_ALLOWED, valueText.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
+    public void test24SelectForbiddenInstallUnknownApp() {
+        String message;
+
+        mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
+
+        UiObject2 installUnknownAppItemContainer =
+                mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
+        UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
+        message = "Verify the value text of install unknown app settings item after forbidden.";
+        Assert.assertEquals(message, TEXT_FORBIDDEN, valueText.getText());
     }
 
     @Test
@@ -344,7 +364,7 @@ public final class TestCommonSettings {
 
     @Ignore
     @Category(CategorySettingsTests.class)
-    public void test32SubWallpapers() {
+    public void test32SubWallpapersOnSelectPage() {
         // TODO: 2016/6/7
     }
 
@@ -412,7 +432,7 @@ public final class TestCommonSettings {
     @Ignore
     @Category(CategorySettingsTests.class)
     public void test44SelectLocationOnSubPage() {
-        // weather activities is not available for automation
+        // Error obtaining UI hierarchy on weather home activity
         String message;
         String province = "江西";
         String city = "九江";
