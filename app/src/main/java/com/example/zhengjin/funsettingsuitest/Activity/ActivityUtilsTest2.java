@@ -3,7 +3,9 @@ package com.example.zhengjin.funsettingsuitest.activity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -30,7 +32,7 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     private final Locale mLocale = Locale.getDefault();
 
     private final String SERVICE_TEXT_STATE_KEY = "SERVICE_TEXT_STATE_KEY";
-    private final String POPUP_WINDOW_TEXT_STATE_KEY = "POPUP_WINDOW_TEXT_STATE_KEY";
+    private final String FLOATING_WINDOW_TEXT_STATE_KEY = "FLOATING_WINDOW_TEXT_STATE_KEY";
 
     private Button mBtnProcessUtilsTest = null;
     private TextView mTextProcessUtilsTest = null;
@@ -40,19 +42,25 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     private TextView mTextGlobalDialogTest = null;
     private Button mBtnPopupWindowTest = null;
     private TextView mTextPopupWindowTest = null;
+    private Button mBtnFloatingWindowTest = null;
+    private TextView mTextFloatingWindowTest = null;
     private Button mBtnFpsTest = null;
     private TextView mTextFpsTest = null;
 
-    private Dialog mDialog;
     private PopupWindow mWindow;
+
+    private Intent mDialogServiceIntent = null;
+    private ComponentName mDialogComponent = null;
+
+    private WindowManager mWindowManager = null;
+    private View mFloatingWindow;
+    private boolean mIsFloating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utils_test2);
         this.initViews();
-        this.initDialog();
-        this.initPopupWindow();
 
         if (mBtnProcessUtilsTest != null) {
             mBtnProcessUtilsTest.setOnClickListener(new View.OnClickListener() {
@@ -74,33 +82,36 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
             mBtnDialogTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final String text = "Dialog is showing";
+                    initDialog().show();
+                    final String text = "Show dialog";
                     mTextDialogTest.setText(text);
-                    mDialog.show();
                 }
             });
         }
 
+        this.initGlobalDialogServiceInfo();
         if (mBtnGlobalDialogTest != null) {
             mBtnGlobalDialogTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ComponentName service =
-                            new ComponentName(ActivityUtilsTest2.this, ServiceDialog.class);
-                    Intent intent = new Intent(ActivityUtilsTest2.this, ServiceDialog.class);
-                    if (PackageUtils.isServiceRunning(service)) {
-                        stopService(intent);
+                    if (PackageUtils.isServiceRunning(mDialogComponent)) {
+                        stopService(mDialogServiceIntent);
                         final String text = "Global dialog is dismiss";
                         mTextGlobalDialogTest.setText(text);
                     } else {
-                        startService(intent);
+                        startService(mDialogServiceIntent);
                         final String text = "Global dialog is showing";
                         mTextGlobalDialogTest.setText(text);
                     }
                 }
             });
+            mBtnGlobalDialogTest.setVisibility(View.GONE);
+        }
+        if (mTextGlobalDialogTest != null) {
+            mTextGlobalDialogTest.setVisibility(View.GONE);
         }
 
+        this.initPopupWindow();
         if (mBtnPopupWindowTest != null) {
             mBtnPopupWindowTest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,6 +124,23 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
                         showPopupWindow();
                         final String text = "Popup window is show";
                         mTextPopupWindowTest.setText(text);
+                    }
+                }
+            });
+        }
+
+        if (mBtnFloatingWindowTest != null) {
+            mBtnFloatingWindowTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!mIsFloating) {
+                        createFloatingWindow();
+                        final String text = "Floating window is show";
+                        mTextFloatingWindowTest.setText(text);
+                    } else {
+                        destroyFloatingWindow();
+                        final String text = "Floating window is dismiss";
+                        mTextFloatingWindowTest.setText(text);
                     }
                 }
             });
@@ -142,26 +170,60 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
         this.restoreSavedInstanceState(savedInstanceState);
     }
 
+    @Override
+    public void onDestroy() {
+        if (PackageUtils.isServiceRunning(mDialogComponent)) {
+            this.stopService(mDialogServiceIntent);
+        }
+        if (mIsFloating) {
+            this.destroyFloatingWindow();
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(SERVICE_TEXT_STATE_KEY, mTextFpsTest.getText().toString());
+        outState.putString(FLOATING_WINDOW_TEXT_STATE_KEY,
+                mTextFloatingWindowTest.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(SERVICE_TEXT_STATE_KEY)) {
+                mTextFpsTest.setText(savedInstanceState.getString(SERVICE_TEXT_STATE_KEY));
+            }
+            if (savedInstanceState.containsKey(FLOATING_WINDOW_TEXT_STATE_KEY)) {
+                mTextFloatingWindowTest.setText(savedInstanceState.getString(
+                        FLOATING_WINDOW_TEXT_STATE_KEY));
+            }
+        }
+    }
+
     private void initViews() {
         mBtnProcessUtilsTest = (Button) this.findViewById(R.id.btn_process_utils_test);
         mBtnDialogTest = (Button) this.findViewById(R.id.btn_dialog_test);
         mBtnGlobalDialogTest = (Button) this.findViewById(R.id.btn_global_dialog_test);
         mBtnPopupWindowTest = (Button) this.findViewById(R.id.btn_popup_window_test);
+        mBtnFloatingWindowTest = (Button) this.findViewById(R.id.btn_floating_window_test);
         mBtnFpsTest = (Button) this.findViewById(R.id.btn_fps_test);
 
         mTextProcessUtilsTest = (TextView) this.findViewById(R.id.text_process_utils_test);
         mTextDialogTest = (TextView) this.findViewById(R.id.text_dialog_test);
         mTextGlobalDialogTest = (TextView) this.findViewById(R.id.text_global_dialog_test);
         mTextPopupWindowTest = (TextView) this.findViewById(R.id.text_popup_window_test);
+        mTextFloatingWindowTest = (TextView) this.findViewById(R.id.text_floating_window_test);
         mTextFpsTest = (TextView) this.findViewById(R.id.text_fps_test);
     }
 
-    private void initDialog() {
-        mDialog = new Dialog(this);
-        mDialog.setContentView(R.layout.dialog_layout);
-        mDialog.setTitle("Dialog Test");
+    private Dialog initDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_layout);
+        dialog.setTitle("Dialog Test");
 
-        Window dialogWindow = mDialog.getWindow();
+        Window dialogWindow = dialog.getWindow();
         if (dialogWindow != null) {
             dialogWindow.setGravity(Gravity.START | Gravity.TOP);
 
@@ -173,22 +235,24 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
             lp.alpha = 0.7f;
             dialogWindow.setAttributes(lp);
         }
+
+        return dialog;
     }
 
+    @SuppressLint("InflateParams")
     private void initPopupWindow() {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams")
-        View layout = inflater.inflate(R.layout.popup_window_layout, null);
-        layout.getBackground().setAlpha(100);  // 0~255
+        View windowLayout = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.popup_window_layout, null);
+        windowLayout.getBackground().setAlpha(100);  // 0~255
 
-        mWindow = new PopupWindow(layout, WindowManager.LayoutParams.WRAP_CONTENT,
+        mWindow = new PopupWindow(windowLayout, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     private void showPopupWindow() {
         mWindow.showAtLocation(this.findViewById(R.id.layout_activity_utils_test2),
                 Gravity.START | Gravity.TOP, 50, 50);
-//        this.setBackgroundAlpha(0.3f);
+//        this.setBackgroundAlpha(0.1f);
     }
 
     private void setBackgroundAlpha(float bgAlpha) {
@@ -198,22 +262,45 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
         this.getWindow().setAttributes(lp);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putString(SERVICE_TEXT_STATE_KEY, mTextFpsTest.getText().toString());
-        outState.putString(POPUP_WINDOW_TEXT_STATE_KEY, mTextPopupWindowTest.getText().toString());
-        super.onSaveInstanceState(outState);
+    private void initGlobalDialogServiceInfo() {
+        mDialogServiceIntent =
+                new Intent(ActivityUtilsTest2.this, ServiceDialog.class);
+        mDialogComponent =
+                new ComponentName(ActivityUtilsTest2.this, ServiceDialog.class);
     }
 
-    private void restoreSavedInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(SERVICE_TEXT_STATE_KEY)) {
-                mTextFpsTest.setText(savedInstanceState.getString(SERVICE_TEXT_STATE_KEY));
-            }
-            if (savedInstanceState.containsKey(POPUP_WINDOW_TEXT_STATE_KEY)) {
-                mTextPopupWindowTest.setText(savedInstanceState.getString(
-                        POPUP_WINDOW_TEXT_STATE_KEY));
-            }
+    @SuppressLint("InflateParams")
+    private void createFloatingWindow() {
+        mWindowManager = (WindowManager)
+                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        mFloatingWindow = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.floating_window_layout, null);
+        mWindowManager.addView(mFloatingWindow, this.initFloatingWindowLayout());
+        mIsFloating = true;
+    }
+
+    private WindowManager.LayoutParams initFloatingWindowLayout() {
+        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        wmParams.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+        wmParams.gravity = Gravity.START | Gravity.TOP;
+        wmParams.x = 100;
+        wmParams.y = 100;
+        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.format = PixelFormat.RGBA_8888;
+        wmParams.alpha = 0.7f;
+
+        return wmParams;
+    }
+
+    private void destroyFloatingWindow() {
+        if (mWindowManager != null && mFloatingWindow != null) {
+            mWindowManager.removeView(mFloatingWindow);
+            mIsFloating = false;
+            mFloatingWindow = null;
         }
     }
 

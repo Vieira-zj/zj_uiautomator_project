@@ -17,7 +17,7 @@ public final class ServiceDialog extends Service {
     private Handler mHandler;
     private Runnable mRunnable;
 
-    private final long delay = 1000;
+    private final long delay = 3000;
 
     @Override
     public IBinder onBind(Intent intent) {

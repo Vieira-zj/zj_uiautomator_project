@@ -60,6 +60,18 @@
         android:text="@string/message_popup_window_test" />
 
     <Button
+        android:id="@+id/btn_floating_window_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_utils_test2" />
+
+    <TextView
+        android:id="@+id/text_floating_window_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_floating_window_test" />
+
+    <Button
         android:id="@+id/btn_fps_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
