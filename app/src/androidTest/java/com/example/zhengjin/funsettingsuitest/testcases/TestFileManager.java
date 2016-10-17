@@ -112,7 +112,7 @@ public final class TestFileManager {
 //        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
     }
 
-    @Test
+    @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test11FileManagerHomeTabShow() {
         String message;

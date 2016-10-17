@@ -31,7 +31,7 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
 
     private final Locale mLocale = Locale.getDefault();
 
-    private final String SERVICE_TEXT_STATE_KEY = "SERVICE_TEXT_STATE_KEY";
+    private final String FPS_SERVICE_TEXT_STATE_KEY = "FPS_SERVICE_TEXT_STATE_KEY";
     private final String FLOATING_WINDOW_TEXT_STATE_KEY = "FLOATING_WINDOW_TEXT_STATE_KEY";
 
     private Button mBtnProcessUtilsTest = null;
@@ -47,14 +47,16 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     private Button mBtnFpsTest = null;
     private TextView mTextFpsTest = null;
 
-    private PopupWindow mWindow;
-
-    private Intent mDialogServiceIntent = null;
-    private ComponentName mDialogComponent = null;
+    private PopupWindow mWindow = null;
 
     private WindowManager mWindowManager = null;
     private View mFloatingWindow;
     private boolean mIsFloating = false;
+
+    private Intent mDialogServiceIntent = null;
+    private ComponentName mDialogServiceComponent = null;
+    private Intent mFpsServiceIntent = null;
+    private ComponentName mFpsServiceComponent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +91,12 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
             });
         }
 
-        this.initGlobalDialogServiceInfo();
         if (mBtnGlobalDialogTest != null) {
+            this.initGlobalDialogServiceInfo();
             mBtnGlobalDialogTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (PackageUtils.isServiceRunning(mDialogComponent)) {
+                    if (PackageUtils.isServiceRunning(mDialogServiceComponent)) {
                         stopService(mDialogServiceIntent);
                         final String text = "Global dialog is dismiss";
                         mTextGlobalDialogTest.setText(text);
@@ -111,8 +113,8 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
             mTextGlobalDialogTest.setVisibility(View.GONE);
         }
 
-        this.initPopupWindow();
         if (mBtnPopupWindowTest != null) {
+            this.initPopupWindow();
             mBtnPopupWindowTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,20 +149,17 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
         }
 
         if (mBtnFpsTest != null) {
+            this.initFpsServiceInfo();
             mBtnFpsTest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ComponentName service =
-                            new ComponentName(ActivityUtilsTest2.this, ServiceMonitor.class);
-                    Intent intent = new Intent(ActivityUtilsTest2.this, ServiceMonitor.class);
-
-                    if (PackageUtils.isServiceRunning(service)) {
-                        stopService(intent);
+                    if (PackageUtils.isServiceRunning(mFpsServiceComponent)) {
+                        stopService(mFpsServiceIntent);
                         final String text = "monitor service stop";
                         mTextFpsTest.setText(text);
                     } else {
                         final String text = "monitor service started";
-                        startService(intent);
+                        startService(mFpsServiceIntent);
                         mTextFpsTest.setText(text);
                     }
                 }
@@ -172,19 +171,22 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        if (PackageUtils.isServiceRunning(mDialogComponent)) {
+        if (PackageUtils.isServiceRunning(mDialogServiceComponent)) {
             this.stopService(mDialogServiceIntent);
         }
+        if (PackageUtils.isServiceRunning(mFpsServiceComponent)) {
+            this.stopService(mFpsServiceIntent);
+        }
+
         if (mIsFloating) {
             this.destroyFloatingWindow();
         }
-
         super.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(SERVICE_TEXT_STATE_KEY, mTextFpsTest.getText().toString());
+        outState.putString(FPS_SERVICE_TEXT_STATE_KEY, mTextFpsTest.getText().toString());
         outState.putString(FLOATING_WINDOW_TEXT_STATE_KEY,
                 mTextFloatingWindowTest.getText().toString());
         super.onSaveInstanceState(outState);
@@ -192,8 +194,8 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
 
     private void restoreSavedInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(SERVICE_TEXT_STATE_KEY)) {
-                mTextFpsTest.setText(savedInstanceState.getString(SERVICE_TEXT_STATE_KEY));
+            if (savedInstanceState.containsKey(FPS_SERVICE_TEXT_STATE_KEY)) {
+                mTextFpsTest.setText(savedInstanceState.getString(FPS_SERVICE_TEXT_STATE_KEY));
             }
             if (savedInstanceState.containsKey(FLOATING_WINDOW_TEXT_STATE_KEY)) {
                 mTextFloatingWindowTest.setText(savedInstanceState.getString(
@@ -265,7 +267,7 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
     private void initGlobalDialogServiceInfo() {
         mDialogServiceIntent =
                 new Intent(ActivityUtilsTest2.this, ServiceDialog.class);
-        mDialogComponent =
+        mDialogServiceComponent =
                 new ComponentName(ActivityUtilsTest2.this, ServiceDialog.class);
     }
 
@@ -302,6 +304,11 @@ public final class ActivityUtilsTest2 extends AppCompatActivity {
             mIsFloating = false;
             mFloatingWindow = null;
         }
+    }
+
+    private void initFpsServiceInfo() {
+        mFpsServiceIntent = new Intent(ActivityUtilsTest2.this, ServiceMonitor.class);
+        mFpsServiceComponent = new ComponentName(ActivityUtilsTest2.this, ServiceMonitor.class);
     }
 
     private String isAppRunning(String pkgName) {

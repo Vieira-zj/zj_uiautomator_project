@@ -5,8 +5,10 @@ import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestHomeVideoTab;
 import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
 
 import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
@@ -20,8 +22,9 @@ import org.junit.runners.Suite;
 @RunWith(Categories.class)
 @Categories.IncludeCategory({
         CategorySettingsTests.class,
-        CategoryFileManagerTests.class})
-//@Categories.ExcludeCategory({CategoryHomeVideoTabTests.class})
+        CategoryFileManagerTests.class,
+        CategoryWeatherTests.class})
+@Categories.ExcludeCategory({CategoryDemoTests.class})
 @Suite.SuiteClasses({
         TestCommonSettings.class,
         TestFileManager.class,

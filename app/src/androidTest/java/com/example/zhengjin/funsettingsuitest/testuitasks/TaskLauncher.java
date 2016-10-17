@@ -40,11 +40,11 @@ public final class TaskLauncher {
         DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
-    public static BySelector getAllLauncherTabsSelector() {
+    private static BySelector getAllLauncherTabsSelector() {
         return By.res("com.bestv.ott:id/tab_title");
     }
 
-    public static BySelector getLauncherTopBarSelector() {
+    private static BySelector getLauncherTopBarSelector() {
         return By.res("com.bestv.ott:id/container");
     }
 
@@ -103,16 +103,17 @@ public final class TaskLauncher {
     }
 
     public static void navigateToAppTab() {
-        String message;
-
         navigateToVideoTab();
-        ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 3);
+        for (int i = 0, moveTimes = 4; i < moveTimes; i++) {
+            ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+            UiObject2 tabApp = getSpecifiedTab("应用");
+            if (tabApp != null && tabApp.getParent().isFocused()) {
+                return;
+            }
+        }
 
-        UiObject2 tabApp = getSpecifiedTab("应用");
-        message = "Error in navigateToAppTab(), the UI object textAppTab is NOT found.";
-        Assert.assertNotNull(message, tabApp);
-        message = "Error in navigateToAppTab(), the UI object textAppTab is NOT focused.";
-        Assert.assertTrue(message, tabApp.getParent().isFocused());
+        Assert.assertTrue("Error in navigateToAppTab(), the UI object textAppTab is NOT focused.",
+                false);
     }
 
     private static UiObject2 getSpecifiedTab(String tabName) {
@@ -161,7 +162,9 @@ public final class TaskLauncher {
         UiObject2 quickAccessBtn = DEVICE.findObject(selector);
         Assert.assertNotNull(message, quickAccessBtn);
 
-        ACTION.doClickActionAndWait(quickAccessBtn);
+        if (!quickAccessBtn.isFocused()) {
+            ACTION.doClickActionAndWait(quickAccessBtn);
+        }
         ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
     }
 

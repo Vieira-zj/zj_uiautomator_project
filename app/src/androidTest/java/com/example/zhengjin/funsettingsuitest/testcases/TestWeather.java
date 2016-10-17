@@ -6,6 +6,7 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
@@ -133,7 +134,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test14FunctionButtonsInMenu() {
         String message;
 
@@ -166,7 +167,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test15UpdateAndRefreshWeatherData() {
         String message;
 
@@ -180,7 +181,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test21OpenAddCityAndCancel() {
         String message;
 
@@ -209,7 +210,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test22AddNewCityWeather() {
         String message;
 
@@ -228,7 +229,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test23AddNewDefaultCityWeather() {
         String message;
 
@@ -248,7 +249,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test24FirstShowCityAfterAddNewDefaultCity() {
         String message;
 
@@ -260,7 +261,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test25ModifyDefaultCity() {
         String message;
 
@@ -280,7 +281,7 @@ public final class TestWeather {
     }
 
     @Test
-    @Category(CategoryWeatherTests.class)
+    @Category({CategoryWeatherTests.class, CategoryDemoTests.class})
     public void test26FirstShowCityAfterModifyDefaultCity() {
         String message;
 
