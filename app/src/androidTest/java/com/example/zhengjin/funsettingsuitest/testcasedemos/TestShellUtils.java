@@ -65,6 +65,8 @@ public final class TestShellUtils {
     @Test
     @Category(CategoryDemoTests.class)
     public void testStopAndStartFileManagerByShellCmd() {
+        // Note: need system authorized to execute 'start' and 'stop' shell command
+
         String cmd = String.format("am force-stop %s", FILE_MANAGER_PKG_NAME);
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
         String output = String.format(Locale.getDefault(),

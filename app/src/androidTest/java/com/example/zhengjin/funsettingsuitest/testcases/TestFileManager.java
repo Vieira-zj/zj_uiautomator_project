@@ -372,7 +372,7 @@ public final class TestFileManager {
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test31EmptyTipsInVideoCard() {
+    public void test31MessageWhenEmptyForVideoCard() {
         String message;
 
         message = "Verify the tips when no files in video card.";
@@ -384,7 +384,7 @@ public final class TestFileManager {
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test32EmptyTipsInAppCard() {
+    public void test32MessageWhenEmptyForAppCard() {
         String message;
 
         message = "Verify the tips when no files in APP card.";
@@ -396,7 +396,7 @@ public final class TestFileManager {
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test33EmptyTipsInMusicCard() {
+    public void test33MessageWhenEmptyForMusicCard() {
         String message;
 
         message = "Verify the tips when no files in music card.";
@@ -408,7 +408,7 @@ public final class TestFileManager {
 
     @Test
     @Category(CategoryFileManagerTests.class)
-    public void test34EmptyTipsInPictureCard() {
+    public void test34MessageWhenEmptyForPictureCard() {
         String message;
 
         message = "Verify the tips when no files in picture card.";
