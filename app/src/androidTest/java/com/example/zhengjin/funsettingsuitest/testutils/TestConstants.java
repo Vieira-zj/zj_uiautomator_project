@@ -14,9 +14,12 @@ public final class TestConstants {
     public final static long LONG_WAIT = 5000;
     public final static long TIME_OUT = 8000;
 
-    public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
+    public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";
     public final static String WEATHER_PKG_NAME = "tv.fun.weather";
+
+    public final static String SETTINGS_HOME_ACT = ".general.GeneralSettingsActivity";
+    public final static String FILE_MANAGER_HOME_ACT = ".FunFileManagerActivity";
 
     public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";

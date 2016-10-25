@@ -8,17 +8,21 @@ import android.util.Log;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 import java.util.Locale;
+
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_HOME_ACT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_HOME_ACT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 
 
 /**
@@ -27,13 +31,11 @@ import java.util.Locale;
  * Include test cases for ShellCmdUtils.java
  */
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestShellUtils {
 
     private final static String TAG = TestShellUtils.class.getSimpleName();
 
     private UiDevice mDevice;
-
 
     @Before
     public void setUp() {
@@ -48,7 +50,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test1ExecShellShCommand() {
+    public void testExecShellShCommand() {
         String command = "cat /system/build.prop | grep ro.product.model";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
 
@@ -62,14 +64,42 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test2ExecShellAmStartCommand() {
-        // add extra option "--user 0"
-        String command = "am start --user 0 tv.fun.filemanager/.FunFileManagerActivity";
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
-
+    public void testStopAndStartFileManagerByShellCmd() {
+        String cmd = String.format("am force-stop %s", FILE_MANAGER_PKG_NAME);
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
         String output = String.format(Locale.getDefault(),
-                "Result code: %d\n Success message: %s\n Error message: %s",
+                "Stop file manager\nResult code: %d\nSuccess message: %s\nError message: %s",
                 cr.mResult,
+                (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
+                (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
+        Log.d(TAG, output);
+        ShellUtils.systemWaitByMillis(TestConstants.WAIT);
+
+        // add extra option "--user 0"
+        cmd = String.format("am start --user 0 %s/%s",
+                FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
+        cr = ShellUtils.execCommand(cmd, false, true);
+        output = String.format(Locale.getDefault(),
+                "Start file manager\nResult code: %d\nSuccess message: %s\nError message: %s",
+                cr.mResult,
+                (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
+                (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
+        Log.d(TAG, output);
+
+        ShellUtils.systemWaitByMillis(TestConstants.WAIT);
+        Log.d(TAG, String.format("Top package is %s", mDevice.getCurrentPackageName()));
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testStopAndStartSettingsByShellCmd() {
+        String cmdStop = String.format("am force-stop %s", SETTINGS_PKG_NAME);
+        String cmdStart = String.format("am start %s/%s", SETTINGS_PKG_NAME, SETTINGS_HOME_ACT);
+
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(
+                new String[] {cmdStop, cmdStart}, false, true);
+        String output = String.format(Locale.getDefault(),
+                "Result code: %d\nSuccess message: %s\nError message: %s", cr.mResult,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
@@ -77,7 +107,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test3TakeScreenCaptures() {
+    public void testTakeScreenCaptures() {
         TaskLauncher.backToLauncher();
         ShellUtils.takeScreenCapture(mDevice);
     }
