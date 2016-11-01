@@ -9,10 +9,10 @@ import android.os.Environment;
  */
 public final class TestConstants {
 
-    public final static long SHORT_WAIT = 1000;
-    public final static long WAIT = 3000;
-    public final static long LONG_WAIT = 5000;
-    public final static long TIME_OUT = 8000;
+    public final static long SHORT_WAIT = 1000L;
+    public final static long WAIT = 3000L;
+    public final static long LONG_WAIT = 5000L;
+    public final static long TIME_OUT = 8000L;
 
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
     public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";

@@ -60,6 +60,10 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/dialog_list_list");
     }
 
+    public BySelector getAdvancedItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_advanced");
+    }
+
     public BySelector getSleepTimeSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_sleep");
     }

@@ -144,12 +144,13 @@ public final class TestCommonSettings {
         TestHelper.waitForUiObjectClickable(deviceName);
         mAction.doClickActionAndWait(deviceName);
 
-        String message = "Verify select a pre-defined device name.";
         UiObject2 deviceNameContainer =
                 mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
-        TestHelper.waitForUiObjectEnabled(deviceNameContainer);
         UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
-        Assert.assertNotNull(message, deviceNameValue);
+        Assert.assertNotNull(deviceNameValue);
+
+        String message = "Verify select a pre-defined device name.";
+        Assert.assertTrue(message, TestHelper.waitForUiObjectEnabled(deviceNameValue));
     }
 
 
@@ -158,8 +159,12 @@ public final class TestCommonSettings {
     public void test15SleepTimeDefaultValue() {
         String message;
 
+        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
+        TestHelper.waitForUiObjectEnabled(sleepSettingContainer);
         UiObject2 itemKey =
                 sleepSettingContainer.findObject(mTask.getSettingItemKeySelector());
         message = "Verify the key text of sleep setting.";
@@ -176,16 +181,16 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test16SelectSleepTime() {
-        String message;
+        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
-        mTask.moveToSpecifiedSettingsItem(mTask.getSleepTimeSettingItemContainerSelector());
-        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
-
-        message = "Verify select the sleep time.";
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
-        UiObject2 itemValue = mTask.getTextViewOfSwitcher(sleepSettingContainer);
+        TestHelper.waitForUiObjectEnabled(sleepSettingContainer);
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
 
+        String message = "Verify select the sleep time.";
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(sleepSettingContainer);
         Assert.assertNotNull(itemValue);
         Assert.assertEquals(message, "30分钟", itemValue.getText());
     }
@@ -193,14 +198,12 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test17ScreenSaverDefaultValue() {
-        String message;
-
         mTask.scrollMoveToSpecificSettingsItem("屏保");
         UiObject2 screenSaverContainer =
                 mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector());
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
 
-        message = "Verify the default value of screen saver.";
+        String message = "Verify the default value of screen saver.";
         Assert.assertNotNull(itemValue);
         Assert.assertEquals(message, "5分钟（默认）", itemValue.getText());
     }
@@ -225,14 +228,12 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test21InstallUnknownAppDefaultValue() {
-        String message;
-
         mTask.scrollMoveToSpecificSettingsItem("安装未知来源应用");
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
 
-        message = "Verify the default value text of install unknown app settings item.";
+        String message = "Verify the default value text of install unknown app settings item.";
         Assert.assertNotNull(valueText);
         Assert.assertEquals(message, TEXT_FORBIDDEN, valueText.getText());
     }
@@ -374,9 +375,10 @@ public final class TestCommonSettings {
         // TODO: 2016/6/7
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
     public void test41DefaultLocationOnSettings() {
+        // weather location settings item is remove from settings home page
         String message;
 
         UiObject2 locationItemContainer =
@@ -393,9 +395,10 @@ public final class TestCommonSettings {
         Assert.assertEquals(message, "湖北 武汉", locationItemValue.getText());
     }
 
-    @Test
+    @Ignore
     @Category(CategorySettingsTests.class)
     public void test42OpenWeatherAppAndBackToSettings() {
+        // weather location settings item is remove from settings home page
         String message;
 
         mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
