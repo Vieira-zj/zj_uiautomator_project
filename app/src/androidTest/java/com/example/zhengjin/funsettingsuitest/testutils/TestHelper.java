@@ -7,6 +7,7 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -26,8 +27,19 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
  */
 public final class TestHelper {
 
-    private static UiDevice device =
+    private static final String TAG = TestHelper.class.getSimpleName();
+    private static final UiDevice device =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {
+        final long timeOut = LONG_WAIT;
+        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut);
+    }
+
+    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
+        final long interval = SHORT_WAIT;
+        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, interval);
+    }
 
     public static boolean waitForAppOpenedByCheckCurPackage(
             String pkgName, long timeOut, long interval) {
@@ -43,15 +55,9 @@ public final class TestHelper {
         return flag_app_opened;
     }
 
-    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
-        final long interval = SHORT_WAIT;
-        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, interval);
-    }
-
     // Prefer to use waitForAppOpenedByUntil()
-    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {
-        final long timeOut = LONG_WAIT;
-        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut);
+    public static boolean waitForAppOpenedByUntil(String pkgName) {
+        return waitForAppOpenedByUntil(pkgName, LONG_WAIT);
     }
 
     public static boolean waitForAppOpenedByUntil(String pkgName, long wait) {
@@ -59,8 +65,37 @@ public final class TestHelper {
         return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), wait);
     }
 
-    public static boolean waitForAppOpenedByUntil(String pkgName) {
-        return waitForAppOpenedByUntil(pkgName, LONG_WAIT);
+    public static boolean waitForAppOpenedByShellCmd(String pkgName) {
+        return waitForAppOpenedByShellCmd(pkgName, 5);
+    }
+
+    public static boolean waitForAppOpenedByShellCmd(String topActivity, int waitBySeconds) {
+        String cmd = "dumpsys activity | grep mFocusedActivity";
+        ShellUtils.CommandResult cr;
+
+        for (int i = 0; i < waitBySeconds; i++) {
+            cr = ShellUtils.execCommand(cmd, false, true);
+            if (cr.mResult == 0) {
+                if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(topActivity)) {
+                    Log.d(TAG, "The top activity -> " + cr.mSuccessMsg);
+                    return true;
+                }
+            }
+            ShellUtils.systemWaitByMillis(SHORT_WAIT);
+        }
+
+        return false;
+    }
+
+    // Prefer to use waitForUiObjectEnabled()
+    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj) {
+        final long timeOut = LONG_WAIT;
+        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut);
+    }
+
+    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj, long timeOut) {
+        final long interval = SHORT_WAIT;
+        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut, interval);
     }
 
     private static boolean waitForUiObjectEnabledByCheckProperty(
@@ -74,17 +109,6 @@ public final class TestHelper {
         }
 
         return flag_UiObj_enabled;
-    }
-
-    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj, long timeOut) {
-        final long interval = SHORT_WAIT;
-        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut, interval);
-    }
-
-    // Prefer to use waitForUiObjectEnabled()
-    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj) {
-        final long timeOut = LONG_WAIT;
-        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut);
     }
 
     public static boolean waitForUiObjectEnabled(UiObject2 uiObj) {

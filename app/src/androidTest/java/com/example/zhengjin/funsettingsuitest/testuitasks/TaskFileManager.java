@@ -70,6 +70,10 @@ public final class TaskFileManager {
         return By.res("tv.fun.filemanager:id/activity_sub_menu_tips");
     }
 
+    public BySelector getMenuContainerSelector() {
+        return By.res("android:id/tv_fun_menu");
+    }
+
     public BySelector getMenuRemoveBtnContainerSelector() {
         return By.res("tv.fun.filemanager:id/menu_item_del_id");
     }
