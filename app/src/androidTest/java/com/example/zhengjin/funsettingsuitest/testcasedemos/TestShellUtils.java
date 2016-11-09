@@ -5,7 +5,11 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
+import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
+import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
+import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -46,6 +50,17 @@ public final class TestShellUtils {
     @After
     public void clearUp() {
         Log.d(TAG, String.format("***** Test %s finished.", TAG));
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testPrintTestCasesName() {
+        int count = 0;
+        Class<?>[] classes = {TestCommonSettings.class, TestFileManager.class, TestWeather.class};
+        for (Class<?> cls : classes) {
+            count += RunnerProfile.countAndPrintTestCasesForClass(cls);
+        }
+        Log.d(TAG, String.format("Total number of test cases -> %d", count));
     }
 
     @Test
