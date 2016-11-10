@@ -34,6 +34,9 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.util.List;
+
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
@@ -55,8 +58,10 @@ public final class TestCommonSettings {
     private TaskWeather mWeatherTask;
     private String mMessage;
 
-    private final String TEXT_ALLOWED = "允许";
+    private final String TEXT_INPUT_METHOD = "百度输入法TV版";
     private final String TEXT_FORBIDDEN = "禁止";
+    private final String TEXT_SYSTEM_RECOVERY = "恢复出厂设置";
+    private String[] TEXT_WALLPAPERS = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
     public static void classSetUp() {
@@ -195,11 +200,11 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test17ScreenSaverDefaultValue() {
         mTask.scrollMoveToSpecificSettingsItem("屏保");
+
+        mMessage = "Verify the default value of screen saver.";
         UiObject2 screenSaverContainer =
                 mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector());
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
-
-        mMessage = "Verify the default value of screen saver.";
         Assert.assertNotNull(itemValue);
         Assert.assertEquals(mMessage, "5分钟（默认）", itemValue.getText());
     }
@@ -274,7 +279,7 @@ public final class TestCommonSettings {
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
         mMessage = "Verify the value text of install unknown app settings item after allowed.";
-        Assert.assertEquals(mMessage, TEXT_ALLOWED, valueText.getText());
+        Assert.assertEquals(mMessage, "允许", valueText.getText());
     }
 
     @Test
@@ -293,7 +298,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test25SystemRecoverDialogAndClickCancel() {
-        mTask.scrollMoveToSpecificSettingsItem("恢复出厂设置");
+        mTask.scrollMoveToSpecificSettingsItem(TEXT_SYSTEM_RECOVERY);
         UiObject2 recoverItem = mDevice.findObject(mTask.getSystemRecoverSettingItemSelector());
         mAction.doClickActionAndWait(recoverItem);  // open dialog
 
@@ -317,7 +322,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test26SaveInfoOnSystemRecoverDialog() {
-        mTask.scrollMoveToSpecificSettingsItem("恢复出厂设置");
+        mTask.scrollMoveToSpecificSettingsItem(TEXT_SYSTEM_RECOVERY);
         UiObject2 recoverItem = mDevice.findObject(mTask.getSystemRecoverSettingItemSelector());
         mAction.doClickActionAndWait(recoverItem);  // open dialog
 
@@ -341,22 +346,92 @@ public final class TestCommonSettings {
         Assert.assertTrue(mMessage, saveInfoCheckbox.isChecked());
     }
 
-    @Ignore
+    @Test
     @Category(CategorySettingsTests.class)
-    public void test31DefaultWallpaper() {
-        // TODO: 2016/6/7
+    public void test31WallpaperDefaultValue() {
+        UiObject2 itemWallpaper =
+                mDevice.findObject(mTask.getWallpaperSettingItemContainerSelector());
+
+        mMessage = "Verify the item key for wallpaper setting item.";
+        UiObject2 itemKey = itemWallpaper.findObject(mTask.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, "壁纸", itemKey.getText());
+        mMessage = "Verify the default wallpaper.";
+        UiObject2 itemValue = itemWallpaper.findObject(mTask.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, TEXT_WALLPAPERS[0], itemValue.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategorySettingsTests.class)
     public void test32SubWallpapersOnSelectPage() {
-        // TODO: 2016/6/7
+        mTask.moveToSpecifiedSettingsItem(mTask.getWallpaperSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        mMessage = "Verify there are 4 sub wallpapers on wallpaper select page.";
+        List<UiObject2> wallpapers = mDevice.findObjects(By.clazz(CLASS_TEXT_VIEW));
+        Assert.assertEquals(mMessage, TEXT_WALLPAPERS.length, wallpapers.size());
+
+        mMessage = "Verify the 1st sub wallpaper is default selected.";
+        UiObject2 defaultWallpaper = mDevice.findObject(By.text(TEXT_WALLPAPERS[0])).getParent();
+        Assert.assertTrue(mMessage, defaultWallpaper.isSelected());
+
+        for (UiObject2 wallpaper : wallpapers) {
+            String title = wallpaper.getText();
+            mMessage = String.format("Verify the sub wallpaper %s is shown.", title);
+            Assert.assertTrue(mMessage, this.IsSubWallpaperIncluded(title));
+        }
     }
 
-    @Ignore
+    @Test
     @Category(CategorySettingsTests.class)
     public void test33SelectWallpaper() {
-        // TODO: 2016/6/7
+        final String selectWallpaper = TEXT_WALLPAPERS[2];
+
+        mTask.moveToSpecifiedSettingsItem(mTask.getWallpaperSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        mTask.selectSpecifiedSubWallpaper(selectWallpaper);
+
+        mMessage = "Verify setting item value is changed to the selected wallpaper.";
+        mAction.doDeviceActionAndWait(new DeviceActionBack());
+        UiObject2 itemWallpaper =
+                mDevice.findObject(mTask.getWallpaperSettingItemContainerSelector());
+        UiObject2 itemValue = itemWallpaper.findObject(mTask.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, selectWallpaper, itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test34InputMethodDefaultValue() {
+        UiObject2 itemInput =
+                mDevice.findObject(mTask.getInputMethodSettingItemContainerSelector());
+
+        mMessage = "Verify the item key for input method setting item.";
+        UiObject2 itemKey = itemInput.findObject(mTask.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, "输入法", itemKey.getText());
+
+        mMessage = "Verify the default input method.";
+        UiObject2 inputMethod = mTask.getTextViewOfSwitcher(itemInput);
+        Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test35SelectInputMethod() {
+        mTask.moveToSpecifiedSettingsItem(mTask.getInputMethodSettingItemContainerSelector());
+
+        // verification 1
+        mMessage = "Verify select input method by left key event.";
+        mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
+        UiObject2 itemInput =
+                mDevice.findObject(mTask.getInputMethodSettingItemContainerSelector());
+        UiObject2 inputMethod = mTask.getTextViewOfSwitcher(itemInput);
+        Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
+
+        // verification 2
+        mMessage = "Verify select input method by right key event.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
+        ShellUtils.systemWaitByMillis(WAIT);
+        inputMethod = mTask.getTextViewOfSwitcher(itemInput);
+        Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
     }
 
     @Ignore
@@ -446,6 +521,15 @@ public final class TestCommonSettings {
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
         mWeatherTask.destroyInstance();
+    }
+
+    private boolean IsSubWallpaperIncluded(String wallpaper) {
+        for (String text : TEXT_WALLPAPERS) {
+            if (text.equals(wallpaper)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

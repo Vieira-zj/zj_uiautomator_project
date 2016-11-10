@@ -10,7 +10,9 @@ import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 
@@ -18,6 +20,7 @@ import junit.framework.Assert;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_SCROLL_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2016/6/6.
@@ -70,6 +73,14 @@ public final class TaskSettings {
 
     public BySelector getScreenSaverSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_screen_saver");
+    }
+
+    public BySelector getWallpaperSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_wallpaper");
+    }
+
+    public BySelector getInputMethodSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_inputmethod");
     }
 
     public BySelector getLocationSettingItemContainerSelector() {
@@ -147,6 +158,14 @@ public final class TaskSettings {
         action.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 10);
     }
 
+    private void moveDownUntilSettingsItemFocused(UiObject2 item) {
+        this.moveUntilSettingsItemFocused(item, true);
+    }
+
+    private void moveUpUntilSettingsItemFocused(UiObject2 item) {
+        this.moveUntilSettingsItemFocused(item, false);
+    }
+
     private void moveUntilSettingsItemFocused(UiObject2 item, boolean flagDirectionDown) {
         DeviceAction moveAction;
         if (flagDirectionDown) {
@@ -162,22 +181,12 @@ public final class TaskSettings {
             action.doDeviceActionAndWait(moveAction);
         }
 
-        String message =
-                "Error in moveUntilSettingsItemFocused(), the settings item is NOT focused.";
-        Assert.assertTrue(message, false);
-    }
-
-    private void moveDownUntilSettingsItemFocused(UiObject2 item) {
-        this.moveUntilSettingsItemFocused(item, true);
-    }
-
-    private void moveUpUntilSettingsItemFocused(UiObject2 item) {
-        this.moveUntilSettingsItemFocused(item, false);
+        Assert.assertTrue(
+                "Error in moveUntilSettingsItemFocused(), the settings item is NOT focused.",
+                false);
     }
 
     public void scrollMoveToSpecificSettingsItem(String itemText) {
-        String message;
-
         UiScrollable scroll =
                 new UiScrollable(new UiSelector().className(CLASS_SCROLL_VIEW));
         scroll.setAsVerticalList();
@@ -185,11 +194,21 @@ public final class TaskSettings {
             scroll.scrollTextIntoView(itemText);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            message = String.format(
-                    "Error in scrollMoveToSpecificSettingsItem(), the ui object %s is NOT found.",
-                    itemText);
-            Assert.assertTrue(message, false);
+            Assert.assertTrue(String.format("The ui object %s is NOT found.", itemText), false);
         }
+    }
+
+    public void selectSpecifiedSubWallpaper(String title) {
+        UiObject2 wallpaper = device.findObject(By.text(title)).getParent();
+        for (int i = 0, wallpaperSize = 4; i < wallpaperSize; i++) {
+            if (wallpaper.isSelected()) {
+                action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+
+        Assert.assertTrue("Failed to select the specified wallpaper.", false);
     }
 
 }
