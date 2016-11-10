@@ -79,8 +79,12 @@ public final class UiActionsManager {
     }
 
     public void doClickActionAndWait(UiObject2 uiObj) {
+        doClickActionAndWait(uiObj, SHORT_WAIT);
+    }
+
+    public void doClickActionAndWait(UiObject2 uiObj, long wait) {
         uiObj.click();
-        ShellUtils.systemWaitByMillis(SHORT_WAIT);
+        ShellUtils.systemWaitByMillis(wait);
     }
 
 }

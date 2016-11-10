@@ -92,6 +92,18 @@ public final class TaskWeather {
         return By.res("tv.fun.weather:id/wheel_view_tx3");
     }
 
+    public BySelector getDialogTitleSelector() {
+        return By.res("tv.fun.weather:id/tv_title");
+    }
+
+    public BySelector getDialogConfirmButtonSelector() {
+        return By.res("tv.fun.weather:id/btn_confirm");
+    }
+
+    public BySelector getDialogCancelButtonSelector() {
+        return By.res("tv.fun.weather:id/btn_cancel");
+    }
+
     public String getWeatherForecastDateFromUiText(String source) {
         int start = source.indexOf("(") + 1;
         return source.substring(start, (source.length() - 1));
