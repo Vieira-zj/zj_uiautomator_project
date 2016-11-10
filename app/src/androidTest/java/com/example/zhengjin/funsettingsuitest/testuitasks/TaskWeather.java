@@ -13,6 +13,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
@@ -181,10 +182,12 @@ public final class TaskWeather {
                 provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
         for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
             if (provinceText.equals(middleProvince.getText())) {
+                ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
                 return;
             }
             action.doDeviceActionAndWait(moveAction);
-            middleProvince = provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
+            middleProvince =
+                    provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
         }
 
         Assert.assertTrue("The specified province is NOT found on city manager!", false);
