@@ -477,7 +477,7 @@ public final class TestCommonSettings {
         Assert.assertTrue(TestHelper.waitForAppOpenedByCheckCurPackage(WEATHER_PKG_NAME, TIME_OUT));
 
         mWeatherTask.openBottomMenu();
-        mWeatherTask.focusOnSpecifiedMenuButtonAndEnter(
+        mWeatherTask.ClickOnSpecifiedMenuButtonByText(
                 mWeatherTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
 
         mMessage = "Verify the default province text on city manager.";
@@ -497,13 +497,12 @@ public final class TestCommonSettings {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
 
         mWeatherTask.openBottomMenu();
-        mWeatherTask.focusOnSpecifiedMenuButtonAndEnter(
+        mWeatherTask.ClickOnSpecifiedMenuButtonByText(
                 mWeatherTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
 
         // select a location from sub page
-        mWeatherTask.selectSpecifiedLocationProvince(province, false);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mWeatherTask.selectSpecifiedLocationCity(city, false);
+        mWeatherTask.selectSpecifiedLocation(
+                new String[] {province, city}, new boolean[] {false, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);

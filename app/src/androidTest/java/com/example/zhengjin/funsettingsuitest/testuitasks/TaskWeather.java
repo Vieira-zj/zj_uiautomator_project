@@ -121,11 +121,9 @@ public final class TaskWeather {
 
     // param date: yyyy-MM-dd
     private String formatForecastDate(String date) {
-        String message;
-
         String[] items = date.split("-");
-        message = "Error in formatForecastDate(), the date items length is not 3.";
-        Assert.assertTrue(message, (items.length == 3));
+        Assert.assertTrue("Error in formatForecastDate(), the date items count is not 3.",
+                items.length == 3);
 
         String month = items[1];
         String day = items[2];
@@ -154,7 +152,7 @@ public final class TaskWeather {
         action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
-    public void focusOnSpecifiedMenuButtonAndEnter(String btnText) {
+    public void ClickOnSpecifiedMenuButtonByText(String btnText) {
         UiObject2 btn = device.findObject(By.text(btnText)).getParent();
         for (int i = 0, moveTimes = 4; i < moveTimes; i++) {
             if (btn.isFocused()) {
@@ -181,47 +179,41 @@ public final class TaskWeather {
         return middleCity.getText();
     }
 
-    public void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
-        DeviceAction moveAction;
-        if (directionUp) {
-            moveAction = new DeviceActionMoveUp();
-        } else {
-            moveAction = new DeviceActionMoveDown();
-        }
+    // location = {province, city}
+    public void selectSpecifiedLocation(String[] location, boolean[] directionUp) {
+        this.selectSpecifiedLocationProvince(location[0], directionUp[0]);
+        action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        this.selectSpecifiedLocationCity(location[1], directionUp[1]);
+    }
 
+    private void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
+        DeviceAction moveAction =
+                directionUp ? new DeviceActionMoveUp() : new DeviceActionMoveDown();
         UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
-        UiObject2 middleProvince =
-                provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
         for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
+            UiObject2 middleProvince =
+                    provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
             if (provinceText.equals(middleProvince.getText())) {
                 ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
                 return;
             }
             action.doDeviceActionAndWait(moveAction);
-            middleProvince =
-                    provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
         }
 
         Assert.assertTrue("The specified province is NOT found on city manager!", false);
     }
 
-    public void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
-        DeviceAction moveAction;
-        if (directionUp) {
-            moveAction = new DeviceActionMoveUp();
-        } else {
-            moveAction = new DeviceActionMoveDown();
-        }
-
+    private void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
+        DeviceAction moveAction =
+                directionUp ? new DeviceActionMoveUp() : new DeviceActionMoveDown();
         UiObject2 cityList = device.findObject(this.getCityListSelector());
-        UiObject2 middleCity =
-                cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
         for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
+            UiObject2 middleCity =
+                    cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
             if (cityText.equals(middleCity.getText())) {
                 return;
             }
             action.doDeviceActionAndWait(moveAction);
-            middleCity = cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
         }
 
         Assert.assertTrue("The specified city is NOT found on city manager!", false);

@@ -160,7 +160,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test15UpdateAndRefreshWeatherData() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE);
 
         mMessage = "Verify the refresh time is updated after click Update menu button.";
         UiObject2 refreshTime = mDevice.findObject(mTask.getTopRefreshTimeOfWeatherHomeSelector());
@@ -172,7 +172,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test21AddCityAndCancel() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
 
         // verification 1
         mMessage = "Verify the title of add city page.";
@@ -184,9 +184,8 @@ public final class TestWeather {
         Assert.assertEquals(mMessage, INIT_CITY, mTask.getSelectedLocationCity());
 
         // select 山东 青岛
-        mTask.selectSpecifiedLocationProvince(ADD_PROVINCE_1, false);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(ADD_CITY_1, false);
+        mTask.selectSpecifiedLocation(
+                new String[] {ADD_PROVINCE_1, ADD_CITY_1}, new boolean[] {true, false});
         mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
 
         // verification 2
@@ -200,12 +199,11 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test22AddNewCityWeather() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
 
         // select 山东 青岛
-        mTask.selectSpecifiedLocationProvince(ADD_PROVINCE_1, false);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(ADD_CITY_1, false);
+        mTask.selectSpecifiedLocation(
+                new String[] {ADD_PROVINCE_1, ADD_CITY_1}, new boolean[] {true, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after add new city weather.";
@@ -218,7 +216,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test23AddDefaultCityAndCancel() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
 
         // verification 1
         mMessage = "Verify the title of modify default city page.";
@@ -230,9 +228,9 @@ public final class TestWeather {
         Assert.assertEquals(mMessage, INIT_CITY, mTask.getSelectedLocationCity());
 
         // select 海南 三亚
-        mTask.selectSpecifiedLocationProvince(ADD_DEFAULT_PROVINCE_2, true);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(ADD_DEFAULT_CITY_2, false);
+        mTask.selectSpecifiedLocation(
+                new String[] {ADD_DEFAULT_PROVINCE_2, ADD_DEFAULT_CITY_2},
+                new boolean[] {false, false});
         mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
 
         // verification 2
@@ -246,12 +244,12 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test24AddDefaultCityWeather() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
 
         // select 海南 三亚
-        mTask.selectSpecifiedLocationProvince(ADD_DEFAULT_PROVINCE_2, true);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(ADD_DEFAULT_CITY_2, false);
+        mTask.selectSpecifiedLocation(
+                new String[] {ADD_DEFAULT_PROVINCE_2, ADD_DEFAULT_CITY_2},
+                new boolean[] {false, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after add new default city.";
@@ -275,12 +273,11 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test26ModifyDefaultCity() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
 
         // select 湖北 武汉
-        mTask.selectSpecifiedLocationProvince(INIT_PROVINCE, false);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(INIT_CITY, false);
+        mTask.selectSpecifiedLocation(
+                new String[] {INIT_PROVINCE, INIT_CITY}, new boolean[] {true, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after change default city.";
@@ -302,12 +299,11 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test28ReAddDefaultCity() {
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
 
         // select 湖北 武汉
-        mTask.selectSpecifiedLocationProvince(INIT_PROVINCE, false);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        mTask.selectSpecifiedLocationCity(INIT_CITY, false);
+        mTask.selectSpecifiedLocation(
+                new String[] {INIT_PROVINCE, INIT_CITY}, new boolean[] {true, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after re-add same default city.";
@@ -350,7 +346,7 @@ public final class TestWeather {
         // select 青岛
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY);
 
         mMessage = "Verify the remove dialog title text.";
         UiObject2 title = mDevice.findObject(mTask.getDialogTitleSelector());
@@ -372,7 +368,7 @@ public final class TestWeather {
         // select 青岛
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
         mTask.openBottomMenu();
-        mTask.focusOnSpecifiedMenuButtonAndEnter(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY);
+        mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY);
 
         mMessage = "Verify the confirm button of dialog.";
         UiObject2 confirmBtn = mDevice.findObject(mTask.getDialogConfirmButtonSelector());
