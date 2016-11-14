@@ -10,8 +10,10 @@ import android.support.test.uiautomator.Until;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
@@ -58,6 +60,8 @@ public final class TestCommonSettings {
     private TaskWeather mWeatherTask;
     private String mMessage;
 
+    private final String SELECT_DEVICE_NAME = "书房的电视";
+    private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
     private final String TEXT_INPUT_METHOD = "百度输入法TV版";
     private final String TEXT_FORBIDDEN = "禁止";
     private final String TEXT_SYSTEM_RECOVERY = "恢复出厂设置";
@@ -140,20 +144,101 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test14SelectDeviceName() {
+    public void test14_01SelectDeviceName() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
         // select a sub device name and back
-        String subDeviceName = "书房的电视";
-        UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
+        UiObject2 deviceName = mDevice.findObject(By.text(SELECT_DEVICE_NAME));
         TestHelper.waitForUiObjectClickable(deviceName);
         mAction.doClickActionAndWait(deviceName);
 
         UiObject2 deviceNameContainer =
                 mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
-        UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
+        UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
         Assert.assertNotNull(deviceNameValue);
 
         mMessage = "Verify select a pre-defined device name.";
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test14_02SelfDefineDeviceNameAndCancel() {
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        UiObject2 defineName = mDevice.findObject(By.text("自定义"));
+        mAction.doClickActionAndWait(defineName, WAIT);
+
+        // verification 1
+        mMessage = "Verify the title of self-define device name activity.";
+        UiObject2 title = mDevice.findObject(mTask.getTitleOfSettingsPageSelector());
+        Assert.assertEquals("自定义设备名称", title.getText());
+
+        UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
+        mMessage = "Verify the device name editor is default focused.";
+        Assert.assertTrue(mMessage, editor.isFocused());
+        mMessage = "Verify the text in the device name editor.";
+        Assert.assertEquals(mMessage, SELECT_DEVICE_NAME, editor.getText());
+
+        // verification 2
+        mMessage = "Verify cancel and back from the self-define device name activity.";
+        ShellUtils.execCommand("input text test", false, false);
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
+        UiObject2 deviceNameContainer =
+                mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
+        UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test14_03SelfDefineDeviceNameAndConfirm() {
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        UiObject2 defineName = mDevice.findObject(By.text("自定义"));
+        mAction.doClickActionAndWait(defineName, WAIT);
+
+        // checkpoint 1
+        mMessage = "Verify define a customized device name.";
+        mTask.clearTextOfEditorView(SELECT_DEVICE_NAME.length());
+        ShellUtils.execCommand(
+                String.format("input text %s", SELF_DEFINE_DEVICE_NAME), false, false);
+        UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
+        Assert.assertEquals(mMessage, SELF_DEFINE_DEVICE_NAME, editor.getText());
+
+        mAction.doDeviceActionAndWait(new DeviceActionBack());  // hide keyboard
+        mAction.doDeviceActionAndWait(new DeviceActionMoveDown());
+        mMessage = "Verify the confirm button is focused.";
+        UiObject2 btnConfirm = mDevice.findObject(mTask.getDeviceNameConfirmButtonSelector());
+        Assert.assertTrue(mMessage, btnConfirm.isFocused());
+
+        // checkpoint 2
+        mMessage = "Self-defined device name is updated success.";
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        UiObject2 deviceNameContainer =
+                mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
+        UiObject2 deviceNameValue =
+                deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test14_04SelfDefineEmptyNameAndConfirm() {
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        UiObject2 defineName = mDevice.findObject(By.text("自定义"));
+        mAction.doClickActionAndWait(defineName, WAIT);
+
+        mMessage = "Verify define empty device name and submit.";
+        mTask.clearTextOfEditorView(SELF_DEFINE_DEVICE_NAME.length());
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]
+                {new DeviceActionBack(), new DeviceActionMoveDown(), new DeviceActionEnter()});
+        UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
+        Assert.assertNull(mMessage, editor.getText());
+
+        mMessage = "Verify the pre-defined device name is unchanged.";
+        mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
+        UiObject2 deviceNameContainer =
+                mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
+        UiObject2 deviceNameValue =
+                deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
     }
 
@@ -502,7 +587,7 @@ public final class TestCommonSettings {
 
         // select a location from sub page
         mWeatherTask.selectSpecifiedLocation(
-                new String[] {province, city}, new boolean[] {false, false});
+                new String[]{province, city}, new boolean[]{false, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);

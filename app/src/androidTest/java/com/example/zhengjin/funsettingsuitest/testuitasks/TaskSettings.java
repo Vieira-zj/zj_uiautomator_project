@@ -15,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 
 import junit.framework.Assert;
 
@@ -61,6 +62,14 @@ public final class TaskSettings {
 
     public BySelector getDialogDeviceNameListSelector() {
         return By.res("tv.fun.settings:id/dialog_list_list");
+    }
+
+    public BySelector getDeviceNameEditorSelector() {
+        return By.res("tv.fun.settings:id/device_edit");
+    }
+
+    public BySelector getDeviceNameConfirmButtonSelector() {
+        return By.res("tv.fun.settings:id/device_name_btn_confirm");
     }
 
     public BySelector getAdvancedItemContainerSelector() {
@@ -138,8 +147,7 @@ public final class TaskSettings {
     public UiObject2 getTextViewOfSwitcher(UiObject2 container) {
         UiObject2 switcher =
                 container.findObject(this.getSettingSwitcherItemValueSelector());
-        UiObject2 text = switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
-        return text;
+        return switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
     }
 
     public void moveToSpecifiedSettingsItem(BySelector selector) {
@@ -211,4 +219,10 @@ public final class TaskSettings {
         Assert.assertTrue("Failed to select the specified wallpaper.", false);
     }
 
+    public void clearTextOfEditorView(int charCount) {
+        for (int i = 0; i < charCount; i++) {
+            ShellUtils.execCommand("input keyevent KEYCODE_DEL", false, false);
+            ShellUtils.systemWaitByMillis(200L);
+        }
+    }
 }

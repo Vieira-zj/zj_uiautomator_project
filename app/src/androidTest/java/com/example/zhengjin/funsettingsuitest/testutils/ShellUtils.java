@@ -89,6 +89,7 @@ public final class ShellUtils {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Log.e(TAG, e.getMessage());
         } finally {
             try {

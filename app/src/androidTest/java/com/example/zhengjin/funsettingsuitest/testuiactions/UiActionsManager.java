@@ -68,11 +68,22 @@ public final class UiActionsManager {
         }
     }
 
-    public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action) {
-        return doMultipleDeviceActionAndWait(action, SHORT_WAIT);
+    public void doMultipleDeviceActionsAndWait(DeviceAction[] actions) {
+        doMultipleDeviceActionsAndWait(actions, SHORT_WAIT);
     }
 
-    public UiActionsManager doMultipleDeviceActionAndWait(DeviceAction action, long wait) {
+    public void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
+        for (DeviceAction action : actions) {
+            action.doDeviceAction(mDevice);
+            ShellUtils.systemWaitByMillis(wait);
+        }
+    }
+
+    public UiActionsManager doChainedDeviceActionAndWait(DeviceAction action) {
+        return doChainedDeviceActionAndWait(action, SHORT_WAIT);
+    }
+
+        public UiActionsManager doChainedDeviceActionAndWait(DeviceAction action, long wait) {
         action.doDeviceAction(mDevice);
         ShellUtils.systemWaitByMillis(wait);
         return this;

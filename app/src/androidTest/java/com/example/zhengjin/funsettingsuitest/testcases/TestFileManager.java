@@ -190,7 +190,7 @@ public final class TestFileManager {
 
         // verification 2
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
+        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveRight())
                 .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
         mTask.showMenuAndRequestFocus();
 
@@ -241,7 +241,7 @@ public final class TestFileManager {
     public void test23HideAndShowDirectory() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doMultipleDeviceActionAndWait(new DeviceActionMoveRight())
+        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveRight())
                 .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
 
         // verification 1
