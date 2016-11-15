@@ -86,6 +86,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test11DefaultLocatedCity() {
         mMessage = "Verify the default location on weather home.";
+        TestHelper.waitForLoadingComplete();
         UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
@@ -161,6 +162,7 @@ public final class TestWeather {
     public void test15UpdateAndRefreshWeatherData() {
         mTask.openBottomMenu();
         mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE);
+        TestHelper.waitForLoadingComplete();
 
         mMessage = "Verify the refresh time is updated after click Update menu button.";
         UiObject2 refreshTime = mDevice.findObject(mTask.getTopRefreshTimeOfWeatherHomeSelector());

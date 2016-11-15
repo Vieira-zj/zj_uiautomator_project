@@ -16,7 +16,6 @@ import junit.framework.Assert;
 import java.util.List;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
 
@@ -32,32 +31,29 @@ public final class TestHelper {
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
     public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {
-        final long timeOut = LONG_WAIT;
-        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut);
+        return waitForAppOpenedByCheckCurPackage(pkgName, TIME_OUT);
     }
 
     public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
-        final long interval = SHORT_WAIT;
-        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, interval);
+        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, SHORT_WAIT);
     }
 
     public static boolean waitForAppOpenedByCheckCurPackage(
             String pkgName, long timeOut, long interval) {
-        boolean flag_app_opened = false;
-
         device.waitForIdle();
         long start = SystemClock.uptimeMillis();
-        while (!flag_app_opened && ((SystemClock.uptimeMillis() - start) < timeOut)) {
-            flag_app_opened = pkgName.equals(device.getCurrentPackageName());
+        while ((SystemClock.uptimeMillis() - start) < timeOut) {
+            if (pkgName.equalsIgnoreCase(device.getCurrentPackageName())) {
+                return true;
+            }
             ShellUtils.systemWaitByMillis(interval);
         }
 
-        return flag_app_opened;
+        return false;
     }
 
-    // Prefer to use waitForAppOpenedByUntil()
     public static boolean waitForAppOpenedByUntil(String pkgName) {
-        return waitForAppOpenedByUntil(pkgName, LONG_WAIT);
+        return waitForAppOpenedByUntil(pkgName, TIME_OUT);
     }
 
     public static boolean waitForAppOpenedByUntil(String pkgName, long wait) {
@@ -66,7 +62,7 @@ public final class TestHelper {
     }
 
     public static boolean waitForAppOpenedByShellCmd(String pkgName) {
-        return waitForAppOpenedByShellCmd(pkgName, 5);
+        return waitForAppOpenedByShellCmd(pkgName, (int)TIME_OUT / 1000);
     }
 
     public static boolean waitForAppOpenedByShellCmd(String topActivity, int waitBySeconds) {
@@ -87,28 +83,26 @@ public final class TestHelper {
         return false;
     }
 
-    // Prefer to use waitForUiObjectEnabled()
-    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj) {
-        final long timeOut = LONG_WAIT;
-        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut);
+    public static boolean waitForUiObjectEnabledByProperty(UiObject2 uiObj) {
+        return waitForUiObjectEnabledByProperty(uiObj, TIME_OUT);
     }
 
-    private static boolean waitForUiObjectEnabledByCheckProperty(UiObject2 uiObj, long timeOut) {
-        final long interval = SHORT_WAIT;
-        return waitForUiObjectEnabledByCheckProperty(uiObj, timeOut, interval);
+    private static boolean waitForUiObjectEnabledByProperty(UiObject2 uiObj, long timeOut) {
+        return waitForUiObjectEnabledByProperty(uiObj, timeOut, SHORT_WAIT);
     }
 
-    private static boolean waitForUiObjectEnabledByCheckProperty(
+    private static boolean waitForUiObjectEnabledByProperty(
             UiObject2 uiObj, long timeOut, long interval) {
-        boolean flag_UiObj_enabled = false;
+        device.waitForIdle();
         long start = SystemClock.uptimeMillis();
-
-        while (!uiObj.isEnabled() && ((SystemClock.uptimeMillis() - start) < timeOut)) {
-            flag_UiObj_enabled = uiObj.isEnabled();
+        while ((SystemClock.uptimeMillis() - start) < timeOut) {
+            if (uiObj.isEnabled()) {
+                return true;
+            }
             ShellUtils.systemWaitByMillis(interval);
         }
 
-        return flag_UiObj_enabled;
+        return false;
     }
 
     public static boolean waitForUiObjectEnabled(UiObject2 uiObj) {
@@ -132,6 +126,23 @@ public final class TestHelper {
     public static List<UiObject2> waitForUiObjectsExistAndReturn(BySelector selector) {
         device.waitForIdle();
         return device.wait(Until.findObjects(selector), TIME_OUT);
+    }
+
+    public static boolean waitForLoadingComplete() {
+        // if loading is showing, wait for loading disappear
+        UiObject2 loading = device.findObject(By.res("com.bestv.ott:id/progressBar"));
+        if (loading == null) {
+            return false;
+        }
+
+        for (int i = 0, waitTimes = 10; i < waitTimes; i++) {
+            SystemClock.sleep(SHORT_WAIT);
+            loading = device.findObject(By.res("com.bestv.ott:id/progressBar"));
+            if (loading == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void verifyEachTextViewHasTextInUiContainer(UiObject2 container) {

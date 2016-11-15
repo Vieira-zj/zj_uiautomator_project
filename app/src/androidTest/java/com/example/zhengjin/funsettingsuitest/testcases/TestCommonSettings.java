@@ -289,6 +289,7 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test18SelectScreenSaver() {
         mTask.moveToSpecifiedSettingsItem(mTask.getScreenSaverSettingItemContainerSelector());
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
         mAction.doDeviceActionAndWait(new DeviceActionMoveLeft());
 
         UiObject2 screenSaverContainer =
