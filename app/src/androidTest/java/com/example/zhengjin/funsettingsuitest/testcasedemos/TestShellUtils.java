@@ -11,6 +11,7 @@ import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
@@ -127,6 +128,13 @@ public final class TestShellUtils {
     public void testTakeScreenCaptures() {
         TaskLauncher.backToLauncher();
         ShellUtils.takeScreenCapture(mDevice);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testLogEnabledImeList() {
+        TaskSettings task = TaskSettings.getInstance();
+        task.isInputMethodEnabled();
     }
 
 }

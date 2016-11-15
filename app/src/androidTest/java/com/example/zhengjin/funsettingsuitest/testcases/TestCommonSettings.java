@@ -149,82 +149,76 @@ public final class TestCommonSettings {
         // select a sub device name and back
         UiObject2 deviceName = mDevice.findObject(By.text(SELECT_DEVICE_NAME));
         TestHelper.waitForUiObjectClickable(deviceName);
-        mAction.doClickActionAndWait(deviceName);
+        mAction.doClickActionAndWait(deviceName, WAIT);
 
+        mMessage = "Verify select a pre-defined device name.";
         UiObject2 deviceNameContainer =
                 mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
         UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
         Assert.assertNotNull(deviceNameValue);
-
-        mMessage = "Verify select a pre-defined device name.";
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test14_02SelfDefineDeviceNameAndCancel() {
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        UiObject2 defineName = mDevice.findObject(By.text("自定义"));
-        mAction.doClickActionAndWait(defineName, WAIT);
+        try {
+            mTask.openSelfDefineDeviceNamePage();
 
-        // verification 1
-        mMessage = "Verify the title of self-define device name activity.";
-        UiObject2 title = mDevice.findObject(mTask.getTitleOfSettingsPageSelector());
-        Assert.assertEquals("自定义设备名称", title.getText());
+            // verification 1
+            mMessage = "Verify the title of self-define device name activity.";
+            UiObject2 title = mDevice.findObject(mTask.getTitleOfSettingsPageSelector());
+            Assert.assertEquals("自定义设备名称", title.getText());
 
-        UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
-        mMessage = "Verify the device name editor is default focused.";
-        Assert.assertTrue(mMessage, editor.isFocused());
-        mMessage = "Verify the text in the device name editor.";
-        Assert.assertEquals(mMessage, SELECT_DEVICE_NAME, editor.getText());
+            UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
+            mMessage = "Verify the device name editor is default focused.";
+            Assert.assertTrue(mMessage, editor.isFocused());
+            mMessage = "Verify the text in the device name editor.";
+            Assert.assertEquals(mMessage, SELECT_DEVICE_NAME, editor.getText());
 
-        // verification 2
-        mMessage = "Verify cancel and back from the self-define device name activity.";
-        ShellUtils.execCommand("input text test", false, false);
-        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
-        UiObject2 deviceNameContainer =
-                mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
-        UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
-        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
+            // verification 2
+            mMessage = "Verify cancel and back from the self-define device name activity.";
+            mTask.inputEnTextInDeviceName("test");
+            mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
+            Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(
+                    mTask.getDeviceNameValueByText(SELECT_DEVICE_NAME)));
+        } finally {
+            mTask.enableInputMethod();
+        }
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test14_03SelfDefineDeviceNameAndConfirm() {
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        UiObject2 defineName = mDevice.findObject(By.text("自定义"));
-        mAction.doClickActionAndWait(defineName, WAIT);
+        try {
+            mTask.openSelfDefineDeviceNamePage();
 
-        // checkpoint 1
-        mMessage = "Verify define a customized device name.";
-        mTask.clearTextOfEditorView(SELECT_DEVICE_NAME.length());
-        ShellUtils.execCommand(
-                String.format("input text %s", SELF_DEFINE_DEVICE_NAME), false, false);
-        UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
-        Assert.assertEquals(mMessage, SELF_DEFINE_DEVICE_NAME, editor.getText());
+            // checkpoint 1
+            mMessage = "Verify define a customized device name.";
+            mTask.clearTextOfEditorView(SELECT_DEVICE_NAME.length());
+            mTask.inputEnTextInDeviceName(SELF_DEFINE_DEVICE_NAME);
+            UiObject2 editor = mDevice.findObject(mTask.getDeviceNameEditorSelector());
+            Assert.assertEquals(mMessage, SELF_DEFINE_DEVICE_NAME, editor.getText());
 
-        mAction.doDeviceActionAndWait(new DeviceActionBack());  // hide keyboard
-        mAction.doDeviceActionAndWait(new DeviceActionMoveDown());
-        mMessage = "Verify the confirm button is focused.";
-        UiObject2 btnConfirm = mDevice.findObject(mTask.getDeviceNameConfirmButtonSelector());
-        Assert.assertTrue(mMessage, btnConfirm.isFocused());
+            mMessage = "Verify the confirm button is focused.";
+            mAction.doDeviceActionAndWait(new DeviceActionMoveDown());
+            UiObject2 btnConfirm = mDevice.findObject(mTask.getDeviceNameConfirmButtonSelector());
+            Assert.assertTrue(mMessage, btnConfirm.isFocused());
 
-        // checkpoint 2
-        mMessage = "Self-defined device name is updated success.";
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        UiObject2 deviceNameContainer =
-                mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
-        UiObject2 deviceNameValue =
-                deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
-        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
+            // checkpoint 2
+            mMessage = "Self-defined device name is updated success.";
+            mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+            Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(
+                    mTask.getDeviceNameValueByText(SELF_DEFINE_DEVICE_NAME)));
+        } finally {
+            mTask.enableInputMethod();
+        }
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test14_04SelfDefineEmptyNameAndConfirm() {
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        UiObject2 defineName = mDevice.findObject(By.text("自定义"));
-        mAction.doClickActionAndWait(defineName, WAIT);
+        mTask.openSelfDefineDeviceNamePage();
 
         mMessage = "Verify define empty device name and submit.";
         mTask.clearTextOfEditorView(SELF_DEFINE_DEVICE_NAME.length());
@@ -235,11 +229,8 @@ public final class TestCommonSettings {
 
         mMessage = "Verify the pre-defined device name is unchanged.";
         mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
-        UiObject2 deviceNameContainer =
-                mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
-        UiObject2 deviceNameValue =
-                deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
-        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(deviceNameValue));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(
+                mTask.getDeviceNameValueByText(SELF_DEFINE_DEVICE_NAME)));
     }
 
     @Test

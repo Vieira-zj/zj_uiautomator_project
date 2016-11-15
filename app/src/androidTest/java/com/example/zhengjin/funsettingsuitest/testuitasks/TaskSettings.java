@@ -16,6 +16,8 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
@@ -25,7 +27,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 
 /**
  * Created by zhengjin on 2016/6/6.
- *
+ * <p>
  * Include the UI selectors and tasks for settings apk.
  */
 public final class TaskSettings {
@@ -150,6 +152,12 @@ public final class TaskSettings {
         return switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
     }
 
+    public UiObject2 getDeviceNameValueByText(String nameText) {
+        UiObject2 deviceNameContainer =
+                device.findObject(this.getDeviceNameSettingItemContainerSelector());
+        return deviceNameContainer.findObject(By.text(nameText));
+    }
+
     public void moveToSpecifiedSettingsItem(BySelector selector) {
         UiObject2 item = device.findObject(selector);  // find the item from top
         if (item != null) {
@@ -219,10 +227,42 @@ public final class TaskSettings {
         Assert.assertTrue("Failed to select the specified wallpaper.", false);
     }
 
+    public void openSelfDefineDeviceNamePage() {
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+        UiObject2 itemSelfDefine = device.findObject(By.text("自定义"));
+        action.doClickActionAndWait(itemSelfDefine, WAIT);
+    }
+
+    public boolean isInputMethodEnabled() {
+        ShellUtils.CommandResult cr = ShellUtils.execCommand("ime list -s", false, true);
+        return cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg);
+    }
+
+    public void enableInputMethod() {
+        if (!isInputMethodEnabled()) {
+            ShellUtils.execCommand("ime enable com.baidu.input_baidutv/.ImeService", false, false);
+        }
+    }
+
+    public void disableInputMethod() {
+        if (isInputMethodEnabled()) {
+            ShellUtils.execCommand("ime disable com.baidu.input_baidutv/.ImeService", false, false);
+        }
+    }
+
+    public boolean inputEnTextInDeviceName(String text) {
+        this.disableInputMethod();
+        ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
+        ShellUtils.CommandResult cr =
+                ShellUtils.execCommand(String.format("input text %s", text), false, false);
+        return cr.mResult == 0;
+    }
+
     public void clearTextOfEditorView(int charCount) {
         for (int i = 0; i < charCount; i++) {
             ShellUtils.execCommand("input keyevent KEYCODE_DEL", false, false);
             ShellUtils.systemWaitByMillis(200L);
         }
     }
+
 }
