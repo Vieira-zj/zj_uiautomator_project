@@ -246,7 +246,8 @@ public final class TaskSettings {
 
     public void disableInputMethod() {
         if (isInputMethodEnabled()) {
-            ShellUtils.execCommand("ime disable com.baidu.input_baidutv/.ImeService", false, false);
+            ShellUtils.execCommand(
+                    "ime disable com.baidu.input_baidutv/.ImeService", false, false);
         }
     }
 
@@ -260,7 +261,8 @@ public final class TaskSettings {
 
     public void clearTextOfEditorView(int charCount) {
         for (int i = 0; i < charCount; i++) {
-            ShellUtils.execCommand("input keyevent KEYCODE_DEL", false, false);
+//            ShellUtils.execCommand("input keyevent KEYCODE_DEL", false, false);
+            device.pressDelete();
             ShellUtils.systemWaitByMillis(200L);
         }
     }
