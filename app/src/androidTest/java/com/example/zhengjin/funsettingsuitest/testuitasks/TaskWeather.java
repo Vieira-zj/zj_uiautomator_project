@@ -104,6 +104,10 @@ public final class TaskWeather {
         return By.res("tv.fun.weather:id/btn_cancel");
     }
 
+    public UiObject2 getCurrentCityOnWeatherHomePage() {
+        return device.findObject(this.getLocationOfWeatherHomeSelector());
+    }
+
     public String getWeatherForecastDateFromUiText(String source) {
         int start = source.indexOf("(") + 1;
         return source.substring(start, (source.length() - 1));

@@ -87,9 +87,9 @@ public final class TestWeather {
     public void test11DefaultLocatedCity() {
         mMessage = "Verify the default location on weather home.";
         TestHelper.waitForLoadingComplete();
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
-        Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+        Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY),location.getText());
     }
 
     @Test
@@ -192,7 +192,7 @@ public final class TestWeather {
 
         // verification 2
         mMessage = "Verify the shown city is not changed after cancel add city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertNotNull(location);
         Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
     }
@@ -209,7 +209,7 @@ public final class TestWeather {
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after add new city weather.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
     }
@@ -237,7 +237,7 @@ public final class TestWeather {
 
         // verification 2
         mMessage = "Verify the shown city is not changed after cancel add new default city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
     }
@@ -255,7 +255,7 @@ public final class TestWeather {
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after add new default city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage,
                 String.format("%s(默认)", ADD_DEFAULT_CITY_2), location.getText());
@@ -265,7 +265,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test25FirstCityAfterAddDefaultCity() {
         mMessage = "Verify the 1st shown city after add new default city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage,
                 String.format("%s(默认)", ADD_DEFAULT_CITY_2), location.getText());
@@ -283,7 +283,7 @@ public final class TestWeather {
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after change default city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
     }
@@ -292,7 +292,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test27FirstCityAfterModifyDefaultCity() {
         mMessage = "Verify the 1st shown city after change default city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
+        UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
     }
@@ -309,26 +309,26 @@ public final class TestWeather {
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
         mMessage = "Verify the shown city after re-add same default city.";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
-        Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+        Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY),
+                mTask.getCurrentCityOnWeatherHomePage().getText());
     }
 
     @Test
     @Category(CategoryWeatherTests.class)
     public void test29SequenceAfterAddedCities() {
         mMessage = "Verify the 1st default city";
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
-        Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+        Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY),
+                mTask.getCurrentCityOnWeatherHomePage().getText());
 
         mMessage = "Verify the 2nd added city.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
-        location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
-        Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
+        Assert.assertEquals(mMessage, ADD_CITY_1,
+                mTask.getCurrentCityOnWeatherHomePage().getText());
 
         mMessage = "Verify the 3rd added city.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
-        location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
-        Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2, location.getText());
+        Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2,
+                mTask.getCurrentCityOnWeatherHomePage().getText());
     }
 
     @Test
@@ -360,8 +360,8 @@ public final class TestWeather {
 
         mMessage = "Verify click cancel button of dialog.";
         mAction.doClickActionAndWait(cancelBtn);
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
-        Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
+        Assert.assertEquals(mMessage, ADD_CITY_1,
+                mTask.getCurrentCityOnWeatherHomePage().getText());
     }
 
     @Test
@@ -378,8 +378,8 @@ public final class TestWeather {
 
         mMessage = "Verify delete a city.";
         mAction.doClickActionAndWait(confirmBtn, WAIT);
-        UiObject2 location = mDevice.findObject(mTask.getLocationOfWeatherHomeSelector());
-        Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2, location.getText());
+        Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2,
+                mTask.getCurrentCityOnWeatherHomePage().getText());
     }
 
     @Ignore
