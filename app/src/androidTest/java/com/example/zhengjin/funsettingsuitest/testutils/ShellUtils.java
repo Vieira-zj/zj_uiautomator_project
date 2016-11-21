@@ -127,31 +127,26 @@ public final class ShellUtils {
         }
     }
 
-    public static void stopProcess(String packageName) {
-        String message = "Force stop the app process.";
-        String cmdStopProcess = String.format("am force-stop %s", packageName);
-
+    public static void stopProcess(String pkgName) {
+        String cmdStopProcess = String.format("am force-stop %s", pkgName);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
-        Assert.assertTrue(message, (result.mResult == 0));
+        Assert.assertTrue("Force stop the app process.", (result.mResult == 0));
     }
 
-    public static void stopAndClearPackage(String packageName) {
-        String message = "Clear the app package.";
-        String cmdStopProcess = String.format("pm clear %s", packageName);
-
+    public static void stopAndClearPackage(String pkgName) {
+        String cmdStopProcess = String.format("pm clear %s", pkgName);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
-        Assert.assertTrue(message, (result.mResult == 0));
+        Assert.assertTrue("Clear the app package.", (result.mResult == 0));
+    }
+
+    public static void startSpecifiedActivity(String pkgName, String actName) {
+        String cmdStart = String.format("am start %s/%s", pkgName, actName);
+        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStart, false, false);
+        Assert.assertEquals("Start the specified activity.", 0, result.mResult);
     }
 
     public static void systemWaitByMillis(long ms) {
         SystemClock.sleep(ms);
-    }
-
-    public static String getCurrentTime() {
-        SimpleDateFormat formatter =
-                new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
-        Date curTime = new Date(System.currentTimeMillis());
-        return formatter.format(curTime);
     }
 
     public static String getCurrentDate() {
@@ -159,6 +154,13 @@ public final class ShellUtils {
                 new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         return formatter.format(curDate);
+    }
+
+    public static String getCurrentDateTime() {
+        SimpleDateFormat formatter =
+                new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
+        Date curTime = new Date(System.currentTimeMillis());
+        return formatter.format(curTime);
     }
 
     public static void takeScreenCapture(UiDevice device) {
@@ -175,7 +177,7 @@ public final class ShellUtils {
 
         final String suffix = ".png";
         String filePath = String.format(
-                "%s/capture_%s%s", CAPTURES_PATH, ShellUtils.getCurrentTime(), suffix);
+                "%s/capture_%s%s", CAPTURES_PATH, ShellUtils.getCurrentDateTime(), suffix);
         Assert.assertTrue("Take screenshot.", device.takeScreenshot(new File(filePath)));
     }
 

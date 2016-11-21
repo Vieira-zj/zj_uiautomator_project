@@ -12,9 +12,11 @@ import android.support.test.uiautomator.UiSelector;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
@@ -27,7 +29,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 
 /**
  * Created by zhengjin on 2016/6/14.
- *
+ * <p>
  * Include the UI selectors and tasks for file manager apk.
  */
 public final class TaskFileManager {
@@ -54,8 +56,20 @@ public final class TaskFileManager {
         }
     }
 
-    public BySelector getFileManagerHomeTab() {
+    public BySelector getFileManagerHomeTabSelector() {
         return By.res("tv.fun.filemanager:id/activity_fun_fm_tab");
+    }
+
+    public BySelector getVideoCategorySelector() {
+        return By.res("tv.fun.filemanager:id/category_video");
+    }
+
+    public BySelector getCategoryTitleSelector() {
+        return By.res("tv.fun.filemanager:id/entity_name");
+    }
+
+    public BySelector getCategoryEntiesCountSelector() {
+        return By.res("tv.fun.filemanager:id/entity_count");
     }
 
     public BySelector getMainTitleSelector() {
@@ -83,7 +97,7 @@ public final class TaskFileManager {
     }
 
     public BySelector getMenuShowAllBtnContainerSelector() {
-        return By.res("tv.fun.filemanager:id/menu_item_hide_id");
+        return By.res("tv.fun.filemanager:id/menu_item_show_id");
     }
 
     public BySelector getMenuBtnTextSelector() {
@@ -105,41 +119,46 @@ public final class TaskFileManager {
     public void openLocalFilesCard() {
         final int positionX = 1350;
         final int positionY = 450;
-        openCardFromFileManagerHomePage(positionX, positionY);
+        this.clickOnSpecifiedCardOfFileManagerHome(positionX, positionY);
     }
 
     public void openCategoryVideoCard() {
         final int positionX = 450;
         final int positionY = 450;
-        openCardFromFileManagerHomePage(positionX, positionY);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        this.clickOnSpecifiedCardOfFileManagerHome(positionX, positionY);
+        this.enterAndWaitForSpecifiedCardOpened();
     }
 
     public void openCategoryAppCard() {
         final int positionX = 650;
         final int positionY = 450;
-        openCardFromFileManagerHomePage(positionX, positionY);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        this.clickOnSpecifiedCardOfFileManagerHome(positionX, positionY);
+        this.enterAndWaitForSpecifiedCardOpened();
     }
 
     public void openCategoryMusicCard() {
         final int positionX = 450;
         final int positionY = 750;
-        openCardFromFileManagerHomePage(positionX, positionY);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        this.clickOnSpecifiedCardOfFileManagerHome(positionX, positionY);
+        this.enterAndWaitForSpecifiedCardOpened();
     }
 
     public void openCategoryPictureCard() {
         final int positionX = 750;
         final int positionY = 750;
-        openCardFromFileManagerHomePage(positionX, positionY);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
+        this.clickOnSpecifiedCardOfFileManagerHome(positionX, positionY);
+        this.enterAndWaitForSpecifiedCardOpened();
     }
 
-    public void openCardFromFileManagerHomePage(int positionX, int positionY) {
+    private void clickOnSpecifiedCardOfFileManagerHome(int positionX, int positionY) {
         String message = "Error in openLocalFilesCard(), click on AllFiles card.";
         Assert.assertTrue(message, device.click(positionX, positionY));
         ShellUtils.systemWaitByMillis(WAIT);
+    }
+
+    private void enterAndWaitForSpecifiedCardOpened() {
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+        TestHelper.waitForUiObjectEnabled(device.findObject(this.getSubTitleSelector()));
     }
 
     public void navigateToSpecifiedPath(String path) {
@@ -205,6 +224,20 @@ public final class TaskFileManager {
         return dirs;
     }
 
+    public void moveUntilSpecifiedItemSelected(String itemText) {
+        UiObject2 item = device.findObject(By.text(itemText));
+        // set focus on 1st item
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
+        for (int i = 0, maxMove = 15; i < maxMove; i++) {
+            if (item.isSelected()) {
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+
+        Assert.assertTrue(String.format("Failed to move on the item %s", itemText), false);
+    }
+
     public void showMenuAndClickBtn(String btnText) {
         String message;
         boolean isFocused = false;
@@ -233,4 +266,5 @@ public final class TaskFileManager {
         action.doDeviceActionAndWait(new DeviceActionMenu());
         action.doDeviceActionAndWait(new DeviceActionMoveDown());  // request focus
     }
+
 }
