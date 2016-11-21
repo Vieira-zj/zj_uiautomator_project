@@ -7,7 +7,6 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
@@ -62,10 +61,18 @@ public final class TestCommonSettings {
 
     private final String SELECT_DEVICE_NAME = "书房的电视";
     private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
+
     private final String TEXT_INPUT_METHOD = "百度输入法TV版";
     private final String TEXT_FORBIDDEN = "禁止";
     private final String TEXT_SYSTEM_RECOVERY = "恢复出厂设置";
-    private String[] TEXT_WALLPAPERS = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
+
+    private final String[] SUB_VALUES_SLEEP_TIME =
+            {"永不休眠", "15分钟", "30分钟", "60分钟", "90分钟", "120分钟"};
+    private final String[] SUB_VALUES_SCREEN_SAVER =
+            {"5分钟（默认）", "10分钟", "15分钟", "20分钟", "关闭"};
+    private final String[] SUB_VALUES_SHUTDOWN_TV_TIME =
+            {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
+    private final String[] SUB_VALUES_WALLPAPER = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
     public static void classSetUp() {
@@ -235,24 +242,60 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test15SleepTimeDefaultValue() {
+    public void test15_01OpenAdvancedSettingItem() {
         mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
+        mMessage = "Verify the text of title on advanced page.";
+        UiObject2 advancedPageTitle =
+                mDevice.findObject(mTask.getTitleOfSettingsPageSelector());
+        TestHelper.waitForUiObjectEnabled(advancedPageTitle);
+        Assert.assertEquals("高级设置", advancedPageTitle.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test15_02SleepTimeDefaultValue() {
+        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        TestHelper.waitForUiObjectEnabled(
+                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+
+        mMessage = "Verify the key text of sleep setting.";
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
-        TestHelper.waitForUiObjectEnabled(sleepSettingContainer);
         UiObject2 itemKey =
                 sleepSettingContainer.findObject(mTask.getSettingItemKeySelector());
-        mMessage = "Verify the key text of sleep setting.";
         Assert.assertEquals(mMessage, "休眠设置", itemKey.getText());
 
-        UiObject2 itemValueContainer =
-                sleepSettingContainer.findObject(mTask.getSettingSwitcherItemValueSelector());
-        UiObject2 itemValue = itemValueContainer.findObject(By.clazz("android.widget.TextView"));
         mMessage = "Verify the default value of sleep setting.";
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(sleepSettingContainer);
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(itemValue));
-        Assert.assertEquals(mMessage, "永不休眠", itemValue.getText());
+        Assert.assertEquals(mMessage, SUB_VALUES_SLEEP_TIME[0], itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test15_01SleepTimeSubValues() {
+        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        TestHelper.waitForUiObjectEnabled(
+                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+
+        mMessage = "Verify the sleep time sub value at position %d.";
+        for (int i = 1; i < SUB_VALUES_SLEEP_TIME.length; i++) {
+            mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+            UiObject2 itemValue = mTask.getTextViewOfSwitcher(
+                    mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector()));
+            Assert.assertEquals(String.format(mMessage, i),
+                    SUB_VALUES_SLEEP_TIME[i], itemValue.getText());
+        }
+
+        mMessage = "Verify move from last to first sleep time item value.";
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(
+                mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector()));
+        Assert.assertEquals(mMessage, SUB_VALUES_SLEEP_TIME[0], itemValue.getText());
     }
 
     @Test
@@ -260,21 +303,70 @@ public final class TestCommonSettings {
     public void test16SelectSleepTime() {
         mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        TestHelper.waitForUiObjectEnabled(
+                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+
+        mMessage = "Verify select the sleep time.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 3);
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
 
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mTask.getSleepTimeSettingItemContainerSelector());
-        TestHelper.waitForUiObjectEnabled(sleepSettingContainer);
-        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
-
-        mMessage = "Verify the selected the sleep time.";
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(sleepSettingContainer);
         Assert.assertNotNull(itemValue);
-        Assert.assertEquals(mMessage, "30分钟", itemValue.getText());
+        Assert.assertEquals(mMessage, SUB_VALUES_SLEEP_TIME[3], itemValue.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test17ScreenSaverDefaultValue() {
+    public void test17_01SetShutDownTvTimeDefaultValue() {
+        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        TestHelper.waitForUiObjectEnabled(
+                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+
+        UiObject2 shutDownTvContainer =
+                mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector());
+
+        mMessage = "Verify the key text of set shutdown tv time.";
+        UiObject2 itemKey =
+                shutDownTvContainer.findObject(mTask.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, "定时关机", itemKey.getText());
+
+        mMessage = "Verify the default value of set shutdown tv time.";
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(shutDownTvContainer);
+        Assert.assertNotNull(itemValue);
+        Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test17_02SetShutDownTvTimeSubValues() {
+        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        TestHelper.waitForUiObjectEnabled(
+                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+
+        mMessage = "Verify the set shutdown tv time sub value at position %d.";
+        mTask.moveToSpecifiedSettingsItem(mTask.getSetShutDownTvItemContainerSelector());
+        for (int i = 1; i < SUB_VALUES_SHUTDOWN_TV_TIME.length; i++) {
+            mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+            UiObject2 itemValue = mTask.getTextViewOfSwitcher(
+                    mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector()));
+            Assert.assertEquals(String.format(mMessage, i),
+                    SUB_VALUES_SHUTDOWN_TV_TIME[i], itemValue.getText());
+        }
+
+        mMessage = "Verify move from last to first value of set shutdown tv time.";
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(
+                mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector()));
+        Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test18ScreenSaverDefaultValue() {
         mTask.scrollMoveToSpecificSettingsItem("屏保");
 
         mMessage = "Verify the default value of screen saver.";
@@ -282,44 +374,65 @@ public final class TestCommonSettings {
                 mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector());
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
         Assert.assertNotNull(itemValue);
-        Assert.assertEquals(mMessage, "5分钟（默认）", itemValue.getText());
+        Assert.assertEquals(mMessage, SUB_VALUES_SCREEN_SAVER[0], itemValue.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test18SelectScreenSaver() {
+    public void test18_01ScreenSaverSubValues() {
         mTask.moveToSpecifiedSettingsItem(mTask.getScreenSaverSettingItemContainerSelector());
         ShellUtils.systemWaitByMillis(SHORT_WAIT);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveLeft());
 
+        mMessage = "Verify the sub values of screen saver at position %d.";
+        for (int i = 1; i < SUB_VALUES_SCREEN_SAVER.length; i++) {
+            mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+            UiObject2 itemValue = mTask.getTextViewOfSwitcher(
+                    mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector()));
+            Assert.assertEquals(String.format(mMessage, i),
+                    SUB_VALUES_SCREEN_SAVER[i], itemValue.getText());
+        }
+
+        mMessage = "Verify move from last to first screen saver item value.";
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(
+                mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector()));
+        Assert.assertEquals(mMessage, SUB_VALUES_SCREEN_SAVER[0], itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test19SelectScreenSaver() {
+        mTask.moveToSpecifiedSettingsItem(mTask.getScreenSaverSettingItemContainerSelector());
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
+        ShellUtils.systemWaitByMillis(WAIT);
+
+        mMessage = "Verify select the screen saver value.";
         UiObject2 screenSaverContainer =
                 mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector());
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
-
-        mMessage = "Verify the selected value of screen saver.";
         Assert.assertNotNull(itemValue);
-        Assert.assertEquals(mMessage, "关闭", itemValue.getText());
+        Assert.assertEquals(mMessage, SUB_VALUES_SCREEN_SAVER[3], itemValue.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
     public void test21InstallUnknownAppDefaultValue() {
         mTask.scrollMoveToSpecificSettingsItem("安装未知来源应用");
+
+        mMessage = "Verify the default value text of install unknown app settings item.";
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
-
-        mMessage = "Verify the default value text of install unknown app settings item.";
         Assert.assertNotNull(valueText);
         Assert.assertEquals(mMessage, TEXT_FORBIDDEN, valueText.getText());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test22SelectAllowedInstallUnknownAppAndCancel() {
+    public void test22AllowedInstallUnknownAppAndCancel() {
         mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
 
-        // verify title
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
         UiObject2 dialogTitle = mDevice.findObject(mTask.getTitleOfCommonDialogSelector());
         mMessage = "Verify the common dialog title is enabled.";
@@ -327,48 +440,46 @@ public final class TestCommonSettings {
         mMessage = "Verify the text of common dialog title.";
         Assert.assertEquals(mMessage, "安装未知应用", dialogTitle.getText());
 
-        // verify click cancel button
-        UiObject2 cancelBtn = mDevice.findObject(mTask.getCancelBtnOfCommonDialogSelector());
         mMessage = "Verify the cancel button on common dialog is enabled.";
+        UiObject2 cancelBtn = mDevice.findObject(mTask.getCancelBtnOfCommonDialogSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectClickable(cancelBtn));
         mAction.doClickActionAndWait(cancelBtn);
 
+        mMessage = "Verify the value text of install unknown app settings item.";
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
-        mMessage = "Verify the value text of install unknown app settings item.";
         Assert.assertEquals(mMessage, TEXT_FORBIDDEN, valueText.getText());
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
-    public void test23SelectAllowedInstallUnknownAppAndConfirm() {
+    @Category(CategorySettingsTests.class)
+    public void test23AllowedInstallUnknownAppAndConfirm() {
         mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
 
-        // verify click confirm button
+        mMessage = "Verify the confirm button on common dialog is enabled.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
         UiObject2 confirmBtn = mDevice.findObject(mTask.getConfirmBtnOfCommonDialogSelector());
-        mMessage = "Verify the confirm button on common dialog is enabled.";
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectClickable(confirmBtn));
         mAction.doClickActionAndWait(confirmBtn);
 
+        mMessage = "Verify the value text of install unknown app settings item after allowed.";
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
-        mMessage = "Verify the value text of install unknown app settings item after allowed.";
         Assert.assertEquals(mMessage, "允许", valueText.getText());
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
-    public void test24SelectForbiddenInstallUnknownApp() {
+    @Category(CategorySettingsTests.class)
+    public void test24ForbiddenInstallUnknownApp() {
         mTask.moveToSpecifiedSettingsItem(mTask.getInstallUnknownAppSettingItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
 
+        mMessage = "Verify the value text of install unknown app settings item after forbidden.";
         UiObject2 installUnknownAppItemContainer =
                 mDevice.findObject(mTask.getInstallUnknownAppSettingItemContainerSelector());
         UiObject2 valueText = mTask.getTextViewOfSwitcher(installUnknownAppItemContainer);
-        mMessage = "Verify the value text of install unknown app settings item after forbidden.";
         Assert.assertEquals(mMessage, TEXT_FORBIDDEN, valueText.getText());
     }
 
@@ -380,19 +491,19 @@ public final class TestCommonSettings {
         mAction.doClickActionAndWait(recoverItem);  // open dialog
 
         // verification 1
+        mMessage = "Verify the content of recover dialog.";
         UiObject2 title = mDevice.findObject(mTask.getSystemRecoverDialogTitleSelector());
         Assert.assertNotNull(title);
-        mMessage = "Verify the content of recover dialog.";
         Assert.assertEquals(mMessage, "您的设备将恢复出厂设置", title.getText());
 
         // verification 2
+        mMessage = "Verify the cancel button in recover dialog.";
         UiObject2 cancelBtn =
                 mDevice.findObject(mTask.getCancelBtnOfSystemRecoverDialogSelector());
-        mMessage = "Verify the cancel button in recover dialog.";
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectClickable(cancelBtn));
 
-        mAction.doClickActionAndWait(cancelBtn);
         mMessage = "Verify back to common settings page after click the cancel button";
+        mAction.doClickActionAndWait(cancelBtn);
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(recoverItem));
     }
 
@@ -404,22 +515,22 @@ public final class TestCommonSettings {
         mAction.doClickActionAndWait(recoverItem);  // open dialog
 
         // verification 1
+        mMessage = "Verify the confirm button is default focused.";
         UiObject2 confirmBtn =
                 mDevice.findObject(mTask.getConfirmBtnOfSystemRecoverDialogSelector());
         Assert.assertNotNull(confirmBtn);
-        mMessage = "Verify the confirm button is default focused.";
         Assert.assertTrue(mMessage, confirmBtn.isFocused());
 
         // verification 2
         UiObject2 saveInfoCheckbox = mDevice.findObject(mTask.getSaveInfoOfRecoverDialogSelector());
         Assert.assertNotNull(saveInfoCheckbox);
 
-        mAction.doDeviceActionAndWait(new DeviceActionMoveUp());
         mMessage = "Verify the saver information checkbox is focused.";
+        mAction.doDeviceActionAndWait(new DeviceActionMoveUp());
         Assert.assertTrue(mMessage, saveInfoCheckbox.isFocused());
 
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
         mMessage = "Verify the saver information checkbox is checked.";
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());
         Assert.assertTrue(mMessage, saveInfoCheckbox.isChecked());
     }
 
@@ -434,7 +545,7 @@ public final class TestCommonSettings {
         Assert.assertEquals(mMessage, "壁纸", itemKey.getText());
         mMessage = "Verify the default wallpaper.";
         UiObject2 itemValue = itemWallpaper.findObject(mTask.getSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TEXT_WALLPAPERS[0], itemValue.getText());
+        Assert.assertEquals(mMessage, SUB_VALUES_WALLPAPER[0], itemValue.getText());
     }
 
     @Test
@@ -445,10 +556,11 @@ public final class TestCommonSettings {
 
         mMessage = "Verify there are 4 sub wallpapers on wallpaper select page.";
         List<UiObject2> wallpapers = mDevice.findObjects(By.clazz(CLASS_TEXT_VIEW));
-        Assert.assertEquals(mMessage, TEXT_WALLPAPERS.length, wallpapers.size());
+        Assert.assertEquals(mMessage, SUB_VALUES_WALLPAPER.length, wallpapers.size());
 
         mMessage = "Verify the 1st sub wallpaper is default selected.";
-        UiObject2 defaultWallpaper = mDevice.findObject(By.text(TEXT_WALLPAPERS[0])).getParent();
+        UiObject2 defaultWallpaper =
+                mDevice.findObject(By.text(SUB_VALUES_WALLPAPER[0])).getParent();
         Assert.assertTrue(mMessage, defaultWallpaper.isSelected());
 
         for (UiObject2 wallpaper : wallpapers) {
@@ -461,7 +573,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test33SelectWallpaper() {
-        final String selectWallpaper = TEXT_WALLPAPERS[2];
+        final String selectWallpaper = SUB_VALUES_WALLPAPER[2];
 
         mTask.moveToSpecifiedSettingsItem(mTask.getWallpaperSettingItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
@@ -495,19 +607,17 @@ public final class TestCommonSettings {
     public void test35SelectInputMethod() {
         mTask.moveToSpecifiedSettingsItem(mTask.getInputMethodSettingItemContainerSelector());
 
-        // verification 1
         mMessage = "Verify select input method by left key event.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
-        UiObject2 itemInput =
-                mDevice.findObject(mTask.getInputMethodSettingItemContainerSelector());
-        UiObject2 inputMethod = mTask.getTextViewOfSwitcher(itemInput);
+        UiObject2 inputMethod = mTask.getTextViewOfSwitcher(
+                mDevice.findObject(mTask.getInputMethodSettingItemContainerSelector()));
         Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
 
-        // verification 2
         mMessage = "Verify select input method by right key event.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
         ShellUtils.systemWaitByMillis(WAIT);
-        inputMethod = mTask.getTextViewOfSwitcher(itemInput);
+        inputMethod = mTask.getTextViewOfSwitcher(
+                mDevice.findObject(mTask.getInputMethodSettingItemContainerSelector()));
         Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
     }
 
@@ -518,14 +628,14 @@ public final class TestCommonSettings {
         UiObject2 locationItemContainer =
                 mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
 
+        mMessage = "Verify the location item key text.";
         UiObject2 locationItemKey =
                 locationItemContainer.findObject(mTask.getSettingItemKeySelector());
-        mMessage = "Verify the location item key text.";
         Assert.assertEquals(mMessage, "天气位置", locationItemKey.getText());
 
+        mMessage = "Verify the location item default value text on Common Settings.";
         UiObject2 locationItemValue =
                 locationItemContainer.findObject(mTask.getSettingItemValueSelector());
-        mMessage = "Verify the location item default value text on Common Settings.";
         Assert.assertEquals(mMessage, "湖北 武汉", locationItemValue.getText());
     }
 
@@ -533,14 +643,14 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test42OpenWeatherAppAndBackToSettings() {
         // weather location settings item is remove from settings home page
+        mMessage = "Verify open Weather app home.";
         mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        mMessage = "Verify open Weather app home.";
         Assert.assertTrue(mMessage,
                 TestHelper.waitForAppOpenedByCheckCurPackage(WEATHER_PKG_NAME, TIME_OUT));
 
-        mAction.doDeviceActionAndWait(new DeviceActionBack());
         mMessage = "Verify back to Settings app home.";
+        mAction.doDeviceActionAndWait(new DeviceActionBack());
         Assert.assertTrue(mMessage,
                 TestHelper.waitForAppOpenedByCheckCurPackage(SETTINGS_PKG_NAME));
     }
@@ -582,8 +692,8 @@ public final class TestCommonSettings {
                 new String[]{province, city}, new boolean[]{false, false});
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
-        mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
         mMessage = "Verify the selected location item value text on Common Settings.";
+        mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
         String expectedItemValueText = String.format("%s %s", province, city);
         UiObject2 locationItemContainer =
                 mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
@@ -600,7 +710,7 @@ public final class TestCommonSettings {
     }
 
     private boolean IsSubWallpaperIncluded(String wallpaper) {
-        for (String text : TEXT_WALLPAPERS) {
+        for (String text : SUB_VALUES_WALLPAPER) {
             if (text.equals(wallpaper)) {
                 return true;
             }

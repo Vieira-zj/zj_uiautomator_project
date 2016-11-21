@@ -82,6 +82,10 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_sleep");
     }
 
+    public BySelector getSetShutDownTvItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_screen_shutdown_time");
+    }
+
     public BySelector getScreenSaverSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_screen_saver");
     }
