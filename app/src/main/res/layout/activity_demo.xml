@@ -28,4 +28,16 @@
         android:layout_height="wrap_content"
         android:text="@string/message_hello" />
 
+    <Button
+        android:id="@+id/button_http_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_http_test" />
+
+    <TextView
+        android:id="@+id/text_http_test_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_Http_Test" />
+
 </LinearLayout>

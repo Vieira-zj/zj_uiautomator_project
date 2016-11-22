@@ -34,6 +34,7 @@ android {
         exclude 'NOTICE'
         exclude 'LICENSE.txt'
     }
+    useLibrary('org.apache.http.legacy')
 }
 
 dependencies {
@@ -55,4 +56,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:design:24.2.1'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
 }

@@ -16,6 +16,8 @@
     <string name="editor_user_name_hint">Your name</string>
     <string name="btn_ok">OK</string>
     <string name="message_hello">Hello Message</string>
+    <string name="btn_http_test">OkHttp</string>
+    <string name="message_Http_Test">Http Test</string>
 
     <!-- instrument test runner activity -->
     <string name="title_activity_inst_test">Instrument test Activity</string>
