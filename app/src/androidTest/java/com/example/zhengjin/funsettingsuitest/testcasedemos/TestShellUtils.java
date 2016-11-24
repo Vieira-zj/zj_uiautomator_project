@@ -132,7 +132,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testLogEnabledImeList() {
+    public void testPrintEnabledImeList() {
         TaskSettings task = TaskSettings.getInstance();
         task.isInputMethodEnabled();
     }

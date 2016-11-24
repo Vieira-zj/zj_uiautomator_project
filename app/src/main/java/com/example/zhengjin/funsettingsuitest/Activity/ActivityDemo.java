@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,8 @@ import java.util.Locale;
 
 @SuppressWarnings("deprecation")
 public final class ActivityDemo extends AppCompatActivity {
+
+    private final static String TAG = ActivityDemo.class.getSimpleName();
 
     private EditText mEditorUserName = null;
     private Button mBtnOk = null;
@@ -90,6 +94,12 @@ public final class ActivityDemo extends AppCompatActivity {
 //            }
 //        }
 //    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d(TAG, String.format("OnKeyDownTest, KeyCode: %d", keyCode));
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void initViews() {
         mEditorUserName = (EditText) findViewById(R.id.editor_user_name);
