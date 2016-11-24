@@ -4,7 +4,7 @@
 
     <!-- main activity -->
     <string name="title_activity_main">Main Activity</string>
-    <string name="label_demo">This a test demo</string>
+    <string name="label_demo">Test demo</string>
     <string name="label_run_instruments">Run instrument ui tests</string>
     <string name="label_run_utils_test">Run utils test</string>
     <string name="label_run_utils_test2">Run utils test2</string>

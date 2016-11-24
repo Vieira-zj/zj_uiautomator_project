@@ -18,13 +18,14 @@ import com.example.zhengjin.funsettingsuitest.utils.PackageUtils;
 import com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public final class ActivityUtilsTest extends AppCompatActivity {
 
-    private static final String TAG = ActivityUtilsTest.class.getSimpleName();
+//    private static final String TAG = ActivityUtilsTest.class.getSimpleName();
 
     private static final int DEVICE_UTILS = 1;
     private static final int PACKAGE_UTILS = 2;
@@ -135,19 +136,31 @@ public final class ActivityUtilsTest extends AppCompatActivity {
         mTextStartActivityTest = (TextView) findViewById(R.id.text_start_activity_test);
     }
 
-    private Handler handler = new Handler() {
+    private Handler mHandler = new activityUtilsTestHandler(this);
+
+    private static class activityUtilsTestHandler extends Handler {
+        WeakReference<ActivityUtilsTest> mActivityReference;
+
+        activityUtilsTestHandler(ActivityUtilsTest activity) {
+            mActivityReference = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            String text = (String) msg.obj;
-            if (msg.what == DEVICE_UTILS) {
-                mTextDeviceUtilsTest.setText(text);
-            } else if (msg.what == PACKAGE_UTILS) {
-                mTextPkgUtilsTest.setText(text);
-            } else if (msg.what == FILE_UTILS) {
-                mTextFileUtilsTest.setText(text);
+            final ActivityUtilsTest curActivity = mActivityReference.get();
+
+            if (curActivity != null) {
+                String text = (String) msg.obj;
+                if (msg.what == DEVICE_UTILS) {
+                    curActivity.mTextDeviceUtilsTest.setText(text);
+                } else if (msg.what == PACKAGE_UTILS) {
+                    curActivity.mTextPkgUtilsTest.setText(text);
+                } else if (msg.what == FILE_UTILS) {
+                    curActivity.mTextFileUtilsTest.setText(text);
+                }
             }
         }
-    };
+    }
 
     private class DeviceUtilsRunnable implements Runnable {
         @Override
@@ -167,7 +180,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             Message msg = Message.obtain();
             msg.obj = sb.toString();
             msg.what = DEVICE_UTILS;
-            handler.sendMessage(msg);
+            mHandler.sendMessage(msg);
         }
     }
 
@@ -184,7 +197,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             Message msg = Message.obtain();
             msg.obj = sb.toString();
             msg.what = PACKAGE_UTILS;
-            handler.sendMessage(msg);
+            mHandler.sendMessage(msg);
         }
     }
 
@@ -211,7 +224,7 @@ public final class ActivityUtilsTest extends AppCompatActivity {
             Message msg = Message.obtain();
             msg.obj = FileUtils.readFileSdcard(filePath);
             msg.what = FILE_UTILS;
-            handler.sendMessage(msg);
+            mHandler.sendMessage(msg);
 
             // clear after file utils test
             FileUtils.deleteFile(new File(filePath));

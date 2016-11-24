@@ -20,6 +20,7 @@ import com.squareup.okhttp.Request;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +36,8 @@ public final class ActivityDemo extends AppCompatActivity {
 
     private List<BasicNameValuePair> URL_PARAMS = new ArrayList<>(5);
     private List<BasicNameValuePair> HEADER_PARAMS = new ArrayList<>(5);
+
+    private Thread mThreadRequestWeatherData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +69,27 @@ public final class ActivityDemo extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (mTextHttpTest != null) {
-                        new Thread(new HttpTestRunnable()).start();
+                        mThreadRequestWeatherData = new Thread(new HttpTestRunnable());
+                        mThreadRequestWeatherData.start();
                     }
                 }
             });
         }
     }
+
+// use static handler and weak reference instead of do clear work onDestroy()
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//
+//        if (mThreadRequestWeatherData != null) {
+//            if (mThreadRequestWeatherData.isAlive()) {
+//                mThreadRequestWeatherData.interrupt();
+//            } else {
+//                mHandler.removeCallbacks(mThreadRequestWeatherData);
+//            }
+//        }
+//    }
 
     private void initViews() {
         mEditorUserName = (EditText) findViewById(R.id.editor_user_name);
@@ -81,13 +99,13 @@ public final class ActivityDemo extends AppCompatActivity {
         mTextHttpTest = (TextView) findViewById(R.id.text_http_test_msg);
     }
 
-    private void initRequestParams() {
+    private void initWeatherRequestParams() {
         URL_PARAMS.add(new BasicNameValuePair("cityid", "101200101"));
         HEADER_PARAMS.add(new BasicNameValuePair("apikey", "11c756e31e9bed863a743ccff784ddeb"));
     }
 
-    private Request buildRequest() {
-        this.initRequestParams();
+    private Request buildWeatherRequest() {
+        this.initWeatherRequestParams();
         String url = HttpUtils.attachHttpGetParams(
                 "http://apis.baidu.com/apistore/weatherservice/recentweathers", URL_PARAMS);
         return HttpUtils.buildRequestWithHeader(url, HEADER_PARAMS);
@@ -101,8 +119,8 @@ public final class ActivityDemo extends AppCompatActivity {
         return jsonData.getJSONObject("retData");
     }
 
-    private String getRetCodeOfWeatherData(JSONObject jsonData) {
-        return String.valueOf(jsonData.getIntValue("errNum"));
+    private int getRetCodeOfWeatherData(JSONObject jsonData) {
+        return jsonData.getIntValue("errNum");
     }
 
     private String getRetMessageOfWeatherData(JSONObject jsonData) {
@@ -128,38 +146,65 @@ public final class ActivityDemo extends AppCompatActivity {
         return sb.toString();
     }
 
-    private static final int HTTP_TEST = 1;
+    private boolean isResponseOk(JSONObject jsonData) {
+        return getRetCodeOfWeatherData(jsonData) == 0
+                && "success".equals(getRetMessageOfWeatherData(jsonData));
+    }
 
-    private Handler handler = new Handler() {
+    private final int HTTP_TEST = 1;
+    private Handler mHandler = new activityDemoHandler(this);
+
+    private static class activityDemoHandler extends Handler {
+        WeakReference<ActivityDemo> mActivityReference;
+
+        activityDemoHandler(ActivityDemo activity) {
+            mActivityReference = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            String text = (String) msg.obj;
-            if (msg.what == HTTP_TEST) {
-                JSONObject resJsonObject = ActivityDemo.this.getJsonObject(text);
-                mTextHttpTest.setText(String.format(
-                        "Return code: %s\nReturn message: %s\nForecast:\n%s",
-                        ActivityDemo.this.getRetCodeOfWeatherData(resJsonObject),
-                        ActivityDemo.this.getRetMessageOfWeatherData(resJsonObject),
-                        getForecastWeatherData(getRetDataOfWeatherData(resJsonObject))));
+            final ActivityDemo curActivity = mActivityReference.get();
+
+            if (curActivity != null) {
+                String showText = "null";
+                String text = (String) msg.obj;
+
+                if (msg.what == curActivity.HTTP_TEST) {
+                    JSONObject resJsonObject = curActivity.getJsonObject(text);
+                    if (!curActivity.isResponseOk(resJsonObject)) {
+                        showText = String.format("Return code: %s\nReturn message: %s",
+                                curActivity.getRetCodeOfWeatherData(resJsonObject),
+                                curActivity.getRetMessageOfWeatherData(resJsonObject));
+                    } else {
+                        showText = String.format(
+                                "Return code: %s\nReturn message: %s\nForecast:\n%s",
+                                curActivity.getRetCodeOfWeatherData(resJsonObject),
+                                curActivity.getRetMessageOfWeatherData(resJsonObject),
+                                curActivity.getForecastWeatherData(
+                                        curActivity.getRetDataOfWeatherData(resJsonObject)));
+                    }
+                }
+
+                curActivity.mTextHttpTest.setText(showText);
             }
         }
-    };
+    }
 
     private class HttpTestRunnable implements Runnable {
         @Override
         public void run() {
             String response;
             try {
-                response = HttpUtils.getStringFromServer(buildRequest());
+                response = HttpUtils.getStringFromServer(buildWeatherRequest());
             } catch (IOException e) {
-                response = e.getMessage();
+                response = String.format("{\"errNum\": -1, \"errMsg\": %s}", e.getMessage());
                 e.printStackTrace();
             }
 
             Message msg = Message.obtain();
             msg.what = HTTP_TEST;
             msg.obj = response;
-            handler.sendMessage(msg);
+            mHandler.sendMessage(msg);
         }
     }
 

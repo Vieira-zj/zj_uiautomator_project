@@ -160,7 +160,7 @@ public final class ActivityRunUiTest extends AppCompatActivity {
         private LayoutInflater inflater = null;
         private int mPrePosition = -1;
 
-        public ListAdapter(Context context) {
+        ListAdapter(Context context) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 

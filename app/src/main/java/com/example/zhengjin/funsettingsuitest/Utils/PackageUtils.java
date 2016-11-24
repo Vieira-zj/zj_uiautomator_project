@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  * Created by zhengjin on 2016/8/24.
- *
+ * <p>
  * Include utils for app package.
  */
 public final class PackageUtils {
@@ -120,7 +120,8 @@ public final class PackageUtils {
         return AM.getRunningAppProcesses();
     }
 
-    private static ActivityManager.RunningAppProcessInfo getProcessInfoByPackageName(String pkgName) {
+    private static ActivityManager.RunningAppProcessInfo getProcessInfoByPackageName(
+            String pkgName) {
         List<ActivityManager.RunningAppProcessInfo> apps = getRunningAppsProcessInfo();
         for (ActivityManager.RunningAppProcessInfo app : apps) {
             if (app.processName != null && app.processName.equals(pkgName)) {
@@ -148,7 +149,7 @@ public final class PackageUtils {
     }
 
     public static int getProcessMemPss(int pid) {
-        Debug.MemoryInfo[] memoryInfo = AM.getProcessMemoryInfo(new int[] {pid});
+        Debug.MemoryInfo[] memoryInfo = AM.getProcessMemoryInfo(new int[]{pid});
         return memoryInfo[0].getTotalPss();
     }
 
@@ -186,7 +187,8 @@ public final class PackageUtils {
             List<ActivityManager.RunningTaskInfo> taskInfo = AM.getRunningTasks(1);
             if (taskInfo != null) {
 //                return taskInfo.get(0).topActivity.getPackageName();
-                return taskInfo.get(0).topActivity.toString();  // ComponentInfo {Package / Activity}
+                return taskInfo.get(0).topActivity.toString();
+                // ComponentInfo {Package / Activity}
             }
         }
 
