@@ -37,4 +37,8 @@ public final class TestConstants {
         CAPTURES_PATH = TEST_ROOT_PATH + "uiautomator_captures";
     }
 
+    public enum VideoType {
+        FILM, TV
+    }
+
 }

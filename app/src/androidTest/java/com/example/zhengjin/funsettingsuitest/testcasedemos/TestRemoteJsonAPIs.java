@@ -34,17 +34,17 @@ public final class TestRemoteJsonAPIs {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testGetTvInfo() {
+    public void test11GetTvInfo() {
         final String tvName = "国家底线";
 
-        TaskPlayingVideos.TvInfo tvInfo = mTask.getTvInfoByName(tvName);
+        TaskPlayingVideos.videoInfo tvInfo = mTask.getTvInfoByName(tvName);
         if (tvInfo != null) {
             Log.d(TAG, String.format(
                     "TvSeriesTest, tv info for %s, mediaId: %d, totalNum: %d, isEnd: %s, isVip: %s",
                     tvInfo.getTvName(), tvInfo.getMediaId(), tvInfo.getTotalNum(),
                     String.valueOf(tvInfo.getIsEnd()), tvInfo.getIsVip()));
         } else {
-            Log.d(TAG, String.format("Failed to get the TvInfo for %s", tvName));
+            Log.d(TAG, String.format("Failed to get the tv info for %s", tvName));
         }
 
         Assert.assertTrue(true);
@@ -52,7 +52,25 @@ public final class TestRemoteJsonAPIs {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testGetTvCurTotalNum() {
+    public void test12GetFilmInfo() {
+        final String filmName = "那年夏天";
+
+        TaskPlayingVideos.videoInfo filmInfo = mTask.getFilmInfoByName(filmName);
+        if (filmInfo != null) {
+            Log.d(TAG, String.format(
+                    "FilmTest, film info for %s, mediaId: %d, totalNum: %d, isEnd: %s, isVip: %s",
+                    filmInfo.getTvName(), filmInfo.getMediaId(), filmInfo.getTotalNum(),
+                    String.valueOf(filmInfo.getIsEnd()), filmInfo.getIsVip()));
+        } else {
+            Log.d(TAG, String.format("Failed to get the film info for %s", filmName));
+        }
+
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test13GetTvCurTotalNum() {
         final String tvName = "国家底线";
 
         int num = mTask.getLatestTvTotalNumByName(tvName);

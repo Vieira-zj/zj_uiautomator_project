@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.HttpUtils;
 import com.squareup.okhttp.Request;
@@ -26,7 +27,6 @@ import java.util.List;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_PLAYER_ACT;
-import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
 
 /**
  * Created by zhengjin on 2016/11/24.
@@ -37,7 +37,10 @@ import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
 @SuppressWarnings("deprecation")
 public final class TaskPlayingVideos {
 
+    private final static String TAG = TaskPlayingVideos.class.getSimpleName();
+
     private static TaskPlayingVideos instance = null;
+
     private UiDevice device;
     private UiActionsManager action;
 
@@ -98,24 +101,39 @@ public final class TaskPlayingVideos {
     }
 
     @Nullable
-    public TvInfo getTvInfoByName(String tvName) {
-        final int limit = 20;
-        return getTvInfoByName(tvName, limit);
+    public videoInfo getTvInfoByName(String tvName) {
+        return getVideoInfoByName(tvName, TestConstants.VideoType.TV);
     }
 
     @Nullable
-    public TvInfo getTvInfoByName(String tvName, int limit) {
-        JSONObject respObj = JSON.parseObject(
-                this.doSendRequestAndRetResponse(this.buildTvSearchGetRequest(limit)));
-        if (!this.isResponseOk(respObj)) {
+    public videoInfo getFilmInfoByName(String tvName) {
+        return getVideoInfoByName(tvName, TestConstants.VideoType.FILM);
+    }
+
+    @Nullable
+    private videoInfo getVideoInfoByName(String tvName, TestConstants.VideoType type) {
+        final int limit = 30;
+        return getVideoInfoByName(tvName, type, limit);
+    }
+
+    @Nullable
+    private videoInfo getVideoInfoByName(
+            String videoName, TestConstants.VideoType type, int limit) {
+        JSONObject respObject = JSON.parseObject(this.doSendRequestAndRetResponse(
+                this.buildVideoSearchGetRequest(limit, type)));
+        if (!this.isResponseOk(respObject)) {
             return null;
         }
 
-        JSONArray dataTvs = respObj.getJSONArray("data");
+        return this.getSpecifiedVideoInfoFromJsonData(videoName, respObject);
+    }
+
+    private videoInfo getSpecifiedVideoInfoFromJsonData(String tvName, JSONObject jsonObject) {
+        JSONArray dataTvs = jsonObject.getJSONArray("data");
         for (int idx = 0, size = dataTvs.size(); idx < size; idx++) {
             JSONObject tv = dataTvs.getJSONObject(idx);
             if (tvName.equals(tv.getString("name"))) {
-                return new TvInfo(
+                return new videoInfo(
                         tv.getIntValue("media_id"), tv.getString("name"),
                         tv.getIntValue("total_num"), tv.getBooleanValue("is_end"),
                         tv.getString("vip_type"));
@@ -126,13 +144,13 @@ public final class TaskPlayingVideos {
     }
 
     public int getLatestTvTotalNumByName(String tvName) {
-        TvInfo tvInfo = this.getTvInfoByName(tvName);
-        if (tvInfo == null) {
+        videoInfo videoInfo = this.getTvInfoByName(tvName);
+        if (videoInfo == null) {
             return -1;
         }
 
         JSONObject respObj = JSON.parseObject(this.doSendRequestAndRetResponse(
-                this.buildTvDetailsGetRequest(tvInfo.getMediaId())));
+                this.buildVideoDetailsGetRequest(videoInfo.getMediaId())));
         if (!this.isResponseOk(respObj)) {
             return -1;
         }
@@ -152,14 +170,12 @@ public final class TaskPlayingVideos {
         }
     }
 
-    private List<BasicNameValuePair> buildTvSearchGetRequestParams(int limit) {
+    private List<BasicNameValuePair> buildVideoSearchGetRequestParams(
+            int limit, TestConstants.VideoType type) {
         List<BasicNameValuePair> URL_PARAMS = new ArrayList<>(20);
-        URL_PARAMS.add(new BasicNameValuePair("mtype", "2"));
         URL_PARAMS.add(new BasicNameValuePair("area", "0"));
         URL_PARAMS.add(new BasicNameValuePair("cate", "0"));
         URL_PARAMS.add(new BasicNameValuePair("year", "1900_2100"));
-        URL_PARAMS.add(new BasicNameValuePair("order", "2"));
-        URL_PARAMS.add(new BasicNameValuePair("pg", "1"));
         URL_PARAMS.add(new BasicNameValuePair("pz", String.valueOf(limit)));
         URL_PARAMS.add(new BasicNameValuePair("pv", "0"));
         URL_PARAMS.add(new BasicNameValuePair("version", "2.10.0.7_s"));
@@ -167,10 +183,19 @@ public final class TaskPlayingVideos {
         URL_PARAMS.add(new BasicNameValuePair("mac", "28:76:CD:01:96:F6"));
         URL_PARAMS.add(new BasicNameValuePair("chiptype", "638"));
 
+        if (type == TestConstants.VideoType.FILM) {
+            URL_PARAMS.add(new BasicNameValuePair("mtype", "1"));
+            URL_PARAMS.add(new BasicNameValuePair("order", "1"));
+        } else if (type == TestConstants.VideoType.TV) {
+            URL_PARAMS.add(new BasicNameValuePair("mtype", "2"));
+            URL_PARAMS.add(new BasicNameValuePair("order", "2"));
+            URL_PARAMS.add(new BasicNameValuePair("pg", "1"));
+        }
+
         return URL_PARAMS;
     }
 
-    private List<BasicNameValuePair> buildTvDetailsGetRequestParams(int tvId) {
+    private List<BasicNameValuePair> buildVideoDetailsGetRequestParams(int tvId) {
         List<BasicNameValuePair> URL_PARAMS = new ArrayList<>(20);
         URL_PARAMS.add(new BasicNameValuePair("id", String.valueOf(tvId)));
         URL_PARAMS.add(new BasicNameValuePair("account_id", "203186836"));
@@ -184,17 +209,17 @@ public final class TaskPlayingVideos {
         return URL_PARAMS;
     }
 
-    private Request buildTvSearchGetRequest(int limit) {
+    private Request buildVideoSearchGetRequest(int limit, TestConstants.VideoType type) {
         final String tvAllUrl = "http://js.funtv.bestv.com.cn/search/mretrieve/v2";
         String url = HttpUtils.attachHttpGetParams(
-                tvAllUrl, this.buildTvSearchGetRequestParams(limit));
+                tvAllUrl, this.buildVideoSearchGetRequestParams(limit, type));
         return HttpUtils.buildRequest(url);
     }
 
-    private Request buildTvDetailsGetRequest(int tvId) {
+    private Request buildVideoDetailsGetRequest(int tvId) {
         final String tvDetailsUrl = "http://jm.funtv.bestv.com.cn/media/episode/v2";
         String url = HttpUtils.attachHttpGetParams(
-                tvDetailsUrl, this.buildTvDetailsGetRequestParams(tvId));
+                tvDetailsUrl, this.buildVideoDetailsGetRequestParams(tvId));
         return HttpUtils.buildRequest(url);
     }
 
@@ -210,14 +235,14 @@ public final class TaskPlayingVideos {
         return response;
     }
 
-    public static class TvInfo {
+    public static class videoInfo {
         private int mediaId;
         private String tvName;
         private int totalNum;
         private boolean isEnd;
         private String isVip;
 
-        TvInfo(int mediaId, String tvName, int totalNum, boolean isEnd, String isVip) {
+        videoInfo(int mediaId, String tvName, int totalNum, boolean isEnd, String isVip) {
             this.mediaId = mediaId;
             this.tvName = tvName;
             this.totalNum = totalNum;
