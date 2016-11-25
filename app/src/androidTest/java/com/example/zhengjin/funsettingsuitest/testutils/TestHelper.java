@@ -30,6 +30,13 @@ public final class TestHelper {
     private static final UiDevice device =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
+    public static void assertTrueAndCaptureIfFailed(String message, boolean result) {
+        if (!result) {
+            ShellUtils.takeScreenCapture(device);
+        }
+        Assert.assertTrue(message, result);
+    }
+
     public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {
         return waitForAppOpenedByCheckCurPackage(pkgName, TIME_OUT);
     }
@@ -38,7 +45,7 @@ public final class TestHelper {
         return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, SHORT_WAIT);
     }
 
-    public static boolean waitForAppOpenedByCheckCurPackage(
+    private static boolean waitForAppOpenedByCheckCurPackage(
             String pkgName, long timeOut, long interval) {
         device.waitForIdle();
         long start = SystemClock.uptimeMillis();
@@ -61,18 +68,29 @@ public final class TestHelper {
         return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), wait);
     }
 
-    public static boolean waitForAppOpenedByShellCmd(String pkgName) {
-        return waitForAppOpenedByShellCmd(pkgName, (int)TIME_OUT / 1000);
+    public static boolean waitForActivityOpenedByShellCmd(String pkgName, String activityName) {
+        return waitForViewOnTopByShellCmd(
+                String.format("%s/%s", pkgName, activityName), (int)TIME_OUT / 1000);
     }
 
-    public static boolean waitForAppOpenedByShellCmd(String topActivity, int waitBySeconds) {
+    public static boolean waitForActivityOpenedByShellCmd(
+            String pkgName, String activityName, int waitBySeconds) {
+        return waitForViewOnTopByShellCmd(
+                String.format("%s/%s", pkgName, activityName), waitBySeconds);
+    }
+
+    public static boolean waitForAppOpenedByShellCmd(String pkgName) {
+        return waitForViewOnTopByShellCmd(pkgName, (int)TIME_OUT / 1000);
+    }
+
+    private static boolean waitForViewOnTopByShellCmd(String fullName, int waitBySeconds) {
         String cmd = "dumpsys activity | grep mFocusedActivity";
         ShellUtils.CommandResult cr;
 
         for (int i = 0; i < waitBySeconds; i++) {
             cr = ShellUtils.execCommand(cmd, false, true);
             if (cr.mResult == 0) {
-                if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(topActivity)) {
+                if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(fullName)) {
                     Log.d(TAG, "The top activity -> " + cr.mSuccessMsg);
                     return true;
                 }
@@ -83,20 +101,28 @@ public final class TestHelper {
         return false;
     }
 
-    public static boolean waitForUiObjectEnabledByProperty(UiObject2 uiObj) {
-        return waitForUiObjectEnabledByProperty(uiObj, TIME_OUT);
+    public static boolean waitForUiObjectEnabledByProperty(BySelector selector) {
+        return waitForUiObjectEnabledByProperty(selector, TIME_OUT);
     }
 
-    private static boolean waitForUiObjectEnabledByProperty(UiObject2 uiObj, long timeOut) {
-        return waitForUiObjectEnabledByProperty(uiObj, timeOut, SHORT_WAIT);
+    public static boolean waitForUiObjectEnabledByProperty(BySelector selector, long timeOut) {
+        return waitForUiObjectEnabledByProperty(selector, timeOut, SHORT_WAIT);
     }
 
     private static boolean waitForUiObjectEnabledByProperty(
-            UiObject2 uiObj, long timeOut, long interval) {
+            BySelector selector, long timeOut, long interval) {
         device.waitForIdle();
+
         long start = SystemClock.uptimeMillis();
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
-            if (uiObj.isEnabled()) {
+            UiObject2 uiObject = null;
+            try {
+                uiObject = device.findObject(selector);
+            } catch (NullPointerException e) {
+                // no handler
+            }
+
+            if (uiObject != null && uiObject.isEnabled()) {
                 return true;
             }
             ShellUtils.systemWaitByMillis(interval);

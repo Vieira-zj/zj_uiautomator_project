@@ -14,19 +14,22 @@ public final class TestConstants {
     public final static long LONG_WAIT = 5000L;
     public final static long TIME_OUT = 8000L;
 
+    public final static String LAUNCHER_PKG_NAME = "com.bestv.ott";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
     public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";
     public final static String WEATHER_PKG_NAME = "tv.fun.weather";
 
     public final static String SETTINGS_HOME_ACT = ".general.GeneralSettingsActivity";
     public final static String FILE_MANAGER_HOME_ACT = ".FunFileManagerActivity";
+    public final static String VIDEO_SUB_PAGE_ACT = ".retrieve.RetrieveActivity";
+    public final static String VIDEO_PLAYER_ACT = ".player.FunVideoPlayerActivity";
 
     public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
 
-    public final static String SDCARD_PATH;
-    public final static String TEST_ROOT_PATH;
-    public final static String CAPTURES_PATH;
+    private final static String SDCARD_PATH;
+    private final static String TEST_ROOT_PATH;
+    final static String CAPTURES_PATH;
 
     static {
         SDCARD_PATH = Environment.getExternalStorageDirectory().getPath();

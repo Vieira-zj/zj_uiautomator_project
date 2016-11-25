@@ -15,7 +15,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
-import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
@@ -31,7 +30,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * This task is used by each module, so keep static.
  */
 public final class TaskLauncher {
-    //    private final static String TAG = TaskLauncher.class.getSimpleName();
+
     private static UiActionsManager ACTION;
     private static UiDevice DEVICE;
 
@@ -62,16 +61,14 @@ public final class TaskLauncher {
 
     public static void backToLauncher() {
         // method 1
-//        String pkgName = getLauncherPackageName();
 //        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
-//        String pkgName = device.getCurrentPackageName();
-//        Assert.assertTrue(message, launcherPackageName.equals(pkgName));
+//        Assert.assertTrue("Error in backToLauncher(), fail to back to the launcher home.",
+//                getLauncherPackageName().equals(DEVICE.getCurrentPackageName()));
 
         // method 2
-        String launcherPackageName = DEVICE.getLauncherPackageName();
-        String message = "Error in backToLauncher(), fail to back to the launcher home.";
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
-        Assert.assertTrue(message, TestHelper.waitForAppOpenedByUntil(launcherPackageName));
+        Assert.assertTrue("Error in backToLauncher(), fail to back to the launcher home.",
+                TestHelper.waitForAppOpenedByUntil(DEVICE.getLauncherPackageName()));
     }
 
     public static String getLauncherPackageName() {
@@ -80,26 +77,18 @@ public final class TaskLauncher {
         PackageManager pm = InstrumentationRegistry.getContext().getPackageManager();
         ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        String pkgName = resolveInfo.activityInfo.packageName;
-        String message =
-                "Error in getLauncherPackageName(), the launcher package name is empty or null.";
-        Assert.assertFalse(message, StringUtils.isEmpty(pkgName));
-
-        return pkgName;
+        return resolveInfo.activityInfo.packageName;
     }
 
     public static void navigateToVideoTab() {
-        String message;
-
         backToLauncher();
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
-        String textVideoTab = ("视频");
-        UiObject2 tabVideo = getSpecifiedTab(textVideoTab);
-        message = "Error in navigateToVideoTab(), the UI object textVideoTab is NOT found.";
-        Assert.assertNotNull(message, tabVideo);
-        message = "Error in navigateToVideoTab(), the UI object textVideoTab is NOT focused.";
-        Assert.assertTrue(message, tabVideo.getParent().isFocused());
+        UiObject2 tabVideo = getSpecifiedTab("视频");
+        Assert.assertNotNull("Error in navigateToVideoTab(), textVideoTab is NOT found.",
+                tabVideo);
+        Assert.assertTrue("Error in navigateToVideoTab(), textVideoTab is NOT focused.",
+                tabVideo.getParent().isFocused());
     }
 
     public static void navigateToAppTab() {
@@ -112,8 +101,7 @@ public final class TaskLauncher {
             }
         }
 
-        Assert.assertTrue("Error in navigateToAppTab(), the UI object textAppTab is NOT focused.",
-                false);
+        Assert.assertTrue("Error in navigateToAppTab(), textAppTab is NOT focused.", false);
     }
 
     private static UiObject2 getSpecifiedTab(String tabName) {
@@ -127,7 +115,6 @@ public final class TaskLauncher {
                 return tab;
             }
         }
-
         return null;
     }
 
@@ -137,30 +124,26 @@ public final class TaskLauncher {
     }
 
     private static void focusOnSpecifiedAppFromAppTab(String appName) {
-        String message;
-
         navigateToAppTab();
 
         UiObject2 appTest = DEVICE.findObject(By.text(appName));
-        message = String.format(
-                "Error in openSpecifiedAppFromAppTab(), the app %s is NOT found.", appName);
-        Assert.assertNotNull(message, appTest);
+        Assert.assertNotNull(String.format(
+                "Error in openSpecifiedAppFromAppTab(), app %s is NOT found.", appName),
+                appTest);
 
         UiObject2 appContainer = appTest.getParent();
-        message = String.format(
-                "Error in openSpecifiedAppFromAppTab(), the app container %s is NOT found.", appName);
-        Assert.assertNotNull(message, appContainer);
+        Assert.assertNotNull(String.format(
+                "Error in openSpecifiedAppFromAppTab(), app container %s is NOT found.", appName),
+                appContainer);
 
         ACTION.doClickActionAndWait(appContainer);
     }
 
     public static void clickOnButtonFromTopQuickAccessBar(BySelector selector) {
-        String message = "Error in clickOnButtonFromTopQuickAccessBar(), " +
-                "the settings button from top bar is NOT found.";
-
         showLauncherTopBar();
         UiObject2 quickAccessBtn = DEVICE.findObject(selector);
-        Assert.assertNotNull(message, quickAccessBtn);
+        Assert.assertNotNull("Error in clickOnButtonFromTopQuickAccessBar(), " +
+                "the settings button from top bar is NOT found.", quickAccessBtn);
 
         if (!quickAccessBtn.isFocused()) {
             ACTION.doClickActionAndWait(quickAccessBtn);
@@ -169,16 +152,13 @@ public final class TaskLauncher {
     }
 
     private static void showLauncherTopBar() {
-        String message;
-
         backToLauncher();
         ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), 2);
 
         UiObject2 bar = DEVICE.findObject(getLauncherTopBarSelector());
-        message = "Error in showLauncherTopBar(), the top bar on launcher is NOT found.";
-        Assert.assertNotNull(message, bar);
-        message = "Error in showLauncherTopBar(), the top bar is NOT enabled.";
-        Assert.assertTrue(message, bar.isEnabled());
+        Assert.assertNotNull(bar);
+        Assert.assertTrue("Error in showLauncherTopBar(), top bar is NOT enabled.",
+                bar.isEnabled());
     }
 
 }

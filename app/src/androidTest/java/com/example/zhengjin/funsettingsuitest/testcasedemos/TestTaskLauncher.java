@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -53,7 +54,7 @@ public class TestTaskLauncher {
     public void test1GetLauncherPackageName() {
         String pkg = TaskLauncher.getLauncherPackageName();
         Assert.assertNotNull(pkg);
-        Assert.assertEquals("com.bestv.ott", pkg);
+        Assert.assertEquals(TestConstants.LAUNCHER_PKG_NAME, pkg);
     }
 
     @Test

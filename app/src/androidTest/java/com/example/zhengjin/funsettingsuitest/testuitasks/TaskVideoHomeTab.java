@@ -6,22 +6,35 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
+
 import junit.framework.Assert;
 
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_SUB_PAGE_ACT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+
 /**
  * Created by Vieira on 2016/7/4.
- *
+ * <p>
  * Include UI selectors and tasks on video tab of home page.
  */
 public final class TaskVideoHomeTab {
 
     private static TaskVideoHomeTab instance = null;
+
     private UiDevice device;
+    private UiActionsManager action;
 
     private TaskVideoHomeTab() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        action = UiActionsManager.getInstance();
     }
 
     public static synchronized TaskVideoHomeTab getInstance() {
@@ -37,55 +50,84 @@ public final class TaskVideoHomeTab {
         }
     }
 
-    public BySelector getAllCardsTitleOfLauncherHomeLeftAreaSelector() {
+    public BySelector getCardTitleOfLauncherHomeLeftAreaSelector() {
         return By.res("com.bestv.ott:id/title");
     }
 
-    public BySelector getAllCardsMainTitleOfLauncherHomeRightAreaSelector() {
+    public BySelector getCardMainTitleOfLauncherHomeRightAreaSelector() {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
-    public BySelector getCardsContainerOfVideoRecommendPageSelector() {
+    public BySelector getCardContainerOfVideoRecommendPageSelector() {
         return By.res("com.bestv.ott:id/grid");
     }
 
-    public BySelector getSpecialSubjectContainerSelector() {
-        return By.res("com.bestv.ott:id/special_listview");
-    }
-
-    public BySelector getAllTabTextOfVideoSubPageSelector() {
+    public BySelector getTopTabTextOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/tab_title");
     }
 
-    public BySelector getAllCardsMainTitleOfVideoSubPageSelector() {
+    public BySelector getCardMainTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
-    public BySelector getAllCardsSubTitleOfVideoSubPageSelector() {
+    public BySelector getCardSubTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/subtitle");
+    }
+
+    public BySelector getVideoTitleOfVideoSubPageSelector() {
+        return By.res("com.bestv.ott:id/title");
     }
 
     public BySelector getTitleTextOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/detail_title");
     }
 
+    public BySelector getPlayButtonOfVideoDetailsPageSelector() {
+        return By.res("com.bestv.ott:id/detail_play_button");
+    }
+
     public BySelector getRelatedVideoListOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/relate_list_view");
     }
 
-    public UiObject2 findSpecifiedCardFromLeftAreaByText(String search) {
+    public UiObject2 getSpecifiedCardFromHomeLeftAreaByText(String search) {
         List<UiObject2> textList =
-                device.findObjects(this.getAllCardsTitleOfLauncherHomeLeftAreaSelector());
-        return this.findSpecifiedTextViewFromUiCollection(textList, search);
+                device.findObjects(this.getCardTitleOfLauncherHomeLeftAreaSelector());
+        return this.getSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    public UiObject2 findSpecifiedCardFromRightAreaByText(String search) {
+    public UiObject2 getSpecifiedCardFromHomeRightAreaByText(String search) {
         List<UiObject2> textList =
-                device.findObjects(this.getAllCardsMainTitleOfLauncherHomeRightAreaSelector());
-        return this.findSpecifiedTextViewFromUiCollection(textList, search);
+                device.findObjects(this.getCardMainTitleOfLauncherHomeRightAreaSelector());
+        return this.getSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    private UiObject2 findSpecifiedTextViewFromUiCollection(
+    public void openSubPageFromLauncherHomeByText(String cardText) {
+        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(cardText);
+        action.doClickActionAndWait(card);  // request focus
+
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        Assert.assertTrue(String.format("Failed to open sub page %s", cardText),
+                TestHelper.waitForActivityOpenedByShellCmd(
+                        LAUNCHER_PKG_NAME, VIDEO_SUB_PAGE_ACT));
+        ShellUtils.systemWaitByMillis(LONG_WAIT);
+    }
+
+    public String waitVideoDetailsPageOpenedAndRetTitle() {
+        Assert.assertTrue("Failed to open the video details page.",
+                TestHelper.waitForUiObjectEnabledByProperty(
+                        this.getTitleTextOfVideoDetailsPageSelector()));
+
+        return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();
+    }
+
+    public void enterOnPlayButtonOnVideoDetailsPage() {
+        UiObject2 playBtn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());
+        Assert.assertTrue("The play button is NOT focused.", playBtn.isFocusable());
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    private UiObject2 getSpecifiedTextViewFromUiCollection(
             List<UiObject2> list, String search) {
         Assert.assertFalse("Error, the UI collection size is zero.", (list.size() == 0));
         UiObject2 retObj = null;

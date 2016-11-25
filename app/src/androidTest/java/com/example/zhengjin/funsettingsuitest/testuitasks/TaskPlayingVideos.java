@@ -1,11 +1,20 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.annotation.Nullable;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
+import android.support.test.uiautomator.Direction;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.HttpUtils;
 import com.squareup.okhttp.Request;
 
@@ -15,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_PLAYER_ACT;
 import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
 
 /**
@@ -27,12 +38,12 @@ import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
 public final class TaskPlayingVideos {
 
     private static TaskPlayingVideos instance = null;
-//    private UiDevice device;
-//    private UiActionsManager action;
+    private UiDevice device;
+    private UiActionsManager action;
 
     private TaskPlayingVideos() {
-//        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//        action = UiActionsManager.getInstance();
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        action = UiActionsManager.getInstance();
     }
 
     public static synchronized TaskPlayingVideos getInstance() {
@@ -46,6 +57,44 @@ public final class TaskPlayingVideos {
         if (instance != null) {
             instance = null;
         }
+    }
+
+    public BySelector getVideoPlayerByClassSelector() {
+        return By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer");
+    }
+
+    public BySelector getVideoNameInVideoPlayerSelector() {
+        return By.res("com.bestv.ott:id/video_player_title");
+    }
+
+    public BySelector getPauseButtonInVideoPlayerSelector() {
+        return By.res("com.bestv.ott:id/control_panel_pause_layout_btn");
+    }
+
+    public BySelector getSeekBarInVideoPlayerSelector() {
+        return By.res("com.bestv.ott:id/media_progress");
+    }
+
+    public BySelector getCurrentTimeInSeekBarOfVideoPlayerSelector() {
+        return By.res("com.bestv.ott:id/time_current");
+    }
+
+    public BySelector getTotalTimeInSeekBarOfVideoPlayerSelector() {
+        return By.res("com.bestv.ott:id/time_total");
+    }
+
+    public void waitForVideoPlayerOpenedAndOnTop() {
+        TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, 15);
+        TestHelper.waitForUiObjectEnabledByProperty(
+                this.getVideoPlayerByClassSelector(), 15 * 1000);
+    }
+
+    public void resetVideoProcessToStart() {
+        action.doDeviceActionAndWait(new DeviceActionMoveRight(), 250L);  // show seek bar
+        UiObject2 seekBar = TestHelper.waitForUiObjectExistAndReturn(
+                this.getSeekBarInVideoPlayerSelector());
+        action.doDeviceActionAndWait(new DeviceActionMoveRight(), 200L);  // show seek bar
+        seekBar.swipe(Direction.LEFT, 1.0f);
     }
 
     @Nullable
@@ -168,7 +217,7 @@ public final class TaskPlayingVideos {
         private boolean isEnd;
         private String isVip;
 
-        public TvInfo(int mediaId, String tvName, int totalNum, boolean isEnd, String isVip) {
+        TvInfo(int mediaId, String tvName, int totalNum, boolean isEnd, String isVip) {
             this.mediaId = mediaId;
             this.tvName = tvName;
             this.totalNum = totalNum;

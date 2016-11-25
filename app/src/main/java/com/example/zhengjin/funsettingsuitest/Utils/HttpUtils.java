@@ -43,7 +43,7 @@ public final class HttpUtils {
         return requestUrl.build();
     }
 
-    public static Response execute(Request request) throws IOException {
+    private static Response execute(Request request) throws IOException {
         return mClient.newCall(request).execute();
     }
 
@@ -60,7 +60,7 @@ public final class HttpUtils {
         }
     }
 
-    public static String formatParams(List<BasicNameValuePair> params) {
+    private static String formatParams(List<BasicNameValuePair> params) {
         return URLEncodedUtils.format(params, CHARSET_NAME);
     }
 
