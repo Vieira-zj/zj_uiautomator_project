@@ -3,7 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testsuites;
 import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestHomeVideoTab;
-import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm;
+import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
@@ -29,7 +29,7 @@ import org.junit.runners.Suite;
         TestCommonSettings.class,
         TestFileManager.class,
         TestWeather.class,
-        TestPlayingFilm.class,
+        TestPlayingVideos.class,
         TestHomeVideoTab.class})
 public class AllTestsSuite {
 }

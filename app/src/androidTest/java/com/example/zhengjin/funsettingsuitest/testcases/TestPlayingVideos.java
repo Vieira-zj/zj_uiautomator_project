@@ -30,15 +30,13 @@ import java.util.Random;
 /**
  * Created by zhengjin on 2016/7/28.
  *
- * Test playing film video.
- * A standalone test case to run more than 8 hours,
- * all methods are self-contained private.
+ * Test playing videos, include test cases to run more than 8 hours.
  */
 
 @RunWith(AndroidJUnit4.class)
-public final class TestPlayingFilm {
+public final class TestPlayingVideos {
 
-    private static final String TAG = TestPlayingFilm.class.getSimpleName();
+    private static final String TAG = TestPlayingVideos.class.getSimpleName();
     private static final String CAPTURES_PATH = "/data/local/tmp/captures";
 
     private static final int SHORT_WAIT = 1;

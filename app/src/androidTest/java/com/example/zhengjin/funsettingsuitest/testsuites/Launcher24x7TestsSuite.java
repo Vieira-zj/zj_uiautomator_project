@@ -1,6 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
-import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingFilm;
+import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
 
 import org.junit.experimental.categories.Categories;
@@ -14,6 +14,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory(Category24x7LauncherTests.class)
-@Suite.SuiteClasses(TestPlayingFilm.class)
+@Suite.SuiteClasses(TestPlayingVideos.class)
 public class Launcher24x7TestsSuite {
 }
