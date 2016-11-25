@@ -169,7 +169,8 @@ public final class TaskSettings {
         } else {  // find the item from bottom
             this.moveToBottomOnCommonSettingsPage();
             item = device.findObject(selector);
-            Assert.assertNotNull("The settings item is NOT found on common settings page.", item);
+            Assert.assertNotNull("moveToSpecifiedSettingsItem, " +
+                    "settings item is NOT found on common settings.", item);
             this.moveUpUntilSettingsItemFocused(item);
         }
     }
@@ -201,9 +202,7 @@ public final class TaskSettings {
             action.doDeviceActionAndWait(moveAction);
         }
 
-        Assert.assertTrue(
-                "Error in moveUntilSettingsItemFocused(), the settings item is NOT focused.",
-                false);
+        Assert.assertTrue("moveUntilSettingsItemFocused, settings item is NOT focused.", false);
     }
 
     public void scrollMoveToSpecificSettingsItem(String itemText) {
@@ -214,7 +213,8 @@ public final class TaskSettings {
             scroll.scrollTextIntoView(itemText);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            Assert.assertTrue(String.format("The ui object %s is NOT found.", itemText), false);
+            Assert.assertTrue(String.format("scrollMoveToSpecificSettingsItem, " +
+                    "setting item %s is NOT found.", itemText), false);
         }
     }
 
@@ -228,7 +228,7 @@ public final class TaskSettings {
             action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
 
-        Assert.assertTrue("Failed to select the specified wallpaper.", false);
+        Assert.assertTrue("selectSpecifiedSubWallpaper, failed select the wallpaper.", false);
     }
 
     public void openSelfDefineDeviceNamePage() {
@@ -248,7 +248,7 @@ public final class TaskSettings {
         }
     }
 
-    public void disableInputMethod() {
+    private void disableInputMethod() {
         if (isInputMethodEnabled()) {
             ShellUtils.execCommand(
                     "ime disable com.baidu.input_baidutv/.ImeService", false, false);

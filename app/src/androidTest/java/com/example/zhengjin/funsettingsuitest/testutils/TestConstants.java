@@ -4,7 +4,7 @@ import android.os.Environment;
 
 /**
  * Created by zhengjin on 2016/6/2.
- *
+ * <p>
  * Include the testing constants in common use.
  */
 public final class TestConstants {
@@ -27,18 +27,19 @@ public final class TestConstants {
     public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
 
+    private final static String TEST_ROOT_DIR_NAME = "test_logs";
+    private final static String TEST_SNAPSHOT_DIR_NAME = "uiautomator_snapshots";
     private final static String SDCARD_PATH;
-    private final static String TEST_ROOT_PATH;
     final static String CAPTURES_PATH;
 
     static {
         SDCARD_PATH = Environment.getExternalStorageDirectory().getPath();
-        TEST_ROOT_PATH = String.format("%s/testlogs/", SDCARD_PATH);
-        CAPTURES_PATH = TEST_ROOT_PATH + "uiautomator_captures";
+        CAPTURES_PATH = String.format("%s/%s/%s",
+                SDCARD_PATH, TEST_ROOT_DIR_NAME, TEST_SNAPSHOT_DIR_NAME);
     }
 
     public enum VideoType {
-        FILM, TV
+        FILM, TV, VARIETY_SHOW
     }
 
 }

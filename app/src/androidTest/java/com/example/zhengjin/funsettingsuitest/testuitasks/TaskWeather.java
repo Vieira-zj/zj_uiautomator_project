@@ -126,8 +126,7 @@ public final class TaskWeather {
     // param date: yyyy-MM-dd
     private String formatForecastDate(String date) {
         String[] items = date.split("-");
-        Assert.assertTrue("Error in formatForecastDate(), the date items count is not 3.",
-                items.length == 3);
+        Assert.assertTrue("formatForecastDate, the date items count is not 3.", items.length == 3);
 
         String month = items[1];
         String day = items[2];
@@ -166,7 +165,8 @@ public final class TaskWeather {
             action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
 
-        Assert.assertTrue("Failed to focus on Specified menu button.", false);
+        Assert.assertTrue(String.format("ClickOnSpecifiedMenuButtonByText, " +
+                "failed to focus on menu button %s.", btnText), false);
     }
 
     public String getSelectedLocationProvince() {
@@ -204,7 +204,8 @@ public final class TaskWeather {
             action.doDeviceActionAndWait(moveAction);
         }
 
-        Assert.assertTrue("The specified province is NOT found on city manager!", false);
+        Assert.assertTrue(String.format("selectSpecifiedLocationProvince, province %s is NOT found."
+                , provinceText), false);
     }
 
     private void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
@@ -220,7 +221,8 @@ public final class TaskWeather {
             action.doDeviceActionAndWait(moveAction);
         }
 
-        Assert.assertTrue("The specified city is NOT found on city manager!", false);
+        Assert.assertTrue(String.format("selectSpecifiedLocationCity, city %s is NOT found."
+                , cityText), false);
     }
 
 }

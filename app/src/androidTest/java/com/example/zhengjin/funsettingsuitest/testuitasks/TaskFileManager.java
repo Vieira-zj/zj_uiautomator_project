@@ -35,6 +35,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 public final class TaskFileManager {
 
     private static TaskFileManager instance = null;
+
     private UiDevice device;
     private UiActionsManager action;
 
@@ -151,8 +152,8 @@ public final class TaskFileManager {
     }
 
     private void clickOnSpecifiedCardOfFileManagerHome(int positionX, int positionY) {
-        String message = "Error in openLocalFilesCard(), click on AllFiles card.";
-        Assert.assertTrue(message, device.click(positionX, positionY));
+        Assert.assertTrue("openLocalFilesCard, error click at position.",
+                device.click(positionX, positionY));
         ShellUtils.systemWaitByMillis(WAIT);
     }
 
@@ -179,8 +180,8 @@ public final class TaskFileManager {
     private void clickOnSpecifiedItemFromCurrentDir(String dirName, boolean flag_bottom) {
         final int ScrollSteps = 5;
 
-        String scrollViewId = "tv.fun.filemanager:id/activity_sub_grid";
-        UiScrollable fileList = new UiScrollable(new UiSelector().resourceId(scrollViewId));
+        UiScrollable fileList = new UiScrollable(new UiSelector()
+                .resourceId("tv.fun.filemanager:id/activity_sub_grid"));
         fileList.setAsVerticalList();
         try {
             fileList.scrollTextIntoView(dirName);
@@ -191,9 +192,8 @@ public final class TaskFileManager {
             }
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            String message = String.format(
-                    "Error in clickOnSpecifiedItemFromCurrentDir(), scroll to UI object %s.", dirName);
-            Assert.assertTrue(message, false);
+            Assert.assertTrue(String.format("clickOnSpecifiedItemFromCurrentDir, "
+                    + "error scroll to item %s.", dirName), false);
         }
 
         UiObject2 dir = device.findObject(By.text(dirName));
@@ -217,8 +217,7 @@ public final class TaskFileManager {
             }
         }
         if (dirs.size() == 0) {
-            String message = "Error in parsePath(), the dirs size is 0.";
-            Assert.assertTrue(message, false);
+            Assert.assertTrue("parsePath, error: the dirs size is 0.", false);
         }
 
         return dirs;
@@ -239,14 +238,12 @@ public final class TaskFileManager {
     }
 
     public void showMenuAndClickBtn(String btnText) {
-        String message;
         boolean isFocused = false;
 
         showMenuAndRequestFocus();
-
         UiObject2 btn = device.findObject(By.text(btnText));
-        message = "Button is not found in showMenuAndClickBtn()";
-        Assert.assertNotNull(message, btn);
+        Assert.assertNotNull(String.format("showMenuAndClickBtn, Button %s is not found."
+                , btnText), btn);
         UiObject2 btnContainer = btn.getParent();
 
         for (int i = 0, maxMove = 5; i < maxMove; i++) {
@@ -256,8 +253,8 @@ public final class TaskFileManager {
             }
             action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
-        message = "Button is not focused in showMenuAndClickBtn()";
-        Assert.assertTrue(message, isFocused);
+        Assert.assertTrue(String.format("showMenuAndClickBtn, Button %s is not focused."
+                , btnText), isFocused);
 
         action.doDeviceActionAndWait(new DeviceActionEnter());
     }

@@ -59,6 +59,10 @@ public final class TaskLauncher {
         return By.res("com.bestv.ott:id/network");
     }
 
+    public static BySelector getLoadingCircleSelector() {
+        return By.res("com.bestv.ott:id/progressBar");
+    }
+
     public static void backToLauncher() {
         // method 1
 //        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
@@ -67,7 +71,7 @@ public final class TaskLauncher {
 
         // method 2
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
-        Assert.assertTrue("Error in backToLauncher(), fail to back to the launcher home.",
+        Assert.assertTrue("backToLauncher, failed to back to the launcher home.",
                 TestHelper.waitForAppOpenedByUntil(DEVICE.getLauncherPackageName()));
     }
 
@@ -85,10 +89,9 @@ public final class TaskLauncher {
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
         UiObject2 tabVideo = getSpecifiedTab("视频");
-        Assert.assertNotNull("Error in navigateToVideoTab(), textVideoTab is NOT found.",
-                tabVideo);
-        Assert.assertTrue("Error in navigateToVideoTab(), textVideoTab is NOT focused.",
-                tabVideo.getParent().isFocused());
+        Assert.assertNotNull("navigateToVideoTab, video tab is NOT found.", tabVideo);
+        Assert.assertTrue("navigateToVideoTab, video is NOT focused."
+                , tabVideo.getParent().isFocused());
     }
 
     public static void navigateToAppTab() {
@@ -101,7 +104,7 @@ public final class TaskLauncher {
             }
         }
 
-        Assert.assertTrue("Error in navigateToAppTab(), textAppTab is NOT focused.", false);
+        Assert.assertTrue("navigateToAppTab, App tab is NOT focused.", false);
     }
 
     private static UiObject2 getSpecifiedTab(String tabName) {
@@ -127,22 +130,15 @@ public final class TaskLauncher {
         navigateToAppTab();
 
         UiObject2 appTest = DEVICE.findObject(By.text(appName));
-        Assert.assertNotNull(String.format(
-                "Error in openSpecifiedAppFromAppTab(), app %s is NOT found.", appName),
-                appTest);
-
-        UiObject2 appContainer = appTest.getParent();
-        Assert.assertNotNull(String.format(
-                "Error in openSpecifiedAppFromAppTab(), app container %s is NOT found.", appName),
-                appContainer);
-
-        ACTION.doClickActionAndWait(appContainer);
+        Assert.assertNotNull(String.format("openSpecifiedAppFromAppTab, app %s is NOT found."
+                , appName), appTest);
+        ACTION.doClickActionAndWait(appTest.getParent());
     }
 
     public static void clickOnButtonFromTopQuickAccessBar(BySelector selector) {
         showLauncherTopBar();
         UiObject2 quickAccessBtn = DEVICE.findObject(selector);
-        Assert.assertNotNull("Error in clickOnButtonFromTopQuickAccessBar(), " +
+        Assert.assertNotNull("clickOnButtonFromTopQuickAccessBar, " +
                 "the settings button from top bar is NOT found.", quickAccessBtn);
 
         if (!quickAccessBtn.isFocused()) {
@@ -157,8 +153,7 @@ public final class TaskLauncher {
 
         UiObject2 bar = DEVICE.findObject(getLauncherTopBarSelector());
         Assert.assertNotNull(bar);
-        Assert.assertTrue("Error in showLauncherTopBar(), top bar is NOT enabled.",
-                bar.isEnabled());
+        Assert.assertTrue("showLauncherTopBar, top bar is NOT enabled.", bar.isEnabled());
     }
 
 }

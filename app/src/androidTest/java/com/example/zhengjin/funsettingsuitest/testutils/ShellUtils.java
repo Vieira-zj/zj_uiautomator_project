@@ -3,7 +3,6 @@ package com.example.zhengjin.funsettingsuitest.testutils;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.test.uiautomator.UiDevice;
-import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -27,8 +26,6 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CAP
  * Include the utils for shell ENV.
  */
 public final class ShellUtils {
-
-    private final static String TAG = ShellUtils.class.getSimpleName();
 
     private static final String COMMAND_SU = "su";
     private static final String COMMAND_SH = "sh";
@@ -90,7 +87,6 @@ public final class ShellUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, e.getMessage());
         } finally {
             try {
                 if (os != null) {
@@ -103,7 +99,7 @@ public final class ShellUtils {
                     errorResult.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
 
             if (process != null) {

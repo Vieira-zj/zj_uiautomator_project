@@ -107,15 +107,16 @@ public final class TaskVideoHomeTab {
         action.doClickActionAndWait(card);  // request focus
 
         action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        Assert.assertTrue(String.format("Failed to open sub page %s", cardText),
-                TestHelper.waitForActivityOpenedByShellCmd(
-                        LAUNCHER_PKG_NAME, VIDEO_SUB_PAGE_ACT));
+        Assert.assertTrue(String.format("openSubPageFromLauncherHomeByText, " +
+                        "failed to open sub page %s", cardText),
+                TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_SUB_PAGE_ACT));
         ShellUtils.systemWaitByMillis(LONG_WAIT);
     }
 
     public String waitVideoDetailsPageOpenedAndRetTitle() {
-        Assert.assertTrue("Failed to open the video details page.",
-                TestHelper.waitForUiObjectEnabledByProperty(
+        Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, " +
+                        "failed to open the video details page."
+                , TestHelper.waitForUiObjectEnabledByProperty(
                         this.getTitleTextOfVideoDetailsPageSelector()));
 
         return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();
@@ -123,24 +124,26 @@ public final class TaskVideoHomeTab {
 
     public void enterOnPlayButtonOnVideoDetailsPage() {
         UiObject2 playBtn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());
-        Assert.assertTrue("The play button is NOT focused.", playBtn.isFocusable());
+        Assert.assertTrue("enterOnPlayButtonOnVideoDetailsPage, the play button is NOT focused."
+                , playBtn.isFocusable());
         action.doDeviceActionAndWait(new DeviceActionEnter());
     }
 
     private UiObject2 getSpecifiedTextViewFromUiCollection(
             List<UiObject2> list, String search) {
-        Assert.assertFalse("Error, the UI collection size is zero.", (list.size() == 0));
-        UiObject2 retObj = null;
+        Assert.assertFalse("getSpecifiedTextViewFromUiCollection, " +
+                "error: the UI collection size is zero.", list.size() == 0);
+        UiObject2 retUiObject = null;
 
         for (UiObject2 uiText : list) {
             if (search.equals(uiText.getText())) {
-                retObj = uiText.getParent();
+                retUiObject = uiText.getParent();
             }
         }
-        Assert.assertNotNull(String.format(
-                "The text(%s) is NOT found on launcher home page.", search), retObj);
+        Assert.assertNotNull(String.format("getSpecifiedTextViewFromUiCollection, " +
+                "text(%s) is NOT found on launcher home page.", search), retUiObject);
 
-        return retObj;
+        return retUiObject;
     }
 
 }

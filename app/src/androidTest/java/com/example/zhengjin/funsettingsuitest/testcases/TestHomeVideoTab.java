@@ -12,6 +12,7 @@ import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 /**
  * Created by Vieira on 2016/7/4.
- *
+ * <p>
  * Include the test cases to test the tabs of launcher home.
  * These test cases are unstable (video 2nd level page).
  */
@@ -153,7 +154,7 @@ public final class TestHomeVideoTab {
         UiObject2 title = TestHelper.waitForUiObjectExistAndReturn(
                 mTask.getTitleTextOfVideoDetailsPageSelector());
         Assert.assertFalse("Verify the title of video details page is NOT empty.",
-                "".equals(title.getText()));
+                StringUtils.isBlank(title.getText()));
 
         // verify each card of bottom related video list
         UiObject2 relatedVideoList = TestHelper.waitForUiObjectExistAndReturn(
@@ -187,6 +188,8 @@ public final class TestHomeVideoTab {
 
     @Test
     @Category({CategoryHomeVideoTabTests.class})
-    public void test99ClearUpAfterAllTestCasesDone() { mTask.destroyInstance(); }
+    public void test99ClearUpAfterAllTestCasesDone() {
+        mTask.destroyInstance();
+    }
 
 }

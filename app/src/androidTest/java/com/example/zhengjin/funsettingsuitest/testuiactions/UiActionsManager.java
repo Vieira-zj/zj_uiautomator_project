@@ -10,7 +10,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
 
 /**
  * Created by zhengjin on 2016/6/2.
- *
+ * <p>
  * Include the UI actions invoked by test tasks and test cases.
  */
 public final class UiActionsManager {
@@ -46,7 +46,7 @@ public final class UiActionsManager {
         return doDeviceActionAndWaitForIdle(action, defaultWait);
     }
 
-    public boolean doDeviceActionAndWaitForIdle(DeviceAction action, long wait) {
+    private boolean doDeviceActionAndWaitForIdle(DeviceAction action, long wait) {
         boolean ret = action.doDeviceAction(mDevice);
 
         if (wait > 0) {
@@ -61,7 +61,7 @@ public final class UiActionsManager {
         doRepeatDeviceActionAndWait(action, repeatTimes, SHORT_WAIT);
     }
 
-    public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
+    private void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
         for (int i = 0; i < repeatTimes; ++i) {
             action.doDeviceAction(mDevice);
             ShellUtils.systemWaitByMillis(wait);
@@ -72,7 +72,7 @@ public final class UiActionsManager {
         doMultipleDeviceActionsAndWait(actions, SHORT_WAIT);
     }
 
-    public void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
+    private void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
         for (DeviceAction action : actions) {
             action.doDeviceAction(mDevice);
             ShellUtils.systemWaitByMillis(wait);
@@ -83,18 +83,18 @@ public final class UiActionsManager {
         return doChainedDeviceActionAndWait(action, SHORT_WAIT);
     }
 
-        public UiActionsManager doChainedDeviceActionAndWait(DeviceAction action, long wait) {
+    private UiActionsManager doChainedDeviceActionAndWait(DeviceAction action, long wait) {
         action.doDeviceAction(mDevice);
         ShellUtils.systemWaitByMillis(wait);
         return this;
     }
 
-    public void doClickActionAndWait(UiObject2 uiObj) {
-        doClickActionAndWait(uiObj, SHORT_WAIT);
+    public void doClickActionAndWait(UiObject2 uiObject) {
+        doClickActionAndWait(uiObject, SHORT_WAIT);
     }
 
-    public void doClickActionAndWait(UiObject2 uiObj, long wait) {
-        uiObj.click();
+    public void doClickActionAndWait(UiObject2 uiObject, long wait) {
+        uiObject.click();
         ShellUtils.systemWaitByMillis(wait);
     }
 

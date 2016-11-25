@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
 
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
@@ -41,19 +42,14 @@ public final class TestHelper {
         return waitForAppOpenedByCheckCurPackage(pkgName, TIME_OUT);
     }
 
-    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
-        return waitForAppOpenedByCheckCurPackage(pkgName, timeOut, SHORT_WAIT);
-    }
-
-    private static boolean waitForAppOpenedByCheckCurPackage(
-            String pkgName, long timeOut, long interval) {
+    private static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
         device.waitForIdle();
         long start = SystemClock.uptimeMillis();
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
             if (pkgName.equalsIgnoreCase(device.getCurrentPackageName())) {
                 return true;
             }
-            ShellUtils.systemWaitByMillis(interval);
+            ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }
 
         return false;
@@ -70,28 +66,28 @@ public final class TestHelper {
 
     public static boolean waitForActivityOpenedByShellCmd(String pkgName, String activityName) {
         return waitForViewOnTopByShellCmd(
-                String.format("%s/%s", pkgName, activityName), (int)TIME_OUT / 1000);
+                String.format("%s/%s", pkgName, activityName), TIME_OUT);
     }
 
     public static boolean waitForActivityOpenedByShellCmd(
-            String pkgName, String activityName, int waitBySeconds) {
+            String pkgName, String activityName, int waitByMillis) {
         return waitForViewOnTopByShellCmd(
-                String.format("%s/%s", pkgName, activityName), waitBySeconds);
+                String.format("%s/%s", pkgName, activityName), waitByMillis);
     }
 
     public static boolean waitForAppOpenedByShellCmd(String pkgName) {
-        return waitForViewOnTopByShellCmd(pkgName, (int)TIME_OUT / 1000);
+        return waitForViewOnTopByShellCmd(pkgName, TIME_OUT);
     }
 
-    private static boolean waitForViewOnTopByShellCmd(String fullName, int waitBySeconds) {
+    private static boolean waitForViewOnTopByShellCmd(String viewName, long waitByMillis) {
         String cmd = "dumpsys activity | grep mFocusedActivity";
         ShellUtils.CommandResult cr;
 
-        for (int i = 0; i < waitBySeconds; i++) {
+        for (int i = 0; i < (int) waitByMillis / 1000L; i++) {
             cr = ShellUtils.execCommand(cmd, false, true);
             if (cr.mResult == 0) {
-                if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(fullName)) {
-                    Log.d(TAG, "The top activity -> " + cr.mSuccessMsg);
+                if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(viewName)) {
+                    Log.d(TAG, "GetViewOnTop, top activity: " + cr.mSuccessMsg);
                     return true;
                 }
             }
@@ -106,14 +102,9 @@ public final class TestHelper {
     }
 
     public static boolean waitForUiObjectEnabledByProperty(BySelector selector, long timeOut) {
-        return waitForUiObjectEnabledByProperty(selector, timeOut, SHORT_WAIT);
-    }
-
-    private static boolean waitForUiObjectEnabledByProperty(
-            BySelector selector, long timeOut, long interval) {
         device.waitForIdle();
-
         long start = SystemClock.uptimeMillis();
+
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
             UiObject2 uiObject = null;
             try {
@@ -125,7 +116,7 @@ public final class TestHelper {
             if (uiObject != null && uiObject.isEnabled()) {
                 return true;
             }
-            ShellUtils.systemWaitByMillis(interval);
+            ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }
 
         return false;
@@ -156,14 +147,14 @@ public final class TestHelper {
 
     public static boolean waitForLoadingComplete() {
         // if loading is showing, wait for loading disappear
-        UiObject2 loading = device.findObject(By.res("com.bestv.ott:id/progressBar"));
+        UiObject2 loading = device.findObject(TaskLauncher.getLoadingCircleSelector());
         if (loading == null) {
             return false;
         }
 
         for (int i = 0, waitTimes = 10; i < waitTimes; i++) {
             SystemClock.sleep(SHORT_WAIT);
-            loading = device.findObject(By.res("com.bestv.ott:id/progressBar"));
+            loading = device.findObject(TaskLauncher.getLoadingCircleSelector());
             if (loading == null) {
                 return true;
             }
