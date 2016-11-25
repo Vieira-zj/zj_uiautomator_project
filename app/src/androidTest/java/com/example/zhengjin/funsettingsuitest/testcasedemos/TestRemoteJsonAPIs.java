@@ -1,10 +1,9 @@
-package com.example.zhengjin.funsettingsuitest.testcases;
+package com.example.zhengjin.funsettingsuitest.testcasedemos;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskPlayingVideos;
 
 import junit.framework.Assert;
@@ -22,9 +21,9 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(AndroidJUnit4.class)
-public final class TestPlayingTvSeries {
+public final class TestRemoteJsonAPIs {
 
-    private final static String TAG = TestPlayingTvSeries.class.getSimpleName();
+    private final static String TAG = TestRemoteJsonAPIs.class.getSimpleName();
 
     private TaskPlayingVideos mTask;
 
@@ -48,6 +47,14 @@ public final class TestPlayingTvSeries {
             Log.d(TAG, String.format("Failed to get the TvInfo for %s", tvName));
         }
 
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testGetTvCurTotalNum() {
+        final String tvName = "国家底线";
+
         int num = mTask.getLatestTvTotalNumByName(tvName);
         if (num != -1) {
             Log.d(TAG, String.format("TvSeriesTest, the current total num for tv %s: %d",
@@ -57,12 +64,6 @@ public final class TestPlayingTvSeries {
         }
 
         Assert.assertTrue(true);
-    }
-
-    @Test
-    @Category(CategoryWeatherTests.class)
-    public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
     }
 
 }
