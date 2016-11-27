@@ -88,7 +88,7 @@ public final class TaskPlayingVideos {
 
     public void waitForVideoPlayerOpenedAndOnTop() {
         TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, 15);
-        TestHelper.waitForUiObjectEnabledByProperty(
+        TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
                 this.getVideoPlayerByClassSelector(), 15 * 1000);
     }
 

@@ -116,7 +116,7 @@ public final class TaskVideoHomeTab {
     public String waitVideoDetailsPageOpenedAndRetTitle() {
         Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, " +
                         "failed to open the video details page."
-                , TestHelper.waitForUiObjectEnabledByProperty(
+                , TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
                         this.getTitleTextOfVideoDetailsPageSelector()));
 
         return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();

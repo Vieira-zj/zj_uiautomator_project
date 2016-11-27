@@ -1,8 +1,8 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
-import android.os.Environment;
 import android.os.SystemClock;
 import android.support.test.uiautomator.UiDevice;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -18,14 +18,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CAPTURES_PATH;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SNAPSHOT_PATH;
 
 /**
  * Created by zhengjin on 2016/5/31.
- *
+ * <p>
  * Include the utils for shell ENV.
  */
 public final class ShellUtils {
+
+    private static final String TAG = ShellUtils.class.getSimpleName();
 
     private static final String COMMAND_SU = "su";
     private static final String COMMAND_SH = "sh";
@@ -34,19 +36,19 @@ public final class ShellUtils {
 
     public static CommandResult execCommand(
             String command, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand(new String[] {command}, isRoot, isNeedResultMsg);
+        return execCommand(new String[]{command}, isRoot, isNeedResultMsg);
     }
 
     public static CommandResult execCommand(
             List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand((commands == null ? null : commands.toArray(new String[] {})),
+        return execCommand((commands == null ? null : commands.toArray(new String[]{})),
                 isRoot, isNeedResultMsg);
     }
 
     public static CommandResult execCommand(
             String[] commands, boolean isRoot, boolean isNeedResultMsg) {
         int result = -1;
-        if (commands == null || commands.length == 0 ) {
+        if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
         }
 
@@ -152,7 +154,7 @@ public final class ShellUtils {
         return formatter.format(curDate);
     }
 
-    public static String getCurrentDateTime() {
+    private static String getCurrentDateTime() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
         Date curTime = new Date(System.currentTimeMillis());
@@ -160,21 +162,23 @@ public final class ShellUtils {
     }
 
     public static void takeScreenCapture(UiDevice device) {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File testDirPath = new File(CAPTURES_PATH);
-            if (!testDirPath.exists()) {
-                Assert.assertTrue(String.format(
-                        "Error, make directory(%s) for screenshot failed.", CAPTURES_PATH),
-                        testDirPath.mkdirs());
-            }
+        if (TestConstants.isSdcardAvailable()) {
+            Log.e(TAG, "takeScreenCapture, the sdcard is NOT available.");
+            return;
         } else {
-            Assert.assertTrue("Error, the sdcard is NOT mount.", false);
+            File testDirPath = new File(SNAPSHOT_PATH);
+            if (!testDirPath.exists() && !testDirPath.mkdirs()) {
+                Log.e(TAG, String.format("takeScreenCapture, failed to make directory(%s)."
+                        , SNAPSHOT_PATH));
+            }
         }
 
         final String suffix = ".png";
         String filePath = String.format(
-                "%s/capture_%s%s", CAPTURES_PATH, ShellUtils.getCurrentDateTime(), suffix);
-        Assert.assertTrue("Take screenshot.", device.takeScreenshot(new File(filePath)));
+                "%s/snapshot_%s%s", SNAPSHOT_PATH, ShellUtils.getCurrentDateTime(), suffix);
+        if (!device.takeScreenshot(new File(filePath))) {
+            Log.e(TAG, String.format("takeScreenCapture, failed to takeScreenshot(%s).", filePath));
+        }
     }
 
 }

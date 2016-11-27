@@ -22,7 +22,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
 
 /**
  * Created by zhengjin on 2016/6/2.
- *
+ * <p>
  * Include the shared UI functions for test cases.
  */
 public final class TestHelper {
@@ -97,11 +97,12 @@ public final class TestHelper {
         return false;
     }
 
-    public static boolean waitForUiObjectEnabledByProperty(BySelector selector) {
-        return waitForUiObjectEnabledByProperty(selector, TIME_OUT);
+    public static boolean waitForUiObjectEnabledByCheckIsEnabled(BySelector selector) {
+        return waitForUiObjectEnabledByCheckIsEnabled(selector, TIME_OUT);
     }
 
-    public static boolean waitForUiObjectEnabledByProperty(BySelector selector, long timeOut) {
+    public static boolean waitForUiObjectEnabledByCheckIsEnabled(
+            BySelector selector, long timeOut) {
         device.waitForIdle();
         long start = SystemClock.uptimeMillis();
 

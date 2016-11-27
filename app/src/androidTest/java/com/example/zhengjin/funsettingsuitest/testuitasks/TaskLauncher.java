@@ -64,15 +64,15 @@ public final class TaskLauncher {
     }
 
     public static void backToLauncher() {
-        // method 1
-//        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
-//        Assert.assertTrue("Error in backToLauncher(), fail to back to the launcher home.",
-//                getLauncherPackageName().equals(DEVICE.getCurrentPackageName()));
-
-        // method 2
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
         Assert.assertTrue("backToLauncher, failed to back to the launcher home.",
                 TestHelper.waitForAppOpenedByUntil(DEVICE.getLauncherPackageName()));
+    }
+
+    public static void backToLauncherByPm() {
+        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
+        Assert.assertTrue("backToLauncher, fail to back to the launcher home.",
+                getLauncherPackageName().equals(DEVICE.getCurrentPackageName()));
     }
 
     public static String getLauncherPackageName() {

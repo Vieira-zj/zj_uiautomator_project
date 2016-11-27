@@ -176,8 +176,8 @@ public final class TaskFileManager {
         this.navigateToSpecifiedPath(fileAbsPath);
     }
 
-    // Item for directory and file
     private void clickOnSpecifiedItemFromCurrentDir(String dirName, boolean flag_bottom) {
+        // Item for both directory and file
         final int ScrollSteps = 5;
 
         UiScrollable fileList = new UiScrollable(new UiSelector()
