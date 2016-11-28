@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -42,7 +43,7 @@ public final class TestHelper {
         return waitForAppOpenedByCheckCurPackage(pkgName, TIME_OUT);
     }
 
-    private static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
+    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
         device.waitForIdle();
         long start = SystemClock.uptimeMillis();
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
@@ -107,16 +108,11 @@ public final class TestHelper {
         long start = SystemClock.uptimeMillis();
 
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
-            UiObject2 uiObject = null;
-            try {
-                uiObject = device.findObject(selector);
-            } catch (NullPointerException e) {
-                // no handler
-            }
-
+            UiObject2 uiObject = findUiObjectIgnoreRootNullException(selector);
             if (uiObject != null && uiObject.isEnabled()) {
                 return true;
             }
+
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }
 
@@ -148,19 +144,32 @@ public final class TestHelper {
 
     public static boolean waitForLoadingComplete() {
         // if loading is showing, wait for loading disappear
-        UiObject2 loading = device.findObject(TaskLauncher.getLoadingCircleSelector());
+        UiObject2 loading =
+                findUiObjectIgnoreRootNullException(TaskLauncher.getLoadingCircleSelector());
         if (loading == null) {
             return false;
         }
 
         for (int i = 0, waitTimes = 10; i < waitTimes; i++) {
             SystemClock.sleep(SHORT_WAIT);
-            loading = device.findObject(TaskLauncher.getLoadingCircleSelector());
+            loading = findUiObjectIgnoreRootNullException(TaskLauncher.getLoadingCircleSelector());
             if (loading == null) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Nullable
+    private static UiObject2 findUiObjectIgnoreRootNullException(BySelector selector) {
+        UiObject2 uiObject = null;
+        try {
+            uiObject = device.findObject(selector);
+        } catch (NullPointerException e) {
+            // NullPointerException from root element, no handler
+        }
+
+        return uiObject;
     }
 
     public static void verifyEachTextViewHasTextInUiContainer(UiObject2 container) {

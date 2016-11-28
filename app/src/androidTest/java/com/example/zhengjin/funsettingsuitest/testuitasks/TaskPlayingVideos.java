@@ -12,6 +12,8 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -66,15 +68,15 @@ public final class TaskPlayingVideos {
         return By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer");
     }
 
-    public BySelector getVideoNameInVideoPlayerSelector() {
+    public BySelector getVideoTitleOfVideoPlayerSelector() {
         return By.res("com.bestv.ott:id/video_player_title");
     }
 
-    public BySelector getPauseButtonInVideoPlayerSelector() {
+    public BySelector getPauseButtonOfVideoPlayerSelector() {
         return By.res("com.bestv.ott:id/control_panel_pause_layout_btn");
     }
 
-    public BySelector getSeekBarInVideoPlayerSelector() {
+    public BySelector getSeekBarOfVideoPlayerSelector() {
         return By.res("com.bestv.ott:id/media_progress");
     }
 
@@ -92,12 +94,29 @@ public final class TaskPlayingVideos {
                 this.getVideoPlayerByClassSelector(), 15 * 1000);
     }
 
-    public void resetVideoProcessToStart(float swipePercent) {
-        action.doDeviceActionAndWait(new DeviceActionMoveRight(), 250L);  // show seek bar
+    public void exitVideoPlayerByBack() {
+        action.doMultipleDeviceActionsAndWait(
+                new DeviceAction[] {new DeviceActionBack(), new DeviceActionBack()}, 300L);
+    }
+
+    public void resetVideoProcessToStart() {
+        swipeOnVideoProcess(Direction.LEFT);
+    }
+
+    public void resetVideoProcessToEnd() {
+        swipeOnVideoProcess(Direction.RIGHT);
+    }
+
+    private void swipeOnVideoProcess(Direction direction) {
+        final long wait = 200L;
+        final float percent = 1.0f;
+        final int step = 300;
+
+        action.doDeviceActionAndWait(new DeviceActionMoveRight(), wait);  // show seek bar
         UiObject2 seekBar = TestHelper.waitForUiObjectExistAndReturn(
-                this.getSeekBarInVideoPlayerSelector());
-        action.doDeviceActionAndWait(new DeviceActionMoveRight(), 200L);  // show seek bar
-        seekBar.swipe(Direction.LEFT, swipePercent);
+                this.getSeekBarOfVideoPlayerSelector());
+        action.doDeviceActionAndWait(new DeviceActionMoveRight(), wait);  // show seek bar
+        seekBar.swipe(direction, percent, step);
     }
 
     @Nullable
@@ -128,6 +147,7 @@ public final class TaskPlayingVideos {
         return this.getVideoInfoByName(videoName, respObject);
     }
 
+    @Nullable
     private videoInfo getVideoInfoByName(String tvName, JSONObject jsonObject) {
         JSONArray dataTvs = jsonObject.getJSONArray("data");
         for (int idx = 0, size = dataTvs.size(); idx < size; idx++) {

@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
+import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -8,9 +9,12 @@ import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -54,11 +58,11 @@ public final class TaskVideoHomeTab {
         }
     }
 
-    public BySelector getCardTitleOfLauncherHomeLeftAreaSelector() {
+    private BySelector getCardTitleOfLauncherHomeLeftAreaSelector() {
         return By.res("com.bestv.ott:id/title");
     }
 
-    public BySelector getCardMainTitleOfLauncherHomeRightAreaSelector() {
+    private BySelector getCardMainTitleOfLauncherHomeRightAreaSelector() {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
@@ -86,12 +90,20 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/detail_title");
     }
 
-    public BySelector getPlayButtonOfVideoDetailsPageSelector() {
+    private BySelector getPlayButtonOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/detail_play_button");
+    }
+
+    private BySelector getSelectButtonOfVideoDetailsPageSelector() {
+        return By.res("com.bestv.ott:id/detail_select_button");
     }
 
     public BySelector getRelatedVideoListOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/relate_list_view");
+    }
+
+    private BySelector getAllTvCellsOfVideoDetailsPageSelector() {
+        return By.res("com.bestv.ott:id/tv_cell");
     }
 
     public UiObject2 getSpecifiedCardFromHomeLeftAreaByText(String search) {
@@ -114,12 +126,18 @@ public final class TaskVideoHomeTab {
         Assert.assertTrue(String.format("openSubPageFromLauncherHomeByText, " +
                         "failed to open sub page %s", cardText),
                 TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_SUB_PAGE_ACT));
-        ShellUtils.systemWaitByMillis(LONG_WAIT);
+        TestHelper.waitForLoadingComplete();
+        ShellUtils.systemWaitByMillis(WAIT);
     }
 
-    private String waitVideoDetailsPageOpenedAndRetTitle() {
-        Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, " +
-                        "failed to open the video details page."
+    public void navigateToVideoInAllTabOnVideoSubPage() {
+        action.doDeviceActionAndWait(new DeviceActionMoveLeft(), LONG_WAIT);
+        TestHelper.waitForLoadingComplete();
+        action.doDeviceActionAndWait(new DeviceActionMoveDown(), TestConstants.WAIT);
+    }
+
+    public String waitVideoDetailsPageOpenedAndRetTitle() {
+        Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, failed open video details page."
                 , TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
                         this.getTitleTextOfVideoDetailsPageSelector()));
 
@@ -131,7 +149,8 @@ public final class TaskVideoHomeTab {
         for (int j = 0; j <= moveTimes; j++) {
             action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
-        Log.d(TAG, String.format("ZjFilmTest, select film at position: %d", moveTimes));
+        Log.d(TAG, String.format("randomSelectVideoAndOpenDetails, select film at position: %d"
+                , moveTimes));
 
         action.doDeviceActionAndWait(new DeviceActionEnter());
         return this.waitVideoDetailsPageOpenedAndRetTitle();
@@ -139,9 +158,30 @@ public final class TaskVideoHomeTab {
 
     public void enterOnPlayButtonOnVideoDetailsPage() {
         UiObject2 playBtn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());
-        Assert.assertTrue("enterOnPlayButtonOnVideoDetailsPage, the play button is NOT focused."
-                , playBtn.isFocusable());
+        if (!playBtn.isFocused()) {
+            action.doClickActionAndWait(playBtn);
+        }
         action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    public void focusOnTvSelectButtonOnVideoDetailsPage() {
+        UiObject2 selectBtn = device.findObject(this.getSelectButtonOfVideoDetailsPageSelector());
+        if (!selectBtn.isFocused()) {
+            action.doClickActionAndWait(selectBtn, WAIT);
+        }
+    }
+
+    @Nullable
+    public UiObject2 getSpecifiedTvCellByIndex(String index) {
+        List<UiObject2> tvCells =
+                device.findObjects(this.getAllTvCellsOfVideoDetailsPageSelector());
+        for (UiObject2 cell : tvCells) {
+            if (index.equals(cell.getText())) {
+                return cell;
+            }
+        }
+
+        return null;
     }
 
     private UiObject2 getSpecifiedTextViewFromUiCollection(
