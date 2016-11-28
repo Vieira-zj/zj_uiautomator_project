@@ -92,12 +92,12 @@ public final class TaskPlayingVideos {
                 this.getVideoPlayerByClassSelector(), 15 * 1000);
     }
 
-    public void resetVideoProcessToStart() {
+    public void resetVideoProcessToStart(float swipePercent) {
         action.doDeviceActionAndWait(new DeviceActionMoveRight(), 250L);  // show seek bar
         UiObject2 seekBar = TestHelper.waitForUiObjectExistAndReturn(
                 this.getSeekBarInVideoPlayerSelector());
         action.doDeviceActionAndWait(new DeviceActionMoveRight(), 200L);  // show seek bar
-        seekBar.swipe(Direction.LEFT, 1.0f);
+        seekBar.swipe(Direction.LEFT, swipePercent);
     }
 
     @Nullable
@@ -112,7 +112,7 @@ public final class TaskPlayingVideos {
 
     @Nullable
     private videoInfo getVideoInfoByName(String tvName, TestConstants.VideoType type) {
-        final int limit = 30;
+        final int limit = 50;
         return getVideoInfoByName(tvName, type, limit);
     }
 
@@ -125,10 +125,10 @@ public final class TaskPlayingVideos {
             return null;
         }
 
-        return this.getSpecifiedVideoInfoFromJsonData(videoName, respObject);
+        return this.getVideoInfoByName(videoName, respObject);
     }
 
-    private videoInfo getSpecifiedVideoInfoFromJsonData(String tvName, JSONObject jsonObject) {
+    private videoInfo getVideoInfoByName(String tvName, JSONObject jsonObject) {
         JSONArray dataTvs = jsonObject.getJSONArray("data");
         for (int idx = 0, size = dataTvs.size(); idx < size; idx++) {
             JSONObject tv = dataTvs.getJSONObject(idx);
@@ -165,7 +165,8 @@ public final class TaskPlayingVideos {
             return true;
         } else {
             Log.e(TAG, String.format(
-                    "Error, response ret code: %s, ret message: %s", retCode, retMsg));
+                    "isResponseOk, error: response ret code: %s, ret message: %s"
+                    , retCode, retMsg));
             return false;
         }
     }
@@ -240,14 +241,14 @@ public final class TaskPlayingVideos {
         private String tvName;
         private int totalNum;
         private boolean isEnd;
-        private String isVip;
+        private String vipType;
 
-        videoInfo(int mediaId, String tvName, int totalNum, boolean isEnd, String isVip) {
+        videoInfo(int mediaId, String tvName, int totalNum, boolean isEnd, String vipType) {
             this.mediaId = mediaId;
             this.tvName = tvName;
             this.totalNum = totalNum;
             this.isEnd = isEnd;
-            this.isVip = isVip;
+            this.vipType = vipType;
         }
 
         public int getMediaId() {
@@ -266,8 +267,22 @@ public final class TaskPlayingVideos {
             return this.isEnd;
         }
 
-        public String getIsVip() {
-            return this.isVip;
+        public String getVipType() {
+            return this.vipType;
+        }
+
+        public boolean isVip() {
+            final String free = "free";
+            final String vipFree = "vipfree";
+
+            if (free.equals(this.vipType)) {
+                return false;
+            } else if (vipFree.equals(this.vipType)) {
+                return true;
+            } else {
+                Log.e(TAG, String.format("isVip, invalid vip type %s", this.vipType));
+                return false;
+            }
         }
     }
 

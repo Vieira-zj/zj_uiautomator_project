@@ -5,8 +5,10 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -14,11 +16,13 @@ import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import junit.framework.Assert;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_SUB_PAGE_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
 
 /**
  * Created by Vieira on 2016/7/4.
@@ -113,13 +117,24 @@ public final class TaskVideoHomeTab {
         ShellUtils.systemWaitByMillis(LONG_WAIT);
     }
 
-    public String waitVideoDetailsPageOpenedAndRetTitle() {
+    private String waitVideoDetailsPageOpenedAndRetTitle() {
         Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, " +
                         "failed to open the video details page."
                 , TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
                         this.getTitleTextOfVideoDetailsPageSelector()));
 
         return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();
+    }
+
+    public String randomSelectVideoAndOpenDetails(int randomInt) {
+        int moveTimes = new Random().nextInt(randomInt);
+        for (int j = 0; j <= moveTimes; j++) {
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+        Log.d(TAG, String.format("ZjFilmTest, select film at position: %d", moveTimes));
+
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+        return this.waitVideoDetailsPageOpenedAndRetTitle();
     }
 
     public void enterOnPlayButtonOnVideoDetailsPage() {

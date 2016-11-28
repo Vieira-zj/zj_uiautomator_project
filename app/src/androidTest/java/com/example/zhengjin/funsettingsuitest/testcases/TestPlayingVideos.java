@@ -13,7 +13,6 @@ import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabT
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskPlayingVideos;
@@ -22,13 +21,12 @@ import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-
-import java.util.Random;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 
@@ -45,84 +43,78 @@ public final class TestPlayingVideos {
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
-    private TaskVideoHomeTab mTaskVideoHomeTab;
     private TaskPlayingVideos mTask;
+    private TaskVideoHomeTab mTaskVideoHomeTab;
 
     @Before
     public void setUp() {
         mAction = UiActionsManager.getInstance();
-        mTaskVideoHomeTab = TaskVideoHomeTab.getInstance();
         mTask = TaskPlayingVideos.getInstance();
+        mTaskVideoHomeTab = TaskVideoHomeTab.getInstance();
 
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mDevice.registerWatcher("BufferRefreshFailedWatcher", new BufferRefreshFailedWatcher());
         TaskLauncher.backToLauncher();
     }
 
-//    @After
-//    public void clearUp() {
+    @After
+    public void clearUp() {
 //        TaskLauncher.backToLauncher();
-//    }
-
-    @Test
-    @Category(Category24x7LauncherTests.class)
-    public void test11PlayingFilm() {
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText("电影");
-        this.navigateToVideoInAllTabOnVideoSubPage();
-        this.randomSelectVideoAndOpenDetails(5);
-        mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage();
-        mTask.waitForVideoPlayerOpenedAndOnTop();
-
-        ShellUtils.systemWaitByMillis(10 * 1000L);  // play 5 minutes
-        this.isVideoPlayerOnTop();
-
-        mTask.resetVideoProcessToStart();
-        this.isPlayerProcessReset(mDevice);
     }
 
     @Test
     @Category(Category24x7LauncherTests.class)
-    public void test12ActionsWhenPlayingFilm() {
+    public void test11PlayerUIWhenPauseFilm() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText("电影");
         this.navigateToVideoInAllTabOnVideoSubPage();
-        String filmTitle = this.randomSelectVideoAndOpenDetails(5);
+        String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(5);
         mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage();
         mTask.waitForVideoPlayerOpenedAndOnTop();
 
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        this.verifyPlayerWhenPause(filmTitle);
-
-        int replayTimes = 3;
-        int playTime = 5;
-        for (int i = 0; i < replayTimes; i++) {
-            this.verifyFilmPlaying(playTime);
+        for (int i = 0, retryTime = 3; i > retryTime; i++) {
+            ShellUtils.systemWaitByMillis(3 * 60 * 1000L);  // set play time, 3 minutes
+            this.isVideoPlayerOnTop();
+            mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
+            this.verifyPlayerUIWhenPause(filmTitle);
         }
 
-        // play film and reset process
-        mTask.resetVideoProcessToStart();
-        this.isPlayerProcessReset(mDevice);
+        TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
+        if (info != null && info.isVip()) {
+            mTask.resetVideoProcessToStart(0.3f);
+            this.isPlayerProcessReset(mDevice);
+        }
+    }
+
+    @Test
+    @Category(Category24x7LauncherTests.class)
+    public void test12PlayingAndPauseFilm() {
+        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText("电影");
+        this.navigateToVideoInAllTabOnVideoSubPage();
+        String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(5);
+        mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage();
+        mTask.waitForVideoPlayerOpenedAndOnTop();
+
+        for (int i = 0, replayTimes = 3; i < replayTimes; i++) {
+            this.verifyPlayingFilm(60);  // set play time, 1 minutes
+        }
+
+        TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
+        if (info !=null && info.isVip()) {
+            mTask.resetVideoProcessToStart(0.3f);
+            this.isPlayerProcessReset(mDevice);
+        }
     }
 
     @Test
     @Category({CategoryHomeVideoTabTests.class})
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
+        mTaskVideoHomeTab.destroyInstance();
     }
 
     private void navigateToVideoInAllTabOnVideoSubPage() {
         mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), LONG_WAIT);
         mAction.doDeviceActionAndWait(new DeviceActionMoveDown(), TestConstants.WAIT);
-    }
-
-    private String randomSelectVideoAndOpenDetails(int randomInt) {
-        int moveTimes = new Random().nextInt(randomInt);
-        for (int j = 0; j <= moveTimes; j++) {
-            mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        }
-        Log.d(TAG, String.format("ZjFilmTest, select film at position: %d", moveTimes));
-
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        return mTaskVideoHomeTab.waitVideoDetailsPageOpenedAndRetTitle();
     }
 
     private void isVideoPlayerOnTop() {
@@ -131,7 +123,7 @@ public final class TestPlayingVideos {
         TestHelper.assertTrueAndCaptureIfFailed("Verify player is playing and on the top.", ret);
     }
 
-    private void verifyPlayerWhenPause(String filmTitleText) {
+    private void verifyPlayerUIWhenPause(String filmTitleText) {
         UiObject2 title = mDevice.findObject(mTask.getVideoNameInVideoPlayerSelector());
         Assert.assertNotNull(title);
         Assert.assertEquals("Verify film title when pause player.",
@@ -150,24 +142,25 @@ public final class TestPlayingVideos {
                 totalTime.getText().contains(":"));
     }
 
-    private void verifyFilmPlaying(int playTime) {
+    private void verifyPlayingFilm(int playTime) {
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
         UiObject2 curTime =
                 mDevice.findObject(mTask.getCurrentTimeInSeekBarOfVideoPlayerSelector());
-        Assert.assertNotNull("Verify film current play time.", curTime);
         int startTime = formatFilmPlayTime(curTime.getText());
 
-        // play film
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // play
         ShellUtils.systemWaitByMillis(playTime * 1000L);
 
-        // pause player
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
         curTime = mDevice.findObject(mTask.getCurrentTimeInSeekBarOfVideoPlayerSelector());
-        Assert.assertNotNull("Verify film current play time.", curTime);
         int endTime = formatFilmPlayTime(curTime.getText());
 
-        final int buffer = 5;
-        Assert.assertTrue("Verify playing film.", (endTime - startTime) >= (playTime - buffer));
+        final int testBuffer = 5;
+        Assert.assertTrue("Verify play time when playing film."
+                , (endTime - startTime) >= (playTime - testBuffer));
+
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // play
+        this.isVideoPlayerOnTop();
     }
 
     private void isPlayerProcessReset(UiDevice device) {
@@ -179,7 +172,7 @@ public final class TestPlayingVideos {
 
         int curPlayTime = this.formatFilmPlayTime(curTimeObj.getText());
         if (curPlayTime > 30) {
-            Log.e(TAG, "Failed to reset the video to start.");
+            Log.w(TAG, "isPlayerProcessReset, failed to reset the video to start.");
         }
     }
 
@@ -224,4 +217,5 @@ public final class TestPlayingVideos {
             return false;
         }
     }
+
 }

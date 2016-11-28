@@ -42,7 +42,7 @@ public final class TestRemoteJsonAPIs {
             Log.d(TAG, String.format(
                     "TvSeriesTest, tv info for %s, mediaId: %d, totalNum: %d, isEnd: %s, isVip: %s",
                     tvInfo.getTvName(), tvInfo.getMediaId(), tvInfo.getTotalNum(),
-                    String.valueOf(tvInfo.getIsEnd()), tvInfo.getIsVip()));
+                    String.valueOf(tvInfo.getIsEnd()), tvInfo.getVipType()));
         } else {
             Log.d(TAG, String.format("Failed to get the tv info for %s", tvName));
         }
@@ -60,7 +60,7 @@ public final class TestRemoteJsonAPIs {
             Log.d(TAG, String.format(
                     "FilmTest, film info for %s, mediaId: %d, totalNum: %d, isEnd: %s, isVip: %s",
                     filmInfo.getTvName(), filmInfo.getMediaId(), filmInfo.getTotalNum(),
-                    String.valueOf(filmInfo.getIsEnd()), filmInfo.getIsVip()));
+                    String.valueOf(filmInfo.getIsEnd()), filmInfo.getVipType()));
         } else {
             Log.d(TAG, String.format("Failed to get the film info for %s", filmName));
         }
