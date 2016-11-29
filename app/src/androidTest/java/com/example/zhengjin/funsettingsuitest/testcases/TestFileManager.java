@@ -251,8 +251,8 @@ public final class TestFileManager {
     public void test23HideAndShowDirectory() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveRight())
-                .doDeviceActionAndWait(new DeviceActionMoveLeft());  // request focus
+        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveUp())
+                .doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);  // request focus
 
         mMessage = "Verify the directory is hidden after click Hide button.";
         mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
@@ -260,6 +260,7 @@ public final class TestFileManager {
         Assert.assertNull(mMessage, fileHidden);
 
         mMessage = "Verify the Show All button is displayed in menu after hide file.";
+        mTask.showMenuAndRequestFocus();
         UiObject2 btnContainer = mDevice.findObject(mTask.getMenuShowAllBtnContainerSelector());
         UiObject2 btnShowAll = btnContainer.findObject(mTask.getMenuBtnTextSelector());
         Assert.assertEquals(mMessage, TEXT_SHOWALL_BUTTON, btnShowAll.getText());
@@ -359,22 +360,6 @@ public final class TestFileManager {
         UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, "未发现可显示的文件", tips.getText());
-    }
-
-    @Test
-    @Category(CategoryFileManagerTests.class)
-    public void test31MessageWhenEmptyForVideoCard() {
-        mTask.openCategoryVideoCard();
-
-        mMessage = "Verify the tips when no files in video card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
-        Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, "未发现可播放的视频", tips.getText());
-
-        mMessage = "Verify the menu is NOT shown when no files in video card.";
-        mAction.doDeviceActionAndWait(new DeviceActionMenu());
-        UiObject2 menu = mDevice.findObject(mTask.getMenuContainerSelector());
-        Assert.assertNull(mMessage, menu);
     }
 
     @Test
@@ -537,6 +522,22 @@ public final class TestFileManager {
 
         fileRemoved = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
         Assert.assertNull(mMessage, fileRemoved);
+    }
+
+    @Test
+    @Category(CategoryFileManagerTests.class)
+    public void test41_07MessageWhenEmptyForVideoCard() {
+        mTask.openCategoryVideoCard();
+
+        mMessage = "Verify the tips when no files in video card.";
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertNotNull(tips);
+        Assert.assertEquals(mMessage, "未发现可播放的视频", tips.getText());
+
+        mMessage = "Verify the menu is NOT shown when no files in video card.";
+        mAction.doDeviceActionAndWait(new DeviceActionMenu());
+        UiObject2 menu = mDevice.findObject(mTask.getMenuContainerSelector());
+        Assert.assertNull(mMessage, menu);
     }
 
     @Test

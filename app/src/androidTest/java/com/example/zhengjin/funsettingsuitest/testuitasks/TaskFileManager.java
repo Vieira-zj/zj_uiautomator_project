@@ -240,7 +240,7 @@ public final class TaskFileManager {
     public void showMenuAndClickBtn(String btnText) {
         boolean isFocused = false;
 
-        showMenuAndRequestFocus();
+        this.showMenuAndRequestFocus();
         UiObject2 btn = device.findObject(By.text(btnText));
         Assert.assertNotNull(String.format("showMenuAndClickBtn, Button %s is not found."
                 , btnText), btn);
