@@ -12,8 +12,8 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -89,22 +89,26 @@ public final class TaskPlayingVideos {
     }
 
     public void waitForVideoPlayerOpenedAndOnTop() {
-        TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, 15);
+        final int waitBySec = 15;
+        // wait for buffer load activity disappear
+        TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, waitBySec);
+        // wait for video player on top
         TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
-                this.getVideoPlayerByClassSelector(), 15 * 1000);
+                this.getVideoPlayerByClassSelector(), waitBySec * 1000);
     }
 
     public void exitVideoPlayerByBack() {
-        action.doMultipleDeviceActionsAndWait(
-                new DeviceAction[] {new DeviceActionBack(), new DeviceActionBack()}, 300L);
+        action.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2, 500L);
     }
 
     public void resetVideoProcessToStart() {
         swipeOnVideoProcess(Direction.LEFT);
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 6, 500L);
     }
 
     public void resetVideoProcessToEnd() {
         swipeOnVideoProcess(Direction.RIGHT);
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 6, 500L);
     }
 
     private void swipeOnVideoProcess(Direction direction) {

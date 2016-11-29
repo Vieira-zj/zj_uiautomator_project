@@ -61,7 +61,7 @@ public final class UiActionsManager {
         doRepeatDeviceActionAndWait(action, repeatTimes, SHORT_WAIT);
     }
 
-    private void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
+    public void doRepeatDeviceActionAndWait(DeviceAction action, int repeatTimes, long wait) {
         for (int i = 0; i < repeatTimes; ++i) {
             action.doDeviceAction(mDevice);
             ShellUtils.systemWaitByMillis(wait);
@@ -72,7 +72,7 @@ public final class UiActionsManager {
         doMultipleDeviceActionsAndWait(actions, SHORT_WAIT);
     }
 
-    public void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
+    private void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
         for (DeviceAction action : actions) {
             action.doDeviceAction(mDevice);
             ShellUtils.systemWaitByMillis(wait);
