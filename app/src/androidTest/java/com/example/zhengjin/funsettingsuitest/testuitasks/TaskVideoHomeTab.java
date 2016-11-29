@@ -98,6 +98,14 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/detail_select_button");
     }
 
+    private BySelector getTryWatchButtonOfVideoDetailsPageSelector() {
+        return By.res("com.bestv.ott:id/detail_try_button");
+    }
+
+    public BySelector getTvNumberTipsOfVideoDetailsPageSelector() {
+        return By.res("com.bestv.ott:id/detail_tip_button");
+    }
+
     public BySelector getRelatedVideoListOfVideoDetailsPageSelector() {
         return By.res("com.bestv.ott:id/relate_list_view");
     }
@@ -156,10 +164,16 @@ public final class TaskVideoHomeTab {
         return this.waitVideoDetailsPageOpenedAndRetTitle();
     }
 
-    public void enterOnPlayButtonOnVideoDetailsPage() {
-        UiObject2 playBtn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());
-        if (!playBtn.isFocused()) {
-            action.doClickActionAndWait(playBtn);
+    public void enterOnPlayButtonOnVideoDetailsPage(TaskPlayingVideos.videoInfo info) {
+        UiObject2 btn;
+        if (info != null && info.isVip()) {
+            btn = device.findObject(this.getTryWatchButtonOfVideoDetailsPageSelector());
+        } else {
+            btn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());
+        }
+
+        if (!btn.isFocused()) {
+            action.doClickActionAndWait(btn);
         }
         action.doDeviceActionAndWait(new DeviceActionEnter());
     }

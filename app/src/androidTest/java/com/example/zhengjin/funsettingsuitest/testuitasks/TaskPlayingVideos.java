@@ -101,14 +101,14 @@ public final class TaskPlayingVideos {
         action.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2, 500L);
     }
 
-    public void resetVideoProcessToStart() {
+    public void resetVideoProcessToBeginning() {
         swipeOnVideoProcess(Direction.LEFT);
         action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 6, 500L);
     }
 
     public void resetVideoProcessToEnd() {
         swipeOnVideoProcess(Direction.RIGHT);
-        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 6, 500L);
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 10, 500L);
     }
 
     private void swipeOnVideoProcess(Direction direction) {
