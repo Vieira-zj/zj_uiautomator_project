@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
@@ -123,6 +124,37 @@ public final class TaskPlayingVideos {
         seekBar.swipe(direction, percent, step);
     }
 
+    public int getCurrentPlayTimeInVideoPlayer() {
+        action.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
+        UiObject2 curTime =
+                device.findObject(this.getCurrentTimeInSeekBarOfVideoPlayerSelector());
+        action.doDeviceActionAndWait(new DeviceActionEnter());  // play
+        return formatPlayTimeInVideoPlayer(curTime.getText());
+    }
+
+    public int formatPlayTimeInVideoPlayer(String playTime) {
+        String[] items = playTime.split(":");
+
+        if (items.length == 2) {
+            return 60 * convertPlayTimeToInt(items[0]) + Integer.parseInt(items[1]);
+        }
+        if (items.length == 3) {
+            return 60 * (60 * convertPlayTimeToInt(items[0])) +
+                    60 * convertPlayTimeToInt(items[1]) + Integer.parseInt(items[2]);
+        }
+        return -1;
+    }
+
+    private int convertPlayTimeToInt(String playTime) {
+        if ("00".equals(playTime)) {
+            return 0;
+        }
+        if (playTime.startsWith("0")) {
+            return Integer.parseInt(playTime.substring(1));
+        }
+        return Integer.parseInt(playTime);
+    }
+
     @Nullable
     public videoInfo getTvInfoByName(String tvName) {
         return getVideoInfoByName(tvName, TestConstants.VideoType.TV);
@@ -167,18 +199,20 @@ public final class TaskPlayingVideos {
         return null;
     }
 
-    public int getLatestTvTotalNumByName(String tvName) {
-        videoInfo videoInfo = this.getTvInfoByName(tvName);
-        if (videoInfo == null) {
+    public int getLatestTvTotalNumByName(videoInfo info) {
+        if (info == null) {
             return -1;
+        }
+
+        if (info.isEnd) {
+            return info.getTotalNum();
         }
 
         JSONObject respObj = JSON.parseObject(this.doSendRequestAndRetResponse(
-                this.buildVideoDetailsGetRequest(videoInfo.getMediaId())));
+                this.buildVideoDetailsGetRequest(info.getMediaId())));
         if (!this.isResponseOk(respObj)) {
             return -1;
         }
-
         return respObj.getJSONObject("data").getJSONArray("episodes").size();
     }
 

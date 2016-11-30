@@ -10,8 +10,12 @@ import android.support.test.uiautomator.UiWatcher;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskPlayingVideos;
@@ -49,7 +53,7 @@ public final class TestPlayingVideos {
     private static final String TEXT_CARD_TV = "电视剧";
 
     private final int RANDOM_SELECT_NUM = 5;
-    private final int PLAY_TIME_BY_SEC = 30;
+    private final int PLAY_TIME_BY_SEC = 15;
     private final int RUN_TIMES = 3;
 
     @Before
@@ -111,31 +115,49 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category(Category24x7LauncherTests.class)
-    public void test21PlayingTvSeriesInSeqOnDetails() {
+    @Category({Category24x7LauncherTests.class})
+    public void test21PlayingPartTvSeriesInSeqOnDetails() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
-        int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle);
+        TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
+        int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
         int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
         for (int idx = 1; idx <= totalPlayNum; idx++) {
+            this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);
             this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
         }
     }
 
     @Test
-    @Category(Category24x7LauncherTests.class)
-    public void test22PlayingTvSeriesInSeqBySwipe() {
+    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
+    public void test22PlayingPartTvSeriesInSeqBySwipe() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
         this.selectAndPlaySpecifiedNumberOfTvSeries(1);
 
-        int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle);
+        TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
+        int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
         int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
         for (int idx = 1; idx <= totalPlayNum; idx++) {
             this.verifyPlayTvSeriesInSeqBySwipe(tvTitle, idx, PLAY_TIME_BY_SEC);
+        }
+    }
+
+    @Test
+    @Category({Category24x7LauncherTests.class})
+    public void test23PlayingAllTvSeriesInSeqOnDetails() {
+        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
+        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        String tvTitle = mTaskVideoHomeTab.selectVideoAtPositionAndOpenDetails(3);
+
+        TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
+        int totalPlayNum = mTask.getLatestTvTotalNumByName(info);
+        for (int idx = 1; idx <= totalPlayNum; idx++) {
+            this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);
+            this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
         }
     }
 
@@ -179,17 +201,9 @@ public final class TestPlayingVideos {
     }
 
     private void verifyPlayingFilm(int playTimeBySec) {
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
-        UiObject2 curTime =
-                mDevice.findObject(mTask.getCurrentTimeInSeekBarOfVideoPlayerSelector());
-        int startTime = formatFilmPlayTime(curTime.getText());
-
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // play
+        int startTime = mTask.getCurrentPlayTimeInVideoPlayer();
         ShellUtils.systemWaitByMillis(playTimeBySec * 1000L);
-
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
-        curTime = mDevice.findObject(mTask.getCurrentTimeInSeekBarOfVideoPlayerSelector());
-        int endTime = formatFilmPlayTime(curTime.getText());
+        int endTime = mTask.getCurrentPlayTimeInVideoPlayer();
 
         final int buffer = 10;
         int during = endTime - startTime;
@@ -206,8 +220,27 @@ public final class TestPlayingVideos {
         mAction.doClickActionAndWait(cell);
     }
 
-    private int getTotalNumberOfTvSeriesToPlay(String tvTitle) {
-        TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
+    private void selectAndPlaySpecifiedNumberOfTvSeries(
+            int number, TaskPlayingVideos.videoInfo info) {
+        mTaskVideoHomeTab.focusOnTvSelectButtonOnVideoDetailsPage();
+
+        UiObject2 cell = mTaskVideoHomeTab.getSpecifiedTvCellByIndex(String.valueOf(number));
+        UiObject2 bottomTabContainer = mDevice.findObject(
+                mTaskVideoHomeTab.getBottomTabContainerOfVideoDetailsPageSelector());
+        if (cell == null && bottomTabContainer != null) {
+            mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 4);  // move at bottom
+            if (info.getIsEnd()) {
+                mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+            } else {
+                mAction.doDeviceActionAndWait(new DeviceActionMoveLeft());
+            }
+            cell = mTaskVideoHomeTab.getSpecifiedTvCellByIndex(String.valueOf(number));
+
+        }
+        mAction.doClickActionAndWait(cell);
+    }
+
+    private int getTotalNumberOfTvSeriesToPlay(String tvTitle, TaskPlayingVideos.videoInfo info) {
         if (info == null) {
             Log.e(TAG, String.format("getTotalNumberOfTvSeriesToPlay, error request info for tv %s"
                     , tvTitle));
@@ -217,7 +250,7 @@ public final class TestPlayingVideos {
             return 1;
         }
 
-        return mTask.getLatestTvTotalNumByName(tvTitle);
+        return mTask.getLatestTvTotalNumByName(info);
     }
 
     private void verifyTvNameAndNumberInVideoPlayer(String tvName, int TvNumber) {
@@ -228,7 +261,6 @@ public final class TestPlayingVideos {
     }
 
     private void verifyPlayTvSeriesInSeqOnDetails(String tvTitle, int idx, int playTimeBySec) {
-        this.selectAndPlaySpecifiedNumberOfTvSeries(idx);
         mTask.waitForVideoPlayerOpenedAndOnTop();
         SystemClock.sleep(playTimeBySec * 1000L);
 
@@ -269,32 +301,9 @@ public final class TestPlayingVideos {
                 mDevice.findObject(mTask.getCurrentTimeInSeekBarOfVideoPlayerSelector());
 
         final int timeAfterReset = 300;  // 5 minutes
-        if (this.formatFilmPlayTime(curTimeObj.getText()) > timeAfterReset) {
+        if (mTask.formatPlayTimeInVideoPlayer(curTimeObj.getText()) > timeAfterReset) {
             Log.w(TAG, "isPlayerProcessReset, failed to reset the video to beginning.");
         }
-    }
-
-    private int formatFilmPlayTime(String playTime) {
-        String[] items = playTime.split(":");
-
-        if (items.length == 2) {
-            return 60 * convertPlayTimeToInt(items[0]) + Integer.parseInt(items[1]);
-        }
-        if (items.length == 3) {
-            return 60 * (60 * convertPlayTimeToInt(items[0])) +
-                    60 * convertPlayTimeToInt(items[1]) + Integer.parseInt(items[2]);
-        }
-        return -1;
-    }
-
-    private int convertPlayTimeToInt(String playTime) {
-        if ("00".equals(playTime)) {
-            return 0;
-        }
-        if (playTime.startsWith("0")) {
-            return Integer.parseInt(playTime.substring(1));
-        }
-        return Integer.parseInt(playTime);
     }
 
     private class BufferRefreshFailedWatcher implements UiWatcher {

@@ -14,6 +14,7 @@ import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import org.junit.After;
@@ -127,7 +128,7 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testTakeScreenCaptures() {
         TaskLauncher.backToLauncher();
-        ShellUtils.takeScreenCapture(mDevice);
+        TestHelper.assertTrueAndCaptureIfFailed("Test take captures", false);
     }
 
     @Test

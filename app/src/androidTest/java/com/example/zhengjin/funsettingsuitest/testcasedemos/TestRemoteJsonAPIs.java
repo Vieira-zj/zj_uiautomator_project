@@ -73,7 +73,8 @@ public final class TestRemoteJsonAPIs {
     public void test13GetTvCurTotalNum() {
         final String tvName = "国家底线";
 
-        int num = mTask.getLatestTvTotalNumByName(tvName);
+        TaskPlayingVideos.videoInfo tvInfo = mTask.getFilmInfoByName(tvName);
+        int num = mTask.getLatestTvTotalNumByName(tvInfo);
         if (num != -1) {
             Log.d(TAG, String.format("TvSeriesTest, the current total num for tv %s: %d",
                     tvName, num));

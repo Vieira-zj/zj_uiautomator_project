@@ -114,6 +114,10 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/tv_cell");
     }
 
+    public BySelector getBottomTabContainerOfVideoDetailsPageSelector() {
+        return By.res("com.bestv.ott:id/episode_view");
+    }
+
     public UiObject2 getSpecifiedCardFromHomeLeftAreaByText(String search) {
         List<UiObject2> textList =
                 device.findObjects(this.getCardTitleOfLauncherHomeLeftAreaSelector());
@@ -150,6 +154,15 @@ public final class TaskVideoHomeTab {
                         this.getTitleTextOfVideoDetailsPageSelector()));
 
         return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();
+    }
+
+    public String selectVideoAtPositionAndOpenDetails(int position) {
+        for (int i = 0; i < position; i++) {
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+        return this.waitVideoDetailsPageOpenedAndRetTitle();
     }
 
     public String randomSelectVideoAndOpenDetails(int randomInt) {

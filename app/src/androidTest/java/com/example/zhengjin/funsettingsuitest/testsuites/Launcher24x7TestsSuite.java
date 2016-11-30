@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 /**
  * Created by Vieira on 2016/7/7.
  *
- * Include test cases for 24 x 7 launcher home test.
+ * Include test cases for 24 x 7 video playing test.
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory(Category24x7LauncherTests.class)
