@@ -29,8 +29,10 @@ public final class TestConstants {
 
     private final static String TEST_ROOT_DIR_NAME = "test_logs";
     private final static String TEST_SNAPSHOT_DIR_NAME = "uiautomator_snapshots";
+    private final static String TEST_LOGCAT_DIR_NAME = "logcat_log";
     private final static String SDCARD_PATH;
     final static String SNAPSHOT_PATH;
+    final static String LOGCAT_PATH;
 
     private final static String SDCARD_STATUS_UN_AVAILABLE = "sdcard_unavailable";
 
@@ -40,8 +42,10 @@ public final class TestConstants {
         } else {
             SDCARD_PATH = SDCARD_STATUS_UN_AVAILABLE;
         }
-        SNAPSHOT_PATH = String.format("%s/%s/%s",
-                SDCARD_PATH, TEST_ROOT_DIR_NAME, TEST_SNAPSHOT_DIR_NAME);
+        SNAPSHOT_PATH =
+                String.format("%s/%s/%s", SDCARD_PATH, TEST_ROOT_DIR_NAME, TEST_SNAPSHOT_DIR_NAME);
+        LOGCAT_PATH =
+                String.format("%s/%s/%s", SDCARD_PATH, TEST_ROOT_DIR_NAME, TEST_LOGCAT_DIR_NAME);
     }
 
     static boolean isSdcardAvailable() {

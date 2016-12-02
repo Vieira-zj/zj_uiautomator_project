@@ -9,4 +9,4 @@
 /.idea/*.xml
 #/.idea/workspace.xml
 
-app/debug.keystore
+/app/*.keystore

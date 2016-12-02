@@ -53,7 +53,7 @@ public final class TestPlayingVideos {
     private static final String TEXT_CARD_TV = "电视剧";
 
     private final int RANDOM_SELECT_NUM = 5;
-    private final int PLAY_TIME_BY_SEC = 15;
+    private final int PLAY_TIME_BY_SEC = 5 * 60;
     private final int RUN_TIMES = 3;
 
     @Before
@@ -131,7 +131,7 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
+    @Category({Category24x7LauncherTests.class})
     public void test22PlayingPartTvSeriesInSeqBySwipe() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
@@ -147,7 +147,7 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({Category24x7LauncherTests.class})
+    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
     public void test23PlayingAllTvSeriesInSeqOnDetails() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
@@ -170,8 +170,8 @@ public final class TestPlayingVideos {
 
     private void verifyVideoPlayerOnTop() {
         UiObject2 player = mDevice.findObject(mTask.getVideoPlayerByClassSelector());
-        TestHelper.assertTrueAndCaptureIfFailed("Verify player is playing and on the top."
-                , (player != null && player.isEnabled()));
+        TestHelper.assertTrueAndSaveEnvIfFailed("Verify player is playing and on the top."
+                , (player != null && player.isEnabled()), TestHelper.SaveEnvType.CAP_AND_DUMP);
         ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
     }
 

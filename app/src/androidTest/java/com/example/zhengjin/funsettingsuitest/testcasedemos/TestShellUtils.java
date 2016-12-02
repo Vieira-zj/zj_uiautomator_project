@@ -33,7 +33,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SET
 
 /**
  * Created by zhengjin on 2016/6/1.
- *
+ * <p>
  * Include test cases for ShellCmdUtils.java
  */
 @RunWith(AndroidJUnit4.class)
@@ -116,7 +116,7 @@ public final class TestShellUtils {
         String cmdStart = String.format("am start %s/%s", SETTINGS_PKG_NAME, SETTINGS_HOME_ACT);
 
         ShellUtils.CommandResult cr = ShellUtils.execCommand(
-                new String[] {cmdStop, cmdStart}, false, true);
+                new String[]{cmdStop, cmdStart}, false, true);
         String output = String.format(Locale.getDefault(),
                 "Result code: %d\nSuccess message: %s\nError message: %s", cr.mResult,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
@@ -128,7 +128,17 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testTakeScreenCaptures() {
         TaskLauncher.backToLauncher();
-        TestHelper.assertTrueAndCaptureIfFailed("Test take captures", false);
+        TestHelper.assertTrueAndSaveEnvIfFailed(
+                "Test take captures", false, TestHelper.SaveEnvType.CAPTURE);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testClearAndDumpLogcatLog() {
+        ShellUtils.clearLogcatLog();
+        ShellUtils.systemWaitByMillis(10 * 1000L);  // do actions
+        TestHelper.assertTrueAndSaveEnvIfFailed(
+                "Test dump logcat log", false, TestHelper.SaveEnvType.DUMP_LOG);
     }
 
     @Test
