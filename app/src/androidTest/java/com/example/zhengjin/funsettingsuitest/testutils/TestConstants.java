@@ -19,6 +19,7 @@ public final class TestConstants {
     public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";
     public final static String WEATHER_PKG_NAME = "tv.fun.weather";
 
+    public final static String LAUNCHER_HOME_ACT = ".home.HomeActivity";
     public final static String SETTINGS_HOME_ACT = ".general.GeneralSettingsActivity";
     public final static String FILE_MANAGER_HOME_ACT = ".FunFileManagerActivity";
     public final static String VIDEO_SUB_PAGE_ACT = ".retrieve.RetrieveActivity";

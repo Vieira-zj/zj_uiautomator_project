@@ -20,6 +20,8 @@ import junit.framework.Assert;
 
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_HOME_ACT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
@@ -71,8 +73,14 @@ public final class TaskLauncher {
 
     public static void backToLauncherByPm() {
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
-        Assert.assertTrue("backToLauncher, fail to back to the launcher home.",
+        Assert.assertTrue("backToLauncherByPm, failed to back to the launcher home.",
                 getLauncherPackageName().equals(DEVICE.getCurrentPackageName()));
+    }
+
+    public static void backToLauncherByShell() {
+        ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
+        Assert.assertTrue("backToLauncherByShell, failed to back to the launcher home.",
+                TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, LAUNCHER_HOME_ACT));
     }
 
     public static String getLauncherPackageName() {

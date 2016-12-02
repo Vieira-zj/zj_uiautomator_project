@@ -53,8 +53,8 @@ public final class TestPlayingVideos {
     private static final String TEXT_CARD_TV = "电视剧";
 
     private final int RANDOM_SELECT_NUM = 5;
-    private final int PLAY_TIME_BY_SEC = 5 * 60;
-    private final int RUN_TIMES = 3;
+    private final int PLAY_TIME_BY_SEC = 30;
+    private final int RUN_TIMES = 1;
 
     @Before
     public void setUp() {
@@ -64,12 +64,14 @@ public final class TestPlayingVideos {
 
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mDevice.registerWatcher("BufferRefreshFailedWatcher", new BufferRefreshFailedWatcher());
-        TaskLauncher.backToLauncher();
+
+        ShellUtils.clearLogcatLog();
+        TaskLauncher.backToLauncherByShell();
     }
 
     @After
     public void clearUp() {
-        TaskLauncher.backToLauncher();
+        TaskLauncher.backToLauncherByShell();
     }
 
     @Test
@@ -79,12 +81,17 @@ public final class TestPlayingVideos {
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
+        this.logTestStart(filmTitle);
         TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
         mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage(info);
         mTask.waitForVideoPlayerOpenedAndOnTop();
 
-        for (int i = 0; i < RUN_TIMES; i++) {
-            this.verifyPlayerUIWhenPause(filmTitle, PLAY_TIME_BY_SEC);
+        try {
+            for (int i = 0; i < RUN_TIMES; i++) {
+                this.verifyPlayerUIWhenPause(filmTitle, PLAY_TIME_BY_SEC);
+            }
+        } finally {
+            this.logTestEnd(filmTitle);
         }
 
         if (info != null && info.isVip()) {
@@ -100,12 +107,17 @@ public final class TestPlayingVideos {
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
+        this.logTestStart(filmTitle);
         TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
         mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage(info);
         mTask.waitForVideoPlayerOpenedAndOnTop();
 
-        for (int i = 0; i < RUN_TIMES; i++) {
-            this.verifyPlayingFilm(PLAY_TIME_BY_SEC);
+        try {
+            for (int i = 0; i < RUN_TIMES; i++) {
+                this.verifyPlayingFilm(PLAY_TIME_BY_SEC);
+            }
+        } finally {
+            this.logTestEnd(filmTitle);
         }
 
         if (info != null && info.isVip()) {
@@ -121,43 +133,59 @@ public final class TestPlayingVideos {
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
+        this.logTestStart(tvTitle);
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
         int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
         int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
-        for (int idx = 1; idx <= totalPlayNum; idx++) {
-            this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);
-            this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
-        }
-    }
-
-    @Test
-    @Category({Category24x7LauncherTests.class})
-    public void test22PlayingPartTvSeriesInSeqBySwipe() {
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
-        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
-        String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
-        this.selectAndPlaySpecifiedNumberOfTvSeries(1);
-
-        TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
-        int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
-        int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
-        for (int idx = 1; idx <= totalPlayNum; idx++) {
-            this.verifyPlayTvSeriesInSeqBySwipe(tvTitle, idx, PLAY_TIME_BY_SEC);
+        try {
+            for (int idx = 1; idx <= totalPlayNum; idx++) {
+                this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);
+                this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
+            }
+        } finally {
+            this.logTestEnd(tvTitle);
         }
     }
 
     @Test
     @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
+    public void test22PlayingPartTvSeriesInSeqBySwipe() {
+//        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
+        mTaskVideoHomeTab.openVideoSubPageFromCateDetailsByText(TEXT_CARD_TV);
+        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
+        this.selectAndPlaySpecifiedNumberOfTvSeries(1);
+
+        this.logTestStart(tvTitle);
+        TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
+        int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
+        int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
+        try {
+            for (int idx = 1; idx <= totalPlayNum; idx++) {
+                this.verifyPlayTvSeriesInSeqBySwipe(tvTitle, idx, PLAY_TIME_BY_SEC);
+            }
+        } finally {
+            this.logTestEnd(tvTitle);
+        }
+    }
+
+    @Test
+    @Category({Category24x7LauncherTests.class})
     public void test23PlayingAllTvSeriesInSeqOnDetails() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.selectVideoAtPositionAndOpenDetails(3);
 
+        this.logTestStart(tvTitle);
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
         int totalPlayNum = mTask.getLatestTvTotalNumByName(info);
-        for (int idx = 1; idx <= totalPlayNum; idx++) {
-            this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);
-            this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
+        try {
+            for (int idx = 1; idx <= totalPlayNum; idx++) {
+                this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);
+                this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
+            }
+        } finally {
+            this.logTestEnd(tvTitle);
         }
     }
 
@@ -166,6 +194,14 @@ public final class TestPlayingVideos {
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
         mTaskVideoHomeTab.destroyInstance();
+    }
+
+    private void logTestStart(String videoTitle) {
+        Log.d(TAG, String.format("%s START: %s", ShellUtils.getRunningMethodName(), videoTitle));
+    }
+
+    private void logTestEnd(String videoTitle) {
+        Log.d(TAG, String.format("%s END: %s", ShellUtils.getRunningMethodName(), videoTitle));
     }
 
     private void verifyVideoPlayerOnTop() {

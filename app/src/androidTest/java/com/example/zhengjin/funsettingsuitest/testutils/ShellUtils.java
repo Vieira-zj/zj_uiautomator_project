@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
@@ -135,7 +136,7 @@ public final class ShellUtils {
         }
     }
 
-    public static void dumpLogcatLog() {
+    static void dumpLogcatLog() {
         if (!initTestDirectory(LOGCAT_PATH)) {
             return;
         }
@@ -212,6 +213,20 @@ public final class ShellUtils {
         }
 
         return true;
+    }
+
+    @Nullable
+    public static String getRunningMethodName() {
+        final String prefix = "test";
+
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        for (int i = 0, depth = 7; i < depth; i++) {
+            if (elements[i].getMethodName().startsWith(prefix)) {
+                return elements[i].getMethodName();
+            }
+        }
+
+        return "null";
     }
 
 }

@@ -17,6 +17,8 @@ import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -146,6 +148,13 @@ public final class TestShellUtils {
     public void testPrintEnabledImeList() {
         TaskSettings task = TaskSettings.getInstance();
         task.isInputMethodEnabled();
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testGetCurRunningMethodName() {
+        Log.d(TAG, String.format("Current running test: %s", ShellUtils.getRunningMethodName()));
+        Assert.assertTrue("Verify get current running test name.", true);
     }
 
 }

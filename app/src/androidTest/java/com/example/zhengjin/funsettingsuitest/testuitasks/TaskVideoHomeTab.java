@@ -66,6 +66,10 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/maintitle");
     }
 
+    private BySelector getAllImagesOfMainCateOnCateDetailsSelector() {
+        return By.res("com.bestv.ott:id/poster");
+    }
+
     public BySelector getCardContainerOfVideoRecommendPageSelector() {
         return By.res("com.bestv.ott:id/grid");
     }
@@ -118,6 +122,35 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/episode_view");
     }
 
+    private void openCateDetailsOfLauncherHomeLeftArea() {
+        action.doChainedDeviceActionAndWait(new DeviceActionMoveRight())
+                .doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 2);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+        ShellUtils.systemWaitByMillis(WAIT);
+    }
+
+    @Nullable
+    private UiObject2 getMainCateCardOnCateDetailsByText(String title) {
+        List<UiObject2> images =
+                device.findObjects(this.getAllImagesOfMainCateOnCateDetailsSelector());
+        for (UiObject2 image : images) {
+            UiObject2 container = image.getParent();
+            if (container.findObject(By.text(title)) != null) {
+                return container;
+            }
+        }
+
+        return null;
+    }
+
+    public void openVideoSubPageFromCateDetailsByText(String title) {
+        this.openCateDetailsOfLauncherHomeLeftArea();
+        UiObject2 card = this.getMainCateCardOnCateDetailsByText(title);
+        action.doClickActionAndWait(card);
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        this.waitForVideoSubPageOpened(title);
+    }
+
     public UiObject2 getSpecifiedCardFromHomeLeftAreaByText(String search) {
         List<UiObject2> textList =
                 device.findObjects(this.getCardTitleOfLauncherHomeLeftAreaSelector());
@@ -130,13 +163,16 @@ public final class TaskVideoHomeTab {
         return this.getSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    public void openSubPageFromLauncherHomeByText(String cardText) {
-        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(cardText);
+    public void openSubPageFromLauncherHomeByText(String title) {
+        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(title);
         action.doClickActionAndWait(card);  // request focus
-
         action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        Assert.assertTrue(String.format("openSubPageFromLauncherHomeByText, " +
-                        "failed to open sub page %s", cardText),
+        this.waitForVideoSubPageOpened(title);
+    }
+
+    private void waitForVideoSubPageOpened(String title) {
+        Assert.assertTrue(String.format("waitForVideoSubPageOpened, " +
+                        "failed to open sub page %s", title),
                 TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_SUB_PAGE_ACT));
         TestHelper.waitForLoadingComplete();
         ShellUtils.systemWaitByMillis(WAIT);
