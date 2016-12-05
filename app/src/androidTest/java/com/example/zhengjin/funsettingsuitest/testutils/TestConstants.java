@@ -13,6 +13,7 @@ public final class TestConstants {
     public final static long WAIT = 3000L;
     public final static long LONG_WAIT = 5000L;
     public final static long TIME_OUT = 8000L;
+    public final static long LONG_TIME_OUT = 15 * 1000L;
 
     public final static String LAUNCHER_PKG_NAME = "com.bestv.ott";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";

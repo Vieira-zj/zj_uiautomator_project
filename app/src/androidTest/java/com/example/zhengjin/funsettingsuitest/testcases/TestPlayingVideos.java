@@ -54,7 +54,7 @@ public final class TestPlayingVideos {
 
     private final int RANDOM_SELECT_NUM = 5;
     private final int PLAY_TIME_BY_SEC = 30;
-    private final int RUN_TIMES = 1;
+    private final int RUN_TIMES = 3;
 
     @Before
     public void setUp() {
@@ -127,7 +127,7 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({Category24x7LauncherTests.class})
+    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
     public void test21PlayingPartTvSeriesInSeqOnDetails() {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
@@ -137,6 +137,7 @@ public final class TestPlayingVideos {
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
         int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
         int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
+        Log.d(TAG, String.format("ZJ, the total times %d", totalPlayNum));
         try {
             for (int idx = 1; idx <= totalPlayNum; idx++) {
                 this.selectAndPlaySpecifiedNumberOfTvSeries(idx, info);

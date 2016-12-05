@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_TIME_OUT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_PLAYER_ACT;
 
 /**
@@ -90,12 +91,12 @@ public final class TaskPlayingVideos {
     }
 
     public void waitForVideoPlayerOpenedAndOnTop() {
-        final int waitBySec = 15;
-        // wait for buffer load activity disappear
-        TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, waitBySec);
-        // wait for video player on top
+        // wait for buffer loading activity disappear
+        TestHelper.waitForActivityOpenedByShellCmd(
+                LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, LONG_TIME_OUT);
+        // wait for adv, and loading in video player
         TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
-                this.getVideoPlayerByClassSelector(), waitBySec * 1000);
+                this.getVideoPlayerByClassSelector(), LONG_TIME_OUT);
     }
 
     public void exitVideoPlayerByBack() {
@@ -213,7 +214,9 @@ public final class TaskPlayingVideos {
         if (!this.isResponseOk(respObj)) {
             return -1;
         }
-        return respObj.getJSONObject("data").getJSONArray("episodes").size();
+
+        int count = respObj.getJSONObject("data").getJSONArray("episodes").size();
+        return count == 0 ? 1 : count;
     }
 
     private boolean isResponseOk(JSONObject response) {

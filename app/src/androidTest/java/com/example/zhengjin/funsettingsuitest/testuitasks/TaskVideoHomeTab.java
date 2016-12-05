@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_TIME_OUT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_SUB_PAGE_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
@@ -185,9 +186,10 @@ public final class TaskVideoHomeTab {
     }
 
     public String waitVideoDetailsPageOpenedAndRetTitle() {
+        TestHelper.waitForLoadingComplete();
         Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, failed open video details page."
                 , TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
-                        this.getTitleTextOfVideoDetailsPageSelector()));
+                        this.getTitleTextOfVideoDetailsPageSelector(), LONG_TIME_OUT));
 
         return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();
     }

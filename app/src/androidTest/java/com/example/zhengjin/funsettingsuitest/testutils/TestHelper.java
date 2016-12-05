@@ -88,12 +88,11 @@ public final class TestHelper {
     }
 
     public static boolean waitForActivityOpenedByShellCmd(String pkgName, String activityName) {
-        return waitForViewOnTopByShellCmd(
-                String.format("%s/%s", pkgName, activityName), TIME_OUT);
+        return waitForActivityOpenedByShellCmd(pkgName, activityName, TIME_OUT);
     }
 
     public static boolean waitForActivityOpenedByShellCmd(
-            String pkgName, String activityName, int waitByMillis) {
+            String pkgName, String activityName, long waitByMillis) {
         return waitForViewOnTopByShellCmd(
                 String.format("%s/%s", pkgName, activityName), waitByMillis);
     }
