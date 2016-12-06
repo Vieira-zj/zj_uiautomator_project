@@ -164,22 +164,29 @@ public final class TaskVideoHomeTab {
         return this.getSpecifiedTextViewFromUiCollection(textList, search);
     }
 
-    public void openSubPageFromLauncherHomeByText(String title) {
-        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(title);
+    public void openSubPageFromLauncherHomeByText(String cardTitle) {
+        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(cardTitle);
         action.doClickActionAndWait(card);  // request focus
         action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        this.waitForVideoSubPageOpened(title);
+        this.waitForVideoSubPageOpened(cardTitle);
     }
 
     private void waitForVideoSubPageOpened(String title) {
+        waitForVideoSubPageOpened(title, true);
+    }
+
+    public void waitForVideoSubPageOpened(String title, boolean isWaitLoading) {
         Assert.assertTrue(String.format("waitForVideoSubPageOpened, " +
                         "failed to open sub page %s", title),
                 TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, VIDEO_SUB_PAGE_ACT));
-        TestHelper.waitForLoadingComplete();
-        ShellUtils.systemWaitByMillis(WAIT);
+        if (isWaitLoading) {
+            TestHelper.waitForLoadingComplete();
+        } else {
+            ShellUtils.systemWaitByMillis(LONG_WAIT);
+        }
     }
 
-    public void navigateToVideoInAllTabOnVideoSubPage() {
+    public void navigateToAllTabAndSelectVideoOnVideoSubPage() {
         action.doDeviceActionAndWait(new DeviceActionMoveLeft(), LONG_WAIT);
         TestHelper.waitForLoadingComplete();
         action.doDeviceActionAndWait(new DeviceActionMoveDown(), TestConstants.WAIT);
@@ -195,12 +202,21 @@ public final class TaskVideoHomeTab {
     }
 
     public String selectVideoAtPositionAndOpenDetails(int position) {
+        if (position < 0) {
+            action.doDeviceActionAndWait(new DeviceActionMoveLeft());
+        }
         for (int i = 0; i < position; i++) {
             action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
-
         action.doDeviceActionAndWait(new DeviceActionEnter());
+
         return this.waitVideoDetailsPageOpenedAndRetTitle();
+    }
+
+    public String selectVideoInSeqFromAllListAndOpenDetails() {
+        action.doChainedDeviceActionAndWait(new DeviceActionMoveRight())
+                .doDeviceActionAndWait(new DeviceActionEnter());
+        return waitVideoDetailsPageOpenedAndRetTitle();
     }
 
     public String randomSelectVideoAndOpenDetails(int randomInt) {

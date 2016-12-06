@@ -171,7 +171,7 @@ public final class TestHelper {
             return false;
         }
 
-        for (int i = 0, waitTimes = 10; i < waitTimes; i++) {
+        for (int i = 0, waitTimes = 15; i < waitTimes; i++) {
             SystemClock.sleep(SHORT_WAIT);
             loading = findUiObjectIgnoreRootNullException(TaskLauncher.getLoadingCircleSelector());
             if (loading == null) {

@@ -110,7 +110,7 @@ public final class TaskPlayingVideos {
 
     public void resetVideoProcessToEnd() {
         swipeOnVideoProcess(Direction.RIGHT);
-        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 10, 500L);
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 6, 500L);
     }
 
     private void swipeOnVideoProcess(Direction direction) {
@@ -129,8 +129,10 @@ public final class TaskPlayingVideos {
         action.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
         UiObject2 curTime =
                 device.findObject(this.getCurrentTimeInSeekBarOfVideoPlayerSelector());
+        int playingTime = formatPlayTimeInVideoPlayer(curTime.getText());
         action.doDeviceActionAndWait(new DeviceActionEnter());  // play
-        return formatPlayTimeInVideoPlayer(curTime.getText());
+
+        return playingTime;
     }
 
     public int formatPlayTimeInVideoPlayer(String playTime) {

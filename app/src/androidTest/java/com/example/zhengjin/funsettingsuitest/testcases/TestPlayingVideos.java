@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
@@ -76,22 +77,23 @@ public final class TestPlayingVideos {
 
     @Test
     @Category(Category24x7LauncherTests.class)
-    public void test11PlayerUIWhenPauseFilm() {
+    public void test11VideoPlayerUIWhenPauseFilm() {
+        // test for one film
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
-        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
-        this.logTestStart(filmTitle);
+        this.logTestVideoStart(filmTitle);
         TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
         mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage(info);
         mTask.waitForVideoPlayerOpenedAndOnTop();
 
         try {
             for (int i = 0; i < RUN_TIMES; i++) {
-                this.verifyPlayerUIWhenPause(filmTitle, PLAY_TIME_BY_SEC);
+                this.verifyVideoPlayerUIWhenPause(filmTitle, PLAY_TIME_BY_SEC);
             }
         } finally {
-            this.logTestEnd(filmTitle);
+            this.logTestVideoEnd(filmTitle);
         }
 
         if (info != null && info.isVip()) {
@@ -102,22 +104,24 @@ public final class TestPlayingVideos {
 
     @Test
     @Category(Category24x7LauncherTests.class)
-    public void test12PlayingAndPauseFilm() {
+    public void test12FilmTitleAndPlayingTimeOnPlayer() {
+        // test for one film
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
-        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
-        this.logTestStart(filmTitle);
+        this.logTestVideoStart(filmTitle);
         TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
         mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage(info);
         mTask.waitForVideoPlayerOpenedAndOnTop();
 
         try {
             for (int i = 0; i < RUN_TIMES; i++) {
-                this.verifyPlayingFilm(PLAY_TIME_BY_SEC);
+                this.verifyFilmTitleOnVideoPlayer(filmTitle);
+                this.verifyPlayingTimeOnVideoPlayer(PLAY_TIME_BY_SEC);
             }
         } finally {
-            this.logTestEnd(filmTitle);
+            this.logTestVideoEnd(filmTitle);
         }
 
         if (info != null && info.isVip()) {
@@ -127,13 +131,38 @@ public final class TestPlayingVideos {
     }
 
     @Test
+    @Category(Category24x7LauncherTests.class)
+    public void test13PlayingFilmsInSeqOnAllList() {
+        // test for films of all list in sequence. if one failed, test will exit.
+        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
+        mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
+
+        for (int idx = 0, totalPlayNum = 10; idx < totalPlayNum; idx++) {
+            String filmTitle = mTaskVideoHomeTab.selectVideoInSeqFromAllListAndOpenDetails();
+
+            this.logTestVideoStart(filmTitle);
+            try {
+                TaskPlayingVideos.videoInfo info = mTask.getFilmInfoByName(filmTitle);
+                mTaskVideoHomeTab.enterOnPlayButtonOnVideoDetailsPage(info);
+                mTask.waitForVideoPlayerOpenedAndOnTop();
+                this.verifyFilmTitleOnVideoPlayer(filmTitle);
+                this.verifyPlayingTimeOnVideoPlayer(PLAY_TIME_BY_SEC);
+                this.exitVideoPlayerAndBackToAllList();
+            } finally {
+                this.logTestVideoEnd(filmTitle);
+            }
+        }
+    }
+
+    @Test
     @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
     public void test21PlayingPartTvSeriesInSeqOnDetails() {
+        // test for part of tv series
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
-        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
-        this.logTestStart(tvTitle);
+        this.logTestVideoStart(tvTitle);
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
         int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
         int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
@@ -144,20 +173,21 @@ public final class TestPlayingVideos {
                 this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
             }
         } finally {
-            this.logTestEnd(tvTitle);
+            this.logTestVideoEnd(tvTitle);
         }
     }
 
     @Test
     @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
     public void test22PlayingPartTvSeriesInSeqBySwipe() {
+        // test for part of tv series
 //        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.openVideoSubPageFromCateDetailsByText(TEXT_CARD_TV);
-        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
         this.selectAndPlaySpecifiedNumberOfTvSeries(1);
 
-        this.logTestStart(tvTitle);
+        this.logTestVideoStart(tvTitle);
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
         int latestNum = this.getTotalNumberOfTvSeriesToPlay(tvTitle, info);
         int totalPlayNum = latestNum <= RUN_TIMES ? latestNum : RUN_TIMES;
@@ -166,18 +196,19 @@ public final class TestPlayingVideos {
                 this.verifyPlayTvSeriesInSeqBySwipe(tvTitle, idx, PLAY_TIME_BY_SEC);
             }
         } finally {
-            this.logTestEnd(tvTitle);
+            this.logTestVideoEnd(tvTitle);
         }
     }
 
     @Test
     @Category({Category24x7LauncherTests.class})
     public void test23PlayingAllTvSeriesInSeqOnDetails() {
+        // test for all of tv series
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
-        mTaskVideoHomeTab.navigateToVideoInAllTabOnVideoSubPage();
+        mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.selectVideoAtPositionAndOpenDetails(3);
 
-        this.logTestStart(tvTitle);
+        this.logTestVideoStart(tvTitle);
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
         int totalPlayNum = mTask.getLatestTvTotalNumByName(info);
         try {
@@ -186,7 +217,7 @@ public final class TestPlayingVideos {
                 this.verifyPlayTvSeriesInSeqOnDetails(tvTitle, idx, PLAY_TIME_BY_SEC);
             }
         } finally {
-            this.logTestEnd(tvTitle);
+            this.logTestVideoEnd(tvTitle);
         }
     }
 
@@ -197,11 +228,11 @@ public final class TestPlayingVideos {
         mTaskVideoHomeTab.destroyInstance();
     }
 
-    private void logTestStart(String videoTitle) {
+    private void logTestVideoStart(String videoTitle) {
         Log.d(TAG, String.format("%s START: %s", ShellUtils.getRunningMethodName(), videoTitle));
     }
 
-    private void logTestEnd(String videoTitle) {
+    private void logTestVideoEnd(String videoTitle) {
         Log.d(TAG, String.format("%s END: %s", ShellUtils.getRunningMethodName(), videoTitle));
     }
 
@@ -212,7 +243,7 @@ public final class TestPlayingVideos {
         ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
     }
 
-    private void verifyPlayerUIWhenPause(String filmTitleText, int playTimeBySec) {
+    private void verifyVideoPlayerUIWhenPause(String filmTitleText, int playTimeBySec) {
         ShellUtils.systemWaitByMillis(playTimeBySec * 1000L);
         mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
 
@@ -237,7 +268,19 @@ public final class TestPlayingVideos {
         this.verifyVideoPlayerOnTop();
     }
 
-    private void verifyPlayingFilm(int playTimeBySec) {
+    private void verifyFilmTitleOnVideoPlayer(String fileTitle) {
+        ShellUtils.systemWaitByMillis(TestConstants.LONG_WAIT);
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause
+
+        UiObject2 title = mDevice.findObject(mTask.getVideoTitleOfVideoPlayerSelector());
+        Assert.assertNotNull(title);
+        Assert.assertEquals("Verify film title when pause player."
+                , fileTitle.trim(), title.getText().trim());
+
+        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // play
+    }
+
+    private void verifyPlayingTimeOnVideoPlayer(int playTimeBySec) {
         int startTime = mTask.getCurrentPlayTimeInVideoPlayer();
         ShellUtils.systemWaitByMillis(playTimeBySec * 1000L);
         int endTime = mTask.getCurrentPlayTimeInVideoPlayer();
@@ -247,7 +290,6 @@ public final class TestPlayingVideos {
         Assert.assertTrue("Verify the play time when playing film."
                 , during >= (playTimeBySec - buffer) && during <= (playTimeBySec + buffer));
 
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());  // play
         this.verifyVideoPlayerOnTop();
     }
 
@@ -341,6 +383,14 @@ public final class TestPlayingVideos {
         if (mTask.formatPlayTimeInVideoPlayer(curTimeObj.getText()) > timeAfterReset) {
             Log.w(TAG, "isPlayerProcessReset, failed to reset the video to beginning.");
         }
+    }
+
+    private void exitVideoPlayerAndBackToAllList() {
+        mTask.exitVideoPlayerByBack();
+        mTaskVideoHomeTab.waitVideoDetailsPageOpenedAndRetTitle();
+
+        mAction.doDeviceActionAndWait(new DeviceActionBack());
+        mTaskVideoHomeTab.waitForVideoSubPageOpened(TEXT_CARD_FILM, false);
     }
 
     private class BufferRefreshFailedWatcher implements UiWatcher {
