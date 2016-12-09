@@ -208,7 +208,10 @@ public final class TaskPlayingVideos {
         }
 
         if (info.isEnd) {
-            return info.getTotalNum();
+            int total = info.getTotalNum();
+            if (total != 0) {
+                return total;
+            }
         }
 
         JSONObject respObj = JSON.parseObject(this.doSendRequestAndRetResponse(
@@ -216,7 +219,6 @@ public final class TaskPlayingVideos {
         if (!this.isResponseOk(respObj)) {
             return -1;
         }
-
         int count = respObj.getJSONObject("data").getJSONArray("episodes").size();
         return count == 0 ? 1 : count;
     }

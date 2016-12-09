@@ -16,6 +16,7 @@ public final class RunnerProfile {
     private static final String TAG = RunnerProfile.class.getSimpleName();
 
     public static boolean isTakeScreenshot = false;
+    public static boolean isAccountVipFree = true;
 
     public static int countAndPrintTestCasesForClass(Class<?> cls) {
         int count = 0;

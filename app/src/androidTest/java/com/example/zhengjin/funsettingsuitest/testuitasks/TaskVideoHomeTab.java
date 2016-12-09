@@ -8,13 +8,13 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -40,6 +40,9 @@ public final class TaskVideoHomeTab {
 
     private UiDevice device;
     private UiActionsManager action;
+
+    public static final String TEXT_CARD_FILM = "电影";
+    public static final String TEXT_CARD_TV = "电视剧";
 
     private TaskVideoHomeTab() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -123,11 +126,23 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/episode_view");
     }
 
-    private void openCateDetailsOfLauncherHomeLeftArea() {
+    public void openFilmSubPageFromLauncherHomeByMove() {
+        action.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
+                .doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        this.waitForVideoSubPageOpened(TEXT_CARD_FILM);
+    }
+
+    public void openTvSubPageFromLauncherHomeByMove() {
+        action.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
+                .doChainedDeviceActionAndWait(new DeviceActionMoveRight())
+                .doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        this.waitForVideoSubPageOpened(TEXT_CARD_TV);
+    }
+
+    private void openCateDetailsSubPageFromLauncherHomeByMove() {
         action.doChainedDeviceActionAndWait(new DeviceActionMoveRight())
                 .doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 2);
-        action.doDeviceActionAndWait(new DeviceActionEnter());
-        ShellUtils.systemWaitByMillis(WAIT);
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
     }
 
     @Nullable
@@ -145,7 +160,7 @@ public final class TaskVideoHomeTab {
     }
 
     public void openVideoSubPageFromCateDetailsByText(String title) {
-        this.openCateDetailsOfLauncherHomeLeftArea();
+        this.openCateDetailsSubPageFromLauncherHomeByMove();
         UiObject2 card = this.getMainCateCardOnCateDetailsByText(title);
         action.doClickActionAndWait(card);
         action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
@@ -189,7 +204,7 @@ public final class TaskVideoHomeTab {
     public void navigateToAllTabAndSelectVideoOnVideoSubPage() {
         action.doDeviceActionAndWait(new DeviceActionMoveLeft(), LONG_WAIT);
         TestHelper.waitForLoadingComplete();
-        action.doDeviceActionAndWait(new DeviceActionMoveDown(), TestConstants.WAIT);
+        action.doDeviceActionAndWait(new DeviceActionMoveDown(), WAIT);
     }
 
     public String waitVideoDetailsPageOpenedAndRetTitle() {
@@ -233,7 +248,7 @@ public final class TaskVideoHomeTab {
 
     public void enterOnPlayButtonOnVideoDetailsPage(TaskPlayingVideos.videoInfo info) {
         UiObject2 btn;
-        if (info != null && info.isVip()) {
+        if (!RunnerProfile.isAccountVipFree && info != null && info.isVip()) {
             btn = device.findObject(this.getTryWatchButtonOfVideoDetailsPageSelector());
         } else {
             btn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());

@@ -34,6 +34,9 @@ import org.junit.runner.RunWith;
 
 import java.util.Locale;
 
+import static com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab.TEXT_CARD_FILM;
+import static com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab.TEXT_CARD_TV;
+
 /**
  * Created by zhengjin on 2016/7/28.
  * <p>
@@ -50,11 +53,8 @@ public final class TestPlayingVideos {
     private TaskPlayingVideos mTask;
     private TaskVideoHomeTab mTaskVideoHomeTab;
 
-    private static final String TEXT_CARD_FILM = "电影";
-    private static final String TEXT_CARD_TV = "电视剧";
-
     private final int RANDOM_SELECT_NUM = 5;
-    private final int PLAY_TIME_BY_SEC = 30;
+    private final int PLAY_TIME_BY_SEC = 15;
     private final int RUN_TIMES = 3;
 
     @Before
@@ -76,10 +76,10 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category(Category24x7LauncherTests.class)
+    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
     public void test11VideoPlayerUIWhenPauseFilm() {
         // test for one film
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
+        mTaskVideoHomeTab.openFilmSubPageFromLauncherHomeByMove();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
@@ -137,7 +137,7 @@ public final class TestPlayingVideos {
         mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
 
-        for (int idx = 0, totalPlayNum = 10; idx < totalPlayNum; idx++) {
+        for (int idx = 0, totalPlayNum = 20; idx < totalPlayNum; idx++) {
             String filmTitle = mTaskVideoHomeTab.selectVideoInSeqFromAllListAndOpenDetails();
 
             this.logTestVideoStart(filmTitle);
@@ -155,10 +155,10 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
+    @Category({Category24x7LauncherTests.class})
     public void test21PlayingPartTvSeriesInSeqOnDetails() {
         // test for part of tv series
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
+        mTaskVideoHomeTab.openTvSubPageFromLauncherHomeByMove();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
@@ -178,10 +178,9 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
+    @Category({Category24x7LauncherTests.class})
     public void test22PlayingPartTvSeriesInSeqBySwipe() {
         // test for part of tv series
-//        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.openVideoSubPageFromCateDetailsByText(TEXT_CARD_TV);
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
