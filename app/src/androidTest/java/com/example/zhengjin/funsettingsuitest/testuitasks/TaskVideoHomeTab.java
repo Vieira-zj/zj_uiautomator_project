@@ -126,17 +126,48 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/episode_view");
     }
 
-    public void openFilmSubPageFromLauncherHomeByMove() {
+    public void openFilmSubPageFromLauncherHome() {
+        if (RunnerProfile.isPlatform938) {
+            this.openFilmSubPageFromLauncherHomeByMove();
+        } else {
+            this.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
+        }
+    }
+
+    public void openTvSubPageFromLauncherHome() {
+        if (RunnerProfile.isPlatform938) {
+            this.openTvSubPageFromLauncherHomeByMove();
+        } else {
+            this.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
+        }
+    }
+
+    private void openFilmSubPageFromLauncherHomeByMove() {
         action.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
                 .doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
         this.waitForVideoSubPageOpened(TEXT_CARD_FILM);
     }
 
-    public void openTvSubPageFromLauncherHomeByMove() {
+    private void openTvSubPageFromLauncherHomeByMove() {
         action.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
                 .doChainedDeviceActionAndWait(new DeviceActionMoveRight())
                 .doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
         this.waitForVideoSubPageOpened(TEXT_CARD_TV);
+    }
+
+    private void openSubPageFromLauncherHomeByText(String cardTitle) {
+        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(cardTitle);
+        action.doClickActionAndWait(card);  // request focus
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        this.waitForVideoSubPageOpened(cardTitle);
+    }
+
+    public void openVideoSubPageFromCateDetailsByText(String title) {
+        this.openCateDetailsSubPageFromLauncherHomeByMove();
+        UiObject2 card = this.getMainCateCardOnCateDetailsByText(title);
+        action.doClickActionAndWait(card);
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        this.waitForVideoSubPageOpened(title);
     }
 
     private void openCateDetailsSubPageFromLauncherHomeByMove() {
@@ -159,14 +190,6 @@ public final class TaskVideoHomeTab {
         return null;
     }
 
-    public void openVideoSubPageFromCateDetailsByText(String title) {
-        this.openCateDetailsSubPageFromLauncherHomeByMove();
-        UiObject2 card = this.getMainCateCardOnCateDetailsByText(title);
-        action.doClickActionAndWait(card);
-        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        this.waitForVideoSubPageOpened(title);
-    }
-
     public UiObject2 getSpecifiedCardFromHomeLeftAreaByText(String search) {
         List<UiObject2> textList =
                 device.findObjects(this.getCardTitleOfLauncherHomeLeftAreaSelector());
@@ -177,13 +200,6 @@ public final class TaskVideoHomeTab {
         List<UiObject2> textList =
                 device.findObjects(this.getCardMainTitleOfLauncherHomeRightAreaSelector());
         return this.getSpecifiedTextViewFromUiCollection(textList, search);
-    }
-
-    public void openSubPageFromLauncherHomeByText(String cardTitle) {
-        UiObject2 card = this.getSpecifiedCardFromHomeLeftAreaByText(cardTitle);
-        action.doClickActionAndWait(card);  // request focus
-        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        this.waitForVideoSubPageOpened(cardTitle);
     }
 
     private void waitForVideoSubPageOpened(String title) {

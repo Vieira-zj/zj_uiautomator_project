@@ -15,8 +15,9 @@ public final class RunnerProfile {
 
     private static final String TAG = RunnerProfile.class.getSimpleName();
 
+    // NOTE: need to set below properties before run test cases
     public static boolean isTakeScreenshot = false;
-    public static boolean isAccountVipFree = true;
+    public static boolean isAccountVipFree = false;
     public static boolean isPlatform938 = true;
 
     public static int countAndPrintTestCasesForClass(Class<?> cls) {

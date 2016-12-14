@@ -10,6 +10,7 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionHome;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
@@ -65,20 +66,27 @@ public final class TaskLauncher {
     public static BySelector getLoadingCircleSelector() {
         return By.res("com.bestv.ott:id/progressBar");
     }
-
     public static void backToLauncher() {
+        if (RunnerProfile.isPlatform938) {
+            backToLauncherByShell();
+        } else {
+            backToLauncherByDevice();
+        }
+    }
+
+    private static void backToLauncherByDevice() {
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
         Assert.assertTrue("backToLauncher, failed to back to the launcher home.",
                 TestHelper.waitForAppOpenedByUntil(DEVICE.getLauncherPackageName()));
     }
 
-    public static void backToLauncherByPm() {
+    private static void backToLauncherByPm() {
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
         Assert.assertTrue("backToLauncherByPm, failed to back to the launcher home.",
                 getLauncherPackageName().equals(DEVICE.getCurrentPackageName()));
     }
 
-    public static void backToLauncherByShell() {
+    private static void backToLauncherByShell() {
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
         Assert.assertTrue("backToLauncherByShell, failed to back to the launcher home.",
                 TestHelper.waitForActivityOpenedByShellCmd(LAUNCHER_PKG_NAME, LAUNCHER_HOME_ACT));

@@ -54,7 +54,7 @@ public final class TestPlayingVideos {
     private TaskVideoHomeTab mTaskVideoHomeTab;
 
     private final int RANDOM_SELECT_NUM = 5;
-    private final int PLAY_TIME_BY_SEC = 15;
+    private final int PLAY_TIME_BY_SEC = 30;
     private final int RUN_TIMES = 3;
 
     @Before
@@ -67,19 +67,19 @@ public final class TestPlayingVideos {
         mDevice.registerWatcher("BufferRefreshFailedWatcher", new BufferRefreshFailedWatcher());
 
         ShellUtils.clearLogcatLog();
-        TaskLauncher.backToLauncherByShell();
+        TaskLauncher.backToLauncher();
     }
 
     @After
     public void clearUp() {
-        TaskLauncher.backToLauncherByShell();
+        TaskLauncher.backToLauncher();
     }
 
     @Test
     @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
     public void test11VideoPlayerUIWhenPauseFilm() {
         // test for one film
-        mTaskVideoHomeTab.openFilmSubPageFromLauncherHomeByMove();
+        mTaskVideoHomeTab.openFilmSubPageFromLauncherHome();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
@@ -106,7 +106,7 @@ public final class TestPlayingVideos {
     @Category(Category24x7LauncherTests.class)
     public void test12FilmTitleAndPlayingTimeOnPlayer() {
         // test for one film
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
+        mTaskVideoHomeTab.openFilmSubPageFromLauncherHome();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String filmTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
@@ -134,10 +134,10 @@ public final class TestPlayingVideos {
     @Category(Category24x7LauncherTests.class)
     public void test13PlayingFilmsInSeqOnAllList() {
         // test for films of all list in sequence. if one failed, test will exit.
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_FILM);
+        mTaskVideoHomeTab.openFilmSubPageFromLauncherHome();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
 
-        for (int idx = 0, totalPlayNum = 20; idx < totalPlayNum; idx++) {
+        for (int idx = 0, totalPlayNum = 10; idx < totalPlayNum; idx++) {
             String filmTitle = mTaskVideoHomeTab.selectVideoInSeqFromAllListAndOpenDetails();
 
             this.logTestVideoStart(filmTitle);
@@ -158,7 +158,7 @@ public final class TestPlayingVideos {
     @Category({Category24x7LauncherTests.class})
     public void test21PlayingPartTvSeriesInSeqOnDetails() {
         // test for part of tv series
-        mTaskVideoHomeTab.openTvSubPageFromLauncherHomeByMove();
+        mTaskVideoHomeTab.openTvSubPageFromLauncherHome();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
         String tvTitle = mTaskVideoHomeTab.randomSelectVideoAndOpenDetails(RANDOM_SELECT_NUM);
 
@@ -203,9 +203,9 @@ public final class TestPlayingVideos {
     @Category({Category24x7LauncherTests.class})
     public void test23PlayingAllTvSeriesInSeqOnDetails() {
         // test for all of tv series
-        mTaskVideoHomeTab.openSubPageFromLauncherHomeByText(TEXT_CARD_TV);
+        mTaskVideoHomeTab.openTvSubPageFromLauncherHome();
         mTaskVideoHomeTab.navigateToAllTabAndSelectVideoOnVideoSubPage();
-        String tvTitle = mTaskVideoHomeTab.selectVideoAtPositionAndOpenDetails(3);
+        String tvTitle = mTaskVideoHomeTab.selectVideoAtPositionAndOpenDetails(4);
 
         this.logTestVideoStart(tvTitle);
         TaskPlayingVideos.videoInfo info = mTask.getTvInfoByName(tvTitle);
