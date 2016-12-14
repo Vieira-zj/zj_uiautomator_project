@@ -101,8 +101,6 @@ public final class TestCommonSettings {
             ShellUtils.takeScreenCapture(mDevice);
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }
-
-//        mAction.doRepeatDeviceActionAndWait(new DeviceActionBack(), 2);
         ShellUtils.stopProcess(SETTINGS_PKG_NAME);
     }
 
