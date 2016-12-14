@@ -17,6 +17,7 @@ public final class RunnerProfile {
 
     public static boolean isTakeScreenshot = false;
     public static boolean isAccountVipFree = true;
+    public static boolean isPlatform938 = true;
 
     public static int countAndPrintTestCasesForClass(Class<?> cls) {
         int count = 0;

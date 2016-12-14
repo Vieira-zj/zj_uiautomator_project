@@ -3,6 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
@@ -93,7 +94,7 @@ public final class TaskLauncher {
     }
 
     public static void navigateToVideoTab() {
-        backToLauncher();
+        backToLauncherByPm();
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
         UiObject2 tabVideo = getSpecifiedTab("视频");
@@ -115,6 +116,7 @@ public final class TaskLauncher {
         Assert.assertTrue("navigateToAppTab, App tab is NOT focused.", false);
     }
 
+    @Nullable
     private static UiObject2 getSpecifiedTab(String tabName) {
         List<UiObject2> tabs = DEVICE.findObjects(getAllLauncherTabsSelector());
         if (tabs.size() == 0) {
@@ -131,7 +133,7 @@ public final class TaskLauncher {
 
     public static void openSpecifiedAppFromAppTab(String appName) {
         focusOnSpecifiedAppFromAppTab(appName);
-        Assert.assertTrue(ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT));
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
     }
 
     private static void focusOnSpecifiedAppFromAppTab(String appName) {
@@ -140,7 +142,7 @@ public final class TaskLauncher {
         UiObject2 appTest = DEVICE.findObject(By.text(appName));
         Assert.assertNotNull(String.format("openSpecifiedAppFromAppTab, app %s is NOT found."
                 , appName), appTest);
-        ACTION.doClickActionAndWait(appTest.getParent());
+        ACTION.doClickActionAndWait(appTest.getParent());  // set focus
     }
 
     public static void clickOnButtonFromTopQuickAccessBar(BySelector selector) {

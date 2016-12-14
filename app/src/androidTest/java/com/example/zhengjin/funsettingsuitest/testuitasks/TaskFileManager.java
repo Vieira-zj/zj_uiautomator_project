@@ -9,10 +9,10 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -23,7 +23,11 @@ import junit.framework.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_HOME_ACT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
@@ -117,6 +121,15 @@ public final class TaskFileManager {
         return By.res("tv.fun.filemanager:id/sub_blank_tips");
     }
 
+    public void openFileManagerHomePage() {
+        if (RunnerProfile.isPlatform938) {
+            ShellUtils.startSpecifiedActivity(FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
+            ShellUtils.systemWaitByMillis(LONG_WAIT);
+        } else {
+            TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
+        }
+    }
+
     public void openLocalFilesCard() {
         final int positionX = 1350;
         final int positionY = 450;
@@ -162,21 +175,37 @@ public final class TaskFileManager {
         TestHelper.waitForUiObjectEnabled(device.findObject(this.getSubTitleSelector()));
     }
 
-    public void navigateToSpecifiedPath(String path) {
-        List<String> dirs = parsePath(path);
-        for (String dir : dirs) {
-            if (dir.toLowerCase().equals("mnt") || dir.toLowerCase().equals("sdcard")) {
-                continue;
-            }
-            this.clickOnSpecifiedItemFromCurrentDir(dir);
-        }
-    }
-
     public void navigateAndOpenSpecifiedFile(String fileAbsPath) {
         this.navigateToSpecifiedPath(fileAbsPath);
     }
 
-    private void clickOnSpecifiedItemFromCurrentDir(String dirName, boolean flag_bottom) {
+    public void navigateToSpecifiedPath(String path) {
+        this.navigateToSpecifiedPath(path, RunnerProfile.isPlatform938);
+    }
+
+    private void navigateToSpecifiedPath(String path, boolean flagMove) {
+        String rex = "mnt|sdcard|storage|emulated|[0-9]";
+        Pattern pattern = Pattern.compile(rex);
+
+        List<String> dirs = parsePath(path);
+        for (String dir : dirs) {
+            if (pattern.matcher(dir.toLowerCase()).find()) {
+                continue;
+            }
+
+            if (flagMove) {
+                this.moveAndEnterOnSpecifiedItemFromCurrentDir(dir);
+            } else {
+                this.clickOnSpecifiedItemFromCurrentDir(dir);
+            }
+        }
+    }
+
+    private void clickOnSpecifiedItemFromCurrentDir(String dirName) {
+        this.clickOnSpecifiedItemFromCurrentDir(dirName, false);
+    }
+
+    private void clickOnSpecifiedItemFromCurrentDir(String itemName, boolean flag_bottom) {
         // Item for both directory and file
         final int ScrollSteps = 5;
 
@@ -184,7 +213,7 @@ public final class TaskFileManager {
                 .resourceId("tv.fun.filemanager:id/activity_sub_grid"));
         fileList.setAsVerticalList();
         try {
-            fileList.scrollTextIntoView(dirName);
+            fileList.scrollTextIntoView(itemName);
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
             if (flag_bottom) {
                 fileList.scrollForward(ScrollSteps);
@@ -192,16 +221,44 @@ public final class TaskFileManager {
             }
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            Assert.assertTrue(String.format("clickOnSpecifiedItemFromCurrentDir, "
-                    + "error scroll to item %s.", dirName), false);
+            Assert.assertTrue("clickOnSpecifiedItemFromCurrentDir, error scroll to item "
+                    + itemName, false);
         }
 
-        UiObject2 dir = device.findObject(By.text(dirName));
-        action.doClickActionAndWait(dir);
+        UiObject2 item = device.findObject(By.text(itemName));
+        action.doClickActionAndWait(item);
     }
 
-    private void clickOnSpecifiedItemFromCurrentDir(String dirName) {
-        this.clickOnSpecifiedItemFromCurrentDir(dirName, false);
+    public void moveUntilSpecifiedItemSelected(String itemText) {
+        moveAndEnterOnSpecifiedItemFromCurrentDir(itemText, false);
+    }
+
+    private void moveAndEnterOnSpecifiedItemFromCurrentDir(String itemName) {
+        moveAndEnterOnSpecifiedItemFromCurrentDir(itemName, true);
+    }
+
+    private void moveAndEnterOnSpecifiedItemFromCurrentDir(String itemName, boolean isEnter) {
+        UiObject2 item = device.findObject(By.text(itemName));
+        for (int i = 0, tryTimes = 10; i < tryTimes; i++) {
+            if (item != null && item.isEnabled()) {
+                break;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveDown());
+            item = device.findObject(By.text(itemName));
+        }
+
+        for (int i = 0, tryTimes = 50; i < tryTimes; i++) {
+            if (item.isSelected()) {
+                if (isEnter) {
+                    action.doDeviceActionAndWait(new DeviceActionEnter());
+                }
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+
+        Assert.assertTrue("moveAndEnterOnSpecifiedItemFromCurrentDir, failed to select item "
+                + itemName, false);
     }
 
     // path like: android/data/tv.fun.filemanager
@@ -221,20 +278,6 @@ public final class TaskFileManager {
         }
 
         return dirs;
-    }
-
-    public void moveUntilSpecifiedItemSelected(String itemText) {
-        UiObject2 item = device.findObject(By.text(itemText));
-        // set focus on 1st item
-        action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
-        for (int i = 0, maxMove = 15; i < maxMove; i++) {
-            if (item.isSelected()) {
-                return;
-            }
-            action.doDeviceActionAndWait(new DeviceActionMoveRight());
-        }
-
-        Assert.assertTrue(String.format("Failed to move on the item %s", itemText), false);
     }
 
     public void showMenuAndClickBtn(String btnText) {

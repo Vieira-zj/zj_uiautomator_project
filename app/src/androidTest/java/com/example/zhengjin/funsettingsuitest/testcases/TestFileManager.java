@@ -13,7 +13,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
-import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
@@ -125,7 +124,7 @@ public final class TestFileManager {
         mAction = UiActionsManager.getInstance();
         mTask = TaskFileManager.getInstance();
 
-        TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
+        mTask.openFileManagerHomePage();
         boolean isAppOpened = TestHelper.waitForAppOpenedByShellCmd(
                 String.format("%s/%s", FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT));
         Assert.assertTrue("Open File Manager app.", isAppOpened);
@@ -222,7 +221,7 @@ public final class TestFileManager {
     public void test22MenuRemoveAndHideBtnExistForFile() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);  // request focus
         mTask.showMenuAndRequestFocus();
 
         // verification 1
@@ -276,7 +275,7 @@ public final class TestFileManager {
     public void test24HideAndShowFile() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);  // request focus
 
         mMessage = "Verify the file is hidden after click Hide button.";
         mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
@@ -294,7 +293,7 @@ public final class TestFileManager {
     public void test25RemoveFileAndCancel() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);  // request focus
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
 
         mMessage = "Verify the Cancel button of confirm dialog.";
@@ -312,7 +311,7 @@ public final class TestFileManager {
     public void test26RemoveFileAndConfirm() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());  // request focus
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);  // request focus
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
 
         mMessage = "Verify the Yes button of confirm dialog.";
