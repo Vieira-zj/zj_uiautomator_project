@@ -1,6 +1,8 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
@@ -34,5 +36,10 @@ public final class TaskImageAndSound {
             instance = null;
         }
     }
+
+    public BySelector getTitleOfImageAndSoundSettingsSelector() {
+        return By.res("tv.fun.settings:id/setting_title");
+    }
+
 
 }

@@ -102,11 +102,10 @@ public final class TestHelper {
     }
 
     private static boolean waitForViewOnTopByShellCmd(String viewName, long waitByMillis) {
-        String cmd = "dumpsys activity | grep mFocusedActivity";
         ShellUtils.CommandResult cr;
 
         for (int i = 0; i < (int) waitByMillis / 1000L; i++) {
-            cr = ShellUtils.execCommand(cmd, false, true);
+            cr = ShellUtils.getTopFocusedActivity();
             if (cr.mResult == 0) {
                 if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(viewName)) {
                     Log.d(TAG, "GetViewOnTop, top activity: " + cr.mSuccessMsg);

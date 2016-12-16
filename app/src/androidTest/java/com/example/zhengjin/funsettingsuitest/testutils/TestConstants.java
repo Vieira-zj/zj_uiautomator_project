@@ -22,6 +22,7 @@ public final class TestConstants {
 
     public final static String LAUNCHER_HOME_ACT = ".home.HomeActivity";
     public final static String SETTINGS_HOME_ACT = ".general.GeneralSettingsActivity";
+    public final static String SETTINGS_IMAGE_AND_SOUND_ACT = ".picaudio.PicAudioSettingsActivity";
     public final static String FILE_MANAGER_HOME_ACT = ".FunFileManagerActivity";
     public final static String VIDEO_SUB_PAGE_ACT = ".retrieve.RetrieveActivity";
     public final static String VIDEO_PLAYER_ACT = ".player.FunVideoPlayerActivity";

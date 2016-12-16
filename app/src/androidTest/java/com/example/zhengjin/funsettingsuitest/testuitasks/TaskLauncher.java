@@ -38,6 +38,9 @@ public final class TaskLauncher {
     private static UiActionsManager ACTION;
     private static UiDevice DEVICE;
 
+    public static final String[] LAUNCHER_HOME_TABS =
+            {"电视", "视频", "体育", "少儿", "应用", "设置"};
+
     static {
         ACTION = UiActionsManager.getInstance();
         DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -111,17 +114,18 @@ public final class TaskLauncher {
                 , tabVideo.getParent().isFocused());
     }
 
-    public static void navigateToAppTab() {
+    public static void navigateToSpecifiedTopTab(String tabText) {
         navigateToVideoTab();
-        for (int i = 0, moveTimes = 4; i < moveTimes; i++) {
+
+        for (int i = 0, moveTimes = 5; i < moveTimes; i++) {
             ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-            UiObject2 tabApp = getSpecifiedTab("应用");
+            UiObject2 tabApp = getSpecifiedTab(tabText);
             if (tabApp != null && tabApp.getParent().isFocused()) {
                 return;
             }
         }
 
-        Assert.assertTrue("navigateToAppTab, App tab is NOT focused.", false);
+        Assert.assertTrue("navigateToSpecifiedTopTab, App tab is NOT focused.", false);
     }
 
     @Nullable
@@ -140,17 +144,20 @@ public final class TaskLauncher {
     }
 
     public static void openSpecifiedAppFromAppTab(String appName) {
-        focusOnSpecifiedAppFromAppTab(appName);
-        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
+        OpenSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[4], appName);
     }
 
-    private static void focusOnSpecifiedAppFromAppTab(String appName) {
-        navigateToAppTab();
+    public static void openSpecifiedCardFromSettingsTab(String cardText) {
+        OpenSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[5], cardText);
+    }
 
-        UiObject2 appTest = DEVICE.findObject(By.text(appName));
-        Assert.assertNotNull(String.format("openSpecifiedAppFromAppTab, app %s is NOT found."
-                , appName), appTest);
-        ACTION.doClickActionAndWait(appTest.getParent());  // set focus
+    private static void OpenSpecifiedCardFromTopTab(String tabText, String cardText) {
+        navigateToSpecifiedTopTab(tabText);
+
+        UiObject2 appCard = DEVICE.findObject(By.text(cardText));
+        Assert.assertNotNull("OpenSpecifiedCardFromTopTab, tab NOT found: " + cardText, appCard);
+        ACTION.doClickActionAndWait(appCard.getParent());  // set focus
+        ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
     }
 
     public static void clickOnButtonFromTopQuickAccessBar(BySelector selector) {

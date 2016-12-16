@@ -168,6 +168,11 @@ public final class ShellUtils {
         Assert.assertEquals("Start the specified activity.", 0, result.mResult);
     }
 
+    public static CommandResult getTopFocusedActivity() {
+        String cmd = "dumpsys activity | grep mFocusedActivity";
+        return ShellUtils.execCommand(cmd, false, true);
+    }
+
     public static void systemWaitByMillis(long ms) {
         SystemClock.sleep(ms);
     }

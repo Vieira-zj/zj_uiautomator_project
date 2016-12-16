@@ -72,7 +72,7 @@ public class TestTaskLauncher {
     @Test
     @Category(CategoryDemoTests.class)
     public void test4NavigateToAppTab() {
-        TaskLauncher.navigateToAppTab();
+        TaskLauncher.navigateToSpecifiedTopTab(TaskLauncher.LAUNCHER_HOME_TABS[4]);
     }
 
     @Test
