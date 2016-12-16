@@ -4,8 +4,13 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+
+import junit.framework.Assert;
 
 /**
  * Created by zhengjin on 2016/12/14.
@@ -61,5 +66,57 @@ public final class TaskImageAndSound {
         return By.res("tv.fun.settings:id/item_value");
     }
 
+    public BySelector getColorTmpSettingItemOfImageParamsSelector() {
+        return By.res("tv.fun.settings:id/custom_scene_temp");
+    }
+
+    public BySelector getTitleOfColorTmpSettingSelector() {
+        return By.res("tv.fun.settings:id/custom_scene_temp_title");
+    }
+
+    public BySelector getBackLightSettingItemOfImageParamsSelector() {
+        return By.res("tv.fun.settings:id/custom_scene_backlight");
+    }
+
+    public BySelector getBrightnessSettingItemOfImageParamsSelector() {
+        return By.res("tv.fun.settings:id/custom_scene_brightness");
+    }
+
+    public BySelector getContrastSettingItemOfImageParamsSelector() {
+        return By.res("tv.fun.settings:id/custom_scene_contrast");
+    }
+
+    public BySelector getSaturationSettingItemOfImageParamsSelector() {
+        return By.res("tv.fun.settings:id/custom_scene_saturation");
+    }
+
+    public BySelector getTitleOfImageSettingsOnImageParamsSelector() {
+        return By.res("tv.fun.settings:id/scene_title");
+    }
+
+    public BySelector getValueOfImageSettingsOnImageParamsSelector() {
+        return By.res("tv.fun.settings:id/scene_value");
+    }
+
+    public BySelector getSetToDefaultSettingItemOfImageParamsSelector() {
+        return By.res("tv.fun.settings:id/set_to_default");
+    }
+
+    public UiObject2 getSwitcherValueOfColorTmpSetting(UiObject2 container) {
+        UiObject2 switcher = container.findObject(By.clazz(TestConstants.CLASS_TEXT_SWITCHER));
+        return switcher.findObject(By.clazz(TestConstants.CLASS_TEXT_VIEW));
+    }
+
+    public void focusOnSpecifiedImageAndSoundSettingsItem(String itemText) {
+        for (int i = 0, maxMoves = 5; i < maxMoves; i++) {
+            UiObject2 item = device.findObject(By.text(itemText));
+            if (item.getParent().isFocused()) {
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveDown());
+        }
+
+        Assert.assertTrue("openSpecifiedSettingsItem, error open setting item " + itemText, false);
+    }
 
 }
