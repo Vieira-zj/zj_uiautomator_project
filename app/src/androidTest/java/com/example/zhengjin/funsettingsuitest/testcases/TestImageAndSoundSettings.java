@@ -61,7 +61,7 @@ public final class TestImageAndSoundSettings {
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void testTitleOfImageAndSoundSettingsPage() {
+    public void test01TitleOfImageAndSoundSettingsPage() {
         mMessage = "Verify the text of Image and Sound settings page title.";
         UiObject2 title = mDevice.findObject(mTask.getTitleOfImageAndSoundSettingsSelector());
         Assert.assertEquals(TEXT_IMAGE_AND_SOUND, title.getText());
@@ -69,7 +69,7 @@ public final class TestImageAndSoundSettings {
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void testSettingsItemsAndDefaultValue() {
+    public void test02TitleAndDefaultValueOfItemsOnImageAndSound() {
         mMessage = "Verify the setting items on Image and Sound settings page.";
         // TODO: 2016/12/16  
     }

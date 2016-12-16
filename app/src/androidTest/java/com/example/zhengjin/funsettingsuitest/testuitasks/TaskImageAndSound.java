@@ -41,5 +41,25 @@ public final class TaskImageAndSound {
         return By.res("tv.fun.settings:id/setting_title");
     }
 
+    public BySelector getImageParamsSettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_pic_params");
+    }
+
+    public BySelector getPressKeySoundSettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_sound_effect_enable");
+    }
+
+    public BySelector getAudioAroundSettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_around_audio");
+    }
+
+    public BySelector getSettingItemTitleSelector() {
+        return By.res("tv.fun.settings:id/item_title");
+    }
+
+    public BySelector getSettingItemValueSelector() {
+        return By.res("tv.fun.settings:id/item_value");
+    }
+
 
 }
