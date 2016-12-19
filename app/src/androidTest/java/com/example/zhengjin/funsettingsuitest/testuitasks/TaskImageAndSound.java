@@ -58,11 +58,11 @@ public final class TaskImageAndSound {
         return By.res("tv.fun.settings:id/setting_item_around_audio");
     }
 
-    public BySelector getSettingItemTitleSelector() {
+    public BySelector getImageAndSoundSettingItemTitleSelector() {
         return By.res("tv.fun.settings:id/item_title");
     }
 
-    public BySelector getSettingItemValueSelector() {
+    public BySelector getImageAndSoundSettingItemValueSelector() {
         return By.res("tv.fun.settings:id/item_value");
     }
 
@@ -102,6 +102,10 @@ public final class TaskImageAndSound {
         return By.res("tv.fun.settings:id/set_to_default");
     }
 
+    public BySelector getValueSeekBarOfSettingItemOnImageParamsSelector() {
+        return By.res("tv.fun.settings:id/scene_seekbar");
+    }
+
     public UiObject2 getSwitcherValueOfColorTmpSetting(UiObject2 container) {
         UiObject2 switcher = container.findObject(By.clazz(TestConstants.CLASS_TEXT_SWITCHER));
         return switcher.findObject(By.clazz(TestConstants.CLASS_TEXT_VIEW));
@@ -116,7 +120,23 @@ public final class TaskImageAndSound {
             action.doDeviceActionAndWait(new DeviceActionMoveDown());
         }
 
-        Assert.assertTrue("openSpecifiedSettingsItem, error open setting item " + itemText, false);
+        Assert.assertTrue("focusOnSpecifiedImageAndSoundSettingsItem, error open setting item "
+                + itemText, false);
+    }
+
+    public void focusOnSpecifiedImageParamsSettingsItem(String itemText) {
+        UiObject2 item = device.findObject(By.text(itemText));
+        for (int i = 0, maxMoves = 8; i < maxMoves; i++) {
+            UiObject2 seekBar = item.getParent().findObject(
+                    this.getValueSeekBarOfSettingItemOnImageParamsSelector());
+            if (seekBar != null && seekBar.isEnabled()) {
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveDown());
+        }
+
+        Assert.assertTrue("focusOnSpecifiedImageParamsSettingsItem, error open setting item "
+                + itemText, false);
     }
 
 }

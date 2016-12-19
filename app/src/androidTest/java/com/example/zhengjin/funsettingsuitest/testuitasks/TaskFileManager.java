@@ -13,6 +13,7 @@ import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -238,6 +239,8 @@ public final class TaskFileManager {
     }
 
     private void moveAndEnterOnSpecifiedItemFromCurrentDir(String itemName, boolean isEnter) {
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);  // focus on 1st item
+
         UiObject2 item = device.findObject(By.text(itemName));
         for (int i = 0, tryTimes = 10; i < tryTimes; i++) {
             if (item != null && item.isEnabled()) {
