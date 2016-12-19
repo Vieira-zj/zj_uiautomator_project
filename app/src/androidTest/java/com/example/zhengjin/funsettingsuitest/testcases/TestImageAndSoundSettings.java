@@ -28,6 +28,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_IMAGE_AND_SOUND_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
@@ -79,7 +80,7 @@ public final class TestImageAndSoundSettings {
 
     @After
     public void clearUp() {
-//        ShellUtils.stopProcess(SETTINGS_PKG_NAME);
+        ShellUtils.stopProcess(SETTINGS_PKG_NAME);
     }
 
     @Test
@@ -92,7 +93,7 @@ public final class TestImageAndSoundSettings {
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02TitleAndDefaultValueOfImageParamsSettingItem() {
+    public void test02TitleAndFocusOfImageParamsSettingItem() {
         mMessage = "Verify the image params setting item is enabled.";
         UiObject2 imageParamsItem = mDevice.findObject(mTask.getImageParamsSettingItemSelector());
         Assert.assertTrue(mMessage, (imageParamsItem != null && imageParamsItem.isEnabled()));
@@ -223,6 +224,8 @@ public final class TestImageAndSoundSettings {
             Assert.assertEquals(String.format(mMessage, i)
                     , IMAGE_COLOR_TMP_VALUES_ARR[i], itemValue.getText());
         }
+
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2, WAIT);  // do update
     }
 
     @Test
@@ -270,37 +273,190 @@ public final class TestImageAndSoundSettings {
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test21TitleAndDefaultValueOfBrightnessOnImageParams() {
-        // TODO: 2016/12/19  
+        this.openImageParamsPageFromImageAndSound();
+
+        mMessage = "Verify the brightness setting item is enabled on image params page.";
+        UiObject2 brightnessItem =
+                mDevice.findObject(mTask.getBrightnessSettingItemOfImageParamsSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(brightnessItem));
+
+        mMessage = "Verify the title of brightness setting item.";
+        UiObject2 itemTitle =
+                brightnessItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[2], itemTitle.getText());
+
+        mMessage = "Verify the default value of brightness setting item.";
+        UiObject2 itemValue =
+                brightnessItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[2], itemValue.getText());
     }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test22SetValueOfBrightnessOnImageParams() {
-        // TODO: 2016/12/19  
+        this.openImageParamsPageFromImageAndSound();
+        UiObject2 brightnessItem =
+                mDevice.findObject(mTask.getBrightnessSettingItemOfImageParamsSelector());
+        TestHelper.waitForUiObjectEnabled(brightnessItem);
+
+        mMessage = "Verify text after minus brightness value.";
+        mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[2]);
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 3);
+        UiObject2 itemValue =
+                brightnessItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals("47", itemValue.getText());
+
+        mMessage = "Verify text after plus brightness value.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 5);
+        itemValue = brightnessItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals("52", itemValue.getText());
     }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test23TitleAndDefaultValueOfContrastOnImageParams() {
-        // TODO: 2016/12/19
+        this.openImageParamsPageFromImageAndSound();
+
+        mMessage = "Verify the contrast setting item is enabled on image params page.";
+        UiObject2 contrastItem =
+                mDevice.findObject(mTask.getContrastSettingItemOfImageParamsSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(contrastItem));
+
+        mMessage = "Verify the title of contrast setting item.";
+        UiObject2 itemTitle =
+                contrastItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[3], itemTitle.getText());
+
+        mMessage = "Verify the default value of contrast setting item.";
+        UiObject2 itemValue =
+                contrastItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[3], itemValue.getText());
     }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test24SetValueOfContrastOnImageParams() {
-        // TODO: 2016/12/19
+        final long waitTime = 500L;
+
+        this.openImageParamsPageFromImageAndSound();
+        UiObject2 contrastItem =
+                mDevice.findObject(mTask.getContrastSettingItemOfImageParamsSelector());
+        TestHelper.waitForUiObjectEnabled(contrastItem);
+
+        mMessage = "Verify text after minus contrast value.";
+        mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[3]);
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 11, waitTime);
+        UiObject2 itemValue =
+                contrastItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals("39", itemValue.getText());
+
+        mMessage = "Verify text after plus contrast value.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2, waitTime);
+        itemValue = contrastItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals("41", itemValue.getText());
     }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test25TitleAndDefaultValueOfSaturationOnImageParams() {
-        // TODO: 2016/12/19
+        this.openImageParamsPageFromImageAndSound();
+
+        mMessage = "Verify the saturation setting item is enabled on image params page.";
+        UiObject2 saturationItem =
+                mDevice.findObject(mTask.getSaturationSettingItemOfImageParamsSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(saturationItem));
+
+        mMessage = "Verify the title of saturation setting item.";
+        UiObject2 itemTitle =
+                saturationItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[4], itemTitle.getText());
+
+        mMessage = "Verify the default value of saturation setting item.";
+        UiObject2 itemValue =
+                saturationItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], itemValue.getText());
     }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test26SetValueOfSaturationOnImageParams() {
-        // TODO: 2016/12/19
+        final long waitTime = 250L;
+
+        this.openImageParamsPageFromImageAndSound();
+        UiObject2 saturationItem =
+                mDevice.findObject(mTask.getSaturationSettingItemOfImageParamsSelector());
+        TestHelper.waitForUiObjectEnabled(saturationItem);
+
+        mMessage = "Verify text after minus saturationItem value.";
+        mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[4]);
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 4, waitTime);
+        UiObject2 itemValue =
+                saturationItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals("46", itemValue.getText());
+
+        mMessage = "Verify text after plus saturationItem value.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 8, waitTime);
+        itemValue = saturationItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals("54", itemValue.getText());
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test27TitleOfResetAllToDefaultOnImageParams() {
+        this.openImageParamsPageFromImageAndSound();
+
+        mMessage = "Verify the reset all to default setting item is enabled on image params.";
+        UiObject2 resetItem =
+                mDevice.findObject(mTask.getResetToDefaultSettingItemOfImageParamsSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(resetItem));
+
+        mMessage = "Verify the title of reset all to default setting item.";
+        UiObject2 title = resetItem.findObject(mTask.getTitleOfResetToDefaultSettingItemSelector());
+        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[5], title.getText());
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test28ValuesSetToDefaultAfterResetOnImageParams() {
+        this.openImageParamsPageFromImageAndSound();
+        UiObject2 resetItem =
+                mDevice.findObject(mTask.getResetToDefaultSettingItemOfImageParamsSelector());
+        TestHelper.waitForUiObjectEnabled(resetItem);
+
+        mTask.focusOnResetToDefaultImageParamsSettingsItem();
+        mAction.doDeviceActionAndWait(new DeviceActionCenter(), LONG_WAIT);
+
+        mMessage = "Verify the color tmp value is set to default after reset.";
+        UiObject2 colorTmpItem =
+                mDevice.findObject(mTask.getColorTmpSettingItemOfImageParamsSelector());
+        UiObject2 colorTmpValue = mTask.getSwitcherValueOfColorTmpSetting(colorTmpItem);
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[0], colorTmpValue.getText());
+
+        mMessage = "Verify the background light value is set to default after reset.";
+        UiObject2 backLightValue =
+                mDevice.findObject(mTask.getBackLightSettingItemOfImageParamsSelector())
+                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[1], backLightValue.getText());
+
+        mMessage = "Verify the brightness value is set to default after reset.";
+        UiObject2 brightnessValue =
+                mDevice.findObject(mTask.getBrightnessSettingItemOfImageParamsSelector())
+                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(mMessage,
+                IMAGE_PARAMS_SETTINGS_VALUE_ARR[2], brightnessValue.getText());
+
+        mMessage = "Verify the contrast value is set to default after reset.";
+        UiObject2 contrastValue =
+                mDevice.findObject(mTask.getContrastSettingItemOfImageParamsSelector())
+                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[3], contrastValue.getText());
+
+        mMessage = "Verify the saturation value is set to default after reset.";
+        UiObject2 saturationValue =
+                mDevice.findObject(mTask.getSaturationSettingItemOfImageParamsSelector())
+                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        Assert.assertEquals(mMessage,
+                IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], saturationValue.getText());
     }
 
     private void openImageParamsPageFromImageAndSound() {

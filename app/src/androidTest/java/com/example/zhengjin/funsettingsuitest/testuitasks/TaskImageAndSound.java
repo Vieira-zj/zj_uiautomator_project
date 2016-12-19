@@ -98,12 +98,16 @@ public final class TaskImageAndSound {
         return By.res("tv.fun.settings:id/scene_value");
     }
 
-    public BySelector getSetToDefaultSettingItemOfImageParamsSelector() {
+    private BySelector getValueSeekBarOfSettingItemOnImageParamsSelector() {
+        return By.res("tv.fun.settings:id/scene_seekbar");
+    }
+
+    public BySelector getResetToDefaultSettingItemOfImageParamsSelector() {
         return By.res("tv.fun.settings:id/set_to_default");
     }
 
-    public BySelector getValueSeekBarOfSettingItemOnImageParamsSelector() {
-        return By.res("tv.fun.settings:id/scene_seekbar");
+    public BySelector getTitleOfResetToDefaultSettingItemSelector() {
+        return By.res("tv.fun.settings:id/set_to_default_title");
     }
 
     public UiObject2 getSwitcherValueOfColorTmpSetting(UiObject2 container) {
@@ -126,7 +130,7 @@ public final class TaskImageAndSound {
 
     public void focusOnSpecifiedImageParamsSettingsItem(String itemText) {
         UiObject2 item = device.findObject(By.text(itemText));
-        for (int i = 0, maxMoves = 8; i < maxMoves; i++) {
+        for (int i = 0, maxMoves = 5; i < maxMoves; i++) {
             UiObject2 seekBar = item.getParent().findObject(
                     this.getValueSeekBarOfSettingItemOnImageParamsSelector());
             if (seekBar != null && seekBar.isEnabled()) {
@@ -137,6 +141,14 @@ public final class TaskImageAndSound {
 
         Assert.assertTrue("focusOnSpecifiedImageParamsSettingsItem, error open setting item "
                 + itemText, false);
+    }
+
+    public void focusOnResetToDefaultImageParamsSettingsItem() {
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 6);
+        UiObject2 resetItem =
+                device.findObject(this.getResetToDefaultSettingItemOfImageParamsSelector());
+        Assert.assertTrue("focusOnResetToDefaultImageParamsSettingsItem, failed to focus."
+                , resetItem.isFocused());
     }
 
 }
