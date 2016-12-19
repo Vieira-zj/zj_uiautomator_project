@@ -2,6 +2,7 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
@@ -51,6 +52,7 @@ public final class TestImageAndSoundSettings {
     private final String IMAGE_AND_SOUND_TEXT = "图像与声音";
     private final String TURN_ON_TEXT = "已开启";
     private final String TURN_OFF_TEXT = "已关闭";
+    private final String ENERGY_SAVER_TITLE_TEXT = "节能模式";
 
     private final String[] IMAGE_AND_SOUND_SETTINGS_TITLE_ARR =
             {"图像参数", "按键音", "开启环绕立体声道"};
@@ -184,6 +186,14 @@ public final class TestImageAndSoundSettings {
         mAction.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
         audioAroundValue = audioAroundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_OFF_TEXT, audioAroundValue.getText());
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test07EnergySaverSettingItemIsHidden() {
+        mMessage = "Verify the energy saver setting item is default hidden on Image and Sound.";
+        UiObject2 saverItem = mDevice.findObject(By.text(ENERGY_SAVER_TITLE_TEXT));
+        Assert.assertNull(mMessage, saverItem);
     }
 
     @Test
