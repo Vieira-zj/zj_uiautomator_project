@@ -172,7 +172,7 @@ public final class TestImageAndSoundSettings {
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test06TurnOnAudioAroundSettingItem() {
-        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1]);
+        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2]);
 
         mMessage = "Verify the text after turn on the audio around setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
@@ -470,6 +470,12 @@ public final class TestImageAndSoundSettings {
                         .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(mMessage,
                 IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], saturationValue.getText());
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test99ClearUpAfterAllTestCasesDone() {
+        mTask.destroyInstance();
     }
 
     private void openImageParamsPageFromImageAndSound() {
