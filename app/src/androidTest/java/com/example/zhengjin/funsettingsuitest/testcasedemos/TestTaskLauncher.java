@@ -51,7 +51,7 @@ public class TestTaskLauncher {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test1GetLauncherPackageName() {
+    public void test01GetLauncherPackageName() {
         String pkg = TaskLauncher.getLauncherPackageName();
         Assert.assertNotNull(pkg);
         Assert.assertEquals(TestConstants.LAUNCHER_PKG_NAME, pkg);
@@ -59,32 +59,32 @@ public class TestTaskLauncher {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test2BackToLauncher() {
+    public void test02BackToLauncher() {
         TaskLauncher.backToLauncher();
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test3NavigateToVideoTab() {
+    public void test03NavigateToVideoTab() {
         TaskLauncher.navigateToVideoTab();
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test4NavigateToAppTab() {
+    public void test04NavigateToAppTab() {
         TaskLauncher.navigateToSpecifiedTopTab(TaskLauncher.LAUNCHER_HOME_TABS[4]);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test5OpenSpecifiedApp() {
+    public void test05OpenSpecifiedApp() {
         String appName = "唯品会";
         TaskLauncher.openSpecifiedAppFromAppTab(appName);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test6OpenSettingsFromTopBar() {
+    public void test06OpenSettingsFromTopBar() {
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
                 TaskLauncher.getQuickAccessBtnSettingsSelector());
     }

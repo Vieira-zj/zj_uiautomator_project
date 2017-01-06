@@ -11,6 +11,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionHome;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
@@ -62,8 +63,12 @@ public final class TaskLauncher {
         return By.res("com.bestv.ott:id/weather");
     }
 
-    public static BySelector getQuickAccessBtnNetworkSelector() {
-        return By.res("com.bestv.ott:id/network");
+//    public static BySelector getQuickAccessBtnNetworkSelector() {
+//        return By.res("com.bestv.ott:id/network");
+//    }
+
+    private static BySelector getSettingsEntrySelector() {
+        return By.res("com.bestv.ott:id/setting_entry");
     }
 
     public static BySelector getLoadingCircleSelector() {
@@ -104,28 +109,32 @@ public final class TaskLauncher {
         return resolveInfo.activityInfo.packageName;
     }
 
-    public static void navigateToVideoTab() {
-        backToLauncherByPm();
-        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
-
-        UiObject2 tabVideo = getSpecifiedTab("视频");
-        Assert.assertNotNull("navigateToVideoTab, video tab is NOT found.", tabVideo);
-        Assert.assertTrue("navigateToVideoTab, video is NOT focused."
-                , tabVideo.getParent().isFocused());
-    }
-
     public static void navigateToSpecifiedTopTab(String tabText) {
         navigateToVideoTab();
 
-        for (int i = 0, moveTimes = 5; i < moveTimes; i++) {
+        UiObject2 tabApp;
+        if (RunnerProfile.isVersion30 && LAUNCHER_HOME_TABS[5].equals(tabText)) {
+            tabApp = DEVICE.findObject(getSettingsEntrySelector());
+        } else {
+            tabApp = getSpecifiedTab(tabText);
+        }
+        for (int i = 0, moveTimes = 7; i < moveTimes; i++) {
             ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-            UiObject2 tabApp = getSpecifiedTab(tabText);
-            if (tabApp != null && tabApp.getParent().isFocused()) {
+            if (tabApp != null && tabApp.isFocused()) {
                 return;
             }
         }
 
         Assert.assertTrue("navigateToSpecifiedTopTab, App tab is NOT focused.", false);
+    }
+
+    public static void navigateToVideoTab() {
+        backToLauncherByPm();
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
+
+        UiObject2 tabVideo = getSpecifiedTab(LAUNCHER_HOME_TABS[1]);
+        Assert.assertNotNull("navigateToVideoTab, video tab is NOT found.", tabVideo);
+        Assert.assertTrue("navigateToVideoTab, video is NOT focused.", tabVideo.isFocused());
     }
 
     @Nullable
@@ -137,22 +146,23 @@ public final class TaskLauncher {
 
         for (UiObject2 tab : tabs) {
             if (tabName.equals(tab.getText())) {
-                return tab;
+                return tab.getParent();
             }
         }
         return null;
     }
 
     public static void openSpecifiedAppFromAppTab(String appName) {
-        OpenSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[4], appName);
+        openSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[4], appName);
     }
 
     public static void openSpecifiedCardFromSettingsTab(String cardText) {
-        OpenSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[5], cardText);
+        openSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[5], cardText);
     }
 
-    private static void OpenSpecifiedCardFromTopTab(String tabText, String cardText) {
+    private static void openSpecifiedCardFromTopTab(String tabText, String cardText) {
         navigateToSpecifiedTopTab(tabText);
+        ACTION.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
 
         UiObject2 appCard = DEVICE.findObject(By.text(cardText));
         Assert.assertNotNull("OpenSpecifiedCardFromTopTab, tab NOT found: " + cardText, appCard);
