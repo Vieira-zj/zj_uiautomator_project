@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_HOME_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
@@ -129,7 +128,7 @@ public final class TaskFileManager {
     public void openFileManagerHomePage(boolean isByShell) {
         if (isByShell || RunnerProfile.isPlatform938) {
             ShellUtils.startSpecifiedActivity(FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
-            ShellUtils.systemWaitByMillis(LONG_WAIT);
+            ShellUtils.systemWaitByMillis(WAIT);
         } else {
             TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
         }
