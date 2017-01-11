@@ -123,12 +123,20 @@ public final class TaskFileManager {
     }
 
     public void openFileManagerHomePage() {
-        if (RunnerProfile.isPlatform938) {
+        this.openFileManagerHomePage(false);
+    }
+
+    public void openFileManagerHomePage(boolean isByShell) {
+        if (isByShell || RunnerProfile.isPlatform938) {
             ShellUtils.startSpecifiedActivity(FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
             ShellUtils.systemWaitByMillis(LONG_WAIT);
         } else {
             TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
         }
+
+        Assert.assertTrue("openFileManagerHomePage, open failed!",
+                TestHelper.waitForActivityOpenedByShellCmd(
+                        FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT));
     }
 
     public void openLocalFilesCard() {

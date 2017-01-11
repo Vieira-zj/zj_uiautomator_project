@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEATHER_PKG_NAME;
+
 /**
  * Created by zhengjin on 2016/9/30.
  * <p>
@@ -102,6 +104,13 @@ public final class TaskWeather {
 
     public BySelector getDialogCancelButtonSelector() {
         return By.res("tv.fun.weather:id/btn_cancel");
+    }
+
+    public void openWeatherHomePage() {
+        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
+                TaskLauncher.getQuickAccessBtnWeatherSelector());
+        Assert.assertTrue("openWeatherHomePage, open failed!",
+                TestHelper.waitForAppOpenedByUntil(WEATHER_PKG_NAME));
     }
 
     public UiObject2 getCurrentCityOnWeatherHomePage() {

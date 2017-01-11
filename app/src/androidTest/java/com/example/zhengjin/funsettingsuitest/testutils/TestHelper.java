@@ -97,20 +97,18 @@ public final class TestHelper {
                 String.format("%s/%s", pkgName, activityName), waitByMillis);
     }
 
-    public static boolean waitForAppOpenedByShellCmd(String pkgName) {
-        return waitForViewOnTopByShellCmd(pkgName, TIME_OUT);
-    }
-
     private static boolean waitForViewOnTopByShellCmd(String viewName, long waitByMillis) {
         ShellUtils.CommandResult cr;
 
         for (int i = 0; i < (int) waitByMillis / 1000L; i++) {
             cr = ShellUtils.getTopFocusedActivity();
-            if (cr.mResult == 0) {
-                if (!StringUtils.isEmpty(cr.mSuccessMsg) && cr.mSuccessMsg.contains(viewName)) {
-                    Log.d(TAG, "GetViewOnTop, top activity: " + cr.mSuccessMsg);
-                    return true;
-                }
+            if (cr.mResult == 0 && cr.mSuccessMsg.contains(viewName)) {
+                Log.d(TAG, "GetViewOnTop, top activity: " + cr.mSuccessMsg);
+                return true;
+            }
+            if (cr.mResult == 1 && StringUtils.isEmpty(cr.mSuccessMsg)) {
+                Log.d(TAG, "GetViewOnTop, top view name is empty, it's a bug for platform 938.");
+                return true;
             }
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }

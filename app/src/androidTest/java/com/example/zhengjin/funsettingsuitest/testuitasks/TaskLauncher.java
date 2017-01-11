@@ -9,6 +9,7 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
@@ -38,6 +39,8 @@ public final class TaskLauncher {
 
     private static UiActionsManager ACTION;
     private static UiDevice DEVICE;
+
+    public static final String TAG = TaskLauncher.class.getSimpleName();
 
     public static final String[] LAUNCHER_HOME_TABS =
             {"电视", "视频", "体育", "少儿", "应用", "设置"};
@@ -125,7 +128,8 @@ public final class TaskLauncher {
             }
         }
 
-        Assert.assertTrue("navigateToSpecifiedTopTab, App tab is NOT focused.", false);
+        Assert.assertTrue(String.format(
+                "navigateToSpecifiedTopTab, tab %s is NOT focused.", tabText), false);
     }
 
     public static void navigateToVideoTab() {
@@ -141,6 +145,7 @@ public final class TaskLauncher {
     private static UiObject2 getSpecifiedTab(String tabName) {
         List<UiObject2> tabs = DEVICE.findObjects(getAllLauncherTabsSelector());
         if (tabs.size() == 0) {
+            Log.e(TAG, "getSpecifiedTab, no tabs found on launcher!");
             return null;
         }
 

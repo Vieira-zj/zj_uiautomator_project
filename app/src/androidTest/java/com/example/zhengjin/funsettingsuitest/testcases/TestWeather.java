@@ -71,10 +71,7 @@ public final class TestWeather {
         mTask = TaskWeather.getInstance();
 
         TaskLauncher.backToLauncher();
-        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
-                TaskLauncher.getQuickAccessBtnWeatherSelector());
-        Assert.assertTrue("Open Weather app.",
-                TestHelper.waitForAppOpenedByUntil(WEATHER_PKG_NAME));
+        mTask.openWeatherHomePage();
     }
 
     @After

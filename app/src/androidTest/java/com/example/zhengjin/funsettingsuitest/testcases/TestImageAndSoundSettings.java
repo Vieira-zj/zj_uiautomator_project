@@ -30,7 +30,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_IMAGE_AND_SOUND_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
@@ -49,7 +48,6 @@ public final class TestImageAndSoundSettings {
     private TaskImageAndSound mTask;
     private String mMessage;
 
-    private final String IMAGE_AND_SOUND_TEXT = "图像与声音";
     private final String TURN_ON_TEXT = "已开启";
     private final String TURN_OFF_TEXT = "已关闭";
 
@@ -74,9 +72,7 @@ public final class TestImageAndSoundSettings {
         mTask = TaskImageAndSound.getInstance();
 
         TaskLauncher.backToLauncher();
-        TaskLauncher.openSpecifiedCardFromSettingsTab(IMAGE_AND_SOUND_TEXT);
-        Assert.assertTrue(TestHelper.waitForActivityOpenedByShellCmd(
-                SETTINGS_PKG_NAME, SETTINGS_IMAGE_AND_SOUND_ACT));
+        mTask.openImageAndSoundSettingsPage();
     }
 
     @After
@@ -89,7 +85,7 @@ public final class TestImageAndSoundSettings {
     public void test01TitleOfImageAndSoundSettingsPage() {
         mMessage = "Verify the text of title on Image and Sound settings page.";
         UiObject2 title = mDevice.findObject(mTask.getTitleOfImageAndSoundSettingsSelector());
-        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_TEXT, title.getText());
+        Assert.assertEquals(mMessage, mTask.IMAGE_AND_SOUND_TEXT, title.getText());
     }
 
     @Test

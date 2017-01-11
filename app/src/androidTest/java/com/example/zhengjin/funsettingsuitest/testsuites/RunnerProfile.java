@@ -18,8 +18,8 @@ public final class RunnerProfile {
     // NOTE: need to set below properties before run test cases
     public static boolean isTakeScreenshot = false;
     public static boolean isAccountVipFree = false;
-    public static boolean isPlatform938 = false;
-    public static boolean isVersion30 = true;
+    public static boolean isPlatform938 = true;
+    public static boolean isVersion30 = false;
 
     public static int countAndPrintTestCasesForClass(Class<?> cls) {
         int count = 0;

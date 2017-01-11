@@ -13,6 +13,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
@@ -30,7 +31,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_HOME_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
 
 /**
@@ -66,8 +66,6 @@ public final class TestFileManager {
     private final String TEXT_REMOVE_BUTTON = "删除";
     private final String TEXT_HIDDEN_BUTTON = "隐藏";
     private final String TEXT_SHOWALL_BUTTON = "显示全部";
-
-    private final String TEXT_SDCARD = "sdcard";
 
     static {
         TEST_ROOT_DIR_PATH =
@@ -124,10 +122,8 @@ public final class TestFileManager {
         mAction = UiActionsManager.getInstance();
         mTask = TaskFileManager.getInstance();
 
+        TaskLauncher.backToLauncher();
         mTask.openFileManagerHomePage();
-        boolean isAppOpened = TestHelper.waitForAppOpenedByShellCmd(
-                String.format("%s/%s", FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT));
-        Assert.assertTrue("Open File Manager app.", isAppOpened);
     }
 
     @After
@@ -552,9 +548,7 @@ public final class TestFileManager {
     }
 
     public void backToFileManagerHome() {
-        ShellUtils.startSpecifiedActivity(FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
-        TestHelper.waitForAppOpenedByShellCmd(
-                String.format("%s/%s", FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT));
+        mTask.openFileManagerHomePage(true);
     }
 
     public void removeFileAndConfirm() {

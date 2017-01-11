@@ -6,15 +6,23 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_SWITCHER;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_IMAGE_AND_SOUND_ACT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+
 /**
  * Created by zhengjin on 2016/12/14.
- *
+ * <p>
  * Include the UI selectors and tasks for settings module.
  */
 
@@ -23,6 +31,8 @@ public final class TaskImageAndSound {
     private static TaskImageAndSound instance = null;
     private UiDevice device;
     private UiActionsManager action;
+
+    public final String IMAGE_AND_SOUND_TEXT = "图像与声音";
 
     private TaskImageAndSound() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -111,8 +121,25 @@ public final class TaskImageAndSound {
     }
 
     public UiObject2 getSwitcherValueOfColorTmpSetting(UiObject2 container) {
-        UiObject2 switcher = container.findObject(By.clazz(TestConstants.CLASS_TEXT_SWITCHER));
-        return switcher.findObject(By.clazz(TestConstants.CLASS_TEXT_VIEW));
+        UiObject2 switcher = container.findObject(By.clazz(CLASS_TEXT_SWITCHER));
+        return switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
+    }
+
+    public void openImageAndSoundSettingsPage() {
+        if (RunnerProfile.isPlatform938) {
+            this.openImageAndSoundSettingsPageByShellCmd();
+        } else {  // platform 638
+            TaskLauncher.openSpecifiedCardFromSettingsTab(IMAGE_AND_SOUND_TEXT);
+        }
+
+        Assert.assertTrue("openImageAndSoundSettingsPage, open failed!",
+                TestHelper.waitForActivityOpenedByShellCmd(
+                        SETTINGS_PKG_NAME, SETTINGS_IMAGE_AND_SOUND_ACT));
+    }
+
+    private void openImageAndSoundSettingsPageByShellCmd() {
+        ShellUtils.startSpecifiedActivity(SETTINGS_PKG_NAME, SETTINGS_IMAGE_AND_SOUND_ACT);
+        ShellUtils.systemWaitByMillis(WAIT);
     }
 
     public void focusOnSpecifiedImageAndSoundSettingsItem(String itemText) {

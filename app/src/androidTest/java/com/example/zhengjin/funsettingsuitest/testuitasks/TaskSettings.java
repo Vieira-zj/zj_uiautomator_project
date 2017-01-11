@@ -17,12 +17,14 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_SCROLL_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
@@ -148,6 +150,15 @@ public final class TaskSettings {
 
     public BySelector getSettingSwitcherItemValueSelector() {
         return By.res("tv.fun.settings:id/setting_item_value");
+    }
+
+    public void openCommonSettingsHomePage() {
+        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
+                TaskLauncher.getQuickAccessBtnSettingsSelector());
+        Assert.assertTrue("openCommonSettingsHomePage, open failed!",
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME, WAIT));
+
+        action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     public UiObject2 getTextViewOfSwitcher(UiObject2 container) {

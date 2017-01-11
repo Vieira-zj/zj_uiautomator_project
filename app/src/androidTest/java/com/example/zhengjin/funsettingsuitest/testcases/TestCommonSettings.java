@@ -87,12 +87,7 @@ public final class TestCommonSettings {
         mWeatherTask = TaskWeather.getInstance();
 
         TaskLauncher.backToLauncher();
-        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
-                TaskLauncher.getQuickAccessBtnSettingsSelector());
-        Assert.assertTrue("Open Settings app.",
-                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME, WAIT));
-
-        mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+        mTask.openCommonSettingsHomePage();
     }
 
     @After
