@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
  * <p>
  * Include the properties when running the test cases.
  */
-
 public final class RunnerProfile {
 
     private static final String TAG = RunnerProfile.class.getSimpleName();
@@ -53,7 +52,7 @@ public final class RunnerProfile {
     }
 
     private static void setPlatformChipType() {
-        String results = runShellCommandWithoutCheck("getprop | grep chiptype");
+        String results = runShellCommand("getprop | grep chiptype");
         if (StringUtils.isEmpty(results)) {
             return;
         }
@@ -63,7 +62,7 @@ public final class RunnerProfile {
     }
 
     private static void setSystemVersion() {
-        String results = runShellCommandWithoutCheck("getprop | grep version.incremental");
+        String results = runShellCommand("getprop | grep version.incremental");
         if (StringUtils.isEmpty(results)) {
             return;
         }
@@ -71,13 +70,13 @@ public final class RunnerProfile {
         Pattern pattern = Pattern.compile("([0-9]{1,2}\\.){3}[0-9]{1,2}");
         Matcher matcher = pattern.matcher(results);
         if (matcher.find()) {
-            if (isVersionGreaterThan30(matcher.group())) {
+            if (isSystemVersion30(matcher.group())) {
                 isVersion30 = true;
             }
         }
     }
 
-    private static String runShellCommandWithoutCheck(String cmd) {
+    private static String runShellCommand(String cmd) {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
         if (cr.mResult != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
             return "";
@@ -86,7 +85,7 @@ public final class RunnerProfile {
         return cr.mSuccessMsg;
     }
 
-    private static boolean isVersionGreaterThan30(String version) {
+    private static boolean isSystemVersion30(String version) {
         String[] nums = version.split("\\.");
         return Integer.parseInt(nums[0]) >= 3;
     }
