@@ -59,13 +59,13 @@ public final class TestCommonUiTasks {
     @Category(CategoryDemoTests.class)
     public void test02GetNetworkInfoFor638() {
         TaskAboutInfo.NetworkInfo infoWired =
-                mAboutInfoTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wired);
+                mAboutInfoTask.getSysNetworkInfo(TaskAboutInfo.NetworkType.Wired);
         Assert.assertNotNull(infoWired);
         Assert.assertEquals("172.17.5.106", infoWired.getIpAddr());
         Assert.assertEquals("28:76:cd:01:96:f6", infoWired.getMacId());
 
         TaskAboutInfo.NetworkInfo info =
-                mAboutInfoTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wireless);
+                mAboutInfoTask.getSysNetworkInfo(TaskAboutInfo.NetworkType.Wireless);
         Assert.assertNotNull(info);
         Assert.assertEquals("0.0.0.0", info.getIpAddr());
         Assert.assertEquals("34:c3:d2:0f:1d:03", info.getMacId());

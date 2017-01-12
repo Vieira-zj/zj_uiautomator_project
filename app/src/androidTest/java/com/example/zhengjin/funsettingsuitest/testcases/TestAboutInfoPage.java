@@ -139,7 +139,7 @@ public final class TestAboutInfoPage {
     @Category(CategoryAboutInfoTests.class)
     public void test08NetworkWiredInfoOnSubPage() {
         TaskAboutInfo.NetworkInfo wiredInfo =
-                mTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wired);
+                mTask.getSysNetworkInfo(TaskAboutInfo.NetworkType.Wired);
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[1]);
 
         mMessage = "Verify the title of network IP address.";
@@ -171,7 +171,7 @@ public final class TestAboutInfoPage {
     @Category(CategoryAboutInfoTests.class)
     public void test09NetworkWirelessInfoMacOnSubPage() {
         TaskAboutInfo.NetworkInfo wiredInfo =
-                mTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wireless);
+                mTask.getSysNetworkInfo(TaskAboutInfo.NetworkType.Wireless);
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[1]);
 
         mMessage = "Verify the title of wireless mac.";

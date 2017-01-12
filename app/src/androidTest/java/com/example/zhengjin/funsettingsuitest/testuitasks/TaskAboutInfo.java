@@ -21,6 +21,10 @@ import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_ABOUT_INFO_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
@@ -195,27 +199,77 @@ public final class TaskAboutInfo {
         action.doDeviceActionAndWait(new DeviceActionCenter());
     }
 
-    public NetworkInfo getSysNetworkInfoForPlatform638(NetworkType type) {
-        String cmd = "netcfg | grep %s";
-        if (type == NetworkType.Wired) {
-            cmd = String.format(cmd, "eth0");
+    public NetworkInfo getSysNetworkInfo(NetworkType type) {
+        if (RunnerProfile.isPlatform938) {
+            return this.getSysNetworkInfoForPlatform938(type);
         }
-        if (type == NetworkType.Wireless) {
-            cmd = String.format(cmd, "wlan0");
+        return this.getSysNetworkInfoForPlatform638(type);
+    }
+
+    private NetworkInfo getSysNetworkInfoForPlatform638(NetworkType type) {
+        String cmd = this.buildCommandByNetworkType(type, "netcfg | grep %s");
+        String[] valuesArr = this.runShellCommandAndCheck(cmd).split("\\s+");
+        return new NetworkInfo(valuesArr[2].split("/")[0], valuesArr[4]);
+    }
+
+    private NetworkInfo getSysNetworkInfoForPlatform938(NetworkType type) {
+        String ipAddr = this.getNetworkIpForPlatform938(type);
+        String macId = this.getNetworkMacForPlatform938(type);
+        return new NetworkInfo(ipAddr, macId);
+    }
+
+    private String getNetworkIpForPlatform938(NetworkType type) {
+        final String DEFAULT_IP = "0.0.0.0";
+
+        String cmd = this.buildCommandByNetworkType(type, "ifconfig %s | grep \"inet addr\"");
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
+        if (cr.mResult != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
+            return DEFAULT_IP;
         }
 
+        String[] items = cr.mSuccessMsg.split("\\s+");
+        for (String item : items) {
+            if (item.startsWith("addr")) {
+                return item.split(":")[1];
+            }
+        }
+        return DEFAULT_IP;
+    }
+
+    private String getNetworkMacForPlatform938(NetworkType type) {
+        String cmd = this.buildCommandByNetworkType(type, "ifconfig %s | grep HWaddr");
+        Pattern pattern = Pattern.compile("(([0-9]|[A-Z]){2}:){5}([0-9]|[A-Z]){2}");
+        Matcher matcher = pattern.matcher(this.runShellCommandAndCheck(cmd));
+
+        if (matcher.find()) {
+            return matcher.group();
+        } else {
+            throw new RuntimeException("No mac found in results for command " + cmd);
+        }
+    }
+
+    private String buildCommandByNetworkType(NetworkType type, String baseCmd) {
+        final String NETWORK_TYPE_WIRED = "eth0";
+        final String NETWORK_TYPE_WIRELESS = "wlan0";
+
+        return type == NetworkType.Wireless ?
+                String.format(baseCmd, NETWORK_TYPE_WIRELESS) :
+                String.format(baseCmd, NETWORK_TYPE_WIRED);
+    }
+
+    private String runShellCommandAndCheck(String cmd) {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
         if (cr.mResult != 0) {
-            Log.e(TAG, "Failed to get the wired network info by " + cmd);
-            throw new RuntimeException("Error for command " + cmd);
+            Log.e(TAG, "Failed to get the network info by " + cmd);
+            throw new RuntimeException(String.format(Locale.getDefault()
+                    , "The return code is (%d) for command (%s)", cr.mResult, cmd));
         }
         if (StringUtils.isEmpty(cr.mSuccessMsg)) {
             Log.e(TAG, "The return info is empty by command " + cmd);
             throw new RuntimeException("Return empty for command " + cmd);
         }
 
-        String[] valuesArr = cr.mSuccessMsg.split("\\s+");
-        return new NetworkInfo(valuesArr[2].split("/")[0], valuesArr[4]);
+        return cr.mSuccessMsg;
     }
 
     public static class NetworkInfo {
