@@ -5,6 +5,7 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
@@ -16,6 +17,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
@@ -33,6 +35,8 @@ public final class TaskAboutInfo {
     private static TaskAboutInfo instance;
     private UiDevice device;
     private UiActionsManager action;
+
+    public static final String TAG = TaskAboutInfo.class.getSimpleName();
 
     public final String ABOUT_INFO_PAGE_TEXT = "关于";
 
@@ -63,7 +67,51 @@ public final class TaskAboutInfo {
         return By.res("tv.fun.settings:id/setting_title");
     }
 
-    public BySelector getQuestionFeedbackItemSelector() {
+    public BySelector getProductInfoItemOnAboutSelector() {
+        return By.res("tv.fun.settings:id/about_item_product_info");
+    }
+
+    public BySelector getNetworkInfoItemOnAboutSelector() {
+        return By.res("tv.fun.settings:id/about_item_network");
+    }
+
+    public BySelector getSystemVersionInfoItemOnAboutSelector() {
+        return By.res("tv.fun.settings:id/about_item_sysinfo");
+    }
+
+    public BySelector getLawInfoItemOnAboutSelector() {
+        return By.res("tv.fun.settings:id/about_item_law");
+    }
+
+    public BySelector getPlayControlItemOnAboutSelector() {
+        return By.res("tv.fun.settings:id/about_item_programflatform");
+    }
+
+    public BySelector getNetworkStatusItemOnNetworkInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_network_status");
+    }
+
+    public BySelector getNetworkIpAddrItemOnNetworkInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_network_ip");
+    }
+
+    public BySelector getNetworkWiredMacItemOnNetworkInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_network_mac_ethernet");
+    }
+
+    public BySelector getNetworkWirelessMacItemOnNetworkInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_network_mac_wifi");
+    }
+
+    public BySelector getItemTitleOnNetworkInfoSubPageSelector() {
+        return By.res("tv.fun.settings:id/display_item_title");
+    }
+
+    public BySelector getItemValueOnNetworkInfoSubPageSelector() {
+        return By.res("tv.fun.settings:id/display_item_edit");
+    }
+
+    public BySelector getQuestionFeedbackItemOnAboutSelector() {
         return By.res("tv.fun.settings:id/about_item_feedback");
     }
 
@@ -145,6 +193,52 @@ public final class TaskAboutInfo {
     public void enterOnSpecifiedButtonInFeedbackMenu(String btnText) {
         this.focusOnSpecifiedButtonInFeedbackMenu(btnText);
         action.doDeviceActionAndWait(new DeviceActionCenter());
+    }
+
+    public NetworkInfo getSysNetworkInfoForPlatform638(NetworkType type) {
+        String cmd = "netcfg | grep %s";
+        if (type == NetworkType.Wired) {
+            cmd = String.format(cmd, "eth0");
+        }
+        if (type == NetworkType.Wireless) {
+            cmd = String.format(cmd, "wlan0");
+        }
+
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
+        if (cr.mResult != 0) {
+            Log.e(TAG, "Failed to get the wired network info by " + cmd);
+            throw new RuntimeException("Error for command " + cmd);
+        }
+        if (StringUtils.isEmpty(cr.mSuccessMsg)) {
+            Log.e(TAG, "The return info is empty by command " + cmd);
+            throw new RuntimeException("Return empty for command " + cmd);
+        }
+
+        String[] valuesArr = cr.mSuccessMsg.split("\\s+");
+        return new NetworkInfo(valuesArr[2].split("/")[0], valuesArr[4]);
+    }
+
+    public static class NetworkInfo {
+        private String ipAddr;
+        private String macId;
+
+        NetworkInfo(String ipAddr, String macId) {
+            this.ipAddr = ipAddr;
+            this.macId = macId;
+        }
+
+        public String getIpAddr() {
+            return this.ipAddr;
+        }
+
+        public String getMacId() {
+            return this.macId;
+        }
+    }
+
+    public enum NetworkType {
+        Wired,
+        Wireless
     }
 
 }

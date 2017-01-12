@@ -80,8 +80,14 @@ public final class TestAboutInfoPage {
 
     @Test
     @Category(CategoryAboutInfoTests.class)
-    public void test02ProductInfoItem() {
-        // TODO: 2017/1/6  
+    public void test02ProductInfoItemOnAbout() {
+        mMessage = "Verify the product info item on About Info page is enabled.";
+        UiObject2 productItem = mDevice.findObject(mTask.getProductInfoItemOnAboutSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
+
+        mMessage = "Verify the title of product info item.";
+        UiObject2 itemText = mTask.getTextViewInAboutInfoItem(productItem);
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[0], itemText.getText());
     }
 
     @Test
@@ -92,9 +98,100 @@ public final class TestAboutInfoPage {
 
     @Test
     @Category(CategoryAboutInfoTests.class)
+    public void test06NetworkInfoItemOnAbout() {
+        mMessage = "Verify the network info item on About Info page is enabled.";
+        UiObject2 productItem = mDevice.findObject(mTask.getNetworkInfoItemOnAboutSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
+
+        mMessage = "Verify the title of network info item.";
+        UiObject2 itemText = mTask.getTextViewInAboutInfoItem(productItem);
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[1], itemText.getText());
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test07NetworkStatusInfoOnSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[1]);
+
+        // verification 1
+        mMessage = "Verify the network info page title is enabled.";
+        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the text of title on network info.";
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[1], title.getText());
+
+        // verification 2
+        mMessage = "Verify the title of network status item.";
+        UiObject2 statusItem =
+                mDevice.findObject(mTask.getNetworkStatusItemOnNetworkInfoSelector());
+        UiObject2 itemTitle =
+                statusItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "已连接", itemTitle.getText());
+
+        mMessage = "Verify the value of network status item.";
+        UiObject2 itemValue =
+                statusItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "有线网络", itemValue.getText());
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test08NetworkWiredInfoOnSubPage() {
+        TaskAboutInfo.NetworkInfo wiredInfo =
+                mTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wired);
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[1]);
+
+        mMessage = "Verify the title of network IP address.";
+        UiObject2 ipAddrItem =
+                mDevice.findObject(mTask.getNetworkIpAddrItemOnNetworkInfoSelector());
+        UiObject2 ipItemTitle =
+                ipAddrItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "IP地址", ipItemTitle.getText());
+
+        mMessage = "Verify the value of network IP address.";
+        UiObject2 ipItemValue =
+                ipAddrItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+        Assert.assertTrue(mMessage, wiredInfo.getIpAddr().equalsIgnoreCase(ipItemValue.getText()));
+
+        mMessage = "Verify the title of wired mac.";
+        UiObject2 macIdItem =
+                mDevice.findObject(mTask.getNetworkWiredMacItemOnNetworkInfoSelector());
+        UiObject2 macItemTitle =
+                macIdItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "有线网络mac地址", macItemTitle.getText());
+
+        mMessage = "Verify the value of wired mac.";
+        UiObject2 macItemValue =
+                macIdItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+        Assert.assertTrue(mMessage, wiredInfo.getMacId().equalsIgnoreCase(macItemValue.getText()));
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test09NetworkWirelessInfoMacOnSubPage() {
+        TaskAboutInfo.NetworkInfo wiredInfo =
+                mTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wireless);
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[1]);
+
+        mMessage = "Verify the title of wireless mac.";
+        UiObject2 macIdItem =
+                mDevice.findObject(mTask.getNetworkWirelessMacItemOnNetworkInfoSelector());
+        UiObject2 macItemTitle =
+                macIdItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "无线网络mac地址", macItemTitle.getText());
+
+        mMessage = "Verify the value of wireless mac.";
+        UiObject2 macItemValue =
+                macIdItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+        Assert.assertTrue(mMessage, wiredInfo.getMacId().equalsIgnoreCase(macItemValue.getText()));
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
     public void test11QuestionFeedbackItem() {
         mMessage = "Verify the feedback item on About Info page is enabled.";
-        UiObject2 feedback = mDevice.findObject(mTask.getQuestionFeedbackItemSelector());
+        UiObject2 feedback = mDevice.findObject(mTask.getQuestionFeedbackItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(feedback));
 
         mMessage = "Verify the title of feedback item.";
@@ -167,7 +264,8 @@ public final class TestAboutInfoPage {
 
         mMessage = "Verify the stop catch log button in feedback menu.";
         mTask.openBottomFeedBackMenu();
-        Assert.assertEquals(STOP_CATCH_LOG_MENU_BTN_TEXT, this.getCatchLogBtnTextInFeedbackMenu());
+        Assert.assertEquals(mMessage,
+                STOP_CATCH_LOG_MENU_BTN_TEXT, this.getCatchLogBtnTextInFeedbackMenu());
 
         mMessage = "Verify feedback menu disappear after stop catch log on feedback page.";
         mTask.enterOnSpecifiedButtonInFeedbackMenu(STOP_CATCH_LOG_MENU_BTN_TEXT);
@@ -176,9 +274,25 @@ public final class TestAboutInfoPage {
 
         mMessage = "Verify the start catch log button in feedback menu.";
         mTask.openBottomFeedBackMenu();
-        Assert.assertEquals(START_CATCH_LOG_MENU_BTN_TEXT, this.getCatchLogBtnTextInFeedbackMenu());
+        Assert.assertEquals(mMessage,
+                START_CATCH_LOG_MENU_BTN_TEXT, this.getCatchLogBtnTextInFeedbackMenu());
     }
 
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test15DumpLogToDiskOnFeedbackSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[3]);
+
+        mMessage = "Verify feedback menu disappear after dump log to disk on feedback page.";
+        mTask.openBottomFeedBackMenu();
+        mTask.enterOnSpecifiedButtonInFeedbackMenu(DUMP_LOG_MENU_BTN_TEXT);
+        Assert.assertFalse(mMessage,
+                TestHelper.waitForUiObjectExist(mTask.getBottomFeedbackMenuSelector()));
+
+        mMessage = "Verify back to question feedback home page.";
+        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+    }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)

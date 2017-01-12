@@ -10,6 +10,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
+import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 
 import junit.framework.Assert;
@@ -27,26 +28,59 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
 
 /**
  * Created by zhengjin on 2016/6/24.
- *
- * It's a demo 1) use the wait(until) APIs for test case stability,
- * and 2) use the "context" to start the specified activity.
+ * <p>
+ * Test the functions in test cases task.
  */
-@RunWith(AndroidJUnit4.class)
-public final class TestTaskFileManager {
 
-    private TaskFileManager mFileManagerTask;
+@RunWith(AndroidJUnit4.class)
+public final class TestCommonUiTasks {
+
     private UiDevice mDevice;
+    private TaskFileManager mFileManagerTask;
+    private TaskAboutInfo mAboutInfoTask;
 
     @Before
     public void setUp() {
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mFileManagerTask = TaskFileManager.getInstance();
+        mAboutInfoTask = TaskAboutInfo.getInstance();
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test01OpenAllFilesCard() {
         this.startFmMainActivityFromHomeScreen();
+        mFileManagerTask.openLocalFilesCard();
+        UiObject2 allFilesTitle = mDevice.findObject(By.text("全部文件"));
+        Assert.assertNotNull(allFilesTitle);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test02GetNetworkInfoFor638() {
+        TaskAboutInfo.NetworkInfo infoWired =
+                mAboutInfoTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wired);
+        Assert.assertNotNull(infoWired);
+        Assert.assertEquals("172.17.5.106", infoWired.getIpAddr());
+        Assert.assertEquals("28:76:cd:01:96:f6", infoWired.getMacId());
+
+        TaskAboutInfo.NetworkInfo info =
+                mAboutInfoTask.getSysNetworkInfoForPlatform638(TaskAboutInfo.NetworkType.Wireless);
+        Assert.assertNotNull(info);
+        Assert.assertEquals("0.0.0.0", info.getIpAddr());
+        Assert.assertEquals("34:c3:d2:0f:1d:03", info.getMacId());
+    }
+
+    @Ignore
+    @Category(CategoryDemoTests.class)
+    public void test11LongPressKey() {
+        // TODO: 2016/8/10 long press action
     }
 
     private void startFmMainActivityFromHomeScreen() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mFileManagerTask = TaskFileManager.getInstance();
-
-        // go to home
+        /** It's a demo 1) use the wait(until) APIs for test case stability,
+         * and 2) use the "context" to start the specified activity.
+         */
         mDevice.pressHome();
         String launcherPkg = mDevice.getLauncherPackageName();
         Assert.assertNotNull(launcherPkg);
@@ -62,20 +96,6 @@ public final class TestTaskFileManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
         mDevice.wait(Until.hasObject(By.pkg(PACKAGE_NAME)), TIME_OUT);
-    }
-
-    @Test
-    @Category(CategoryDemoTests.class)
-    public void test1OpenAllFilesCard() {
-        mFileManagerTask.openLocalFilesCard();
-        UiObject2 allFilesTitle = mDevice.findObject(By.text("全部文件"));
-        Assert.assertNotNull(allFilesTitle);
-    }
-
-    @Ignore
-    @Category(CategoryDemoTests.class)
-    public void test2LongPressKey() {
-        // TODO: 2016/8/10 long press action
     }
 
 }
