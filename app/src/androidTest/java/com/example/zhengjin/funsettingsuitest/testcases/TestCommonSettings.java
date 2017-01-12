@@ -210,6 +210,9 @@ public final class TestCommonSettings {
             mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
             Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(
                     mTask.getDeviceNameValueByText(SELF_DEFINE_DEVICE_NAME)));
+
+            // if success, set global var
+            RunnerProfile.deviceName = SELF_DEFINE_DEVICE_NAME;
         } finally {
             mTask.enableInputMethod();
         }
