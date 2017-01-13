@@ -15,7 +15,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -87,8 +86,36 @@ public final class TaskAboutInfo {
         return By.res("tv.fun.settings:id/about_item_law");
     }
 
-    public BySelector getPlayControlItemOnAboutSelector() {
+    public BySelector getPlayControllerItemOnAboutSelector() {
         return By.res("tv.fun.settings:id/about_item_programflatform");
+    }
+
+    public BySelector getItemTitleOnAboutInfoPageSelector() {
+        return By.res("tv.fun.settings:id/item_title");
+    }
+
+    public BySelector getItemValueOnAboutInfoPageSelector() {
+        return By.res("tv.fun.settings:id/item_value");
+    }
+
+    public BySelector getQrCodeContentOnProductInfoSelector() {
+        return By.res("tv.fun.settings:id/prompt");
+    }
+
+    public BySelector getTvNameItemOnProductInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_productinfo_tvname");
+    }
+
+    public BySelector getTvModelItemOnProductInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_productinfo_model");
+    }
+
+    public BySelector getRomSizeItemOnProductInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_productinfo_space");
+    }
+
+    public BySelector getSeriesIdItemOnProductInfoSelector() {
+        return By.res("tv.fun.settings:id/activity_about_productinfo_code");
     }
 
     public BySelector getNetworkStatusItemOnNetworkInfoSelector() {
@@ -107,11 +134,11 @@ public final class TaskAboutInfo {
         return By.res("tv.fun.settings:id/activity_about_network_mac_wifi");
     }
 
-    public BySelector getItemTitleOnNetworkInfoSubPageSelector() {
+    public BySelector getItemTitleOnAboutInfoSubPageSelector() {
         return By.res("tv.fun.settings:id/display_item_title");
     }
 
-    public BySelector getItemValueOnNetworkInfoSubPageSelector() {
+    public BySelector getItemValueOnAboutInfoSubPageSelector() {
         return By.res("tv.fun.settings:id/display_item_edit");
     }
 
@@ -139,8 +166,8 @@ public final class TaskAboutInfo {
         return By.res("android:id/tv_fun_menu_text");
     }
 
-    public UiObject2 getTextViewInAboutInfoItem(UiObject2 parent) {
-        return parent.findObject(By.clazz(TestConstants.CLASS_TEXT_VIEW));
+    public UiObject2 getTitleInAboutInfoItem(UiObject2 parent) {
+        return parent.findObject(this.getItemTitleOnAboutInfoPageSelector());
     }
 
     public void openAboutInfoHomePage() {
@@ -199,6 +226,92 @@ public final class TaskAboutInfo {
         action.doDeviceActionAndWait(new DeviceActionCenter());
     }
 
+    public String getDeviceModelInfo() {
+        String productSeriesNo = this.getTvSeriesNoByShellCmd("getprop | grep product.model");
+        String tvModel = this.getDeviceModel(productSeriesNo);
+        String suffix = this.getDeviceModelSuffix(productSeriesNo);
+
+        return String.format("%s%s%s", "G", tvModel, suffix);
+    }
+
+    private String getDeviceModel(String seriesNo) {
+        final String DEFAULT_MODEL = "55";
+
+        if (StringUtils.isEmpty(seriesNo)) {
+            return DEFAULT_MODEL;
+        }
+        try {
+            return seriesNo.substring(0, 2);
+        } catch (Exception e) {
+            return DEFAULT_MODEL;
+        }
+    }
+
+    private String getDeviceModelSuffix(String seriesNo) {
+        final String DEFAULT_MODEL_SUFFIX = "F";
+
+        if (StringUtils.isEmpty(seriesNo)) {
+            return DEFAULT_MODEL_SUFFIX;
+        }
+        if (RunnerProfile.isPlatform938) {
+            return "S";
+        }
+        if (seriesNo.endsWith("51")) {
+            return "F";
+        }
+        if (seriesNo.endsWith("52")) {
+            return "Y";
+        }
+
+        return DEFAULT_MODEL_SUFFIX;
+    }
+
+    private String getTvSeriesNoByShellCmd(String cmd) {
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
+        if (cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
+            Pattern pattern = Pattern.compile("[0-9]{4}");
+            Matcher matcher = pattern.matcher(cr.mSuccessMsg);
+            if (matcher.find()) {
+                return matcher.group();
+            }
+        }
+
+        return "";
+    }
+
+    public String getDeviceRomSizeInfo() {
+        final String DEFAULT_ROM_SIZE = "8GB";
+        final String cmd = "df | grep sdcard";
+
+        String romSize = "8";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
+        if (cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
+            romSize = cr.mSuccessMsg.substring(0, cr.mSuccessMsg.indexOf("G"));
+        }
+
+        try {
+            if (Float.parseFloat(romSize) <= 8.0) {
+                return DEFAULT_ROM_SIZE;
+            }
+            return "32GB";
+        } catch (Exception e) {
+            return DEFAULT_ROM_SIZE;
+        }
+    }
+
+    public boolean isDeviceSeriesIdValid(String seriesId) {
+        Pattern pattern = Pattern.compile("FUN[0-9]{20,21}");
+        Matcher matcher = pattern.matcher(seriesId);
+        return matcher.find();
+    }
+
+    public String getSystemVersionInfo() {
+        String results = this.runShellCommandAndCheck("getprop | grep version.incremental");
+        String version = results.split("\\s+")[1];
+        version = version.substring(1, (version.length() - 1));
+        return version;
+    }
+
     public NetworkInfo getSysNetworkInfo(NetworkType type) {
         if (RunnerProfile.isPlatform938) {
             return this.getSysNetworkInfoForPlatform938(type);
@@ -243,9 +356,9 @@ public final class TaskAboutInfo {
 
         if (matcher.find()) {
             return matcher.group();
-        } else {
-            throw new RuntimeException("No mac found in results for command " + cmd);
         }
+        Assert.assertTrue("No mac found in results for command " + cmd, false);
+        return "";  // not go here
     }
 
     private String buildCommandByNetworkType(NetworkType type, String baseCmd) {
@@ -261,12 +374,12 @@ public final class TaskAboutInfo {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
         if (cr.mResult != 0) {
             Log.e(TAG, "Failed to get the network info by " + cmd);
-            throw new RuntimeException(String.format(Locale.getDefault()
-                    , "The return code is (%d) for command (%s)", cr.mResult, cmd));
+            Assert.assertTrue(String.format(Locale.getDefault()
+                    , "The return code is (%d) for command (%s)", cr.mResult, cmd), false);
         }
         if (StringUtils.isEmpty(cr.mSuccessMsg)) {
             Log.e(TAG, "The return info is empty by command " + cmd);
-            throw new RuntimeException("Return empty for command " + cmd);
+            Assert.assertTrue("Return empty for command " + cmd, false);
         }
 
         return cr.mSuccessMsg;

@@ -7,6 +7,7 @@ import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
@@ -20,6 +21,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -80,31 +82,116 @@ public final class TestAboutInfoPage {
 
     @Test
     @Category(CategoryAboutInfoTests.class)
-    public void test02ProductInfoItemOnAbout() {
+    public void test02ProductInfoItemOnAboutInfo() {
         mMessage = "Verify the product info item on About Info page is enabled.";
         UiObject2 productItem = mDevice.findObject(mTask.getProductInfoItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
 
         mMessage = "Verify the title of product info item.";
-        UiObject2 itemText = mTask.getTextViewInAboutInfoItem(productItem);
-        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[0], itemText.getText());
+        UiObject2 itemTitle = mTask.getTitleInAboutInfoItem(productItem);
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[0], itemTitle.getText());
     }
 
     @Test
     @Category(CategoryAboutInfoTests.class)
-    public void test03ProductInfoSubPage() {
-        // TODO: 2017/1/6
+    public void test03TitleAndQrCodeOnProductInfoSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
+
+        mMessage = "Verify the tile on Product Info is enabled.";
+        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the text of title on Product Info.";
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[0], title.getText());
+
+        mMessage = "Verify the QR code content.";
+        UiObject2 qrCodeText = mDevice.findObject(mTask.getQrCodeContentOnProductInfoSelector());
+        Assert.assertEquals(mMessage, "扫描微信二维码，关注公众号", qrCodeText.getText());
     }
 
     @Test
     @Category(CategoryAboutInfoTests.class)
-    public void test06NetworkInfoItemOnAbout() {
+    public void test04_01TvNameOnProductInfoSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
+
+        mMessage = "Verify the device name item is enabled.";
+        UiObject2 tvNameItem = mDevice.findObject(mTask.getTvNameItemOnProductInfoSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(tvNameItem));
+
+        mMessage = "Verify the device name item title.";
+        UiObject2 itemTitle = tvNameItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "设备名称：", itemTitle.getText());
+
+        mMessage = "Verify the device name item value.";
+        UiObject2 itemValue = tvNameItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, RunnerProfile.deviceName, itemValue.getText());
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test04_02TvModelOnProductInfoSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
+
+        mMessage = "Verify the device model item is enabled.";
+        UiObject2 tvModelItem = mDevice.findObject(mTask.getTvModelItemOnProductInfoSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(tvModelItem));
+
+        mMessage = "Verify the device model item title.";
+        UiObject2 itemTitle =
+                tvModelItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "产品型号：", itemTitle.getText());
+
+        mMessage = "Verify the device model item value.";
+        UiObject2 itemValue =
+                tvModelItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, mTask.getDeviceModelInfo(), itemValue.getText());
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test04_03TvRomSizeOnProductInfoSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
+
+        mMessage = "Verify the device rom size item is enabled.";
+        UiObject2 romSize = mDevice.findObject(mTask.getRomSizeItemOnProductInfoSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(romSize));
+
+        mMessage = "Verify the device rom size item title.";
+        UiObject2 itemTitle = romSize.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "本机容量：", itemTitle.getText());
+
+        mMessage = "Verify the device rom item value.";
+        UiObject2 itemValue = romSize.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, mTask.getDeviceRomSizeInfo(), itemValue.getText());
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test04_04TvSeriesIdOnProductInfoSubPage() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
+
+        mMessage = "Verify the device series id item is enabled.";
+        UiObject2 seriesId = mDevice.findObject(mTask.getSeriesIdItemOnProductInfoSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(seriesId));
+
+        mMessage = "Verify the device series id item title.";
+        UiObject2 itemTitle = seriesId.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        Assert.assertEquals(mMessage, "设备序列号：", itemTitle.getText());
+
+        mMessage = "Verify the device series id item value.";
+        UiObject2 itemValue = seriesId.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        Assert.assertTrue(mMessage, mTask.isDeviceSeriesIdValid(itemValue.getText()));
+    }
+
+    @Test
+    @Category(CategoryAboutInfoTests.class)
+    public void test06NetworkInfoItemOnAboutInfo() {
         mMessage = "Verify the network info item on About Info page is enabled.";
         UiObject2 productItem = mDevice.findObject(mTask.getNetworkInfoItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
 
         mMessage = "Verify the title of network info item.";
-        UiObject2 itemText = mTask.getTextViewInAboutInfoItem(productItem);
+        UiObject2 itemText = mTask.getTitleInAboutInfoItem(productItem);
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[1], itemText.getText());
     }
 
@@ -126,12 +213,12 @@ public final class TestAboutInfoPage {
         UiObject2 statusItem =
                 mDevice.findObject(mTask.getNetworkStatusItemOnNetworkInfoSelector());
         UiObject2 itemTitle =
-                statusItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+                statusItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "已连接", itemTitle.getText());
 
         mMessage = "Verify the value of network status item.";
         UiObject2 itemValue =
-                statusItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+                statusItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "有线网络", itemValue.getText());
     }
 
@@ -146,24 +233,24 @@ public final class TestAboutInfoPage {
         UiObject2 ipAddrItem =
                 mDevice.findObject(mTask.getNetworkIpAddrItemOnNetworkInfoSelector());
         UiObject2 ipItemTitle =
-                ipAddrItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+                ipAddrItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "IP地址", ipItemTitle.getText());
 
         mMessage = "Verify the value of network IP address.";
         UiObject2 ipItemValue =
-                ipAddrItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+                ipAddrItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, wiredInfo.getIpAddr().equalsIgnoreCase(ipItemValue.getText()));
 
         mMessage = "Verify the title of wired mac.";
         UiObject2 macIdItem =
                 mDevice.findObject(mTask.getNetworkWiredMacItemOnNetworkInfoSelector());
         UiObject2 macItemTitle =
-                macIdItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+                macIdItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "有线网络mac地址", macItemTitle.getText());
 
         mMessage = "Verify the value of wired mac.";
         UiObject2 macItemValue =
-                macIdItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+                macIdItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, wiredInfo.getMacId().equalsIgnoreCase(macItemValue.getText()));
     }
 
@@ -178,12 +265,12 @@ public final class TestAboutInfoPage {
         UiObject2 macIdItem =
                 mDevice.findObject(mTask.getNetworkWirelessMacItemOnNetworkInfoSelector());
         UiObject2 macItemTitle =
-                macIdItem.findObject(mTask.getItemTitleOnNetworkInfoSubPageSelector());
+                macIdItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "无线网络mac地址", macItemTitle.getText());
 
         mMessage = "Verify the value of wireless mac.";
         UiObject2 macItemValue =
-                macIdItem.findObject(mTask.getItemValueOnNetworkInfoSubPageSelector());
+                macIdItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, wiredInfo.getMacId().equalsIgnoreCase(macItemValue.getText()));
     }
 
@@ -195,7 +282,7 @@ public final class TestAboutInfoPage {
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(feedback));
 
         mMessage = "Verify the title of feedback item.";
-        UiObject2 title = mTask.getTextViewInAboutInfoItem(feedback);
+        UiObject2 title = mTask.getTitleInAboutInfoItem(feedback);
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[3], title.getText());
     }
 
@@ -292,6 +379,74 @@ public final class TestAboutInfoPage {
         mMessage = "Verify back to question feedback home page.";
         UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test17SystemVersionItemOnAboutInfo() {
+        mMessage = "Verify the System Version item on about info page.";
+        UiObject2 sysVersion = mDevice.findObject(mTask.getSystemVersionInfoItemOnAboutSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(sysVersion));
+
+        mMessage = "Verify the system version title text.";
+        UiObject2 itemTitle = sysVersion.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, "系统版本", itemTitle.getText());
+
+        mMessage = "Verify the system version number value.";
+        UiObject2 itemValue = sysVersion.findObject(mTask.getItemValueOnAboutInfoPageSelector());
+        Assert.assertTrue(mMessage, itemValue.getText().contains(mTask.getSystemVersionInfo()));
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test18PlayControllerItemOnAboutInfo() {
+        mMessage = "Verify the play controller item on about info page.";
+        UiObject2 controller = mDevice.findObject(mTask.getPlayControllerItemOnAboutSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(controller));
+
+        mMessage = "Verify the play controller title text.";
+        UiObject2 itemTitle = controller.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, "播控方", itemTitle.getText());
+
+        mMessage = "Verify the play controller value.";
+        UiObject2 itemValue = controller.findObject(mTask.getItemValueOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, "BesTV", itemValue.getText());
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test21LawInfoItemOnAboutInfo() {
+        mMessage = "Verify the law info item on about info page.";
+        UiObject2 law = mDevice.findObject(mTask.getLawInfoItemOnAboutSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(law));
+
+        mMessage = "Verify the law info title text.";
+        UiObject2 title = law.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[4], title.getText());
+    }
+
+    @Ignore
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test22TitleAndItemsOnLawInfoSubPage() {
+        // TODO: 2017/1/13  
+    }
+
+    @Ignore
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test23TitleAndContentOnCopyRightProtectSubPage() {
+        // TODO: 2017/1/13  
+    }
+
+    @Ignore
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test24TitleAndContentOnPrivacyPolicySubPage() {
+        // TODO: 2017/1/13
+    }
+
+    @Ignore
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test25TitleAndContentOnUserAgreementSubPage() {
+        // TODO: 2017/1/13  
     }
 
     @Test
