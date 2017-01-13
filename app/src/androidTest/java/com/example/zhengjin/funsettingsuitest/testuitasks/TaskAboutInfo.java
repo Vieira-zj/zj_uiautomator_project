@@ -281,22 +281,29 @@ public final class TaskAboutInfo {
 
     public String getDeviceRomSizeInfo() {
         final String DEFAULT_ROM_SIZE = "8GB";
-        final String cmd = "df | grep sdcard";
 
-        String romSize = "8";
+        String cmd = RunnerProfile.isPlatform938 ? "df | grep /data" : "df | grep /sdcard";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
-        if (cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
-            romSize = cr.mSuccessMsg.substring(0, cr.mSuccessMsg.indexOf("G"));
-        }
-
-        try {
-            if (Float.parseFloat(romSize) <= 8.0) {
-                return DEFAULT_ROM_SIZE;
-            }
-            return "32GB";
-        } catch (Exception e) {
+        if (cr.mResult != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
             return DEFAULT_ROM_SIZE;
         }
+
+        if (this.filterRomSize(cr.mSuccessMsg) <= 8.0) {
+            return DEFAULT_ROM_SIZE;
+        }
+        return "32GB";
+    }
+
+    private float filterRomSize(String results) {
+        String size;
+        try {
+            String[] items = results.split("\\s+");
+            size = items[1].substring(0, items[1].indexOf("G"));
+        } catch (Exception e) {
+            size = "0";
+        }
+
+        return Float.parseFloat(size);
     }
 
     public boolean isDeviceSeriesIdValid(String seriesId) {
@@ -306,10 +313,17 @@ public final class TaskAboutInfo {
     }
 
     public String getSystemVersionInfo() {
+        String ret = "0.0.0.0";
+
         String results = this.runShellCommandAndCheck("getprop | grep version.incremental");
-        String version = results.split("\\s+")[1];
-        version = version.substring(1, (version.length() - 1));
-        return version;
+        try {
+            String version = results.split("\\s+")[1];
+            ret = version.substring(1, (version.length() - 1));
+        } catch (Exception e) {
+            Assert.assertTrue("Failed to get system version from " + results, false);
+        }
+
+        return ret;
     }
 
     public NetworkInfo getSysNetworkInfo(NetworkType type) {
