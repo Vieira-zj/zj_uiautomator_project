@@ -57,6 +57,16 @@ public final class TestConstants {
         return SDCARD_STATUS_UN_AVAILABLE.equals(SDCARD_PATH);
     }
 
+    public enum FunSystemVersion {
+        V2,
+        V3
+    }
+
+    public enum PlatformChipType {
+        MSTAR638,
+        MSTAR938
+    }
+
     public enum VideoType {
         FILM, TV, VARIETY_SHOW
     }

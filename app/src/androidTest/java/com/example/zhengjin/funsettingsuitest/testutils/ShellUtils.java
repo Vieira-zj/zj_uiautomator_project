@@ -49,11 +49,14 @@ public final class ShellUtils {
 
     public static CommandResult execCommand(
             String[] commands, boolean isRoot, boolean isNeedResultMsg) {
-        int result = -1;
+        final int DEFAULT_ERROR_CODE = -1;
+        final CommandResult defaultCommandResult =
+                new CommandResult(DEFAULT_ERROR_CODE, null, null);
         if (commands == null || commands.length == 0) {
-            return new CommandResult(result, null, null);
+            return defaultCommandResult;
         }
 
+        int result = DEFAULT_ERROR_CODE;
         Process process = null;
         BufferedReader successResult = null;
         BufferedReader errorResult = null;
@@ -77,20 +80,24 @@ public final class ShellUtils {
 
             result = process.waitFor();
             if (isNeedResultMsg) {
-                successMsg = new StringBuilder();
-                errorMsg = new StringBuilder();
-                successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                final int DEFAULT_SIZE = 10;
                 String tmpStr;
+
+                successMsg = new StringBuilder(DEFAULT_SIZE);
+                successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 while ((tmpStr = successResult.readLine()) != null) {
                     successMsg.append(tmpStr);
                 }
+
+                errorMsg = new StringBuilder(DEFAULT_SIZE);
+                errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 while ((tmpStr = errorResult.readLine()) != null) {
                     errorMsg.append(tmpStr);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return defaultCommandResult;
         } finally {
             try {
                 if (os != null) {
@@ -111,7 +118,8 @@ public final class ShellUtils {
             }
         }
 
-        return new CommandResult(result, (successMsg != null ? successMsg.toString() : null),
+        return new CommandResult(result,
+                (successMsg != null ? successMsg.toString() : null),
                 (errorMsg != null ? errorMsg.toString() : null));
     }
 
@@ -168,7 +176,7 @@ public final class ShellUtils {
         Assert.assertEquals("Start the specified activity.", 0, result.mResult);
     }
 
-    public static CommandResult getTopFocusedActivity() {
+    static CommandResult getTopFocusedActivity() {
         String cmd = "dumpsys activity | grep mFocusedActivity";
         return ShellUtils.execCommand(cmd, false, true);
     }

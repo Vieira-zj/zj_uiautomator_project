@@ -3,6 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testsuites;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -24,16 +25,11 @@ public final class RunnerProfile {
     public static boolean isAccountVipFree = false;
 
     // Below properties set auto
-    public static boolean isPlatform938 = false;
-    public static boolean isVersion30 = false;
+    public static boolean isPlatform938 = isPlatformChipType938();
+    public static boolean isVersion30 = isFunSystemVersion30();
 
     // Global properties
     public static String deviceName = "风行电视";
-
-    static {
-        setPlatformChipType();
-        setSystemVersion();
-    }
 
     public static int countAndPrintTestCasesForClass(Class<?> cls) {
         int count = 0;
@@ -51,29 +47,43 @@ public final class RunnerProfile {
         return count;
     }
 
-    private static void setPlatformChipType() {
-        String results = runShellCommand("getprop | grep chiptype");
-        if (StringUtils.isEmpty(results)) {
-            return;
-        }
-        if (results.contains("938")) {
-            isPlatform938 = true;
-        }
+    private static boolean isPlatformChipType938() {
+        return getPlatformChipType938() == TestConstants.PlatformChipType.MSTAR938;
     }
 
-    private static void setSystemVersion() {
+    private static TestConstants.PlatformChipType getPlatformChipType938() {
+        String results = runShellCommand("getprop | grep chiptype");
+        if (!StringUtils.isEmpty(results) && results.contains("938")) {
+            return TestConstants.PlatformChipType.MSTAR938;
+        }
+
+        return TestConstants.PlatformChipType.MSTAR638;
+    }
+
+    private static boolean isFunSystemVersion30() {
+        return getSystemVersion() == TestConstants.FunSystemVersion.V3;
+    }
+
+        private static TestConstants.FunSystemVersion getSystemVersion() {
         String results = runShellCommand("getprop | grep version.incremental");
         if (StringUtils.isEmpty(results)) {
-            return;
+            return TestConstants.FunSystemVersion.V2;
         }
 
         Pattern pattern = Pattern.compile("([0-9]{1,2}\\.){3}[0-9]{1,2}");
         Matcher matcher = pattern.matcher(results);
         if (matcher.find()) {
-            if (isSystemVersion30(matcher.group())) {
-                isVersion30 = true;
+            if (isVersionNumber30(matcher.group())) {
+                return TestConstants.FunSystemVersion.V3;
             }
         }
+
+        return TestConstants.FunSystemVersion.V2;
+    }
+
+    private static boolean isVersionNumber30(String version) {
+        String[] nums = version.split("\\.");
+        return Integer.parseInt(nums[0]) >= 3;
     }
 
     private static String runShellCommand(String cmd) {
@@ -83,11 +93,6 @@ public final class RunnerProfile {
         }
 
         return cr.mSuccessMsg;
-    }
-
-    private static boolean isSystemVersion30(String version) {
-        String[] nums = version.split("\\.");
-        return Integer.parseInt(nums[0]) >= 3;
     }
 
 }
