@@ -25,6 +25,7 @@ import junit.framework.Assert;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_SCROLL_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
@@ -177,13 +178,15 @@ public final class TaskSettings {
         UiObject2 item = device.findObject(selector);  // find the item from top
         if (item != null) {
             this.moveDownUntilSettingsItemFocused(item);
-        } else {  // find the item from bottom
+        } else {
+            // find the item from bottom
             this.moveToBottomOnCommonSettingsPage();
             item = device.findObject(selector);
             Assert.assertNotNull("moveToSpecifiedSettingsItem, " +
                     "settings item is NOT found on common settings.", item);
             this.moveUpUntilSettingsItemFocused(item);
         }
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
     }
 
     private void moveToBottomOnCommonSettingsPage() {

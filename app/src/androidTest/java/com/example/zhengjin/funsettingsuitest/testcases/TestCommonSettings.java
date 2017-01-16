@@ -343,8 +343,10 @@ public final class TestCommonSettings {
         TestHelper.waitForUiObjectEnabled(
                 mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
 
-        mMessage = "Verify the set shutdown tv time sub value at position %d.";
         mTask.moveToSpecifiedSettingsItem(mTask.getSetShutDownTvItemContainerSelector());
+        ShellUtils.systemWaitByMillis(WAIT);
+
+        mMessage = "Verify the set shutdown tv time sub value at position %d.";
         for (int i = 1; i < SUB_VALUES_SHUTDOWN_TV_TIME.length; i++) {
             mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
             UiObject2 itemValue = mTask.getTextViewOfSwitcher(
@@ -377,7 +379,7 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test18_01ScreenSaverSubValues() {
         mTask.moveToSpecifiedSettingsItem(mTask.getScreenSaverSettingItemContainerSelector());
-        ShellUtils.systemWaitByMillis(SHORT_WAIT);
+        ShellUtils.systemWaitByMillis(WAIT);
 
         mMessage = "Verify the sub values of screen saver at position %d.";
         for (int i = 1; i < SUB_VALUES_SCREEN_SAVER.length; i++) {
@@ -399,9 +401,8 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test19SelectScreenSaver() {
         mTask.moveToSpecifiedSettingsItem(mTask.getScreenSaverSettingItemContainerSelector());
-        ShellUtils.systemWaitByMillis(SHORT_WAIT);
-        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
-        ShellUtils.systemWaitByMillis(WAIT);
+        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveLeft())
+                .doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
 
         mMessage = "Verify select the screen saver value.";
         UiObject2 screenSaverContainer =
