@@ -47,9 +47,9 @@ public final class TestFileManager {
     private TaskFileManager mTask;
     private String mMessage;
 
-    private static final String TEST_ROOT_DIR_NAME = "TestFile";
+    private static final String TEST_ROOT_DIR_NAME = "AutoTestFiles";
     private static final String TEST_ROOT_DIR_PATH;
-    private static final String TEST_DIR_NAME = "TestDirectory";
+    private static final String TEST_DIR_NAME = "TestNonMediaDir";
     private static final String TEST_DIR_PATH;
     private static final String TEST_MEDIA_DIR_NAME = "TestMediaDir";
     private static final String TEST_MEDIA_DIR_PATH;
@@ -66,6 +66,8 @@ public final class TestFileManager {
     private final String TEXT_REMOVE_BUTTON = "删除";
     private final String TEXT_HIDDEN_BUTTON = "隐藏";
     private final String TEXT_SHOWALL_BUTTON = "显示全部";
+
+    private final String TEXT_NO_VIDEO_FOUND_IN_CATEGORY = "未发现可播放的视频";
 
     static {
         TEST_ROOT_DIR_PATH =
@@ -169,7 +171,7 @@ public final class TestFileManager {
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test15OpenSpecifiedPicture() {
-        // need push pic file to the device
+        // pre-condition: push pic file to the device
         // TODO: 2016/11/21
     }
 
@@ -408,7 +410,7 @@ public final class TestFileManager {
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test35VideoCardNameAndItemsCount() {
-        // Error obtaining UI hierarchy
+        // Error: obtaining UI hierarchy
         mDevice.waitForIdle();
 
         mMessage = "Verify the video card is enabled.";
@@ -436,15 +438,19 @@ public final class TestFileManager {
 
         mMessage = "Verify the video file is hidden after click Hide button.";
         mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
-        UiObject2 fileHidden = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
-        Assert.assertNull(mMessage, fileHidden);
+        UiObject2 fileHiddenFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertNull(mMessage, fileHiddenFromAll);
 
-        mMessage = "Verify the video file is hidden from video category.";
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
 
-        fileHidden = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
-        Assert.assertNull(mMessage, fileHidden);
+        mMessage = "Verify the video file is hidden from video category.";
+        UiObject2 fileHiddenFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertNull(mMessage, fileHiddenFromCate);
+
+        mMessage = "Verify the unchanged video file is shown from video category.";
+        UiObject2 fileUnchanged = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+        Assert.assertNotNull(mMessage, fileUnchanged);
     }
 
     @Test
@@ -455,33 +461,67 @@ public final class TestFileManager {
 
         mMessage = "Verify the video file is shown after click Show All button.";
         mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
-        UiObject2 fileShown = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
-        Assert.assertNotNull(fileShown);
-        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(fileShown));
+        UiObject2 fileShownFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(fileShownFromAll));
 
         mMessage = "Verify the video file is shown from video category.";
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
 
-        fileShown = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
-        Assert.assertNotNull(fileShown);
-        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(fileShown));
+        UiObject2 fileShownFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(fileShownFromCate));
+
+        mMessage = "Verify the unchanged video file is shown from video category.";
+        UiObject2 fileUnchanged = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+        Assert.assertNotNull(mMessage, fileUnchanged);
     }
 
     @Test
     @Category({CategoryFileManagerTests.class})
     public void test41_03HideVideoDirectory() {
-        // TODO: 2016/11/21 for dir
+        mTask.openLocalFilesCard();
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+        mTask.moveUntilSpecifiedItemSelected(TEST_MEDIA_DIR_NAME);
+
+        mMessage = "Verify the video directory is hidden from All Files category.";
+        mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+        UiObject2 mediaDirHidden = mDevice.findObject(By.text(TEST_MEDIA_DIR_NAME));
+        Assert.assertNull(mMessage, mediaDirHidden);
+
+        this.backToFileManagerHome();
+        mTask.openCategoryVideoCard();
+
+        mMessage = "Verify all video files in directory is hidden from Video category.";
+        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(tips));
+        Assert.assertEquals(mMessage, TEXT_NO_VIDEO_FOUND_IN_CATEGORY, tips.getText());
     }
 
     @Test
     @Category({CategoryFileManagerTests.class})
     public void test41_04ShowVideoDirectory() {
-        // TODO: 2016/11/21 for dir 
+        mTask.openLocalFilesCard();
+        mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+        mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+
+        mMessage = "Verify the video directory is shown from All Files category.";
+        UiObject2 mediaDirShown = mDevice.findObject(By.text(TEST_MEDIA_DIR_NAME));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(mediaDirShown));
+
+        this.backToFileManagerHome();
+        mTask.openCategoryVideoCard();
+
+        mMessage = "Verify all video files(%s) in directory is shown from Video category.";
+        UiObject2 videoFileTest1 = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertTrue(String.format(mMessage, TEST1_VIDEO_FILE_NAME),
+                TestHelper.waitForUiObjectEnabled(videoFileTest1));
+
+        UiObject2 videoFileTest2 = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+        Assert.assertNotNull(String.format(mMessage, TEST2_VIDEO_FILE_NAME), videoFileTest2);
     }
 
     @Test
-    @Category(CategoryFileManagerTests.class)
+    @Category({CategoryFileManagerTests.class})
     public void test41_05RemoveVideoFileFromAllFilesCategory() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
@@ -489,14 +529,19 @@ public final class TestFileManager {
 
         mMessage = "Verify the video file is removed after click Show All button.";
         this.removeFileAndConfirm();
-        UiObject2 fileRemoved = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
-        Assert.assertNull(mMessage, fileRemoved);
+        UiObject2 fileRemovedFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertNull(mMessage, fileRemovedFromAll);
 
-        mMessage = "Verify the video file is removed from video category.";
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
-        fileRemoved = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
-        Assert.assertNull(mMessage, fileRemoved);
+
+        mMessage = "Verify the video file is removed from video category.";
+        UiObject2 fileRemovedFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+        Assert.assertNull(mMessage, fileRemovedFromCate);
+
+        mMessage = "Verify the unchanged video file is shown from video category.";
+        UiObject2 fileUnchanged = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+        Assert.assertNotNull(mMessage, fileUnchanged);
     }
 
     @Test
@@ -507,16 +552,16 @@ public final class TestFileManager {
 
         mMessage = "Verify the video file is removed from video category.";
         this.removeFileAndConfirm();
-        UiObject2 fileRemoved = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
-        Assert.assertNull(mMessage, fileRemoved);
+        UiObject2 fileRemovedFromCate = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+        Assert.assertNull(mMessage, fileRemovedFromCate);
 
-        mMessage = "Verify the video file is removed from all files category.";
         this.backToFileManagerHome();
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
 
-        fileRemoved = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
-        Assert.assertNull(mMessage, fileRemoved);
+        mMessage = "Verify the video file is removed from all files category.";
+        UiObject2 fileRemovedFromAll = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+        Assert.assertNull(mMessage, fileRemovedFromAll);
     }
 
     @Test
@@ -527,7 +572,7 @@ public final class TestFileManager {
         mMessage = "Verify the tips when no files in video card.";
         UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, "未发现可播放的视频", tips.getText());
+        Assert.assertEquals(mMessage, TEXT_NO_VIDEO_FOUND_IN_CATEGORY, tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in video card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
@@ -539,6 +584,18 @@ public final class TestFileManager {
     @Category({CategoryFileManagerTests.class})
     public void test42_01HidePictureFile() {
         // TODO: 2016/11/21 pic category
+    }
+
+    @Test
+    @Category({CategoryFileManagerTests.class})
+    public void test43_01HideMusicFile() {
+        // TODO: 2016/11/21 music category
+    }
+
+    @Test
+    @Category({CategoryFileManagerTests.class})
+    public void test42_01HideApkFile() {
+        // TODO: 2016/11/21 APK category
     }
 
     @Test

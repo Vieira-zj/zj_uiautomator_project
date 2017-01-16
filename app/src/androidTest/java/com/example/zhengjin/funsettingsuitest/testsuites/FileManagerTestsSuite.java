@@ -15,5 +15,5 @@ import org.junit.runners.Suite;
 @RunWith(Categories.class)
 @Suite.SuiteClasses(TestFileManager.class)
 @Categories.IncludeCategory(CategoryDemoTests.class)
-public class FileManagerTestsSuite {
+public final class FileManagerTestsSuite {
 }

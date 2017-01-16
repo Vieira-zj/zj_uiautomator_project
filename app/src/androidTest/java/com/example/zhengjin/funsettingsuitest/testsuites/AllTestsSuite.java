@@ -35,5 +35,5 @@ import org.junit.runners.Suite;
         TestWeather.class,
         TestImageAndSoundSettings.class,
         TestAboutInfoPage.class})
-public class AllTestsSuite {
+public final class AllTestsSuite {
 }

@@ -29,7 +29,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -40,9 +39,7 @@ import java.util.List;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIME_OUT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEATHER_PKG_NAME;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -616,87 +613,6 @@ public final class TestCommonSettings {
         inputMethod = mTask.getTextViewOfSwitcher(
                 mDevice.findObject(mTask.getInputMethodSettingItemContainerSelector()));
         Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
-    }
-
-    @Ignore
-    @Category(CategorySettingsTests.class)
-    public void test41DefaultLocationOnSettings() {
-        // weather location settings item is remove from settings home page
-        UiObject2 locationItemContainer =
-                mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
-
-        mMessage = "Verify the location item key text.";
-        UiObject2 locationItemKey =
-                locationItemContainer.findObject(mTask.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "天气位置", locationItemKey.getText());
-
-        mMessage = "Verify the location item default value text on Common Settings.";
-        UiObject2 locationItemValue =
-                locationItemContainer.findObject(mTask.getSettingItemValueSelector());
-        Assert.assertEquals(mMessage, "湖北 武汉", locationItemValue.getText());
-    }
-
-    @Ignore
-    @Category(CategorySettingsTests.class)
-    public void test42OpenWeatherAppAndBackToSettings() {
-        // weather location settings item is remove from settings home page
-        mMessage = "Verify open Weather app home.";
-        mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        Assert.assertTrue(mMessage,
-                TestHelper.waitForAppOpenedByCheckCurPackage(WEATHER_PKG_NAME, TIME_OUT));
-
-        mMessage = "Verify back to Settings app home.";
-        mAction.doDeviceActionAndWait(new DeviceActionBack());
-        Assert.assertTrue(mMessage,
-                TestHelper.waitForAppOpenedByCheckCurPackage(SETTINGS_PKG_NAME));
-    }
-
-    @Ignore
-    @Category(CategorySettingsTests.class)
-    public void test43DefaultLocationOnSubPage() {
-        // weather activities is not available for automation
-        mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-        Assert.assertTrue(TestHelper.waitForAppOpenedByCheckCurPackage(WEATHER_PKG_NAME, TIME_OUT));
-
-        mWeatherTask.openBottomMenu();
-        mWeatherTask.ClickOnSpecifiedMenuButtonByText(
-                mWeatherTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
-
-        mMessage = "Verify the default province text on city manager.";
-        Assert.assertEquals(mMessage, "湖北", mWeatherTask.getSelectedLocationProvince());
-        mMessage = "Verify the default city text on city manager.";
-        Assert.assertEquals(mMessage, "武汉", mWeatherTask.getSelectedLocationCity());
-    }
-
-    @Ignore
-    @Category(CategorySettingsTests.class)
-    public void test44SelectLocationOnSubPage() {
-        // Error obtaining UI hierarchy on weather home activity
-        String province = "江西";
-        String city = "九江";
-
-        mTask.moveToSpecifiedSettingsItem(mTask.getLocationSettingItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter());
-
-        mWeatherTask.openBottomMenu();
-        mWeatherTask.ClickOnSpecifiedMenuButtonByText(
-                mWeatherTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
-
-        // select a location from sub page
-        mWeatherTask.selectSpecifiedLocation(
-                new String[]{province, city}, new boolean[]{false, false});
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-
-        mMessage = "Verify the selected location item value text on Common Settings.";
-        mAction.doDeviceActionAndWait(new DeviceActionBack(), WAIT);
-        String expectedItemValueText = String.format("%s %s", province, city);
-        UiObject2 locationItemContainer =
-                mDevice.findObject(mTask.getLocationSettingItemContainerSelector());
-        UiObject2 locationItemValue =
-                locationItemContainer.findObject(mTask.getSettingItemValueSelector());
-        Assert.assertEquals(mMessage, expectedItemValueText, locationItemValue.getText());
     }
 
     @Test

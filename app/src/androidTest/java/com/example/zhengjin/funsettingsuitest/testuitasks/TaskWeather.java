@@ -39,10 +39,10 @@ public final class TaskWeather {
     private UiDevice device;
     private UiActionsManager action;
 
-    public final String WEATHER_MENU_BUTTON_TEXT_UPDATE = "更新";
-    public final String WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT = "修改默认";
-    public final String WEATHER_MENU_BUTTON_TEXT_ADD_CITY = "添加城市";
-    public final String WEATHER_MENU_BUTTON_TEXT_DELETE_CITY = "删除当前";
+    public final String MENU_BUTTON_TEXT_UPDATE = "更新";
+    public final String MENU_BUTTON_TEXT_MODIFY_DEFAULT = "修改默认";
+    public final String MENU_BUTTON_TEXT_ADD_CITY = "添加城市";
+    public final String MENU_BUTTON_TEXT_DELETE_CITY = "删除当前";
 
     private TaskWeather() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -62,7 +62,7 @@ public final class TaskWeather {
         }
     }
 
-    public BySelector getLocationOfWeatherHomeSelector() {
+    private BySelector getLocationOfWeatherHomeSelector() {
         return By.res("tv.fun.weather:id/tv_weather_day_addr");
     }
 
@@ -113,13 +113,31 @@ public final class TaskWeather {
                 TestHelper.waitForAppOpenedByUntil(WEATHER_PKG_NAME));
     }
 
+    public void validateWeatherHomeDefaultCityName(String cityName) {
+        UiObject2 cityOnHome = this.getCurrentCityOnWeatherHomePage();
+        TestHelper.waitForUiObjectEnabled(cityOnHome);
+        Assert.assertEquals("validateWeatherHomeDefaultCityName, failed!",
+                this.formatCityNameWithDefaultText(cityName), cityOnHome.getText());
+    }
+
     public UiObject2 getCurrentCityOnWeatherHomePage() {
         return device.findObject(this.getLocationOfWeatherHomeSelector());
     }
 
+    public String formatCityNameWithDefaultText(String cityName) {
+        return String.format("%s(默认)", cityName);
+    }
+
     public String getWeatherForecastDateFromUiText(String source) {
+        String retDate = "";
         int start = source.indexOf("(") + 1;
-        return source.substring(start, (source.length() - 1));
+        try {
+            retDate = source.substring(start, (source.length() - 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retDate;
     }
 
     public List<String> getWeatherForecastDates() {
@@ -160,11 +178,11 @@ public final class TaskWeather {
     public void openBottomMenu() {
         action.doDeviceActionAndWait(new DeviceActionMenu());
         Assert.assertTrue(
-                TestHelper.waitForUiObjectExist(By.text(WEATHER_MENU_BUTTON_TEXT_UPDATE)));
+                TestHelper.waitForUiObjectExist(By.text(MENU_BUTTON_TEXT_UPDATE)));
         action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
-    public void ClickOnSpecifiedMenuButtonByText(String btnText) {
+    private void EnterOnSpecifiedMenuButtonByText(String btnText) {
         UiObject2 btn = device.findObject(By.text(btnText)).getParent();
         for (int i = 0, moveTimes = 4; i < moveTimes; i++) {
             if (btn.isFocused()) {
@@ -176,6 +194,11 @@ public final class TaskWeather {
 
         Assert.assertTrue(String.format("ClickOnSpecifiedMenuButtonByText, " +
                 "failed to focus on menu button %s.", btnText), false);
+    }
+
+    public void openMenuAndEnterOnButtonByText(String btnText) {
+        this.openBottomMenu();
+        this.EnterOnSpecifiedMenuButtonByText(btnText);
     }
 
     public String getSelectedLocationProvince() {

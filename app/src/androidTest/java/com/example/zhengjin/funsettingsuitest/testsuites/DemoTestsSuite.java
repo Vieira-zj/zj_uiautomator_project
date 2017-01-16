@@ -22,5 +22,5 @@ import org.junit.runners.Suite;
         TestCommonUiTasks.class,
         TestShellUtils.class,
         TestEspressoDemo.class})
-public class DemoTestsSuite {
+public final class DemoTestsSuite {
 }

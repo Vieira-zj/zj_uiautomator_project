@@ -21,9 +21,9 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(AndroidJUnit4.class)
-public final class TestRemoteJsonAPIs {
+public final class TestHttpUtils {
 
-    private final static String TAG = TestRemoteJsonAPIs.class.getSimpleName();
+    private final static String TAG = TestHttpUtils.class.getSimpleName();
 
     private TaskPlayingVideos mTask;
 

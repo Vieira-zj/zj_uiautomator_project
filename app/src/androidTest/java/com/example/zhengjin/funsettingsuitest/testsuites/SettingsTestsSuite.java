@@ -15,5 +15,5 @@ import org.junit.runners.Suite;
 @RunWith(Categories.class)
 @Categories.IncludeCategory(CategoryDemoTests.class)
 @Suite.SuiteClasses(TestCommonSettings.class)
-public class SettingsTestsSuite {
+public final class SettingsTestsSuite {
 }

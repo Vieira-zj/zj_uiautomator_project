@@ -1,6 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
-import com.example.zhengjin.funsettingsuitest.testcases.TestPlayingVideos;
+import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 
 import org.junit.experimental.categories.Categories;
@@ -8,12 +8,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- * Created by Vieira on 2016/7/7.
+ * Created by zhengjin on 2017/1/16.
  *
- * Include test cases for 24 x 7 video playing test.
+ * Run test cases for Weather apk.
  */
+
 @RunWith(Categories.class)
+@Suite.SuiteClasses(TestWeather.class)
 @Categories.IncludeCategory(CategoryDemoTests.class)
-@Suite.SuiteClasses(TestPlayingVideos.class)
-public final class Launcher24x7TestsSuite {
+public final class WeatherTestsSuite {
 }
