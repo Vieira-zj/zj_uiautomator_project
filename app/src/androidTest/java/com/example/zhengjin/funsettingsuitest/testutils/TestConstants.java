@@ -31,6 +31,7 @@ public final class TestConstants {
     public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
     public final static String CLASS_TEXT_SWITCHER = "android.widget.TextSwitcher";
+    public final static String CLASS_WEB_VIEW = "android.webkit.WebView";
 
     private final static String TEST_ROOT_DIR_NAME = "test_logs";
     private final static String TEST_SNAPSHOT_DIR_NAME = "uiautomator_snapshots";

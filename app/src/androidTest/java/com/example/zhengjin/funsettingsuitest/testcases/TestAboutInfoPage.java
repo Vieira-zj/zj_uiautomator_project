@@ -21,7 +21,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -46,8 +45,8 @@ public final class TestAboutInfoPage {
     private final String[] ABOUT_ITEM_TITLES_ARR =
             {"产品信息", "网络信息", "系统版本", "问题反馈", "法律信息", "播控方"};
     private final String START_CATCH_LOG_MENU_BTN_TEXT = "开始抓日志";
-    private final String STOP_CATCH_LOG_MENU_BTN_TEXT = "停止抓日志";
     private final String DUMP_LOG_MENU_BTN_TEXT = "导入U盘";
+    private final String[] LAW_ITEM_TITLES_ARR = {"版权保护投诉指引", "隐私政策", "用户协议"};
 
     @BeforeClass
     public static void classSetUp() {
@@ -341,6 +340,8 @@ public final class TestAboutInfoPage {
     @Test
     @Category(CategoryAboutInfoTests.class)
     public void test14StartAndStopCatchLogOnFeedbackSubPage() {
+        final String STOP_CATCH_LOG_MENU_BTN_TEXT = "停止抓日志";
+
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[3]);
 
         mMessage = "Verify feedback menu disappear after start catch log on feedback page.";
@@ -425,28 +426,96 @@ public final class TestAboutInfoPage {
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[4], title.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test22TitleAndItemsOnLawInfoSubPage() {
-        // TODO: 2017/1/13  
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
+
+        // verification 1
+        mMessage = "Verify the title on Law Info sub page is enabled.";
+        UiObject2 title =
+                mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the title text on Law Info sub page.";
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[4], title.getText());
+
+        // verification 2
+        mMessage = "Verify the Copy Right Protect item title text.";
+        UiObject2 copyRightItem =
+                mDevice.findObject(mTask.getCopyRightProtectItemOnLawInfoSelector());
+        UiObject2 titleCopyRight =
+                copyRightItem.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[0], titleCopyRight.getText());
+
+        mMessage = "Verify the Privacy Policy item title text.";
+        UiObject2 privacyItem = mDevice.findObject(mTask.getPrivacyPolicyItemOnLawInfoSelector());
+        UiObject2 titlePrivacy =
+                privacyItem.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[1], titlePrivacy.getText());
+
+        mMessage = "Verify the user agreement item title text.";
+        UiObject2 agreementItem = mDevice.findObject(mTask.getUserAgreementItemOnLawInfoSelector());
+        UiObject2 titleAgreement =
+                agreementItem.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[2], titleAgreement.getText());
     }
 
-    @Ignore
+    @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test23TitleAndContentOnCopyRightProtectSubPage() {
-        // TODO: 2017/1/13  
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
+        mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[0]);
+
+        mMessage = "Verify the title is enabled on Copy Right Protect sub page.";
+        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the title text on Copy Right Protect sub page.";
+        Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[0], title.getText());
+
+        mMessage = "Verify the content web view is exist.";
+        UiObject2 contentWebView =
+                mDevice.findObject(mTask.getContentWebViewOnLawItemSubPageSelector());
+        Assert.assertNotNull(mMessage, contentWebView);
     }
 
-    @Ignore
+    @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test24TitleAndContentOnPrivacyPolicySubPage() {
-        // TODO: 2017/1/13
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
+        mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[1]);
+
+        mMessage = "Verify the title is enabled on Privacy Policy sub page.";
+        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the title text on Privacy Policy sub page.";
+        Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[1], title.getText());
+
+        mMessage = "Verify the content web view is exist.";
+        UiObject2 contentWebView =
+                mDevice.findObject(mTask.getContentWebViewOnLawItemSubPageSelector());
+        Assert.assertNotNull(mMessage, contentWebView);
     }
 
-    @Ignore
+    @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test25TitleAndContentOnUserAgreementSubPage() {
-        // TODO: 2017/1/13  
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
+        mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[2]);
+
+        mMessage = "Verify the title is enabled on User Agreement sub page.";
+        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the title text on User Agreement sub page.";
+        Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[2], title.getText());
+
+        mMessage = "Verify the content web view is exist.";
+        UiObject2 contentWebView =
+                mDevice.findObject(mTask.getContentWebViewOnLawItemSubPageSelector());
+        Assert.assertNotNull(mMessage, contentWebView);
     }
 
     @Test

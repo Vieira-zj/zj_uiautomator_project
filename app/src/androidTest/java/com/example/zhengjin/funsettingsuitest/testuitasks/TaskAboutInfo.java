@@ -15,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -164,6 +165,22 @@ public final class TaskAboutInfo {
 
     public BySelector getFeedbackMenuButtonTextSelector() {
         return By.res("android:id/tv_fun_menu_text");
+    }
+
+    public BySelector getCopyRightProtectItemOnLawInfoSelector() {
+        return By.res("tv.fun.settings:id/about_item_sub_complaint");
+    }
+
+    public BySelector getPrivacyPolicyItemOnLawInfoSelector() {
+        return By.res("tv.fun.settings:id/about_item_sub_policy");
+    }
+
+    public BySelector getUserAgreementItemOnLawInfoSelector() {
+        return By.res("tv.fun.settings:id/about_item_sub_protocol");
+    }
+
+    public BySelector getContentWebViewOnLawItemSubPageSelector() {
+        return By.clazz(TestConstants.CLASS_WEB_VIEW);
     }
 
     public UiObject2 getTitleInAboutInfoItem(UiObject2 parent) {
