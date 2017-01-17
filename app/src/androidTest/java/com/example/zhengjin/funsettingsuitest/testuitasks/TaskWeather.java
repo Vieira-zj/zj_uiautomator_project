@@ -117,7 +117,7 @@ public final class TaskWeather {
         UiObject2 cityOnHome = this.getCurrentCityOnWeatherHomePage();
         TestHelper.waitForUiObjectEnabled(cityOnHome);
         Assert.assertEquals("validateWeatherHomeDefaultCityName, failed!"
-                , cityName, cityOnHome.getText());
+                , this.formatCityNameWithSuffixDefault(cityName), cityOnHome.getText());
     }
 
     public UiObject2 getCurrentCityOnWeatherHomePage() {

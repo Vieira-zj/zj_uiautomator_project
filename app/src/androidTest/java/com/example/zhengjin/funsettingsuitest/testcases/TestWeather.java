@@ -85,8 +85,12 @@ public final class TestWeather {
         mMessage = "Verify the default city name on weather home.";
         UiObject2 cityOnHome = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(cityOnHome));
-        Assert.assertEquals(mMessage, mTask.formatCityNameWithSuffixDefault(INIT_CITY)
-                , cityOnHome.getText());
+
+        if (!mTask.formatCityNameWithSuffixDefault(INIT_CITY).equals(cityOnHome.getText())) {
+            // exit testing process if init default city is not WuHan
+            System.exit(-1);
+        }
+        Assert.assertTrue(mMessage, true);
     }
 
     @Test
@@ -446,7 +450,8 @@ public final class TestWeather {
         mAction.doClickActionAndWait(confirmBtn, WAIT);
         UiObject2 cityOnHome = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(cityOnHome));
-        Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2, cityOnHome.getText());
+        Assert.assertEquals(mMessage, mTask.formatCityNameWithSuffixDefault(ADD_DEFAULT_CITY_2)
+                , cityOnHome.getText());
     }
 
     @Test

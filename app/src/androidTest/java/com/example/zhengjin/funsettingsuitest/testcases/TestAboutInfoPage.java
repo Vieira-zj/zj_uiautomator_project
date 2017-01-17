@@ -268,9 +268,10 @@ public final class TestAboutInfoPage {
         Assert.assertEquals(mMessage, "无线网络mac地址", macItemTitle.getText());
 
         mMessage = "Verify the value of wireless mac.";
-        UiObject2 macItemValue =
-                macIdItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
-        Assert.assertTrue(mMessage, wiredInfo.getMacId().equalsIgnoreCase(macItemValue.getText()));
+        String macAddrWireless  =
+                macIdItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector()).getText();
+        Assert.assertTrue(mMessage, (wiredInfo.getMacId().equalsIgnoreCase(macAddrWireless)
+                || "00:00:00:00:00:00".equals(macAddrWireless)));
     }
 
     @Test
