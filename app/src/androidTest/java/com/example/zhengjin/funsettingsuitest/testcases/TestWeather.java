@@ -491,6 +491,7 @@ public final class TestWeather {
         private Integer[] formatDateText(String dateText) {
             List<Integer> lstMonthAndDay = new ArrayList<>(5);
 
+            // match month and day number
             Pattern pattern = Pattern.compile("\\d{1,2}");
             Matcher matcher = pattern.matcher(dateText);
             while (matcher.find()) {
@@ -498,9 +499,10 @@ public final class TestWeather {
             }
 
             if (lstMonthAndDay.size() < 2) {
+                // default month 1, and day 1
                 return new Integer[]{1, 1};
             }
-            return lstMonthAndDay.toArray(new Integer[2]);
+            return lstMonthAndDay.toArray(new Integer[0]);
         }
     }
 
