@@ -65,7 +65,7 @@ public final class TestHelper {
         return waitForAppOpenedByCheckCurPackage(pkgName, TIME_OUT);
     }
 
-    public static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
+    private static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
         device.waitForIdle();
         long start = SystemClock.uptimeMillis();
         while ((SystemClock.uptimeMillis() - start) < timeOut) {

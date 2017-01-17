@@ -116,15 +116,15 @@ public final class TaskWeather {
     public void validateWeatherHomeDefaultCityName(String cityName) {
         UiObject2 cityOnHome = this.getCurrentCityOnWeatherHomePage();
         TestHelper.waitForUiObjectEnabled(cityOnHome);
-        Assert.assertEquals("validateWeatherHomeDefaultCityName, failed!",
-                this.formatCityNameWithDefaultText(cityName), cityOnHome.getText());
+        Assert.assertEquals("validateWeatherHomeDefaultCityName, failed!"
+                , cityName, cityOnHome.getText());
     }
 
     public UiObject2 getCurrentCityOnWeatherHomePage() {
         return device.findObject(this.getLocationOfWeatherHomeSelector());
     }
 
-    public String formatCityNameWithDefaultText(String cityName) {
+    public String formatCityNameWithSuffixDefault(String cityName) {
         return String.format("%s(默认)", cityName);
     }
 
@@ -215,11 +215,11 @@ public final class TaskWeather {
         return middleCity.getText();
     }
 
-    // location = {province, city}
-    public void selectSpecifiedLocation(String[] location, boolean[] directionUp) {
-        this.selectSpecifiedLocationProvince(location[0], directionUp[0]);
+    // locations = {province, city}
+    public void selectSpecifiedLocation(String[] locationsArr, boolean[] directionUpArr) {
+        this.selectSpecifiedLocationProvince(locationsArr[0], directionUpArr[0]);
         action.doDeviceActionAndWait(new DeviceActionMoveRight());
-        this.selectSpecifiedLocationCity(location[1], directionUp[1]);
+        this.selectSpecifiedLocationCity(locationsArr[1], directionUpArr[1]);
     }
 
     private void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
