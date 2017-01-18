@@ -376,18 +376,18 @@ public final class TestCommonSettings {
     @Category(CategorySettingsTests.class)
     public void test18_01ScreenSaverSubValues() {
         mTask.moveToSpecifiedSettingsItem(mTask.getScreenSaverSettingItemContainerSelector());
-        ShellUtils.systemWaitByMillis(WAIT);
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
 
         mMessage = "Verify the sub values of screen saver at position %d.";
         for (int i = 1; i < SUB_VALUES_SCREEN_SAVER.length; i++) {
             mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
             UiObject2 itemValue = mTask.getTextViewOfSwitcher(
                     mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector()));
-            Assert.assertEquals(String.format(mMessage, i),
+            Assert.assertEquals(String.format(mMessage, (i + 1)),
                     SUB_VALUES_SCREEN_SAVER[i], itemValue.getText());
         }
 
-        mMessage = "Verify move from last to first screen saver item value.";
+        mMessage = "Verify screen saver item value when move from last to first.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(
                 mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector()));

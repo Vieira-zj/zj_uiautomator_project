@@ -163,6 +163,7 @@ public final class TaskSettings {
     }
 
     public UiObject2 getTextViewOfSwitcher(UiObject2 container) {
+        TestHelper.waitForUiObjectEnabled(container);
         UiObject2 switcher =
                 container.findObject(this.getSettingSwitcherItemValueSelector());
         return switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
