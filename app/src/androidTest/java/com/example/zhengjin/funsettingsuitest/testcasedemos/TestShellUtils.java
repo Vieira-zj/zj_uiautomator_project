@@ -138,12 +138,12 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testClearAndDumpLogcatLog() {
         ShellUtils.clearLogcatLog();
-        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
+        this.wait10Seconds();
         ShellUtils.dumpLogcatLog();
 
         ShellUtils.systemWaitByMillis(SHORT_WAIT);
         ShellUtils.clearLogcatLog();
-        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
+        this.wait10Seconds();
         ShellUtils.dumpLogcatLog(TestConstants.LOG_LEVEL_INFO);
     }
 
@@ -151,8 +151,12 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testStartAndStopLogcatLog() {
         Thread t = ShellUtils.startLogcatLog(TestConstants.LOG_LEVEL_WARN);
-        ShellUtils.systemWaitByMillis(5 * SHORT_WAIT);
+        this.wait10Seconds();
         ShellUtils.stopLogcatLog(t);
+    }
+
+    private void wait10Seconds() {
+        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
     }
 
     @Test

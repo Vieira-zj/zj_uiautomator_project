@@ -74,10 +74,6 @@ public final class TestConstants {
         return String.format("%s/%s", getTestingRootPath(), TEST_LOGCAT_DIR_NAME);
     }
 
-    public enum SaveEnvType {
-        CAPTURE, DUMP_LOG, CAP_AND_DUMP
-    }
-
     public enum FunSystemVersion {
         V2,
         V3

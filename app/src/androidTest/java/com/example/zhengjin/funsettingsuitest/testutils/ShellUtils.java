@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LOGCAT_LOG_PATH;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SNAPSHOT_PATH;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2016/5/31.
@@ -41,6 +42,7 @@ public final class ShellUtils {
         return execCommand(new String[]{command}, isRoot, isNeedResultMsg);
     }
 
+    @SuppressWarnings("unused")
     public static CommandResult execCommand(
             List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
         return execCommand((commands == null ? null : commands.toArray(new String[]{})),
@@ -160,6 +162,10 @@ public final class ShellUtils {
         }
     }
 
+    private static String getLogcatFilePath() {
+        return String.format("%s/logcat_%s.log", LOGCAT_LOG_PATH, getCurrentDateTime());
+    }
+
     public static Thread startLogcatLog(final String logLevel) {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -177,40 +183,51 @@ public final class ShellUtils {
     }
 
     public static void stopLogcatLog(Thread t) {
-        if (t != null && t.isAlive()) {
-            t.interrupt();
-        }
-
-        String cmdFind = "ps | grep logcat | grep system";
-        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdFind, false, true);
-        if (result.mResult != 0) {
-            Log.e(TAG, String.format("Get logcat pid failed, return code: %d", result.mResult));
-            return;
-        }
-        if (StringUtils.isEmpty(result.mSuccessMsg)) {
-            return;
-        }
-
         String logcatPid;
         try {
-            logcatPid = result.mSuccessMsg.split("\\s+")[1];
+            logcatPid = getLogcatProcessInfo().split("\\s+")[1];
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return;
         }
-        if (!StringUtils.isNumeric(logcatPid)) {
-            return;
-        }
+        killProcessById(logcatPid);
 
-        String cmdKill = String.format("kill %s", logcatPid);
-        result = ShellUtils.execCommand(cmdKill, false, false);
-        if (result.mResult != 0) {
-            Log.e(TAG, String.format("Failed to kill process (%d)", result.mResult));
+        if (t != null && t.isAlive()) {
+            try {
+                t.join(WAIT);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private static String getLogcatFilePath() {
-        return String.format("%s/logcat_%s.log", LOGCAT_LOG_PATH, getCurrentDateTime());
+    private static String getLogcatProcessInfo() {
+        String emptyInfo = "null";
+        String cmdFind = "ps | grep logcat | grep system";
+
+        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdFind, false, true);
+        if (result.mResult != 0) {
+            Log.e(TAG, String.format("getLogcatProcessInfo failed, return code: %d"
+                    , result.mResult));
+            return emptyInfo;
+        }
+        if (StringUtils.isEmpty(result.mSuccessMsg)) {
+            return emptyInfo;
+        }
+
+        return result.mSuccessMsg;
+    }
+
+    private static void killProcessById(String pid) {
+        if (!StringUtils.isNumeric(pid)) {
+            return;
+        }
+
+        String cmdKill = String.format("kill %s", pid);
+        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdKill, false, false);
+        if (result.mResult != 0) {
+            Log.e(TAG, String.format("Failed to kill process (%d)", result.mResult));
+        }
     }
 
     public static void takeScreenCapture(UiDevice device) {
@@ -258,6 +275,7 @@ public final class ShellUtils {
         SystemClock.sleep(ms);
     }
 
+    @SuppressWarnings("unused")
     private static String getCurrentDate() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());

@@ -39,6 +39,7 @@ public final class TestHelper {
         Assert.assertTrue(message, result);
     }
 
+    @SuppressWarnings("unused")
     public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {
         return waitForAppOpenedByCheckCurPackage(pkgName, TIME_OUT);
     }
@@ -94,6 +95,7 @@ public final class TestHelper {
         return false;
     }
 
+    @SuppressWarnings("unused")
     public static boolean waitForUiObjectEnabledByCheckIsEnabled(BySelector selector) {
         return waitForUiObjectEnabledByCheckIsEnabled(selector, TIME_OUT);
     }
