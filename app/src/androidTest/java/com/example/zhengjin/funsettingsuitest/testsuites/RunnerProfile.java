@@ -21,14 +21,15 @@ public final class RunnerProfile {
     private static final String TAG = RunnerProfile.class.getSimpleName();
 
     // NOTE: set below properties manual before run test cases
-    public static boolean isTakeScreenshot = false;
+    // Flag take snapshot after each test case done
+    public static boolean isTakeSnapshot = false;
     public static boolean isAccountVipFree = false;
 
     // Below properties set auto
     public static boolean isPlatform938 = isPlatformChipType938();
     public static boolean isVersion30 = isFunSystemVersion30();
 
-    // Global properties
+    // Global properties set in test cases
     public static String deviceName = "风行电视";
 
     public static int countAndPrintTestCasesForClass(Class<?> cls) {

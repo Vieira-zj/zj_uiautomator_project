@@ -238,7 +238,7 @@ public final class TestPlayingVideos {
     private void verifyVideoPlayerOnTop() {
         UiObject2 player = mDevice.findObject(mTask.getVideoPlayerByClassSelector());
         TestHelper.assertTrueAndSaveEnvIfFailed("Verify player is playing and on the top."
-                , (player != null && player.isEnabled()), TestHelper.SaveEnvType.CAP_AND_DUMP);
+                , (player != null && player.isEnabled()), TestConstants.SaveEnvType.CAP_AND_DUMP);
         ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
     }
 

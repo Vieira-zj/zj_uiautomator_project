@@ -89,7 +89,7 @@ public final class TestCommonSettings {
 
     @After
     public void clearUp() {
-        if (RunnerProfile.isTakeScreenshot) {
+        if (RunnerProfile.isTakeSnapshot) {
             ShellUtils.takeScreenCapture(mDevice);
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }

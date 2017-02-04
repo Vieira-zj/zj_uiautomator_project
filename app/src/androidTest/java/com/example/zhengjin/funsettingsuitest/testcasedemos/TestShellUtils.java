@@ -128,19 +128,19 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testTakeScreenCaptures() {
+    public void testTakeScreenCapture() {
         TaskLauncher.backToLauncher();
-        TestHelper.assertTrueAndSaveEnvIfFailed(
-                "Test take captures", false, TestHelper.SaveEnvType.CAPTURE);
+        TestHelper.assertTrueAndSaveEnvIfFailed("testTakeScreenCapture", false
+                , TestConstants.SaveEnvType.CAPTURE);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void testClearAndDumpLogcatLog() {
         ShellUtils.clearLogcatLog();
-        ShellUtils.systemWaitByMillis(10 * 1000L);  // do actions
-        TestHelper.assertTrueAndSaveEnvIfFailed(
-                "Test dump logcat log", false, TestHelper.SaveEnvType.DUMP_LOG);
+        ShellUtils.systemWaitByMillis(10 * 1000L);
+        TestHelper.assertTrueAndSaveEnvIfFailed("testClearAndDumpLogcatLog", false
+                , TestConstants.SaveEnvType.DUMP_LOG);
     }
 
     @Test

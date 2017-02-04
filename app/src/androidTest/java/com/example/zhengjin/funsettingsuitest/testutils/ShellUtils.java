@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LOGCAT_PATH;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LOGCAT_LOG_PATH;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SNAPSHOT_PATH;
 
 /**
@@ -139,23 +139,44 @@ public final class ShellUtils {
         String cmdClear = "logcat -c";
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdClear, false, false);
         if (result.mResult != 0) {
-            Log.e(TAG, String.format("Failed to clear logcat, and return code is %d"
-                    , result.mResult));
+            Log.e(TAG, String.format("clearLogcatLog filed, return code: %d", result.mResult));
         }
     }
 
     static void dumpLogcatLog() {
-        if (!initTestDirectory(LOGCAT_PATH)) {
+        dumpLogcatLog(TestConstants.LOG_LEVEL_DEBUG);
+    }
+
+    private static void dumpLogcatLog(String logLevel) {
+        if (!createTestingDirectory(LOGCAT_LOG_PATH)) {
             return;
         }
 
-        String logFilePath = String.format("%s/logcat_%s.log", LOGCAT_PATH, getCurrentDateTime());
-        String cmdLogcat = String.format("logcat -v time -d > %s", logFilePath);
+        String logFilePath =
+                String.format("%s/logcat_%s.log", LOGCAT_LOG_PATH, getCurrentDateTime());
+        String cmdLogcat = String.format("logcat -v time -d *:%s > %s", logLevel, logFilePath);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdLogcat, false, false);
         if (result.mResult != 0) {
-            Log.e(TAG, String.format("failed to dump logcat log, and return code is %d"
-                    , result.mResult));
+            Log.e(TAG, String.format("dumpLogcatLog failed, return code: %d", result.mResult));
         }
+    }
+
+    public static void takeScreenCapture(UiDevice device) {
+        if (!createTestingDirectory(SNAPSHOT_PATH)) {
+            return;
+        }
+
+        final String suffix = ".png";
+        String filePath = String.format(
+                "%s/snapshot_%s%s", SNAPSHOT_PATH, ShellUtils.getCurrentDateTime(), suffix);
+        if (!device.takeScreenshot(new File(filePath))) {
+            Log.e(TAG, String.format("takeScreenCapture failed, save path: %s", filePath));
+        }
+    }
+
+    private static boolean createTestingDirectory(String path) {
+        File testDirPath = new File(path);
+        return testDirPath.exists() || testDirPath.mkdirs();
     }
 
     public static void stopProcess(String pkgName) {
@@ -197,35 +218,6 @@ public final class ShellUtils {
                 new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
         Date curTime = new Date(System.currentTimeMillis());
         return formatter.format(curTime);
-    }
-
-    public static void takeScreenCapture(UiDevice device) {
-        if (!initTestDirectory(SNAPSHOT_PATH)) {
-            return;
-        }
-
-        final String suffix = ".png";
-        String filePath = String.format(
-                "%s/snapshot_%s%s", SNAPSHOT_PATH, ShellUtils.getCurrentDateTime(), suffix);
-        if (!device.takeScreenshot(new File(filePath))) {
-            Log.e(TAG, String.format("takeScreenCapture, failed to takeScreenshot(%s).", filePath));
-        }
-    }
-
-    private static boolean initTestDirectory(String path) {
-        if (TestConstants.isSdcardAvailable()) {
-            Log.e(TAG, "takeScreenCapture, the sdcard is NOT available.");
-            return false;
-        }
-
-        File testDirPath = new File(path);
-        if (!testDirPath.exists() && !testDirPath.mkdirs()) {
-            Log.e(TAG, String.format("takeScreenCapture, failed to make directory (%s)."
-                    , SNAPSHOT_PATH));
-            return false;
-        }
-
-        return true;
     }
 
     @Nullable

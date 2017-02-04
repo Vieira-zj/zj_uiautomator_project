@@ -32,19 +32,16 @@ public final class TestHelper {
     private static final UiDevice device =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
-    public enum SaveEnvType {
-        CAPTURE, DUMP_LOG, CAP_AND_DUMP
-    }
-
+    // Note: prefer steps: 1) clear log, 2) run test case, 3) assert and dump logcat log
     public static void assertTrueAndSaveEnvIfFailed(
-            String message, boolean result, SaveEnvType type) {
+            String message, boolean result, TestConstants.SaveEnvType type) {
         if (!result) {
-            takeCaptureAndDumpLogcat(type);
+            saveCurrentEnv(type);
         }
         Assert.assertTrue(message, result);
     }
 
-    private static void takeCaptureAndDumpLogcat(SaveEnvType type) {
+    private static void saveCurrentEnv(TestConstants.SaveEnvType type) {
         switch (type) {
             case CAPTURE:
                 ShellUtils.takeScreenCapture(device);

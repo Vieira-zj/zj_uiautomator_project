@@ -1,6 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
 import android.os.Environment;
+import android.util.Log;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -9,11 +10,19 @@ import android.os.Environment;
  */
 public final class TestConstants {
 
+    public final static String TAG = TestConstants.class.getSimpleName();
+
     public final static long SHORT_WAIT = 1000L;
     public final static long WAIT = 3000L;
     public final static long LONG_WAIT = 5000L;
     public final static long TIME_OUT = 8000L;
     public final static long LONG_TIME_OUT = 15 * 1000L;
+
+    final static String LOG_LEVEL_DEBUG = "D";
+//    public final static String LOG_LEVEL_INFO = "I";
+//    public final static String LOG_LEVEL_WARN = "W";
+//    public final static String LOG_LEVEL_ERROR = "E";
+//    public final static String LOG_LEVEL_ASSERT = "A";
 
     public final static String LAUNCHER_PKG_NAME = "com.bestv.ott";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
@@ -33,29 +42,40 @@ public final class TestConstants {
     public final static String CLASS_TEXT_SWITCHER = "android.widget.TextSwitcher";
     public final static String CLASS_WEB_VIEW = "android.webkit.WebView";
 
-    private final static String TEST_ROOT_DIR_NAME = "test_logs";
-    private final static String TEST_SNAPSHOT_DIR_NAME = "uiautomator_snapshots";
-    private final static String TEST_LOGCAT_DIR_NAME = "logcat_log";
-    private final static String SDCARD_PATH;
-    final static String SNAPSHOT_PATH;
-    final static String LOGCAT_PATH;
+    final static String SNAPSHOT_PATH = getSnapshotDirPath();
+    final static String LOGCAT_LOG_PATH = getLogcatLogDirPath();
 
-    private final static String SDCARD_STATUS_UN_AVAILABLE = "sdcard_unavailable";
-
-    static {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            SDCARD_PATH = Environment.getExternalStorageDirectory().getPath();
-        } else {
-            SDCARD_PATH = SDCARD_STATUS_UN_AVAILABLE;
+    private static String getStoragePath() {
+        try {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                return Environment.getExternalStorageDirectory().getPath();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        SNAPSHOT_PATH =
-                String.format("%s/%s/%s", SDCARD_PATH, TEST_ROOT_DIR_NAME, TEST_SNAPSHOT_DIR_NAME);
-        LOGCAT_PATH =
-                String.format("%s/%s/%s", SDCARD_PATH, TEST_ROOT_DIR_NAME, TEST_LOGCAT_DIR_NAME);
+
+        final String defaultPath = "/data/local/tmp";
+        Log.w(TAG, "Sdcard is not available, and use default path: " + defaultPath);
+        return defaultPath;
     }
 
-    static boolean isSdcardAvailable() {
-        return SDCARD_STATUS_UN_AVAILABLE.equals(SDCARD_PATH);
+    private static String getTestingRootPath() {
+        final String TEST_ROOT_DIR_NAME = "auto_test_logs";
+        return String.format("/%s/%s", getStoragePath(), TEST_ROOT_DIR_NAME);
+    }
+
+    private static String getSnapshotDirPath() {
+        final String TEST_SNAPSHOT_DIR_NAME = "snapshots";
+        return String.format("%s/%s", getTestingRootPath(), TEST_SNAPSHOT_DIR_NAME);
+    }
+
+    private static String getLogcatLogDirPath() {
+        final String TEST_LOGCAT_DIR_NAME = "logcat_log";
+        return String.format("%s/%s", getTestingRootPath(), TEST_LOGCAT_DIR_NAME);
+    }
+
+    public enum SaveEnvType {
+        CAPTURE, DUMP_LOG, CAP_AND_DUMP
     }
 
     public enum FunSystemVersion {
