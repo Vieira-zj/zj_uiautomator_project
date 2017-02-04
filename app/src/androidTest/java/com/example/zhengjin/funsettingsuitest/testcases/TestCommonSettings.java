@@ -93,7 +93,7 @@ public final class TestCommonSettings {
             ShellUtils.takeScreenCapture(mDevice);
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
         }
-        ShellUtils.stopProcess(SETTINGS_PKG_NAME);
+        ShellUtils.stopProcessByPackageName(SETTINGS_PKG_NAME);
     }
 
     @Test

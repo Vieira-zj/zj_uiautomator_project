@@ -32,30 +32,11 @@ public final class TestHelper {
     private static final UiDevice device =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
-    // Note: prefer steps: 1) clear log, 2) run test case, 3) assert and dump logcat log
-    public static void assertTrueAndSaveEnvIfFailed(
-            String message, boolean result, TestConstants.SaveEnvType type) {
+    public static void assertTrueAndTakeCaptureIfFailed(String message, boolean result) {
         if (!result) {
-            saveCurrentEnv(type);
+            ShellUtils.takeScreenCapture(device);
         }
         Assert.assertTrue(message, result);
-    }
-
-    private static void saveCurrentEnv(TestConstants.SaveEnvType type) {
-        switch (type) {
-            case CAPTURE:
-                ShellUtils.takeScreenCapture(device);
-                break;
-            case DUMP_LOG:
-                ShellUtils.dumpLogcatLog();
-                break;
-            case CAP_AND_DUMP:
-                ShellUtils.dumpLogcatLog();
-                ShellUtils.takeScreenCapture(device);
-                break;
-            default:
-                Log.w(TAG, "takeCaptureAndDumpLogcat, invalid SaveEnvType!");
-        }
     }
 
     public static boolean waitForAppOpenedByCheckCurPackage(String pkgName) {

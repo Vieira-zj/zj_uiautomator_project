@@ -62,7 +62,7 @@ public final class TestImageAndSoundSettings {
 
     @BeforeClass
     public static void classSetUp() {
-        ShellUtils.stopProcess(SETTINGS_PKG_NAME);
+        ShellUtils.stopProcessByPackageName(SETTINGS_PKG_NAME);
     }
 
     @Before
@@ -77,7 +77,7 @@ public final class TestImageAndSoundSettings {
 
     @After
     public void clearUp() {
-        ShellUtils.stopProcess(SETTINGS_PKG_NAME);
+        ShellUtils.stopProcessByPackageName(SETTINGS_PKG_NAME);
     }
 
     @Test

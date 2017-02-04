@@ -130,7 +130,7 @@ public final class TestFileManager {
 
     @After
     public void clearUp() {
-        ShellUtils.stopProcess(FILE_MANAGER_PKG_NAME);
+        ShellUtils.stopProcessByPackageName(FILE_MANAGER_PKG_NAME);
     }
 
     @Ignore

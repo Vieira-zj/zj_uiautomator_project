@@ -143,22 +143,74 @@ public final class ShellUtils {
         }
     }
 
-    static void dumpLogcatLog() {
+    public static void dumpLogcatLog() {
         dumpLogcatLog(TestConstants.LOG_LEVEL_DEBUG);
     }
 
-    private static void dumpLogcatLog(String logLevel) {
+    public static void dumpLogcatLog(String logLevel) {
         if (!createTestingDirectory(LOGCAT_LOG_PATH)) {
             return;
         }
 
-        String logFilePath =
-                String.format("%s/logcat_%s.log", LOGCAT_LOG_PATH, getCurrentDateTime());
-        String cmdLogcat = String.format("logcat -v time -d *:%s > %s", logLevel, logFilePath);
+        String cmdLogcat =
+                String.format("logcat -v time -d *:%s > %s", logLevel, getLogcatFilePath());
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdLogcat, false, false);
         if (result.mResult != 0) {
             Log.e(TAG, String.format("dumpLogcatLog failed, return code: %d", result.mResult));
         }
+    }
+
+    public static Thread startLogcatLog(final String logLevel) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!createTestingDirectory(LOGCAT_LOG_PATH)) {
+                    return;
+                }
+                String cmdLogcat = String.format("logcat -c && logcat -v time *:%s > %s"
+                        , logLevel, getLogcatFilePath());
+                ShellUtils.execCommand(cmdLogcat, false, false);
+            }
+        });
+        t.start();
+        return t;
+    }
+
+    public static void stopLogcatLog(Thread t) {
+        if (t != null && t.isAlive()) {
+            t.interrupt();
+        }
+
+        String cmdFind = "ps | grep logcat | grep system";
+        ShellUtils.CommandResult result = ShellUtils.execCommand(cmdFind, false, true);
+        if (result.mResult != 0) {
+            Log.e(TAG, String.format("Get logcat pid failed, return code: %d", result.mResult));
+            return;
+        }
+        if (StringUtils.isEmpty(result.mSuccessMsg)) {
+            return;
+        }
+
+        String logcatPid;
+        try {
+            logcatPid = result.mSuccessMsg.split("\\s+")[1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (!StringUtils.isNumeric(logcatPid)) {
+            return;
+        }
+
+        String cmdKill = String.format("kill %s", logcatPid);
+        result = ShellUtils.execCommand(cmdKill, false, false);
+        if (result.mResult != 0) {
+            Log.e(TAG, String.format("Failed to kill process (%d)", result.mResult));
+        }
+    }
+
+    private static String getLogcatFilePath() {
+        return String.format("%s/logcat_%s.log", LOGCAT_LOG_PATH, getCurrentDateTime());
     }
 
     public static void takeScreenCapture(UiDevice device) {
@@ -179,7 +231,7 @@ public final class ShellUtils {
         return testDirPath.exists() || testDirPath.mkdirs();
     }
 
-    public static void stopProcess(String pkgName) {
+    public static void stopProcessByPackageName(String pkgName) {
         String cmdStopProcess = String.format("am force-stop %s", pkgName);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
         Assert.assertTrue("Force stop the app process.", (result.mResult == 0));

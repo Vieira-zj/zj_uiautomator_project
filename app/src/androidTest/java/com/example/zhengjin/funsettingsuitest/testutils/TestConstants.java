@@ -19,8 +19,8 @@ public final class TestConstants {
     public final static long LONG_TIME_OUT = 15 * 1000L;
 
     final static String LOG_LEVEL_DEBUG = "D";
-//    public final static String LOG_LEVEL_INFO = "I";
-//    public final static String LOG_LEVEL_WARN = "W";
+    public final static String LOG_LEVEL_INFO = "I";
+    public final static String LOG_LEVEL_WARN = "W";
 //    public final static String LOG_LEVEL_ERROR = "E";
 //    public final static String LOG_LEVEL_ASSERT = "A";
 

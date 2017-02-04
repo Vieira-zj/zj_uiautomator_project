@@ -73,6 +73,7 @@ public final class TestPlayingVideos {
     @After
     public void clearUp() {
         TaskLauncher.backToLauncher();
+        ShellUtils.dumpLogcatLog(TestConstants.LOG_LEVEL_INFO);
     }
 
     @Test
@@ -237,8 +238,8 @@ public final class TestPlayingVideos {
 
     private void verifyVideoPlayerOnTop() {
         UiObject2 player = mDevice.findObject(mTask.getVideoPlayerByClassSelector());
-        TestHelper.assertTrueAndSaveEnvIfFailed("Verify player is playing and on the top."
-                , (player != null && player.isEnabled()), TestConstants.SaveEnvType.CAP_AND_DUMP);
+        TestHelper.assertTrueAndTakeCaptureIfFailed("Verify player is playing and on the top."
+                , (player != null && player.isEnabled()));
         ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
     }
 

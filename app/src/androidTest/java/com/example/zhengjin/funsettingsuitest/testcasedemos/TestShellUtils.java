@@ -31,6 +31,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_HOME_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 
 
 /**
@@ -130,17 +131,28 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testTakeScreenCapture() {
         TaskLauncher.backToLauncher();
-        TestHelper.assertTrueAndSaveEnvIfFailed("testTakeScreenCapture", false
-                , TestConstants.SaveEnvType.CAPTURE);
+        TestHelper.assertTrueAndTakeCaptureIfFailed("testTakeScreenCapture", false);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void testClearAndDumpLogcatLog() {
         ShellUtils.clearLogcatLog();
-        ShellUtils.systemWaitByMillis(10 * 1000L);
-        TestHelper.assertTrueAndSaveEnvIfFailed("testClearAndDumpLogcatLog", false
-                , TestConstants.SaveEnvType.DUMP_LOG);
+        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
+        ShellUtils.dumpLogcatLog();
+
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
+        ShellUtils.clearLogcatLog();
+        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
+        ShellUtils.dumpLogcatLog(TestConstants.LOG_LEVEL_INFO);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void testStartAndStopLogcatLog() {
+        Thread t = ShellUtils.startLogcatLog(TestConstants.LOG_LEVEL_WARN);
+        ShellUtils.systemWaitByMillis(5 * SHORT_WAIT);
+        ShellUtils.stopLogcatLog(t);
     }
 
     @Test

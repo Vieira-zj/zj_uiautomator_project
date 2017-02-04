@@ -76,7 +76,7 @@ public final class TestWeather {
 
     @After
     public void clearUp() {
-        ShellUtils.stopProcess(WEATHER_PKG_NAME);
+        ShellUtils.stopProcessByPackageName(WEATHER_PKG_NAME);
     }
 
     @Test
