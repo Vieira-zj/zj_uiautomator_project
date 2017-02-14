@@ -101,6 +101,7 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_inputmethod");
     }
 
+    @SuppressWarnings("unused")
     public BySelector getLocationSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_locate");
     }
@@ -149,7 +150,7 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/item_value");
     }
 
-    public BySelector getSettingSwitcherItemValueSelector() {
+    private BySelector getSettingSwitcherItemValueSelector() {
         return By.res("tv.fun.settings:id/setting_item_value");
     }
 
@@ -284,6 +285,13 @@ public final class TaskSettings {
             device.pressDelete();
             ShellUtils.systemWaitByMillis(200L);
         }
+    }
+
+    public void openAdvancedSettingsPage() {
+        this.moveToSpecifiedSettingsItem(this.getAdvancedItemContainerSelector());
+        action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+        TestHelper.waitForUiObjectEnabled(
+                device.findObject(this.getTitleOfSettingsPageSelector()));
     }
 
 }

@@ -67,7 +67,8 @@ public final class TestFileManager {
     private final String TEXT_HIDDEN_BUTTON = "隐藏";
     private final String TEXT_SHOWALL_BUTTON = "显示全部";
 
-    private final String TEXT_NO_VIDEO_FOUND_IN_CATEGORY = "未发现可播放的视频";
+    private final String TEXT_NO_FILES_IN_DIR = "未发现可显示的文件";
+    private final String TEXT_NO_VIDEO_IN_CATEGORY = "未发现可播放的视频";
 
     static {
         TEST_ROOT_DIR_PATH =
@@ -333,7 +334,7 @@ public final class TestFileManager {
         mMessage = "Verify the tips of empty directory from all files card.";
         UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, "未发现可显示的文件", tips.getText());
+        Assert.assertEquals(mMessage, TEXT_NO_FILES_IN_DIR, tips.getText());
 
         mMessage = "Verify the file is show after click Show All.";
         mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
@@ -356,7 +357,7 @@ public final class TestFileManager {
         mMessage = "Verify the tips of empty directory from all files card.";
         UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, "未发现可显示的文件", tips.getText());
+        Assert.assertEquals(mMessage, TEXT_NO_FILES_IN_DIR, tips.getText());
     }
 
     @Test
@@ -464,10 +465,10 @@ public final class TestFileManager {
         UiObject2 fileShownFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(fileShownFromAll));
 
-        mMessage = "Verify the video file is shown from video category.";
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
 
+        mMessage = "Verify the video file is shown from video category.";
         UiObject2 fileShownFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(fileShownFromCate));
 
@@ -494,7 +495,7 @@ public final class TestFileManager {
         mMessage = "Verify all video files in directory is hidden from Video category.";
         UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(tips));
-        Assert.assertEquals(mMessage, TEXT_NO_VIDEO_FOUND_IN_CATEGORY, tips.getText());
+        Assert.assertEquals(mMessage, TEXT_NO_VIDEO_IN_CATEGORY, tips.getText());
     }
 
     @Test
@@ -572,7 +573,7 @@ public final class TestFileManager {
         mMessage = "Verify the tips when no files in video card.";
         UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, TEXT_NO_VIDEO_FOUND_IN_CATEGORY, tips.getText());
+        Assert.assertEquals(mMessage, TEXT_NO_VIDEO_IN_CATEGORY, tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in video card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
@@ -604,11 +605,11 @@ public final class TestFileManager {
         mTask.destroyInstance();
     }
 
-    public void backToFileManagerHome() {
+    private void backToFileManagerHome() {
         mTask.openFileManagerHomePage(true);
     }
 
-    public void removeFileAndConfirm() {
+    private void removeFileAndConfirm() {
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
         UiObject2 btnConfirm = mDevice.findObject(mTask.getYesBtnOfConfirmDialogSelector());
         Assert.assertTrue("Wait for confirm button enabled.",

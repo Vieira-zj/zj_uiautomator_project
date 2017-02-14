@@ -249,10 +249,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test15_02SleepTimeDefaultValue() {
-        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        TestHelper.waitForUiObjectEnabled(
-                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+        mTask.openAdvancedSettingsPage();
 
         mMessage = "Verify the key text of sleep setting.";
         UiObject2 sleepSettingContainer =
@@ -270,10 +267,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test15_01SleepTimeSubValues() {
-        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        TestHelper.waitForUiObjectEnabled(
-                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+        mTask.openAdvancedSettingsPage();
 
         mMessage = "Verify the sleep time sub value at position %d.";
         for (int i = 1; i < SUB_VALUES_SLEEP_TIME.length; i++) {
@@ -294,10 +288,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test16SelectSleepTime() {
-        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        TestHelper.waitForUiObjectEnabled(
-                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
+        mTask.openAdvancedSettingsPage();
 
         mMessage = "Verify select the sleep time.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 3);
@@ -313,11 +304,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test17_01SetShutDownTvTimeDefaultValue() {
-        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        TestHelper.waitForUiObjectEnabled(
-                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
-
+        mTask.openAdvancedSettingsPage();
         UiObject2 shutDownTvContainer =
                 mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector());
 
@@ -335,11 +322,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test17_02SetShutDownTvTimeSubValues() {
-        mTask.moveToSpecifiedSettingsItem(mTask.getAdvancedItemContainerSelector());
-        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
-        TestHelper.waitForUiObjectEnabled(
-                mDevice.findObject(mTask.getTitleOfSettingsPageSelector()));
-
+        mTask.openAdvancedSettingsPage();
         mTask.moveToSpecifiedSettingsItem(mTask.getSetShutDownTvItemContainerSelector());
         ShellUtils.systemWaitByMillis(WAIT);
 
