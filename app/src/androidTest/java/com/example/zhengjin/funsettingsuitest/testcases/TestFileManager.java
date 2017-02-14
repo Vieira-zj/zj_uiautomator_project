@@ -31,6 +31,8 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.io.IOException;
+
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
 
 /**
@@ -48,7 +50,7 @@ public final class TestFileManager {
     private String mMessage;
 
     private static final String TEST_ROOT_DIR_NAME = "AutoTestFiles";
-    private static final String TEST_ROOT_DIR_PATH;
+    private static String TEST_ROOT_DIR_PATH;
     private static final String TEST_DIR_NAME = "TestNonMediaDir";
     private static final String TEST_DIR_PATH;
     private static final String TEST_MEDIA_DIR_NAME = "TestMediaDir";
@@ -71,8 +73,13 @@ public final class TestFileManager {
     private final String TEXT_NO_VIDEO_IN_CATEGORY = "未发现可播放的视频";
 
     static {
-        TEST_ROOT_DIR_PATH =
-                String.format("%s/%s", FileUtils.getExternalStoragePath(), TEST_ROOT_DIR_NAME);
+        try {
+            TEST_ROOT_DIR_PATH =
+                    String.format("%s/%s", FileUtils.getExternalStoragePath(), TEST_ROOT_DIR_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.assertTrue(e.getMessage(), false);
+        }
 
         TEST_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_DIR_NAME);
         TEST1_FILE_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST1_FILE_NAME);

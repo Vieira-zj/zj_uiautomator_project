@@ -78,8 +78,16 @@ public class ServiceUiTestRunner extends IntentService {
     }
 
     private String buildAbsFilePath(String fileName) {
+        String externalStoragePath;
+        try {
+            externalStoragePath = FileUtils.getExternalStoragePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            externalStoragePath = "/data/local/tmp/";
+        }
+
         String tmpFileName = String.format(fileName, HelperUtils.getCurrentTime());
-        return String.format("%s/%s", FileUtils.getExternalStoragePath(), tmpFileName);
+        return String.format("%s/%s", externalStoragePath, tmpFileName);
     }
 
     private String buildInstCommand(Intent intent) {

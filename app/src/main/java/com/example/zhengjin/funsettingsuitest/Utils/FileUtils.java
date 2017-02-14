@@ -4,8 +4,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.TestApplication;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,9 +21,9 @@ import java.io.OutputStreamWriter;
 public final class FileUtils {
 
     private static final String TAG = FileUtils.class.getSimpleName();
-    private static final TestApplication CONTEXT = TestApplication.getInstance();
+//    private static final TestApplication CONTEXT = TestApplication.getInstance();
 
-    public static boolean isExternalStorageAvailable() {
+    private static boolean isExternalStorageAvailable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
@@ -33,11 +31,10 @@ public final class FileUtils {
         return isExternalStorageAvailable() ? Environment.getExternalStorageDirectory() : null;
     }
 
-    public static String getExternalStoragePath() {
+    public static String getExternalStoragePath() throws IOException {
         File file = getExternalStorageDir();
         if (file == null) {
-            Log.e(TAG, "The external storage (sdcard) is not available!");
-            return "";
+            throw new IOException("The external storage(sdcard) is not available");
         }
         return file.getAbsolutePath();
     }

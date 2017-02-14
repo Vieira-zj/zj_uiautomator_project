@@ -18,6 +18,7 @@ import com.example.zhengjin.funsettingsuitest.utils.PackageUtils;
 import com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +73,9 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                         ShellCmdUtils.CommandResult cr = ShellCmdUtils.execCommand(command, true);
                         String text = String.format(mLocale,
                                 "Result code: %d\n Success message: %s\n Error message: %s",
-                                cr.getReturnCode(), cr.getReturnSuccessMsg(), cr.getReturnErrorMsg());
+                                cr.getReturnCode(),
+                                cr.getReturnSuccessMsg(),
+                                cr.getReturnErrorMsg());
                         mTextShellUtilsTest.setText(text);
                     }
                 }
@@ -204,7 +207,14 @@ public final class ActivityUtilsTest extends AppCompatActivity {
     private class FileUtilsRunnable implements Runnable {
         @Override
         public void run() {
-            String sdcardPath = FileUtils.getExternalStoragePath();
+            String sdcardPath;
+            try {
+                sdcardPath = FileUtils.getExternalStoragePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
             String filePath = String.format("%s/%s", sdcardPath, "test.log");
 
             StringBuilder sb = new StringBuilder(10);

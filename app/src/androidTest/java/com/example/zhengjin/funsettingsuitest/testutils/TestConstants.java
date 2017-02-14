@@ -1,7 +1,10 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
-import android.os.Environment;
 import android.util.Log;
+
+import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
+
+import java.io.IOException;
 
 /**
  * Created by zhengjin on 2016/6/2.
@@ -45,12 +48,10 @@ public final class TestConstants {
     final static String SNAPSHOT_PATH = getSnapshotDirPath();
     final static String LOGCAT_LOG_PATH = getLogcatLogDirPath();
 
-    private static String getStoragePath() {
+    private static String getExternalStoragePath() {
         try {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                return Environment.getExternalStorageDirectory().getPath();
-            }
-        } catch (Exception e) {
+            return FileUtils.getExternalStoragePath();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -61,7 +62,7 @@ public final class TestConstants {
 
     private static String getTestingRootPath() {
         final String TEST_ROOT_DIR_NAME = "auto_test_logs";
-        return String.format("/%s/%s", getStoragePath(), TEST_ROOT_DIR_NAME);
+        return String.format("/%s/%s", getExternalStoragePath(), TEST_ROOT_DIR_NAME);
     }
 
     private static String getSnapshotDirPath() {
