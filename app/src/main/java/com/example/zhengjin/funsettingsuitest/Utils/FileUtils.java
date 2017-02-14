@@ -72,13 +72,13 @@ public final class FileUtils {
         return writeFileSdcard(filePath, fileContent, false);
     }
 
-    public static boolean writeFileSdcard(String filePath, String fileContent, boolean flagAppend) {
+    public static boolean writeFileSdcard(String filePath, String fileContent, boolean isAppend) {
         boolean ret = false;
         BufferedWriter bw = null;
 
         try {
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
-                    new File(filePath), flagAppend)));
+                    new File(filePath), isAppend)));
             bw.write(fileContent);
             ret = true;
         } catch (IOException e) {

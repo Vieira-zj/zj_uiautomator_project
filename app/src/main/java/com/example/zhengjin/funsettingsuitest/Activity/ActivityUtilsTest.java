@@ -212,6 +212,11 @@ public final class ActivityUtilsTest extends AppCompatActivity {
                 sdcardPath = FileUtils.getExternalStoragePath();
             } catch (IOException e) {
                 e.printStackTrace();
+
+                Message msg = Message.obtain();
+                msg.obj = e.getMessage();
+                msg.what = FILE_UTILS;
+                mHandler.sendMessage(msg);
                 return;
             }
 
