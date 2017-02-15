@@ -362,18 +362,25 @@ public final class TestCommonSettings {
         ShellUtils.systemWaitByMillis(SHORT_WAIT);
 
         mMessage = "Verify the sub values of screen saver at position %d.";
+        UiObject2 itemSubValueContainer;
         for (int i = 1; i < SUB_VALUES_SCREEN_SAVER.length; i++) {
             mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-            Assert.assertTrue(TestHelper.waitForTextGone(SUB_VALUES_SCREEN_SAVER[i - 1]));
-            Assert.assertTrue(String.format(mMessage, (i + 1)),
-                    TestHelper.waitForTextVisible(SUB_VALUES_SCREEN_SAVER[i]));
+            itemSubValueContainer =
+                    mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector());
+            Assert.assertTrue(TestHelper.waitForTextGone(
+                    itemSubValueContainer, SUB_VALUES_SCREEN_SAVER[i - 1]));
+            Assert.assertTrue(String.format(mMessage, (i + 1)), TestHelper.waitForTextVisible(
+                    itemSubValueContainer, SUB_VALUES_SCREEN_SAVER[i]));
         }
 
         mMessage = "Verify screen saver item value when move from last to first.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        Assert.assertTrue(TestHelper.waitForTextGone(
+        UiObject2 itemValueContainer =
+                mDevice.findObject(mTask.getScreenSaverSettingItemContainerSelector());
+        Assert.assertTrue(TestHelper.waitForTextGone(itemValueContainer,
                 SUB_VALUES_SCREEN_SAVER[SUB_VALUES_SCREEN_SAVER.length - 1]));
-        Assert.assertTrue(mMessage, TestHelper.waitForTextVisible(SUB_VALUES_SCREEN_SAVER[0]));
+        Assert.assertTrue(mMessage, TestHelper.waitForTextVisible(
+                itemValueContainer, SUB_VALUES_SCREEN_SAVER[0]));
     }
 
     @Test

@@ -140,14 +140,26 @@ public final class TestHelper {
         return device.wait(Until.findObjects(selector), TIME_OUT);
     }
 
+    @SuppressWarnings("unused")
     public static boolean waitForTextGone(String uiText) {
         device.waitForIdle();
         return device.wait(Until.gone(By.text(uiText)), TIME_OUT);
     }
 
+    public static boolean waitForTextGone(UiObject2 parent, String uiText) {
+        device.waitForIdle();
+        return parent.wait(Until.gone(By.text(uiText)), TIME_OUT);
+    }
+
+    @SuppressWarnings("unused")
     public static boolean waitForTextVisible(String uiText) {
         device.waitForIdle();
         return device.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
+    }
+
+    public static boolean waitForTextVisible(UiObject2 parent, String uiText) {
+        device.waitForIdle();
+        return parent.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
     }
 
     public static boolean waitForLoadingComplete() {
