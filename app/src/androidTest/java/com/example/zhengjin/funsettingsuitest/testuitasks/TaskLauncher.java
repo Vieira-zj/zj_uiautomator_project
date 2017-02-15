@@ -123,8 +123,10 @@ public final class TaskLauncher {
         }
         for (int i = 0, moveTimes = 7; i < moveTimes; i++) {
             ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-            if (tabApp != null && tabApp.isFocused()) {
-                return;
+            if (tabApp != null) {
+                if (tabApp.isFocused() || tabApp.isSelected()) {
+                    return;
+                }
             }
         }
 
@@ -138,7 +140,8 @@ public final class TaskLauncher {
 
         UiObject2 tabVideo = getSpecifiedTab(LAUNCHER_HOME_TABS[1]);
         Assert.assertNotNull("navigateToVideoTab, video tab is NOT found.", tabVideo);
-        Assert.assertTrue("navigateToVideoTab, video is NOT focused.", tabVideo.isFocused());
+        Assert.assertTrue("navigateToVideoTab, video is NOT focused.",
+                (tabVideo.isFocused() || tabVideo.isSelected()));
     }
 
     @Nullable
@@ -161,7 +164,7 @@ public final class TaskLauncher {
         openSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[4], appName);
     }
 
-    public static void openSpecifiedCardFromSettingsTab(String cardText) {
+    static void openSpecifiedCardFromSettingsTab(String cardText) {
         openSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[5], cardText);
     }
 

@@ -140,6 +140,16 @@ public final class TestHelper {
         return device.wait(Until.findObjects(selector), TIME_OUT);
     }
 
+    public static boolean waitForTextGone(String uiText) {
+        device.waitForIdle();
+        return device.wait(Until.gone(By.text(uiText)), TIME_OUT);
+    }
+
+    public static boolean waitForTextVisible(String uiText) {
+        device.waitForIdle();
+        return device.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
+    }
+
     public static boolean waitForLoadingComplete() {
         // if loading is showing, wait for loading disappear
         UiObject2 loading =
