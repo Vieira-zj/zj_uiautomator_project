@@ -45,6 +45,7 @@ public final class TestConstants {
     public final static String CLASS_TEXT_SWITCHER = "android.widget.TextSwitcher";
     public final static String CLASS_WEB_VIEW = "android.webkit.WebView";
 
+    public final static String TEST_ROOT_DIR_PATH = getTestingRootPath();
     final static String SNAPSHOT_PATH = getSnapshotDirPath();
     final static String LOGCAT_LOG_PATH = getLogcatLogDirPath();
 
@@ -85,6 +86,7 @@ public final class TestConstants {
         MSTAR938
     }
 
+    @SuppressWarnings("unused")
     public enum VideoType {
         FILM, TV, VARIETY_SHOW
     }

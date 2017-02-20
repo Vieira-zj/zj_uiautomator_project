@@ -283,7 +283,7 @@ public final class ShellUtils {
         return formatter.format(curDate);
     }
 
-    private static String getCurrentDateTime() {
+    public static String getCurrentDateTime() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss-SSS", Locale.getDefault());
         Date curTime = new Date(System.currentTimeMillis());
