@@ -9,7 +9,9 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
+import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
@@ -38,6 +40,8 @@ public final class TaskSettings {
     private static TaskSettings instance = null;
     private UiDevice device;
     private UiActionsManager action;
+
+    public final String TEXT_COMMON_SETTINGS = "通用设置";
 
     private TaskSettings() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -157,8 +161,15 @@ public final class TaskSettings {
     public void openCommonSettingsHomePage() {
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
                 TaskLauncher.getQuickAccessBtnSettingsSelector());
+
+        if (RunnerProfile.isVersion30) {
+            UiObject2 settingsCard =
+                    TestHelper.waitForUiObjectExistAndReturn(By.text(TEXT_COMMON_SETTINGS));
+            action.doClickActionAndWait(settingsCard);
+            action.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
+        }
         Assert.assertTrue("openCommonSettingsHomePage, open failed!",
-                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME, WAIT));
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
 
         action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }

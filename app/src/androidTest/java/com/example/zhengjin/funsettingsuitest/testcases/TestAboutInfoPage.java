@@ -6,6 +6,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
@@ -69,7 +70,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryAboutInfoTests.class)
+    @Category({CategoryAboutInfoTests.class, CategoryDemoTests.class})
     public void test01AboutInfoPageTitle() {
         UiObject2 pageTitle = mDevice.findObject(mTask.getSettingsAboutInfoPageTitleSelector());
 
@@ -80,7 +81,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryAboutInfoTests.class)
+    @Category({CategoryAboutInfoTests.class})
     public void test02ProductInfoItemOnAboutInfo() {
         mMessage = "Verify the product info item on About Info page is enabled.";
         UiObject2 productItem = mDevice.findObject(mTask.getProductInfoItemOnAboutSelector());

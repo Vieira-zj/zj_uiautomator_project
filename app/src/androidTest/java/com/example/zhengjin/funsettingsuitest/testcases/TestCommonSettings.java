@@ -7,6 +7,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
@@ -97,17 +98,17 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test11TitleNameOfSettingsPage() {
         UiObject2 settingsTitle =
                 mDevice.findObject(mTask.getTitleOfSettingsPageSelector());
         Assert.assertNotNull(settingsTitle);
         mMessage = "Verify the title name of common settings page.";
-        Assert.assertEquals(mMessage, "通用设置", settingsTitle.getText());
+        Assert.assertEquals(mMessage, mTask.TEXT_COMMON_SETTINGS, settingsTitle.getText());
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test12DeviceNameDefaultValue() {
         UiObject2 deviceNameContainer =
                 mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
@@ -126,7 +127,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test13DeviceNameSubValues() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
         mDevice.wait(Until.hasObject(mTask.getDialogDeviceNameListSelector()), WAIT);
