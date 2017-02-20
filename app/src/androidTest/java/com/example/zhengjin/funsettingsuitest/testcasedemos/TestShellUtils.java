@@ -9,7 +9,7 @@ import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.testsuites.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;

@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.testsuites;
+package com.example.zhengjin.funsettingsuitest.testrunner;
 
 import android.util.Log;
 
