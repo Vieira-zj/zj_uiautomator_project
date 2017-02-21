@@ -139,7 +139,7 @@ public final class TestImageAndSoundSettings {
         Assert.assertEquals(mMessage, TURN_OFF_TEXT, pressKeySoundValue.getText());
 
         mMessage = "Verify the text after turn on the press key sound setting item.";
-        mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
+        mAction.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
         pressKeySoundValue =
                 pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());

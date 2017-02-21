@@ -239,11 +239,11 @@ public final class RunnerListenerFunSettings extends RunListener {
     public void testRunFinished(Result result) {
         if (mTestSuiteSerializer != null) {
             this.buildTestSuiteInfo(mSuiteCount);
-            this.buildXmlReportSummary(result);
+            this.buildTestReportSummary(result);
         }
     }
 
-    private void buildXmlReportSummary(Result result) {
+    private void buildTestReportSummary(Result result) {
         try {
             mTestSuiteSerializer.startTag(null, "summary");
             mTestSuiteSerializer.attribute(null, XML_TAG_TOTAL_TIME,
