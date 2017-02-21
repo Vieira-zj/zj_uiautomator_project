@@ -29,7 +29,6 @@ import java.util.Locale;
  * Customized runner listener to generate testing report.
  * Usage: -e listener com.example.zhengjin.funsettingsuitest.testrunner.RunnerListenerFunSettings
  */
-
 @SuppressWarnings("unused")
 public final class RunnerListenerFunSettings extends RunListener {
 
@@ -48,7 +47,7 @@ public final class RunnerListenerFunSettings extends RunListener {
     private long mTestStarted;
     private long mSuiteStarted;
 
-    private int mTestCount;  // include ignore ones
+    private int mTestCount;  // include ignore test cases
     private int mSuiteCount = 0;
     private String mCurrentTestClassName;
     private String mLastTestClassName;

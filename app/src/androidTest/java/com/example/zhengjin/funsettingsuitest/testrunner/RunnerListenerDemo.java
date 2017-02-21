@@ -24,7 +24,6 @@ import java.util.List;
  * Run sequence:
  * testRunStarted() -> testStarted() -> testFailure() -> testFinished() -> testRunFinished()
  */
-
 @SuppressWarnings("unused")
 public final class RunnerListenerDemo extends RunListener {
 

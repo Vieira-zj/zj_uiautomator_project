@@ -305,6 +305,7 @@ public final class TestCommonSettings {
     @Test
     @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test17_01SetShutDownTvTimeDefaultValue() {
+        // TODO: 2017/2/21  requirement changes
         mTask.openAdvancedSettingsPage();
         UiObject2 shutDownTvContainer =
                 mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector());
@@ -323,6 +324,7 @@ public final class TestCommonSettings {
     @Test
     @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test17_02SetShutDownTvTimeSubValues() {
+        // TODO: 2017/2/21  requirement changes
         mTask.openAdvancedSettingsPage();
         mTask.moveToSpecifiedSettingsItem(mTask.getSetShutDownTvItemContainerSelector());
         ShellUtils.systemWaitByMillis(WAIT);
