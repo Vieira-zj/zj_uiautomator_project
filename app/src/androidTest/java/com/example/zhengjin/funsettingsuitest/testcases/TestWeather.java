@@ -466,7 +466,7 @@ public final class TestWeather {
         mMessage = "Verify delete button is not shown when only one city exist.";
         mTask.openBottomMenu();
         UiObject2 btnDeleteCity = mDevice.findObject(By.text(mTask.MENU_BUTTON_TEXT_DELETE_CITY));
-        Assert.assertNull(btnDeleteCity);
+        Assert.assertNull(mMessage, btnDeleteCity);
     }
 
     @Test

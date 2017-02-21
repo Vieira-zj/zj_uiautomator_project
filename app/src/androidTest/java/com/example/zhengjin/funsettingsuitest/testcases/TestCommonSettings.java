@@ -98,7 +98,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
+    @Category({CategorySettingsTests.class})
     public void test11TitleNameOfSettingsPage() {
         UiObject2 settingsTitle =
                 mDevice.findObject(mTask.getTitleOfSettingsPageSelector());
@@ -108,7 +108,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
+    @Category({CategorySettingsTests.class})
     public void test12DeviceNameDefaultValue() {
         UiObject2 deviceNameContainer =
                 mDevice.findObject(mTask.getDeviceNameSettingItemContainerSelector());
@@ -127,7 +127,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
+    @Category({CategorySettingsTests.class})
     public void test13DeviceNameSubValues() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
         mDevice.wait(Until.hasObject(mTask.getDialogDeviceNameListSelector()), WAIT);
@@ -303,7 +303,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test17_01SetShutDownTvTimeDefaultValue() {
         mTask.openAdvancedSettingsPage();
         UiObject2 shutDownTvContainer =
@@ -321,7 +321,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test17_02SetShutDownTvTimeSubValues() {
         mTask.openAdvancedSettingsPage();
         mTask.moveToSpecifiedSettingsItem(mTask.getSetShutDownTvItemContainerSelector());

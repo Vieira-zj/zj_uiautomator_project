@@ -27,8 +27,8 @@ import org.junit.runners.Suite;
         CategoryWeatherTests.class,
         CategoryImageAndSoundSettingsTests.class,
         CategoryAboutInfoTests.class})
+//@Categories.IncludeCategory(CategoryDemoTests.class)
 //@Categories.ExcludeCategory({CategoryDemoTests.class})
-//@Categories.IncludeCategory({CategoryDemoTests.class})
 @Suite.SuiteClasses({
         TestCommonSettings.class,
         TestFileManager.class,

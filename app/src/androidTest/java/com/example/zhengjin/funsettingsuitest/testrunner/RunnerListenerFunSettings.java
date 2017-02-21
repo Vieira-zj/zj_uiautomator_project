@@ -36,11 +36,11 @@ public final class RunnerListenerFunSettings extends RunListener {
     private static final String TAG = RunnerListenerFunSettings.class.getSimpleName();
     private static final String ZJ_KEYWORD = "ZJTest => ";
 
-    private static final String XML_TAG_TEST_SUITES = "testsuites";
-    private static final String XML_TAG_TEST_SUITE = "testsuite";
-    private static final String XML_TAG_TOTAL_TIME = "runtime";
-    private static final String XML_TAG_TEST_CASE = "testcase";
-    private static final String XML_TAG_TEST_CASE_RESULTS = "testresult";
+    private final String XML_TAG_TEST_SUITES = "testsuites";
+    private final String XML_TAG_TEST_SUITE = "testsuite";
+    private final String XML_TAG_TOTAL_TIME = "runtime";
+    private final String XML_TAG_TEST_CASE = "testcase";
+    private final String XML_TAG_TEST_CASE_RESULTS = "testresult";
 
     private Writer mWriter;
     private XmlSerializer mTestSuiteSerializer;
@@ -48,16 +48,18 @@ public final class RunnerListenerFunSettings extends RunListener {
     private long mTestStarted;
     private long mSuiteStarted;
 
-    private boolean mIsCurrentCaseFailed = false;
-    private int mCurrentCount = 0;
+    private int mTestCount;  // include ignore ones
     private int mSuiteCount = 0;
     private String mCurrentTestClassName;
     private String mLastTestClassName;
+
+    private boolean mIsCurrentCaseFailed = false;
 
     @Override
     public void testRunStarted(Description description) {
         this.initFileWriter();
         if (mTestSuiteSerializer != null) {
+            mTestCount = description.testCount();
             this.buildTestReportHeader();
         }
     }
@@ -116,7 +118,6 @@ public final class RunnerListenerFunSettings extends RunListener {
             return;
         }
 
-        mCurrentCount += 1;
         mSuiteCount += 1;
         mCurrentTestClassName = description.getClassName();
 
@@ -155,6 +156,7 @@ public final class RunnerListenerFunSettings extends RunListener {
             mTestSuiteSerializer.attribute(null, XML_TAG_TOTAL_TIME, this.formatRunTime(runTime));
             mTestSuiteSerializer.endTag(null, "suiteinfo");
             mTestSuiteSerializer.endTag(null, XML_TAG_TEST_SUITE);
+            mTestSuiteSerializer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -203,7 +205,6 @@ public final class RunnerListenerFunSettings extends RunListener {
                 this.buildFinishedTestCaseInfo();
             }
             mTestSuiteSerializer.endTag(null, XML_TAG_TEST_CASE);
-            this.doSerializerFlush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -214,28 +215,24 @@ public final class RunnerListenerFunSettings extends RunListener {
         mTestSuiteSerializer.attribute(null, XML_TAG_TEST_CASE_RESULTS, TEST_FAIL);
 
         mTestSuiteSerializer.startTag(null, "failure");
-        mTestSuiteSerializer.attribute(null, "message", failure.getMessage());
-        mTestSuiteSerializer.startTag(null, "trace");
-        mTestSuiteSerializer.text(failure.getTrace());
-        mTestSuiteSerializer.endTag(null, "trace");
+        String messageText = failure.getMessage();
+        if (StringUtils.isEmpty(messageText)) {
+            messageText = "Exception";
+        }
+        mTestSuiteSerializer.attribute(null, "message", messageText);
+
+        String traceText = failure.getTrace();
+        if (!StringUtils.isEmpty(traceText)) {
+            mTestSuiteSerializer.startTag(null, "trace");
+            mTestSuiteSerializer.text(traceText);
+            mTestSuiteSerializer.endTag(null, "trace");
+        }
         mTestSuiteSerializer.endTag(null, "failure");
     }
 
     private void buildFinishedTestCaseInfo() throws IOException {
         final String TEST_PASS = "pass";
         mTestSuiteSerializer.attribute(null, XML_TAG_TEST_CASE_RESULTS, TEST_PASS);
-    }
-
-    private void doSerializerFlush() {
-        final int COUNT_OF_FLUSH = 10;
-
-        if (mCurrentCount >= COUNT_OF_FLUSH) {
-            try {
-                mTestSuiteSerializer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -251,7 +248,7 @@ public final class RunnerListenerFunSettings extends RunListener {
             mTestSuiteSerializer.startTag(null, "summary");
             mTestSuiteSerializer.attribute(null, XML_TAG_TOTAL_TIME,
                     this.formatRunTime(result.getRunTime()));
-            mTestSuiteSerializer.attribute(null, "total", String.valueOf(result.getRunCount()));
+            mTestSuiteSerializer.attribute(null, "total", String.valueOf(mTestCount));
             mTestSuiteSerializer.attribute(null, "totalfailed",
                     String.valueOf(result.getFailureCount()));
             mTestSuiteSerializer.attribute(null, "totalpass",

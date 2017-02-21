@@ -6,6 +6,7 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
@@ -151,7 +152,7 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category(CategoryFileManagerTests.class)
+    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
     public void test13OpenAllFilesCardFromSdcardTab() {
         mTask.openLocalFilesCard();
 
@@ -166,7 +167,7 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category(CategoryFileManagerTests.class)
+    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
     public void test14NavigateToSpecifiedPath() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -184,7 +185,7 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category(CategoryFileManagerTests.class)
+    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
     public void test16OpenUnknownTypeFile() {
         mTask.openLocalFilesCard();
 

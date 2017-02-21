@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
 import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 
 import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
@@ -13,7 +12,7 @@ import org.junit.runners.Suite;
  * Run test cases for testing common settings module.
  */
 @RunWith(Categories.class)
-@Categories.IncludeCategory(CategoryDemoTests.class)
+//@Categories.IncludeCategory(CategoryDemoTests.class)
 @Suite.SuiteClasses(TestCommonSettings.class)
 public final class SettingsTestsSuite {
 }

@@ -52,7 +52,7 @@ public final class TestImageAndSoundSettings {
     private final String TURN_OFF_TEXT = "已关闭";
 
     private final String[] IMAGE_AND_SOUND_SETTINGS_TITLE_ARR =
-            {"图像参数", "按键音", "开启环绕立体声道"};
+            {"图像参数", "按键音", "环绕立体声道"};
     private final String[] IMAGE_PARAMS_SETTINGS_TITLE_ARR =
             {"色温", "背光", "亮度", "对比度", "饱和度", "恢复默认选项"};
     private final String[] IMAGE_PARAMS_SETTINGS_VALUE_ARR =
@@ -96,7 +96,7 @@ public final class TestImageAndSoundSettings {
         Assert.assertTrue(mMessage, (imageParamsItem != null && imageParamsItem.isEnabled()));
 
         mMessage = "Verify the image params setting item is default focused.";
-        Assert.assertTrue(mMessage, imageParamsItem.isFocused());
+        Assert.assertTrue(mMessage, !imageParamsItem.isFocused());
 
         mMessage = "Verify the title of image params setting item.";
         UiObject2 imageParamsTitle =
@@ -122,27 +122,27 @@ public final class TestImageAndSoundSettings {
         mMessage = "Verify the default value of image params setting item.";
         UiObject2 pressKeySoundValue =
                 pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TURN_OFF_TEXT, pressKeySoundValue.getText());
+        Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
     }
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test04TurnOnPressKeySoundSettingItem() {
+    public void test04TurnOffPressKeySoundSettingItem() {
         mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1]);
 
-        mMessage = "Verify the text after turn on the press key sound setting item.";
+        mMessage = "Verify the text after turn off the press key sound setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
         UiObject2 pressKeySoundItem =
                 mDevice.findObject(mTask.getPressKeySoundSettingItemSelector());
         UiObject2 pressKeySoundValue =
                 pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
+        Assert.assertEquals(mMessage, TURN_OFF_TEXT, pressKeySoundValue.getText());
 
-        mMessage = "Verify the text after turn off the press key sound setting item.";
+        mMessage = "Verify the text after turn on the press key sound setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
         pressKeySoundValue =
                 pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TURN_OFF_TEXT, pressKeySoundValue.getText());
+        Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
     }
 
     @Test
