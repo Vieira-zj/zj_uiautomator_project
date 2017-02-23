@@ -102,6 +102,8 @@ public final class RunnerListenerFunSettings extends RunListener {
             mTestSuiteSerializer.startDocument(null, null);
 
             mTestSuiteSerializer.startTag(null, XML_TAG_TEST_SUITES);
+            mTestSuiteSerializer.attribute(null, "datetime", ShellUtils.getCurrentDateTime());
+
             mTestSuiteSerializer.startTag(null, "systeminfo");
             mTestSuiteSerializer.attribute(null, "sdkversion", android.os.Build.VERSION.RELEASE);
             mTestSuiteSerializer.attribute(null, "devicetype", android.os.Build.MODEL);

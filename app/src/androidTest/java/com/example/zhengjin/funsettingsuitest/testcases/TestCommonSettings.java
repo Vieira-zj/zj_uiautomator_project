@@ -30,6 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -302,7 +303,7 @@ public final class TestCommonSettings {
         Assert.assertEquals(mMessage, SUB_VALUES_SLEEP_TIME[3], itemValue.getText());
     }
 
-    @Test
+    @Ignore
     @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test17_01SetShutDownTvTimeDefaultValue() {
         // TODO: 2017/2/21  requirement changes
@@ -321,7 +322,7 @@ public final class TestCommonSettings {
         Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
     }
 
-    @Test
+    @Ignore
     @Category({CategorySettingsTests.class, CategoryDemoTests.class})
     public void test17_02SetShutDownTvTimeSubValues() {
         // TODO: 2017/2/21  requirement changes

@@ -152,7 +152,7 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
+    @Category({CategoryFileManagerTests.class})
     public void test13OpenAllFilesCardFromSdcardTab() {
         mTask.openLocalFilesCard();
 
@@ -167,7 +167,7 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
+    @Category({CategoryFileManagerTests.class})
     public void test14NavigateToSpecifiedPath() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -185,7 +185,7 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
+    @Category({CategoryFileManagerTests.class})
     public void test16OpenUnknownTypeFile() {
         mTask.openLocalFilesCard();
 
@@ -486,10 +486,11 @@ public final class TestFileManager {
     }
 
     @Test
-    @Category({CategoryFileManagerTests.class})
+    @Category({CategoryFileManagerTests.class, CategoryDemoTests.class})
     public void test41_03HideVideoDirectory() {
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+        ShellUtils.takeScreenCapture(mDevice);
         mTask.moveUntilSpecifiedItemSelected(TEST_MEDIA_DIR_NAME);
 
         mMessage = "Verify the video directory is hidden from All Files category.";

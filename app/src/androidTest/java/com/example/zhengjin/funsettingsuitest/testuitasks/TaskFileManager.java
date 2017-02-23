@@ -191,7 +191,7 @@ public final class TaskFileManager {
         this.navigateToSpecifiedPath(path, RunnerProfile.isPlatform938);
     }
 
-    private void navigateToSpecifiedPath(String path, boolean flagMove) {
+    private void navigateToSpecifiedPath(String path, boolean isByMove) {
         String rex = "mnt|sdcard|storage|emulated|[0-9]";
         Pattern pattern = Pattern.compile(rex);
 
@@ -201,7 +201,7 @@ public final class TaskFileManager {
                 continue;
             }
 
-            if (flagMove) {
+            if (isByMove) {
                 this.moveAndEnterOnSpecifiedItemFromCurrentDir(dir);
             } else {
                 this.clickOnSpecifiedItemFromCurrentDir(dir);
@@ -246,16 +246,18 @@ public final class TaskFileManager {
     }
 
     private void moveAndEnterOnSpecifiedItemFromCurrentDir(String itemName, boolean isEnter) {
-        action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);  // focus on 1st item
+        action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 3);  // focus on 1st item
 
-        UiObject2 item = device.findObject(By.text(itemName));
+        UiObject2 item = null;
         for (int i = 0, tryTimes = 10; i < tryTimes; i++) {
+            item = device.findObject(By.text(itemName));
             if (item != null && item.isEnabled()) {
                 break;
             }
             action.doDeviceActionAndWait(new DeviceActionMoveDown());
-            item = device.findObject(By.text(itemName));
         }
+        Assert.assertNotNull("moveAndEnterOnSpecifiedItemFromCurrentDir, failed to find item "
+                + itemName, item);
 
         for (int i = 0, tryTimes = 50; i < tryTimes; i++) {
             if (item.isSelected()) {
@@ -266,7 +268,6 @@ public final class TaskFileManager {
             }
             action.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
-
         Assert.assertTrue("moveAndEnterOnSpecifiedItemFromCurrentDir, failed to select item "
                 + itemName, false);
     }
