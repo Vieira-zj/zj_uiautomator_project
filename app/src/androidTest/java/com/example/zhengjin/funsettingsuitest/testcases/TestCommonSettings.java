@@ -7,7 +7,6 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
@@ -30,7 +29,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -69,8 +67,6 @@ public final class TestCommonSettings {
             {"永不休眠", "15分钟", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_SCREEN_SAVER =
             {"5分钟（默认）", "10分钟", "15分钟", "20分钟", "关闭"};
-    private final String[] SUB_VALUES_SHUTDOWN_TV_TIME =
-            {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_WALLPAPER = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
@@ -303,47 +299,127 @@ public final class TestCommonSettings {
         Assert.assertEquals(mMessage, SUB_VALUES_SLEEP_TIME[3], itemValue.getText());
     }
 
-    @Ignore
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
-    public void test17_01SetShutDownTvTimeDefaultValue() {
-        // TODO: 2017/2/21  requirement changes
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_01TitleAndValueOfSetShutDownTime() {
         mTask.openAdvancedSettingsPage();
-        UiObject2 shutDownTvContainer =
+        UiObject2 shutDownTimeContainer =
                 mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector());
 
         mMessage = "Verify the key text of set shutdown tv time.";
-        UiObject2 itemKey =
-                shutDownTvContainer.findObject(mTask.getSettingItemKeySelector());
+        UiObject2 itemKey = shutDownTimeContainer.findObject(mTask.getSettingItemKeySelector());
         Assert.assertEquals(mMessage, "定时关机", itemKey.getText());
 
         mMessage = "Verify the default value of set shutdown tv time.";
-        UiObject2 itemValue = mTask.getTextViewOfSwitcher(shutDownTvContainer);
-        Assert.assertNotNull(itemValue);
-        Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
+        UiObject2 itemValue = shutDownTimeContainer.findObject(mTask.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, "关闭", itemValue.getText());
     }
 
-    @Ignore
-    @Category({CategorySettingsTests.class, CategoryDemoTests.class})
-    public void test17_02SetShutDownTvTimeSubValues() {
-        // TODO: 2017/2/21  requirement changes
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test17_02TitleAndTipsOnSetShutDownTimeDialog() {
         mTask.openAdvancedSettingsPage();
-        mTask.moveToSpecifiedSettingsItem(mTask.getSetShutDownTvItemContainerSelector());
-        ShellUtils.systemWaitByMillis(WAIT);
+        mTask.openSetShutDownTimeDialog();
 
-        mMessage = "Verify the set shutdown tv time sub value at position %d.";
-        for (int i = 1; i < SUB_VALUES_SHUTDOWN_TV_TIME.length; i++) {
-            mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
-            UiObject2 itemValue = mTask.getTextViewOfSwitcher(
-                    mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector()));
-            Assert.assertEquals(String.format(mMessage, i),
-                    SUB_VALUES_SHUTDOWN_TV_TIME[i], itemValue.getText());
-        }
+        mMessage = "Verify the title of set shutdown time dialog.";
+        UiObject2 dialogTitle = mDevice.findObject(mTask.getTitleOfSetShutDownTimeDialogSelector());
+        Assert.assertEquals(mMessage, mTask.TITLE_SET_SHUTDOWN_TIME_DIALOG, dialogTitle.getText());
 
-        mMessage = "Verify move from last to first value of set shutdown tv time.";
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
-        UiObject2 itemValue = mTask.getTextViewOfSwitcher(
-                mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector()));
-        Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
+        mMessage = "Verify the text of tips on set shutdown time dialog.";
+        Assert.assertTrue(mMessage, TestHelper.waitForTextVisible("* 退出时自动保存"));
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test17_03SetShutDownTimeCheckboxOnDialog() {
+        mTask.openAdvancedSettingsPage();
+        mTask.openSetShutDownTimeDialog();
+
+        UiObject2 dialogCheckbox =
+                mDevice.findObject(mTask.getCheckboxOfSetShutDownTimeDialogSelector());
+        mMessage = "Verify the checkbox is default focused.";
+        Assert.assertTrue(dialogCheckbox.isFocused());
+        mMessage = "Verify the checkbox is default un-check.";
+        Assert.assertFalse(dialogCheckbox.isChecked());
+        mMessage = "Verify the text of checkbox on set shutdown time dialog.";
+        Assert.assertEquals(mMessage, "开启定时关机", dialogCheckbox.getText());
+
+        mMessage = "Verify only the checkbox can be focused when un-checked.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
+        Assert.assertTrue(mMessage, dialogCheckbox.isFocused());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test17_04TimesControlOnSetShutDownTimeDialog() {
+        mTask.openAdvancedSettingsPage();
+        mTask.openSetShutDownTimeDialog();
+
+        String expectedCurHour = mTask.getHoursOfCurrentTime();
+        String expectedCurMinutes = mTask.getMinutesOfCurrentTime();
+
+        // verification hours
+        mMessage = "Verify the hours time control is enabled.";
+        UiObject2 hoursContainer =
+                mDevice.findObject(mTask.getHoursItemOfSetShutDownTimeDialogSelector());
+        Assert.assertTrue(mMessage, hoursContainer.isEnabled());
+
+        mMessage = "Verify the value of hours time control is default as current time.";
+        UiObject2 actualHour = mTask.getValueOfTimeControlOnSetShutDownTimeDialog(hoursContainer);
+        Assert.assertNotNull(actualHour);
+        Assert.assertEquals(mMessage, expectedCurHour, actualHour.getText());
+
+        // verification minutes
+        mMessage = "Verify the minutes time control is enabled.";
+        UiObject2 minutesContainer =
+                mDevice.findObject(mTask.getMinutesItemOfSetShutDownTimeDialogSelector());
+        Assert.assertTrue(minutesContainer.isEnabled());
+
+        mMessage = "Verify the value of minutes time control is default as current time.";
+        UiObject2 actualMinutes =
+                mTask.getValueOfTimeControlOnSetShutDownTimeDialog(minutesContainer);
+        Assert.assertNotNull(actualMinutes);
+        Assert.assertEquals(expectedCurMinutes, actualMinutes.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test17_04EditTimesControlOnSetShutDownTimeDialog() {
+        mTask.openAdvancedSettingsPage();
+        mTask.openSetShutDownTimeDialog();
+        mTask.checkSetShutDownTimeCheckbox();
+
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_11SetShutDownTimeAndSave() {
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_12SetShutDownTimeLessThanFiveMins() {
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_13SetShutDownTimeEqualCurTime() {
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_14SetShutDownTimeLessThanCurTime() {
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_15UnsetShutDownTime() {
+        // TODO: 2017/2/24
     }
 
     @Test

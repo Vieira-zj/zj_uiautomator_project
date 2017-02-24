@@ -56,6 +56,10 @@ public final class TaskImageAndSound {
         return By.res("tv.fun.settings:id/setting_title");
     }
 
+    public BySelector getDefaultPlayClaritySettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_play_clarity");
+    }
+
     public BySelector getImageParamsSettingItemSelector() {
         return By.res("tv.fun.settings:id/setting_item_pic_params");
     }

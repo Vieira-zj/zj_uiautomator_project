@@ -14,6 +14,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
@@ -23,6 +24,11 @@ import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_SCROLL_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
@@ -42,6 +48,7 @@ public final class TaskSettings {
     private UiActionsManager action;
 
     public final String TEXT_COMMON_SETTINGS = "通用设置";
+    public final String TITLE_SET_SHUTDOWN_TIME_DIALOG = "设置定时关机";
 
     private TaskSettings() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -156,6 +163,22 @@ public final class TaskSettings {
 
     private BySelector getSettingSwitcherItemValueSelector() {
         return By.res("tv.fun.settings:id/setting_item_value");
+    }
+
+    public BySelector getTitleOfSetShutDownTimeDialogSelector() {
+        return By.res("tv.fun.settings:id/tp_title");
+    }
+
+    public BySelector getCheckboxOfSetShutDownTimeDialogSelector() {
+        return By.res("tv.fun.settings:id/tp_checkbox");
+    }
+
+    public BySelector getHoursItemOfSetShutDownTimeDialogSelector() {
+        return By.res("tv.fun.settings:id/tp_hour");
+    }
+
+    public BySelector getMinutesItemOfSetShutDownTimeDialogSelector() {
+        return By.res("tv.fun.settings:id/tp_minute");
     }
 
     public void openCommonSettingsHomePage() {
@@ -303,6 +326,63 @@ public final class TaskSettings {
         action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
         TestHelper.waitForUiObjectEnabled(
                 device.findObject(this.getTitleOfSettingsPageSelector()));
+    }
+
+    public void openSetShutDownTimeDialog() {
+        this.moveToSpecifiedSettingsItem(this.getSetShutDownTvItemContainerSelector());
+        action.doDeviceActionAndWait(new DeviceActionCenter());
+        TestHelper.waitForTextVisible(TITLE_SET_SHUTDOWN_TIME_DIALOG);
+    }
+
+    public UiObject2 getValueOfTimeControlOnSetShutDownTimeDialog(UiObject2 container) {
+        List<UiObject2> timeItems = container.findObjects(By.clazz(TestConstants.CLASS_TEXT_VIEW));
+        for (UiObject2 timeItem : timeItems) {
+            if (timeItem.isSelected()) {
+                return timeItem;
+            }
+        }
+
+        return null;
+    }
+
+    public void checkSetShutDownTimeCheckbox() {
+        UiObject2 checkbox = device.findObject(this.getCheckboxOfSetShutDownTimeDialogSelector());
+        if (!checkbox.isFocused()) {
+            action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
+        }
+        if (!checkbox.isChecked()) {
+            action.doDeviceActionAndWait(new DeviceActionCenter());
+        }
+
+        Assert.assertTrue(
+                "checkSetShutDownTimeCheckbox, failed to set checked!", checkbox.isChecked());
+
+    }
+
+    public void unCheckSetShutDownTimeCheckbox() {
+        UiObject2 checkbox = device.findObject(this.getCheckboxOfSetShutDownTimeDialogSelector());
+        if (!checkbox.isFocused()) {
+            action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
+        }
+        if (checkbox.isChecked()) {
+            action.doDeviceActionAndWait(new DeviceActionCenter());
+        }
+
+        Assert.assertFalse(
+                "unCheckSetShutDownTimeCheckbox, failed to set unchecked!", checkbox.isChecked());
+    }
+
+    public String getHoursOfCurrentTime() {
+        // "hh" for 12, "HH" for 24
+        SimpleDateFormat formatter = new SimpleDateFormat("HH", Locale.getDefault());
+        Date curTime = new Date(System.currentTimeMillis());
+        return formatter.format(curTime);
+    }
+
+    public String getMinutesOfCurrentTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("mm", Locale.getDefault());
+        Date curTime = new Date(System.currentTimeMillis());
+        return formatter.format(curTime);
     }
 
 }

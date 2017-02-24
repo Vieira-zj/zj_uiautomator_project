@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
@@ -52,7 +51,7 @@ public final class TestImageAndSoundSettings {
     private final String TURN_OFF_TEXT = "已关闭";
 
     private final String[] IMAGE_AND_SOUND_SETTINGS_TITLE_ARR =
-            {"图像参数", "按键音", "环绕立体声道"};
+            {"默认播放清晰度", "图像参数", "按键音", "环绕立体声道"};
     private final String[] IMAGE_PARAMS_SETTINGS_TITLE_ARR =
             {"色温", "背光", "亮度", "对比度", "饱和度", "恢复默认选项"};
     private final String[] IMAGE_PARAMS_SETTINGS_VALUE_ARR =
@@ -90,19 +89,38 @@ public final class TestImageAndSoundSettings {
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02TitleAndFocusOfImageParamsSettingItem() {
+    public void test02_01TitleAndValueOfDefaultPlayClarity() {
+        mMessage = "Verify the default play clarity setting item is enabled.";
+        UiObject2 playClarityItem =
+                mDevice.findObject(mTask.getDefaultPlayClaritySettingItemSelector());
+        Assert.assertTrue(mMessage, (playClarityItem != null && playClarityItem.isEnabled()));
+
+        mMessage = "Verify the default play clarity setting item is default focused.";
+        Assert.assertTrue(mMessage, playClarityItem.isFocused());
+
+        mMessage = "Verify the title of default play clarity setting item.";
+        UiObject2 playClarityTitle =
+                playClarityItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0],
+                playClarityTitle.getText());
+
+        mMessage = "Verify the value of default play clarity setting item.";
+        UiObject2 playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
+        Assert.assertEquals(mMessage, "超清", playClarityValue.getText());
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test02_02TitleOfImageParamsSettingItem() {
         mMessage = "Verify the image params setting item is enabled.";
         UiObject2 imageParamsItem = mDevice.findObject(mTask.getImageParamsSettingItemSelector());
         Assert.assertTrue(mMessage, (imageParamsItem != null && imageParamsItem.isEnabled()));
 
-        mMessage = "Verify the image params setting item is default focused.";
-        Assert.assertTrue(mMessage, !imageParamsItem.isFocused());
-
         mMessage = "Verify the title of image params setting item.";
         UiObject2 imageParamsTitle =
                 imageParamsItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
-        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0]
-                , imageParamsTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1],
+                imageParamsTitle.getText());
     }
 
     @Test
@@ -116,8 +134,8 @@ public final class TestImageAndSoundSettings {
         mMessage = "Verify the title of image params setting item.";
         UiObject2 pressKeySoundTitle =
                 pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
-        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1]
-                , pressKeySoundTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2],
+                pressKeySoundTitle.getText());
 
         mMessage = "Verify the default value of image params setting item.";
         UiObject2 pressKeySoundValue =
@@ -128,7 +146,7 @@ public final class TestImageAndSoundSettings {
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test04TurnOffPressKeySoundSettingItem() {
-        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1]);
+        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2]);
 
         mMessage = "Verify the text after turn off the press key sound setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
@@ -156,8 +174,8 @@ public final class TestImageAndSoundSettings {
         mMessage = "Verify the title of audio around setting item.";
         UiObject2 audioAroundTitle =
                 audioAroundItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
-        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2]
-                , audioAroundTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[3],
+                audioAroundTitle.getText());
 
         mMessage = "Verify the default value of audio around setting item.";
         UiObject2 audioAroundValue =
@@ -168,7 +186,7 @@ public final class TestImageAndSoundSettings {
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test06TurnOnAudioAroundSettingItem() {
-        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2]);
+        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[3]);
 
         mMessage = "Verify the text after turn on the audio around setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
@@ -189,10 +207,8 @@ public final class TestImageAndSoundSettings {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test07EnergySaverSettingItemIsHidden() {
         final String ENERGY_SAVER_TITLE_TEXT = "节能模式";
-
         mMessage = "Verify the energy saver setting item is default hidden on Image and Sound.";
-        UiObject2 saverItem = mDevice.findObject(By.text(ENERGY_SAVER_TITLE_TEXT));
-        Assert.assertNull(mMessage, saverItem);
+        Assert.assertTrue(mMessage, TestHelper.waitForTextGone(ENERGY_SAVER_TITLE_TEXT));
     }
 
     @Test
@@ -475,7 +491,7 @@ public final class TestImageAndSoundSettings {
     }
 
     private void openImageParamsPageFromImageAndSound() {
-        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0]);
+        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1]);
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), TestConstants.LONG_WAIT);
     }
 
