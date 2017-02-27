@@ -353,7 +353,6 @@ public final class TaskSettings {
         if (!checkbox.isChecked()) {
             action.doDeviceActionAndWait(new DeviceActionCenter());
         }
-
         Assert.assertTrue(
                 "checkSetShutDownTimeCheckbox, failed to set checked!", checkbox.isChecked());
 
@@ -367,22 +366,82 @@ public final class TaskSettings {
         if (checkbox.isChecked()) {
             action.doDeviceActionAndWait(new DeviceActionCenter());
         }
-
         Assert.assertFalse(
                 "unCheckSetShutDownTimeCheckbox, failed to set unchecked!", checkbox.isChecked());
     }
 
-    public String getHoursOfCurrentTime() {
+    public int getHoursOfCurrentTime() {
         // "hh" for 12, "HH" for 24
         SimpleDateFormat formatter = new SimpleDateFormat("HH", Locale.getDefault());
         Date curTime = new Date(System.currentTimeMillis());
-        return formatter.format(curTime);
+        return Integer.parseInt(formatter.format(curTime));
     }
 
-    public String getMinutesOfCurrentTime() {
+    public int getMinutesOfCurrentTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("mm", Locale.getDefault());
         Date curTime = new Date(System.currentTimeMillis());
-        return formatter.format(curTime);
+        return Integer.parseInt(formatter.format(curTime));
+    }
+
+    public int getIntValueFromTimeControlText(String timeVal) {
+        if (timeVal.startsWith("0")) {
+            return Integer.parseInt(timeVal.substring(1));
+        }
+        return Integer.parseInt(timeVal);
+    }
+
+    public int addHoursValue(int hourVal, int addVal) {
+        final int maxVal = 23;
+        int tmpVal = hourVal + addVal;
+        return tmpVal > maxVal ? maxVal : tmpVal;
+    }
+
+    public int subHoursValue(int hourVal, int subVal) {
+        final int minVal = 0;
+        int tmpVal = hourVal - subVal;
+        return tmpVal < minVal ? minVal : tmpVal;
+    }
+
+    public int addMinutesValue(int minVal, int addVal) {
+        final int maxVal = 59;
+        int tmpVal = minVal + addVal;
+        return tmpVal > maxVal ? maxVal : tmpVal;
+    }
+
+    public int subMinutesValue(int minutesVal, int subVal) {
+        final int minVal = 0;
+        int tmpVal = minutesVal - subVal;
+        return tmpVal < minVal ? minVal : tmpVal;
+    }
+
+    public String setAndGetHoursOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
+        UiObject2 hoursContainer =
+                device.findObject(this.getHoursItemOfSetShutDownTimeDialogSelector());
+        Assert.assertTrue("setAndGetHoursOfShutDownTime, failed to focus on hours of time control!",
+                hoursContainer.isSelected());
+
+        action.doRepeatDeviceActionAndWait(deviceAction, moveTimes);
+        UiObject2 hourControl =
+                this.getValueOfTimeControlOnSetShutDownTimeDialog(hoursContainer);
+        Assert.assertNotNull("setAndGetHoursOfShutDownTime, hour control is not found!",
+                hourControl);
+
+        return hourControl.getText();
+    }
+
+    public String setAndGetMinutesOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
+        UiObject2 minContainer =
+                device.findObject(this.getMinutesItemOfSetShutDownTimeDialogSelector());
+        Assert.assertTrue(
+                "setAndGetMinutesOfShutDownTime, failed to focus on minutes of time control!",
+                minContainer.isSelected());
+
+        action.doRepeatDeviceActionAndWait(deviceAction, moveTimes);
+        UiObject2 minControl = this.getValueOfTimeControlOnSetShutDownTimeDialog(minContainer);
+        Assert.assertNotNull("setAndGetMinutesOfShutDownTime, minutes control is not found!",
+                minControl);
+
+        return minControl.getText();
     }
 
 }
