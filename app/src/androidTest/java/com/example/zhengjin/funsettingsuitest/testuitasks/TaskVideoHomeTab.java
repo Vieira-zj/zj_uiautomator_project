@@ -27,7 +27,6 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LON
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VIDEO_SUB_PAGE_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
-import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
 
 /**
  * Created by Vieira on 2016/7/4.
@@ -35,6 +34,8 @@ import static com.example.zhengjin.funsettingsuitest.utils.ShellCmdUtils.TAG;
  * Include UI selectors and tasks on video tab of home page.
  */
 public final class TaskVideoHomeTab {
+
+    private static final String TAG = TaskVideoHomeTab.class.getSimpleName();
 
     private static TaskVideoHomeTab instance = null;
 
@@ -90,6 +91,7 @@ public final class TaskVideoHomeTab {
         return By.res("com.bestv.ott:id/subtitle");
     }
 
+    @SuppressWarnings("unused")
     public BySelector getVideoTitleOfVideoSubPageSelector() {
         return By.res("com.bestv.ott:id/title");
     }

@@ -6,6 +6,7 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
@@ -22,6 +23,7 @@ import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -50,6 +52,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestCommonSettings {
+
+    private static final String TAG = TestCommonSettings.class.getSimpleName();
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
@@ -305,15 +309,15 @@ public final class TestCommonSettings {
     @Category({CategorySettingsTests.class})
     public void test17_01TitleAndValueOfSetShutDownTime() {
         mTask.openAdvancedSettingsPage();
-        UiObject2 shutDownTimeContainer =
-                mDevice.findObject(mTask.getSetShutDownTvItemContainerSelector());
 
         mMessage = "Verify the key text of set shutdown tv time.";
-        UiObject2 itemKey = shutDownTimeContainer.findObject(mTask.getSettingItemKeySelector());
+        UiObject2 shutDownTimeItem =
+                mDevice.findObject(mTask.getShutDownTimeSettingItemContainerSelector());
+        UiObject2 itemKey = shutDownTimeItem.findObject(mTask.getSettingItemKeySelector());
         Assert.assertEquals(mMessage, "定时关机", itemKey.getText());
 
         mMessage = "Verify the default value of set shutdown tv time.";
-        UiObject2 itemValue = shutDownTimeContainer.findObject(mTask.getSettingItemValueSelector());
+        UiObject2 itemValue = shutDownTimeItem.findObject(mTask.getSettingItemValueSelector());
         Assert.assertEquals(mMessage, TEXT_CLOSED, itemValue.getText());
     }
 
@@ -324,8 +328,8 @@ public final class TestCommonSettings {
         mTask.openSetShutDownTimeDialog();
 
         mMessage = "Verify the title of set shutdown time dialog.";
-        UiObject2 dialogTitle = mDevice.findObject(mTask.getTitleOfSetShutDownTimeDialogSelector());
-        Assert.assertEquals(mMessage, mTask.TITLE_SET_SHUTDOWN_TIME_DIALOG, dialogTitle.getText());
+        UiObject2 title = mDevice.findObject(mTask.getTitleOfSetShutDownTimeDialogSelector());
+        Assert.assertEquals(mMessage, mTask.TITLE_SET_SHUTDOWN_TIME_DIALOG, title.getText());
 
         mMessage = "Verify the text of tips on set shutdown time dialog.";
         Assert.assertTrue(mMessage, TestHelper.waitForTextVisible("* 退出时自动保存"));
@@ -333,53 +337,45 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test17_03SetShutDownTimeCheckboxOnDialog() {
+    public void test17_03ShutDownTimeCheckboxOnDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
 
-        UiObject2 dialogCheckbox =
-                mDevice.findObject(mTask.getCheckboxOfSetShutDownTimeDialogSelector());
+        UiObject2 checkbox = mDevice.findObject(mTask.getCheckboxOnShutDownTimeDialogSelector());
         mMessage = "Verify the checkbox is default focused.";
-        Assert.assertTrue(dialogCheckbox.isFocused());
+        Assert.assertTrue(checkbox.isFocused());
         mMessage = "Verify the checkbox is default un-check.";
-        Assert.assertFalse(dialogCheckbox.isChecked());
+        Assert.assertFalse(checkbox.isChecked());
         mMessage = "Verify the text of checkbox on set shutdown time dialog.";
-        Assert.assertEquals(mMessage, "开启定时关机", dialogCheckbox.getText());
+        Assert.assertEquals(mMessage, "开启定时关机", checkbox.getText());
 
         mMessage = "Verify only the checkbox can be focused when un-checked.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
-        Assert.assertTrue(mMessage, dialogCheckbox.isFocused());
+        Assert.assertTrue(mMessage, checkbox.isFocused());
     }
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test17_04TimesControlOnSetShutDownTimeDialog() {
+    public void test17_04TimesControlOnShutDownTimeDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
+
         int expectedHour = mTask.getHoursOfCurrentTime();
         int expectedMin = mTask.getMinutesOfCurrentTime();
 
-        // verification hours
-        mMessage = "Verify the hours time control is enabled.";
-        UiObject2 hoursContainer =
-                mDevice.findObject(mTask.getHoursItemOfSetShutDownTimeDialogSelector());
-        Assert.assertTrue(mMessage, hoursContainer.isEnabled());
-
         mMessage = "Verify the value of hours time control is default as current time.";
-        UiObject2 actualHour = mTask.getValueOfTimeControlOnSetShutDownTimeDialog(hoursContainer);
+        UiObject2 hoursContainer =
+                mDevice.findObject(mTask.getHoursControlOnShutDownTimeDialogSelector());
+        UiObject2 actualHour = mTask.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
         Assert.assertNotNull(actualHour);
         Assert.assertEquals(mMessage, expectedHour,
                 mTask.getIntValueFromTimeControlText(actualHour.getText()));
 
-        // verification minutes
-        mMessage = "Verify the minutes time control is enabled.";
-        UiObject2 minContainer =
-                mDevice.findObject(mTask.getMinutesItemOfSetShutDownTimeDialogSelector());
-        Assert.assertTrue(mMessage, minContainer.isEnabled());
-
         mMessage = "Verify the value of minutes time control is default as current time.";
+        UiObject2 minContainer =
+                mDevice.findObject(mTask.getMinutesControlOnShutDownTimeDialogSelector());
         UiObject2 actualMin =
-                mTask.getValueOfTimeControlOnSetShutDownTimeDialog(minContainer);
+                mTask.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
         Assert.assertNotNull(actualMin);
         Assert.assertEquals(mMessage, expectedMin,
                 mTask.getIntValueFromTimeControlText(actualMin.getText()));
@@ -387,35 +383,37 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test17_05EditHoursControlOnSetShutDownTimeDialog() {
+    public void test17_05EditHoursControlOnShutDownTimeDialog() {
         try {
             mTask.openAdvancedSettingsPage();
             mTask.openSetShutDownTimeDialog();
             int expectedHour = mTask.getHoursOfCurrentTime();
 
-            mMessage = "Verify the hours control is focused after checkbox is checked.";
+            mMessage = "Verify the hours control can be focused after checkbox is checked.";
             mTask.checkSetShutDownTimeCheckbox();
             mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
             UiObject2 hoursContainer =
-                    mDevice.findObject(mTask.getHoursItemOfSetShutDownTimeDialogSelector());
+                    mDevice.findObject(mTask.getHoursControlOnShutDownTimeDialogSelector());
             Assert.assertTrue(mMessage, hoursContainer.isSelected());
 
             mMessage = "Verify the hours is updated when move up on hours control.";
             int upMoveTimes = 1;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), upMoveTimes);
             UiObject2 actualHour =
-                    mTask.getValueOfTimeControlOnSetShutDownTimeDialog(hoursContainer);
+                    mTask.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
             Assert.assertNotNull(actualHour);
-            Assert.assertEquals(mMessage, mTask.subHoursValue(expectedHour, upMoveTimes),
+
+            expectedHour = mTask.subHoursValue(expectedHour, upMoveTimes);
+            Assert.assertEquals(mMessage, expectedHour,
                     mTask.getIntValueFromTimeControlText(actualHour.getText()));
 
             mMessage = "Verify the hours is updated when move down on hours control.";
             int downMoveTimes = 3;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), downMoveTimes);
-            actualHour = mTask.getValueOfTimeControlOnSetShutDownTimeDialog(hoursContainer);
+            actualHour = mTask.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
             Assert.assertNotNull(actualHour);
             Assert.assertEquals(mMessage,
-                    mTask.addHoursValue(expectedHour, downMoveTimes - upMoveTimes),
+                    mTask.addHoursValue(expectedHour, downMoveTimes),
                     mTask.getIntValueFromTimeControlText(actualHour.getText()));
         } finally {
             // exit with un-save the updated value
@@ -431,29 +429,31 @@ public final class TestCommonSettings {
             mTask.openSetShutDownTimeDialog();
             int expectedMin = mTask.getMinutesOfCurrentTime();
 
-            mMessage = "Verify the minutes control is focused after checkbox is checked.";
+            mMessage = "Verify the minutes control can be focused after checkbox is checked.";
             mTask.checkSetShutDownTimeCheckbox();
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
             UiObject2 minContainer =
-                    mDevice.findObject(mTask.getMinutesItemOfSetShutDownTimeDialogSelector());
+                    mDevice.findObject(mTask.getMinutesControlOnShutDownTimeDialogSelector());
             Assert.assertTrue(mMessage, minContainer.isSelected());
 
             mMessage = "Verify the minutes is updated when move up on hours control.";
             int upMoveTimes = 2;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), upMoveTimes);
             UiObject2 actualMin =
-                    mTask.getValueOfTimeControlOnSetShutDownTimeDialog(minContainer);
+                    mTask.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
             Assert.assertNotNull(actualMin);
-            Assert.assertEquals(mMessage, mTask.subMinutesValue(expectedMin, upMoveTimes),
+
+            expectedMin = mTask.subMinutesValue(expectedMin, upMoveTimes);
+            Assert.assertEquals(mMessage, expectedMin,
                     mTask.getIntValueFromTimeControlText(actualMin.getText()));
 
             mMessage = "Verify the minutes is updated when move down on hours control.";
             int downMoveTimes = 3;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), downMoveTimes);
-            actualMin = mTask.getValueOfTimeControlOnSetShutDownTimeDialog(minContainer);
+            actualMin = mTask.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
             Assert.assertNotNull(actualMin);
             Assert.assertEquals(mMessage,
-                    mTask.addMinutesValue(expectedMin, downMoveTimes - upMoveTimes),
+                    mTask.addMinutesValue(expectedMin, downMoveTimes),
                     mTask.getIntValueFromTimeControlText(actualMin.getText()));
         } finally {
             // exit with un-save the updated value
@@ -464,54 +464,70 @@ public final class TestCommonSettings {
     @Test
     @Category({CategorySettingsTests.class})
     public void test17_11SetShutDownTimeAndSave() {
+        try {
+            mTask.openAdvancedSettingsPage();
+            mTask.openSetShutDownTimeDialog();
+
+            mTask.focusOnHoursOfShutDownTimeControl();
+            String expectedHour = mTask.setAndGetHoursOfShutDownTime(new DeviceActionMoveDown(), 2);
+            mTask.focusOnMinutesOfShutDownTimeControl();
+            String expectedMin = mTask.setAndGetMinutesOfShutDownTime(new DeviceActionMoveUp(), 2);
+            mAction.doDeviceActionAndWait(new DeviceActionCenter());  // save
+
+            mMessage = "Verify the shutdown time is updated on settings page after saved.";
+            UiObject2 shutDownTimeContainer = TestHelper.waitForUiObjectExistAndReturn(
+                    mTask.getShutDownTimeSettingItemContainerSelector());
+            UiObject2 itemValue =
+                    shutDownTimeContainer.findObject(mTask.getSettingItemValueSelector());
+            Assert.assertEquals(mMessage,
+                    String.format("%s:%s关机", expectedHour, expectedMin), itemValue.getText());
+        } finally {
+            mTask.unSetShutDownTvTime();
+        }
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_12SetShutDownTimeEqualCurTime() {
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_13SetShutDownTimeLessThanCurTime() {
+        // TODO: 2017/2/24
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_14UnsetShutDownTime() {
         mTask.openAdvancedSettingsPage();
-        mTask.openSetShutDownTimeDialog();
-
-        mTask.checkSetShutDownTimeCheckbox();
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        String expectedHour = mTask.setAndGetHoursOfShutDownTime(new DeviceActionMoveDown(), 2);
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        String expectedMin = mTask.setAndGetMinutesOfShutDownTime(new DeviceActionMoveUp(), 2);
-
-        mMessage = "Verify the shutdown time is updated on settings page after saved.";
-        mAction.doDeviceActionAndWait(new DeviceActionCenter());  // save
-        UiObject2 shutDownTimeContainer = TestHelper.waitForUiObjectExistAndReturn(
-                mTask.getSetShutDownTvItemContainerSelector());
-        UiObject2 itemValue = shutDownTimeContainer.findObject(mTask.getSettingItemValueSelector());
-        Assert.assertEquals(mMessage,
-                String.format("%s:%s关机", expectedHour, expectedMin), itemValue.getText());
-    }
-
-    @Test
-    @Category({CategorySettingsTests.class})
-    public void test17_12SetShutDownTimeLessThanFiveMins() {
-        // TODO: 2017/2/24
-    }
-
-    @Test
-    @Category({CategorySettingsTests.class})
-    public void test17_13SetShutDownTimeEqualCurTime() {
-        // TODO: 2017/2/24
-    }
-
-    @Test
-    @Category({CategorySettingsTests.class})
-    public void test17_14SetShutDownTimeLessThanCurTime() {
-        // TODO: 2017/2/24
-    }
-
-    @Test
-    @Category({CategorySettingsTests.class})
-    public void test17_15UnsetShutDownTime() {
-        mTask.openAdvancedSettingsPage();
-        mTask.openSetShutDownTimeDialog();
-        mTask.unCheckSetShutDownTimeCheckbox();
-        mAction.doDeviceActionAndWait(new DeviceActionBack());
+        mTask.unSetShutDownTvTime();
 
         mMessage = "Verify the shutdown time item is closed on settings page after saved.";
-        UiObject2 shutDownTimeContainer = TestHelper.waitForUiObjectExistAndReturn(
-                mTask.getSetShutDownTvItemContainerSelector());
-        UiObject2 itemValue = shutDownTimeContainer.findObject(mTask.getSettingItemValueSelector());
+        UiObject2 shutDownTimeItem = TestHelper.waitForUiObjectExistAndReturn(
+                mTask.getShutDownTimeSettingItemContainerSelector());
+        UiObject2 itemValue = shutDownTimeItem.findObject(mTask.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, TEXT_CLOSED, itemValue.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class})
+    public void test17_15SetShutDownTimeLessThanFiveMinutes() {
+        mTask.openAdvancedSettingsPage();
+        mTask.openSetShutDownTimeDialog();
+
+        mTask.focusOnMinutesOfShutDownTimeControl();
+        String expectedMin = mTask.setAndGetMinutesOfShutDownTime(new DeviceActionMoveDown(), 4);
+        mAction.doDeviceActionAndWait(new DeviceActionCenter());
+        Log.d(TAG, String.format("%s set and save shutdown time: %s minutes",
+                TestConstants.LOG_KEYWORD, expectedMin));
+
+        mMessage = "Verify the status of shutdown time settings is closed" +
+                " when set time less than 5 minutes.";
+        UiObject2 shutDownTimeItem = TestHelper.waitForUiObjectExistAndReturn(
+                mTask.getShutDownTimeSettingItemContainerSelector());
+        UiObject2 itemValue = shutDownTimeItem.findObject(mTask.getSettingItemValueSelector());
         Assert.assertEquals(mMessage, TEXT_CLOSED, itemValue.getText());
     }
 

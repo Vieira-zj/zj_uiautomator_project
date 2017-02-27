@@ -13,7 +13,7 @@ import java.util.List;
  */
 public final class ShellCmdUtils {
 
-    public static final String TAG = ShellCmdUtils.class.getSimpleName();
+//    private static final String TAG = ShellCmdUtils.class.getSimpleName();
 
 //    private static final String COMMAND_SU = "su";
     private static final String COMMAND_SH = "sh";

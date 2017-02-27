@@ -13,7 +13,8 @@ import java.io.IOException;
  */
 public final class TestConstants {
 
-    public final static String TAG = TestConstants.class.getSimpleName();
+    private final static String TAG = TestConstants.class.getSimpleName();
+    public final static String LOG_KEYWORD = "ZJTest => ";
 
     public final static long SHORT_WAIT = 1000L;
     public final static long WAIT = 3000L;

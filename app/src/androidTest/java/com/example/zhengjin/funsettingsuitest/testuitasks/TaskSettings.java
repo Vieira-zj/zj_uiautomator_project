@@ -11,6 +11,7 @@ import android.support.test.uiautomator.UiSelector;
 
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
@@ -96,7 +97,7 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/setting_item_sleep");
     }
 
-    public BySelector getSetShutDownTvItemContainerSelector() {
+    public BySelector getShutDownTimeSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_screen_shutdown_time");
     }
 
@@ -169,15 +170,15 @@ public final class TaskSettings {
         return By.res("tv.fun.settings:id/tp_title");
     }
 
-    public BySelector getCheckboxOfSetShutDownTimeDialogSelector() {
+    public BySelector getCheckboxOnShutDownTimeDialogSelector() {
         return By.res("tv.fun.settings:id/tp_checkbox");
     }
 
-    public BySelector getHoursItemOfSetShutDownTimeDialogSelector() {
+    public BySelector getHoursControlOnShutDownTimeDialogSelector() {
         return By.res("tv.fun.settings:id/tp_hour");
     }
 
-    public BySelector getMinutesItemOfSetShutDownTimeDialogSelector() {
+    public BySelector getMinutesControlOnShutDownTimeDialogSelector() {
         return By.res("tv.fun.settings:id/tp_minute");
     }
 
@@ -329,12 +330,12 @@ public final class TaskSettings {
     }
 
     public void openSetShutDownTimeDialog() {
-        this.moveToSpecifiedSettingsItem(this.getSetShutDownTvItemContainerSelector());
+        this.moveToSpecifiedSettingsItem(this.getShutDownTimeSettingItemContainerSelector());
         action.doDeviceActionAndWait(new DeviceActionCenter());
         TestHelper.waitForTextVisible(TITLE_SET_SHUTDOWN_TIME_DIALOG);
     }
 
-    public UiObject2 getValueOfTimeControlOnSetShutDownTimeDialog(UiObject2 container) {
+    public UiObject2 getValueOfTimeControlOnShutDownTimeDialog(UiObject2 container) {
         List<UiObject2> timeItems = container.findObjects(By.clazz(TestConstants.CLASS_TEXT_VIEW));
         for (UiObject2 timeItem : timeItems) {
             if (timeItem.isSelected()) {
@@ -346,28 +347,31 @@ public final class TaskSettings {
     }
 
     public void checkSetShutDownTimeCheckbox() {
-        UiObject2 checkbox = device.findObject(this.getCheckboxOfSetShutDownTimeDialogSelector());
+        UiObject2 checkbox = device.findObject(this.getCheckboxOnShutDownTimeDialogSelector());
+        if (checkbox.isChecked()) {
+            return;
+        }
+
         if (!checkbox.isFocused()) {
             action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
         }
-        if (!checkbox.isChecked()) {
-            action.doDeviceActionAndWait(new DeviceActionCenter());
-        }
-        Assert.assertTrue(
-                "checkSetShutDownTimeCheckbox, failed to set checked!", checkbox.isChecked());
-
+        action.doDeviceActionAndWait(new DeviceActionCenter());
+        Assert.assertTrue("checkSetShutDownTimeCheckbox, failed to set check",
+                checkbox.isChecked());
     }
 
     public void unCheckSetShutDownTimeCheckbox() {
-        UiObject2 checkbox = device.findObject(this.getCheckboxOfSetShutDownTimeDialogSelector());
+        UiObject2 checkbox = device.findObject(this.getCheckboxOnShutDownTimeDialogSelector());
+        if (!checkbox.isChecked()) {
+            return;
+        }
+
         if (!checkbox.isFocused()) {
             action.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
         }
-        if (checkbox.isChecked()) {
-            action.doDeviceActionAndWait(new DeviceActionCenter());
-        }
-        Assert.assertFalse(
-                "unCheckSetShutDownTimeCheckbox, failed to set unchecked!", checkbox.isChecked());
+        action.doDeviceActionAndWait(new DeviceActionCenter());
+        Assert.assertFalse("unCheckSetShutDownTimeCheckbox, failed to set unchecked!",
+                checkbox.isChecked());
     }
 
     public int getHoursOfCurrentTime() {
@@ -414,15 +418,43 @@ public final class TaskSettings {
         return tmpVal < minVal ? minVal : tmpVal;
     }
 
+    public void focusOnHoursOfShutDownTimeControl() {
+        this.checkSetShutDownTimeCheckbox();
+
+        UiObject2 hoursContainer;
+        for (int i = 0, max = 2; i < max; i++) {
+            hoursContainer = device.findObject(this.getHoursControlOnShutDownTimeDialogSelector());
+            if (hoursContainer.isSelected()) {
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+        Assert.assertTrue("focusOnHoursOfShutDownTimeControl, focus failed!", false);
+    }
+
+    public void focusOnMinutesOfShutDownTimeControl() {
+        this.checkSetShutDownTimeCheckbox();
+
+        UiObject2 minContainer;
+        for (int i = 0, max = 3; i < max; i++) {
+            minContainer = device.findObject(this.getMinutesControlOnShutDownTimeDialogSelector());
+            if (minContainer.isSelected()) {
+                return;
+            }
+            action.doDeviceActionAndWait(new DeviceActionMoveRight());
+        }
+        Assert.assertTrue("focusOnMinutesOfShutDownTimeControl, focus failed!", false);
+    }
+
     public String setAndGetHoursOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
         UiObject2 hoursContainer =
-                device.findObject(this.getHoursItemOfSetShutDownTimeDialogSelector());
-        Assert.assertTrue("setAndGetHoursOfShutDownTime, failed to focus on hours of time control!",
+                device.findObject(this.getHoursControlOnShutDownTimeDialogSelector());
+        Assert.assertTrue("setAndGetHoursOfShutDownTime, NOT focus on hours of time control!",
                 hoursContainer.isSelected());
 
         action.doRepeatDeviceActionAndWait(deviceAction, moveTimes);
         UiObject2 hourControl =
-                this.getValueOfTimeControlOnSetShutDownTimeDialog(hoursContainer);
+                this.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
         Assert.assertNotNull("setAndGetHoursOfShutDownTime, hour control is not found!",
                 hourControl);
 
@@ -431,17 +463,23 @@ public final class TaskSettings {
 
     public String setAndGetMinutesOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
         UiObject2 minContainer =
-                device.findObject(this.getMinutesItemOfSetShutDownTimeDialogSelector());
+                device.findObject(this.getMinutesControlOnShutDownTimeDialogSelector());
         Assert.assertTrue(
-                "setAndGetMinutesOfShutDownTime, failed to focus on minutes of time control!",
+                "setAndGetMinutesOfShutDownTime, NOT focus on minutes of time control!",
                 minContainer.isSelected());
 
         action.doRepeatDeviceActionAndWait(deviceAction, moveTimes);
-        UiObject2 minControl = this.getValueOfTimeControlOnSetShutDownTimeDialog(minContainer);
+        UiObject2 minControl = this.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
         Assert.assertNotNull("setAndGetMinutesOfShutDownTime, minutes control is not found!",
                 minControl);
 
         return minControl.getText();
+    }
+
+    public void unSetShutDownTvTime() {
+        this.openSetShutDownTimeDialog();
+        this.unCheckSetShutDownTimeCheckbox();
+        action.doDeviceActionAndWait(new DeviceActionBack());
     }
 
 }
