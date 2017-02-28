@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -16,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsFileManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
@@ -42,10 +42,12 @@ public final class TaskFileManager {
 
     private UiDevice device;
     private UiActionsManager action;
+    private UiObjectsFileManager funUiObjects;
 
     private TaskFileManager() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         action = UiActionsManager.getInstance();
+        funUiObjects = UiObjectsFileManager.getInstance();
     }
 
     public static synchronized TaskFileManager getInstance() {
@@ -59,66 +61,6 @@ public final class TaskFileManager {
         if (instance != null) {
             instance = null;
         }
-    }
-
-    public BySelector getFileManagerHomeTabSelector() {
-        return By.res("tv.fun.filemanager:id/activity_fun_fm_tab");
-    }
-
-    public BySelector getVideoCategorySelector() {
-        return By.res("tv.fun.filemanager:id/category_video");
-    }
-
-    public BySelector getCategoryTitleSelector() {
-        return By.res("tv.fun.filemanager:id/entity_name");
-    }
-
-    public BySelector getCategoryEntiesCountSelector() {
-        return By.res("tv.fun.filemanager:id/entity_count");
-    }
-
-    public BySelector getMainTitleSelector() {
-        return By.res("tv.fun.filemanager:id/activity_sub_title_main");
-    }
-
-    public BySelector getSubTitleSelector() {
-        return By.res("tv.fun.filemanager:id/activity_sub_title_sub");
-    }
-
-    public BySelector getMenuTipsSelector() {
-        return By.res("tv.fun.filemanager:id/activity_sub_menu_tips");
-    }
-
-    public BySelector getMenuContainerSelector() {
-        return By.res("android:id/tv_fun_menu");
-    }
-
-    public BySelector getMenuRemoveBtnContainerSelector() {
-        return By.res("tv.fun.filemanager:id/menu_item_del_id");
-    }
-
-    public BySelector getMenuHideBtnContainerSelector() {
-        return By.res("tv.fun.filemanager:id/menu_item_hide_id");
-    }
-
-    public BySelector getMenuShowAllBtnContainerSelector() {
-        return By.res("tv.fun.filemanager:id/menu_item_show_id");
-    }
-
-    public BySelector getMenuBtnTextSelector() {
-        return By.res("android:id/tv_fun_menu_text");
-    }
-
-    public BySelector getYesBtnOfConfirmDialogSelector() {
-        return By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm");
-    }
-
-    public BySelector getCancelBtnOfConfirmDialogSelector() {
-        return By.res("tv.fun.filemanager:id/confirm_dialog_btn_cancel");
-    }
-
-    public BySelector getTipsOfEmptyDirFromLocalFilesCardSelector() {
-        return By.res("tv.fun.filemanager:id/sub_blank_tips");
     }
 
     public void openFileManagerHomePage() {
@@ -180,7 +122,7 @@ public final class TaskFileManager {
 
     private void enterAndWaitForSpecifiedCardOpened() {
         action.doDeviceActionAndWait(new DeviceActionEnter());
-        TestHelper.waitForUiObjectEnabled(device.findObject(this.getSubTitleSelector()));
+        TestHelper.waitForUiObjectEnabled(device.findObject(funUiObjects.getSubTitleSelector()));
     }
 
     public void navigateAndOpenSpecifiedFile(String fileAbsPath) {

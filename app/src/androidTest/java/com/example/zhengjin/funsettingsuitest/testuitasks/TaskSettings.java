@@ -19,6 +19,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsSettings;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -47,6 +48,7 @@ public final class TaskSettings {
     private static TaskSettings instance = null;
     private UiDevice device;
     private UiActionsManager action;
+    private UiObjectsSettings funUiObjects;
 
     public final String TEXT_COMMON_SETTINGS = "通用设置";
     public final String TITLE_SET_SHUTDOWN_TIME_DIALOG = "设置定时关机";
@@ -54,6 +56,7 @@ public final class TaskSettings {
     private TaskSettings() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         action = UiActionsManager.getInstance();
+        funUiObjects = UiObjectsSettings.getInstance();
     }
 
     public static synchronized TaskSettings getInstance() {
@@ -67,119 +70,6 @@ public final class TaskSettings {
         if (instance != null) {
             instance = null;
         }
-    }
-
-    public BySelector getTitleOfSettingsPageSelector() {
-        return By.res("tv.fun.settings:id/setting_title");
-    }
-
-    public BySelector getDeviceNameSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_name");
-    }
-
-    public BySelector getDialogDeviceNameListSelector() {
-        return By.res("tv.fun.settings:id/dialog_list_list");
-    }
-
-    public BySelector getDeviceNameEditorSelector() {
-        return By.res("tv.fun.settings:id/device_edit");
-    }
-
-    public BySelector getDeviceNameConfirmButtonSelector() {
-        return By.res("tv.fun.settings:id/device_name_btn_confirm");
-    }
-
-    public BySelector getAdvancedItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_advanced");
-    }
-
-    public BySelector getSleepTimeSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_sleep");
-    }
-
-    public BySelector getShutDownTimeSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_screen_shutdown_time");
-    }
-
-    public BySelector getScreenSaverSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_screen_saver");
-    }
-
-    public BySelector getWallpaperSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_wallpaper");
-    }
-
-    public BySelector getInputMethodSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_inputmethod");
-    }
-
-    @SuppressWarnings("unused")
-    public BySelector getLocationSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_locate");
-    }
-
-    public BySelector getInstallUnknownAppSettingItemContainerSelector() {
-        return By.res("tv.fun.settings:id/setting_item_unkown_source");
-    }
-
-    public BySelector getSystemRecoverSettingItemSelector() {
-        return By.res("tv.fun.settings:id/setting_item_recovery");
-    }
-
-    public BySelector getSystemRecoverDialogTitleSelector() {
-        return By.res("tv.fun.settings:id/recovery_title");
-    }
-
-    public BySelector getSaveInfoOfRecoverDialogSelector() {
-        return By.res("tv.fun.settings:id/recovery_cbx_save_network_info");
-    }
-
-    public BySelector getConfirmBtnOfSystemRecoverDialogSelector() {
-        return By.res("tv.fun.settings:id/recovery_btn_confirm");
-    }
-
-    public BySelector getCancelBtnOfSystemRecoverDialogSelector() {
-        return By.res("tv.fun.settings:id/recovery_btn_cancel");
-    }
-
-    public BySelector getTitleOfCommonDialogSelector() {
-        return By.res("tv.fun.settings:id/dialog_title");
-    }
-
-    public BySelector getConfirmBtnOfCommonDialogSelector() {
-        return By.res("tv.fun.settings:id/dialog_btn_confirm");
-    }
-
-    public BySelector getCancelBtnOfCommonDialogSelector() {
-        return By.res("tv.fun.settings:id/dialog_btn_cancel");
-    }
-
-    public BySelector getSettingItemKeySelector() {
-        return By.res("tv.fun.settings:id/item_title");
-    }
-
-    public BySelector getSettingItemValueSelector() {
-        return By.res("tv.fun.settings:id/item_value");
-    }
-
-    private BySelector getSettingSwitcherItemValueSelector() {
-        return By.res("tv.fun.settings:id/setting_item_value");
-    }
-
-    public BySelector getTitleOfSetShutDownTimeDialogSelector() {
-        return By.res("tv.fun.settings:id/tp_title");
-    }
-
-    public BySelector getCheckboxOnShutDownTimeDialogSelector() {
-        return By.res("tv.fun.settings:id/tp_checkbox");
-    }
-
-    public BySelector getHoursControlOnShutDownTimeDialogSelector() {
-        return By.res("tv.fun.settings:id/tp_hour");
-    }
-
-    public BySelector getMinutesControlOnShutDownTimeDialogSelector() {
-        return By.res("tv.fun.settings:id/tp_minute");
     }
 
     public void openCommonSettingsHomePage() {
@@ -201,13 +91,13 @@ public final class TaskSettings {
     public UiObject2 getTextViewOfSwitcher(UiObject2 container) {
         TestHelper.waitForUiObjectEnabled(container);
         UiObject2 switcher =
-                container.findObject(this.getSettingSwitcherItemValueSelector());
+                container.findObject(funUiObjects.getSettingSwitcherItemValueSelector());
         return switcher.findObject(By.clazz(CLASS_TEXT_VIEW));
     }
 
     public UiObject2 getDeviceNameValueByText(String nameText) {
         UiObject2 deviceNameContainer =
-                device.findObject(this.getDeviceNameSettingItemContainerSelector());
+                device.findObject(funUiObjects.getDeviceNameSettingItemContainerSelector());
         return deviceNameContainer.findObject(By.text(nameText));
     }
 
@@ -323,14 +213,15 @@ public final class TaskSettings {
     }
 
     public void openAdvancedSettingsPage() {
-        this.moveToSpecifiedSettingsItem(this.getAdvancedItemContainerSelector());
+        this.moveToSpecifiedSettingsItem(funUiObjects.getAdvancedItemContainerSelector());
         action.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
         TestHelper.waitForUiObjectEnabled(
-                device.findObject(this.getTitleOfSettingsPageSelector()));
+                device.findObject(funUiObjects.getTitleOfSettingsPageSelector()));
     }
 
     public void openSetShutDownTimeDialog() {
-        this.moveToSpecifiedSettingsItem(this.getShutDownTimeSettingItemContainerSelector());
+        this.moveToSpecifiedSettingsItem(
+                funUiObjects.getShutDownTimeSettingItemContainerSelector());
         action.doDeviceActionAndWait(new DeviceActionCenter());
         TestHelper.waitForTextVisible(TITLE_SET_SHUTDOWN_TIME_DIALOG);
     }
@@ -347,7 +238,8 @@ public final class TaskSettings {
     }
 
     public void checkSetShutDownTimeCheckbox() {
-        UiObject2 checkbox = device.findObject(this.getCheckboxOnShutDownTimeDialogSelector());
+        UiObject2 checkbox = device.findObject(
+                funUiObjects.getCheckboxOnShutDownTimeDialogSelector());
         if (checkbox.isChecked()) {
             return;
         }
@@ -361,7 +253,8 @@ public final class TaskSettings {
     }
 
     public void unCheckSetShutDownTimeCheckbox() {
-        UiObject2 checkbox = device.findObject(this.getCheckboxOnShutDownTimeDialogSelector());
+        UiObject2 checkbox = device.findObject(
+                funUiObjects.getCheckboxOnShutDownTimeDialogSelector());
         if (!checkbox.isChecked()) {
             return;
         }
@@ -423,7 +316,8 @@ public final class TaskSettings {
 
         UiObject2 hoursContainer;
         for (int i = 0, max = 2; i < max; i++) {
-            hoursContainer = device.findObject(this.getHoursControlOnShutDownTimeDialogSelector());
+            hoursContainer =
+                    device.findObject(funUiObjects.getHoursControlOnShutDownTimeDialogSelector());
             if (hoursContainer.isSelected()) {
                 return;
             }
@@ -437,7 +331,8 @@ public final class TaskSettings {
 
         UiObject2 minContainer;
         for (int i = 0, max = 3; i < max; i++) {
-            minContainer = device.findObject(this.getMinutesControlOnShutDownTimeDialogSelector());
+            minContainer = device.findObject(
+                    funUiObjects.getMinutesControlOnShutDownTimeDialogSelector());
             if (minContainer.isSelected()) {
                 return;
             }
@@ -448,7 +343,7 @@ public final class TaskSettings {
 
     public String setAndGetHoursOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
         UiObject2 hoursContainer =
-                device.findObject(this.getHoursControlOnShutDownTimeDialogSelector());
+                device.findObject(funUiObjects.getHoursControlOnShutDownTimeDialogSelector());
         Assert.assertTrue("setAndGetHoursOfShutDownTime, NOT focus on hours of time control!",
                 hoursContainer.isSelected());
 
@@ -463,7 +358,7 @@ public final class TaskSettings {
 
     public String setAndGetMinutesOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
         UiObject2 minContainer =
-                device.findObject(this.getMinutesControlOnShutDownTimeDialogSelector());
+                device.findObject(funUiObjects.getMinutesControlOnShutDownTimeDialogSelector());
         Assert.assertTrue(
                 "setAndGetMinutesOfShutDownTime, NOT focus on minutes of time control!",
                 minContainer.isSelected());

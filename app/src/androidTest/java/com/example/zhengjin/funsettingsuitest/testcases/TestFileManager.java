@@ -13,6 +13,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -47,6 +48,7 @@ public final class TestFileManager {
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
+    private UiObjectsFileManager mFunUiObjects;
     private TaskFileManager mTask;
     private String mMessage;
 
@@ -131,6 +133,7 @@ public final class TestFileManager {
     public void setUp() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mAction = UiActionsManager.getInstance();
+        mFunUiObjects = UiObjectsFileManager.getInstance();
         mTask = TaskFileManager.getInstance();
 
         TaskLauncher.backToLauncher();
@@ -146,7 +149,7 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test11FileManagerHomeTabShow() {
         mMessage = "Verify the sdcard tab name is enabled.";
-        UiObject2 tabContainer = mDevice.findObject(mTask.getFileManagerHomeTabSelector());
+        UiObject2 tabContainer = mDevice.findObject(mFunUiObjects.getFileManagerHomeTabSelector());
         Assert.assertNotNull(tabContainer);
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(tabContainer));
     }
@@ -157,12 +160,12 @@ public final class TestFileManager {
         mTask.openLocalFilesCard();
 
         mMessage = "Verify the text of main title from sdcard local files.";
-        UiObject2 mainTitle = mDevice.findObject(mTask.getMainTitleSelector());
+        UiObject2 mainTitle = mDevice.findObject(mFunUiObjects.getMainTitleSelector());
         Assert.assertNotNull(mainTitle);
         Assert.assertEquals(mMessage, "本地存储", mainTitle.getText());
 
         mMessage = "Verify the text of sub title from sdcard local files.";
-        UiObject2 subTitle = mDevice.findObject(mTask.getSubTitleSelector());
+        UiObject2 subTitle = mDevice.findObject(mFunUiObjects.getSubTitleSelector());
         Assert.assertEquals(mMessage, "全部文件", subTitle.getText());
     }
 
@@ -173,7 +176,7 @@ public final class TestFileManager {
         mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
 
         mMessage = "Verify navigate to the specified path.";
-        UiObject2 subTitle = mDevice.findObject(mTask.getSubTitleSelector());
+        UiObject2 subTitle = mDevice.findObject(mFunUiObjects.getSubTitleSelector());
         Assert.assertEquals(mMessage, TEST_ROOT_DIR_NAME, subTitle.getText());
     }
 
@@ -201,7 +204,7 @@ public final class TestFileManager {
 
         // verification 1
         mMessage = "Verify the menu tips is displayed.";
-        UiObject2 menuTips = mDevice.findObject(mTask.getMenuTipsSelector());
+        UiObject2 menuTips = mDevice.findObject(mFunUiObjects.getMenuTipsSelector());
         Assert.assertTrue(mMessage, menuTips.getText().contains("查看更多操作"));
 
         // verification 2
@@ -212,13 +215,13 @@ public final class TestFileManager {
 
         mMessage = "Verify the hide button is focused in the bottom menu.";
         UiObject2 menuHideBtnContainer =
-                mDevice.findObject(mTask.getMenuHideBtnContainerSelector());
+                mDevice.findObject(mFunUiObjects.getMenuHideBtnContainerSelector());
         Assert.assertNotNull(menuHideBtnContainer);
         Assert.assertTrue(mMessage, menuHideBtnContainer.isFocused());
 
         mMessage = "Verify the text of hide button in the bottom menu.";
         UiObject2 menuHideBtn =
-                menuHideBtnContainer.findObject(mTask.getMenuBtnTextSelector());
+                menuHideBtnContainer.findObject(mFunUiObjects.getMenuBtnTextSelector());
         Assert.assertNotNull(menuHideBtn);
         Assert.assertEquals(mMessage, TEXT_HIDDEN_BUTTON, menuHideBtn.getText());
     }
@@ -234,21 +237,21 @@ public final class TestFileManager {
         // verification 1
         mMessage = "Verify the remove button is focused in the bottom menu.";
         UiObject2 menuRemoveBtnContainer =
-                mDevice.findObject(mTask.getMenuRemoveBtnContainerSelector());
+                mDevice.findObject(mFunUiObjects.getMenuRemoveBtnContainerSelector());
         Assert.assertNotNull(menuRemoveBtnContainer);
         Assert.assertTrue(mMessage, menuRemoveBtnContainer.isFocused());
 
         mMessage = "Verify the text of remove button in the bottom menu.";
         UiObject2 menuRemoveBtn =
-                menuRemoveBtnContainer.findObject(mTask.getMenuBtnTextSelector());
+                menuRemoveBtnContainer.findObject(mFunUiObjects.getMenuBtnTextSelector());
         Assert.assertEquals(mMessage, TEXT_REMOVE_BUTTON, menuRemoveBtn.getText());
 
         // verification 2
         mMessage = "Verify the text of hide button in the bottom menu.";
         UiObject2 menuHideBtnContainer =
-                mDevice.findObject(mTask.getMenuHideBtnContainerSelector());
+                mDevice.findObject(mFunUiObjects.getMenuHideBtnContainerSelector());
         UiObject2 menuHideBtn =
-                menuHideBtnContainer.findObject(mTask.getMenuBtnTextSelector());
+                menuHideBtnContainer.findObject(mFunUiObjects.getMenuBtnTextSelector());
         Assert.assertEquals(mMessage, TEXT_HIDDEN_BUTTON, menuHideBtn.getText());
     }
 
@@ -267,8 +270,9 @@ public final class TestFileManager {
 
         mMessage = "Verify the Show All button is displayed in menu after hide file.";
         mTask.showMenuAndRequestFocus();
-        UiObject2 btnContainer = mDevice.findObject(mTask.getMenuShowAllBtnContainerSelector());
-        UiObject2 btnShowAll = btnContainer.findObject(mTask.getMenuBtnTextSelector());
+        UiObject2 btnContainer =
+                mDevice.findObject(mFunUiObjects.getMenuShowAllBtnContainerSelector());
+        UiObject2 btnShowAll = btnContainer.findObject(mFunUiObjects.getMenuBtnTextSelector());
         Assert.assertEquals(mMessage, TEXT_SHOWALL_BUTTON, btnShowAll.getText());
 
         mMessage = "Verify the directory is show after click Show All button.";
@@ -304,7 +308,8 @@ public final class TestFileManager {
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
 
         mMessage = "Verify the Cancel button of confirm dialog.";
-        UiObject2 cancelBtn = mDevice.findObject(mTask.getCancelBtnOfConfirmDialogSelector());
+        UiObject2 cancelBtn =
+                mDevice.findObject(mFunUiObjects.getCancelBtnOfConfirmDialogSelector());
         Assert.assertNotNull(mMessage, cancelBtn);
 
         mMessage = "Verify click cancel and do not remove a file.";
@@ -322,7 +327,7 @@ public final class TestFileManager {
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
 
         mMessage = "Verify the Yes button of confirm dialog.";
-        UiObject2 confirmBtn = mDevice.findObject(mTask.getYesBtnOfConfirmDialogSelector());
+        UiObject2 confirmBtn = mDevice.findObject(mFunUiObjects.getYesBtnOfConfirmDialogSelector());
         Assert.assertNotNull(mMessage, confirmBtn);
 
         mMessage = "Verify click yes and remove a file.";
@@ -340,7 +345,8 @@ public final class TestFileManager {
 
         mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
         mMessage = "Verify the tips of empty directory from all files card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, TEXT_NO_FILES_IN_DIR, tips.getText());
 
@@ -359,11 +365,12 @@ public final class TestFileManager {
         // remove file
         mAction.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
-        UiObject2 confirmBtn = mDevice.findObject(mTask.getYesBtnOfConfirmDialogSelector());
+        UiObject2 confirmBtn = mDevice.findObject(mFunUiObjects.getYesBtnOfConfirmDialogSelector());
         mAction.doClickActionAndWait(confirmBtn);
 
         mMessage = "Verify the tips of empty directory from all files card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, TEXT_NO_FILES_IN_DIR, tips.getText());
     }
@@ -374,13 +381,14 @@ public final class TestFileManager {
         mTask.openCategoryAppCard();
 
         mMessage = "Verify the tips when no files in APP card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, "未发现可安装的应用", tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in APP card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
-        UiObject2 menu = mDevice.findObject(mTask.getMenuContainerSelector());
+        UiObject2 menu = mDevice.findObject(mFunUiObjects.getMenuContainerSelector());
         Assert.assertNull(mMessage, menu);
     }
 
@@ -390,13 +398,14 @@ public final class TestFileManager {
         mTask.openCategoryMusicCard();
 
         mMessage = "Verify the tips when no files in music card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, "未发现可播放的音乐", tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in music card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
-        UiObject2 menu = mDevice.findObject(mTask.getMenuContainerSelector());
+        UiObject2 menu = mDevice.findObject(mFunUiObjects.getMenuContainerSelector());
         Assert.assertNull(mMessage, menu);
     }
 
@@ -406,13 +415,14 @@ public final class TestFileManager {
         mTask.openCategoryPictureCard();
 
         mMessage = "Verify the tips when no files in picture card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, "未发现可显示的图片", tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in picture card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
-        UiObject2 menu = mDevice.findObject(mTask.getMenuContainerSelector());
+        UiObject2 menu = mDevice.findObject(mFunUiObjects.getMenuContainerSelector());
         Assert.assertNull(mMessage, menu);
     }
 
@@ -423,17 +433,18 @@ public final class TestFileManager {
         mDevice.waitForIdle();
 
         mMessage = "Verify the video card is enabled.";
-        UiObject2 videoCardContainer = mDevice.findObject(mTask.getVideoCategorySelector());
+        UiObject2 videoCardContainer = mDevice.findObject(mFunUiObjects.getVideoCategorySelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(videoCardContainer));
 
         mMessage = "Verify the text of video card.";
-        UiObject2 videoCardText = videoCardContainer.findObject(mTask.getCategoryTitleSelector());
+        UiObject2 videoCardText =
+                videoCardContainer.findObject(mFunUiObjects.getCategoryTitleSelector());
         Assert.assertNotNull(videoCardText);
         Assert.assertEquals(mMessage, "视频", videoCardText.getText());
 
         mMessage = "Verify the files count of video card.";
         UiObject2 videoCardCount =
-                videoCardContainer.findObject(mTask.getCategoryEntiesCountSelector());
+                videoCardContainer.findObject(mFunUiObjects.getCategoryEntiesCountSelector());
         Assert.assertNotNull(videoCardCount);
         Assert.assertEquals(mMessage, "(0项)", videoCardCount.getText());
     }
@@ -502,7 +513,8 @@ public final class TestFileManager {
         mTask.openCategoryVideoCard();
 
         mMessage = "Verify all video files in directory is hidden from Video category.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(tips));
         Assert.assertEquals(mMessage, TEXT_NO_VIDEO_IN_CATEGORY, tips.getText());
     }
@@ -580,13 +592,14 @@ public final class TestFileManager {
         mTask.openCategoryVideoCard();
 
         mMessage = "Verify the tips when no files in video card.";
-        UiObject2 tips = mDevice.findObject(mTask.getTipsOfEmptyDirFromLocalFilesCardSelector());
+        UiObject2 tips = mDevice.findObject(
+                mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
         Assert.assertEquals(mMessage, TEXT_NO_VIDEO_IN_CATEGORY, tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in video card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
-        UiObject2 menu = mDevice.findObject(mTask.getMenuContainerSelector());
+        UiObject2 menu = mDevice.findObject(mFunUiObjects.getMenuContainerSelector());
         Assert.assertNull(mMessage, menu);
     }
 
@@ -611,6 +624,7 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
+        mFunUiObjects.destroyInstance();
         mTask.destroyInstance();
     }
 
@@ -620,7 +634,7 @@ public final class TestFileManager {
 
     private void removeFileAndConfirm() {
         mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
-        UiObject2 btnConfirm = mDevice.findObject(mTask.getYesBtnOfConfirmDialogSelector());
+        UiObject2 btnConfirm = mDevice.findObject(mFunUiObjects.getYesBtnOfConfirmDialogSelector());
         Assert.assertTrue("Wait for confirm button enabled.",
                 TestHelper.waitForUiObjectEnabled(btnConfirm));
         mAction.doClickActionAndWait(btnConfirm);
