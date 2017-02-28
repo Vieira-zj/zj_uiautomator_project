@@ -39,17 +39,18 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SET
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestAboutInfoPage {
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsAboutInfo mFunUiObjects;
-    private TaskAboutInfo mTask;
-    private String mMessage;
-
     private final String[] ABOUT_ITEM_TITLES_ARR =
             {"产品信息", "网络信息", "系统版本", "问题反馈", "法律信息", "播控方"};
     private final String START_CATCH_LOG_MENU_BTN_TEXT = "开始抓日志";
     private final String DUMP_LOG_MENU_BTN_TEXT = "导入U盘";
     private final String[] LAW_ITEM_TITLES_ARR = {"版权保护投诉指引", "隐私政策", "用户协议"};
+
+    private UiDevice mDevice;
+    private UiActionsManager mAction;
+    private UiObjectsAboutInfo mFunUiObjects;
+    private TaskAboutInfo mTask;
+
+    private String mMessage;
 
     @BeforeClass
     public static void classSetUp() {

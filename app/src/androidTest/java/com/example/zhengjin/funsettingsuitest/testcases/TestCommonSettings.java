@@ -56,12 +56,6 @@ public final class TestCommonSettings {
 
     private static final String TAG = TestCommonSettings.class.getSimpleName();
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsSettings mFunUiObjects;
-    private TaskSettings mTask;
-    private String mMessage;
-
     private final String SELECT_DEVICE_NAME = "书房的电视";
     private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
 
@@ -78,6 +72,13 @@ public final class TestCommonSettings {
     private final String[] SUB_VALUES_SHUTDOWN_TV_TIME =
             {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_WALLPAPER = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
+
+    private UiDevice mDevice;
+    private UiActionsManager mAction;
+    private UiObjectsSettings mFunUiObjects;
+    private TaskSettings mTask;
+
+    private String mMessage;
 
     @BeforeClass
     public static void classSetUp() {
@@ -584,7 +585,7 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test18ScreenSaverDefaultValue() {
+    public void test18_01ScreenSaverDefaultValue() {
         mTask.scrollMoveToSpecificSettingsItem("屏保");
 
         mMessage = "Verify the default value of screen saver.";
@@ -597,7 +598,7 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test18_01ScreenSaverSubValues() {
+    public void test18_02ScreenSaverSubValues() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getScreenSaverSettingItemContainerSelector());
         ShellUtils.systemWaitByMillis(SHORT_WAIT);

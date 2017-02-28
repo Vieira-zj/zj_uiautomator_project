@@ -48,18 +48,19 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestWeather {
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsWeather mFunUiObjects;
-    private TaskWeather mTask;
-    private String mMessage;
-
     private final String INIT_PROVINCE = "湖北";
     private final String INIT_CITY = "武汉";
     private final String ADD_PROVINCE_1 = "山东";
     private final String ADD_CITY_1 = "青岛";
     private final String ADD_DEFAULT_PROVINCE_2 = "海南";
     private final String ADD_DEFAULT_CITY_2 = "三亚";
+
+    private UiDevice mDevice;
+    private UiActionsManager mAction;
+    private UiObjectsWeather mFunUiObjects;
+    private TaskWeather mTask;
+
+    private String mMessage;
 
     @BeforeClass
     public static void classSetUp() {

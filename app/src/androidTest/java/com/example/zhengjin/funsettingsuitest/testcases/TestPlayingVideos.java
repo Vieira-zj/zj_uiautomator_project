@@ -48,14 +48,14 @@ public final class TestPlayingVideos {
 
     private static final String TAG = TestPlayingVideos.class.getSimpleName();
 
+    private final int RANDOM_SELECT_NUM = 5;
+    private final int PLAY_TIME_BY_SEC = 30;
+    private final int RUN_TIMES = 3;
+
     private UiDevice mDevice;
     private UiActionsManager mAction;
     private TaskPlayingVideos mTask;
     private TaskVideoHomeTab mTaskVideoHomeTab;
-
-    private final int RANDOM_SELECT_NUM = 5;
-    private final int PLAY_TIME_BY_SEC = 30;
-    private final int RUN_TIMES = 3;
 
     @Before
     public void setUp() {

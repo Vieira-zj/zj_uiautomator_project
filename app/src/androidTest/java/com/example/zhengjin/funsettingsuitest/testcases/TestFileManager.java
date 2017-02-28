@@ -46,12 +46,6 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsFileManager mFunUiObjects;
-    private TaskFileManager mTask;
-    private String mMessage;
-
     private static final String TEST_ROOT_DIR_NAME = "AutoTestFiles";
     private static String TEST_ROOT_DIR_PATH;
     private static final String TEST_DIR_NAME = "TestNonMediaDir";
@@ -75,12 +69,20 @@ public final class TestFileManager {
     private final String TEXT_NO_FILES_IN_DIR = "未发现可显示的文件";
     private final String TEXT_NO_VIDEO_IN_CATEGORY = "未发现可播放的视频";
 
+    private UiDevice mDevice;
+    private UiActionsManager mAction;
+    private UiObjectsFileManager mFunUiObjects;
+    private TaskFileManager mTask;
+
+    private String mMessage;
+
     static {
         try {
             TEST_ROOT_DIR_PATH =
                     String.format("%s/%s", FileUtils.getExternalStoragePath(), TEST_ROOT_DIR_NAME);
         } catch (IOException e) {
             e.printStackTrace();
+            // Assert failed in static block, then all test methods will run failed
             Assert.assertTrue(e.getMessage(), false);
         }
 

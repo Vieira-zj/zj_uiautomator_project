@@ -6,6 +6,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
@@ -42,12 +43,6 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestImageAndSoundSettings {
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsImageAndSound mFunUiObjects;
-    private TaskImageAndSound mTask;
-    private String mMessage;
-
     private final String TURN_ON_TEXT = "已开启";
     private final String TURN_OFF_TEXT = "已关闭";
 
@@ -57,8 +52,14 @@ public final class TestImageAndSoundSettings {
             {"色温", "背光", "亮度", "对比度", "饱和度", "恢复默认选项"};
     private final String[] IMAGE_PARAMS_SETTINGS_VALUE_ARR =
             {"标准", "10", "50", "50", "50"};
-
     private final String[] IMAGE_COLOR_TMP_VALUES_ARR = {"暖", "冷", "标准"};
+
+    private UiDevice mDevice;
+    private UiActionsManager mAction;
+    private UiObjectsImageAndSound mFunUiObjects;
+    private TaskImageAndSound mTask;
+
+    private String mMessage;
 
     @BeforeClass
     public static void classSetUp() {
@@ -144,7 +145,8 @@ public final class TestImageAndSoundSettings {
         mMessage = "Verify the default value of image params setting item.";
         UiObject2 pressKeySoundValue = pressKeySoundItem.findObject(
                 mFunUiObjects.getImageAndSoundSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
+        String expected = RunnerProfile.isVersion30 ? TURN_ON_TEXT : TURN_OFF_TEXT;
+        Assert.assertEquals(mMessage, expected, pressKeySoundValue.getText());
     }
 
     @Test
@@ -158,13 +160,15 @@ public final class TestImageAndSoundSettings {
                 mDevice.findObject(mFunUiObjects.getPressKeySoundSettingItemSelector());
         UiObject2 pressKeySoundValue = pressKeySoundItem.findObject(
                 mFunUiObjects.getImageAndSoundSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TURN_OFF_TEXT, pressKeySoundValue.getText());
+        String expected = RunnerProfile.isVersion30 ? TURN_OFF_TEXT : TURN_ON_TEXT;
+        Assert.assertEquals(mMessage, expected, pressKeySoundValue.getText());
 
         mMessage = "Verify the text after turn on the press key sound setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
         pressKeySoundValue = pressKeySoundItem.findObject(
                 mFunUiObjects.getImageAndSoundSettingItemValueSelector());
-        Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
+        expected = RunnerProfile.isVersion30 ? TURN_ON_TEXT : TURN_OFF_TEXT;
+        Assert.assertEquals(mMessage, expected, pressKeySoundValue.getText());
     }
 
     @Test

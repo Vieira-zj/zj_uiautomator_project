@@ -109,7 +109,7 @@ public final class TaskImageAndSound {
         action.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 6);
         UiObject2 resetItem = device.findObject(
                 funUiObjects.getResetToDefaultSettingItemOfImageParamsSelector());
-        Assert.assertTrue("focusOnResetToDefaultImageParamsSettingsItem, failed to focus.",
+        Assert.assertTrue("focusOnResetToDefaultImageParamsSettingsItem, failed to focus!",
                 resetItem.isFocused());
     }
 
