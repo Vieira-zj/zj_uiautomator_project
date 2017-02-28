@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
@@ -13,6 +12,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -32,12 +32,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
  * <p>
  * Include the UI selectors and tasks for weather app.
  */
-
 public final class TaskWeather {
 
     private static TaskWeather instance;
+
     private UiDevice device;
     private UiActionsManager action;
+    private UiObjectsWeather funUiObjects;
 
     public final String MENU_BUTTON_TEXT_UPDATE = "更新";
     public final String MENU_BUTTON_TEXT_MODIFY_DEFAULT = "修改默认";
@@ -47,6 +48,7 @@ public final class TaskWeather {
     private TaskWeather() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         action = UiActionsManager.getInstance();
+        funUiObjects = UiObjectsWeather.getInstance();
     }
 
     public static synchronized TaskWeather getInstance() {
@@ -60,50 +62,6 @@ public final class TaskWeather {
         if (instance != null) {
             instance = null;
         }
-    }
-
-    private BySelector getLocationOfWeatherHomeSelector() {
-        return By.res("tv.fun.weather:id/tv_weather_day_addr");
-    }
-
-    public BySelector getTipTextAtBottomOfWeatherHomeSelector() {
-        return By.res("tv.fun.weather:id/tv_tip");
-    }
-
-    public BySelector getTopRefreshTimeOfWeatherHomeSelector() {
-        return By.res("tv.fun.weather:id/tv_weather_refresh_time");
-    }
-
-    public BySelector getWeatherForecastDateSelector() {
-        return By.res("tv.fun.weather:id/tv_weather_date");
-    }
-
-    public BySelector getCityManagerTitleSelector() {
-        return By.res("tv.fun.weather:id/setting_title");
-    }
-
-    private BySelector getProvinceListSelector() {
-        return By.res("tv.fun.weather:id/ws_province");
-    }
-
-    private BySelector getCityListSelector() {
-        return By.res("tv.fun.weather:id/ws_city");
-    }
-
-    private BySelector getMiddleItemInProvinceCityListSelector() {
-        return By.res("tv.fun.weather:id/wheel_view_tx3");
-    }
-
-    public BySelector getDialogTitleSelector() {
-        return By.res("tv.fun.weather:id/tv_title");
-    }
-
-    public BySelector getDialogConfirmButtonSelector() {
-        return By.res("tv.fun.weather:id/btn_confirm");
-    }
-
-    public BySelector getDialogCancelButtonSelector() {
-        return By.res("tv.fun.weather:id/btn_cancel");
     }
 
     public void openWeatherHomePage() {
@@ -121,7 +79,7 @@ public final class TaskWeather {
     }
 
     public UiObject2 getCurrentCityOnWeatherHomePage() {
-        return device.findObject(this.getLocationOfWeatherHomeSelector());
+        return device.findObject(funUiObjects.getLocationOfWeatherHomeSelector());
     }
 
     public String formatCityNameWithSuffixDefault(String cityName) {
@@ -202,16 +160,16 @@ public final class TaskWeather {
     }
 
     public String getSelectedLocationProvince() {
-        UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
+        UiObject2 provinceList = device.findObject(funUiObjects.getProvinceListSelector());
         UiObject2 middleProvince =
-                provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
+                provinceList.findObject(funUiObjects.getMiddleItemInProvinceCityListSelector());
         return middleProvince.getText();
     }
 
     public String getSelectedLocationCity() {
-        UiObject2 cityList = device.findObject(this.getCityListSelector());
+        UiObject2 cityList = device.findObject(funUiObjects.getCityListSelector());
         UiObject2 middleCity =
-                cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
+                cityList.findObject(funUiObjects.getMiddleItemInProvinceCityListSelector());
         return middleCity.getText();
     }
 
@@ -225,10 +183,10 @@ public final class TaskWeather {
     private void selectSpecifiedLocationProvince(String provinceText, boolean directionUp) {
         DeviceAction moveAction =
                 directionUp ? new DeviceActionMoveUp() : new DeviceActionMoveDown();
-        UiObject2 provinceList = device.findObject(this.getProvinceListSelector());
+        UiObject2 provinceList = device.findObject(funUiObjects.getProvinceListSelector());
         for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
-            UiObject2 middleProvince =
-                    provinceList.findObject(this.getMiddleItemInProvinceCityListSelector());
+            UiObject2 middleProvince = provinceList.findObject(
+                    funUiObjects.getMiddleItemInProvinceCityListSelector());
             if (provinceText.equals(middleProvince.getText())) {
                 ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
                 return;
@@ -236,25 +194,25 @@ public final class TaskWeather {
             action.doDeviceActionAndWait(moveAction);
         }
 
-        Assert.assertTrue(String.format("selectSpecifiedLocationProvince, province %s is NOT found."
-                , provinceText), false);
+        Assert.assertTrue(String.format(
+                "selectSpecifiedLocationProvince, province %s is NOT found.", provinceText), false);
     }
 
     private void selectSpecifiedLocationCity(String cityText, boolean directionUp) {
         DeviceAction moveAction =
                 directionUp ? new DeviceActionMoveUp() : new DeviceActionMoveDown();
-        UiObject2 cityList = device.findObject(this.getCityListSelector());
+        UiObject2 cityList = device.findObject(funUiObjects.getCityListSelector());
         for (int i = 0, maxMoveTimes = 20; i < maxMoveTimes; i++) {
             UiObject2 middleCity =
-                    cityList.findObject(this.getMiddleItemInProvinceCityListSelector());
+                    cityList.findObject(funUiObjects.getMiddleItemInProvinceCityListSelector());
             if (cityText.equals(middleCity.getText())) {
                 return;
             }
             action.doDeviceActionAndWait(moveAction);
         }
 
-        Assert.assertTrue(String.format("selectSpecifiedLocationCity, city %s is NOT found."
-                , cityText), false);
+        Assert.assertTrue(String.format(
+                "selectSpecifiedLocationCity, city %s is NOT found.", cityText), false);
     }
 
 }

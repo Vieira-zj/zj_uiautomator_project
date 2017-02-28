@@ -624,8 +624,8 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mFunUiObjects.destroyInstance();
         mTask.destroyInstance();
+        mFunUiObjects.destroyInstance();
     }
 
     private void backToFileManagerHome() {

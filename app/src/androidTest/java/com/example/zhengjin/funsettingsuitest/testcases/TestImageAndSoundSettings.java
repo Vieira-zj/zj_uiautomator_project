@@ -11,6 +11,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -37,13 +38,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * <p>
  * Include test cases for image and sound settings.
  */
-
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestImageAndSoundSettings {
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
+    private UiObjectsImageAndSound mFunUiObjects;
     private TaskImageAndSound mTask;
     private String mMessage;
 
@@ -68,6 +69,7 @@ public final class TestImageAndSoundSettings {
     public void setUp() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mAction = UiActionsManager.getInstance();
+        mFunUiObjects = UiObjectsImageAndSound.getInstance();
         mTask = TaskImageAndSound.getInstance();
 
         TaskLauncher.backToLauncher();
@@ -83,7 +85,8 @@ public final class TestImageAndSoundSettings {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test01TitleOfImageAndSoundSettingsPage() {
         mMessage = "Verify the text of title on Image and Sound settings page.";
-        UiObject2 title = mDevice.findObject(mTask.getTitleOfImageAndSoundSettingsSelector());
+        UiObject2 title =
+                mDevice.findObject(mFunUiObjects.getTitleOfImageAndSoundSettingsSelector());
         Assert.assertEquals(mMessage, mTask.IMAGE_AND_SOUND_TEXT, title.getText());
     }
 
@@ -92,15 +95,15 @@ public final class TestImageAndSoundSettings {
     public void test02_01TitleAndValueOfDefaultPlayClarity() {
         mMessage = "Verify the default play clarity setting item is enabled.";
         UiObject2 playClarityItem =
-                mDevice.findObject(mTask.getDefaultPlayClaritySettingItemSelector());
+                mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
         Assert.assertTrue(mMessage, (playClarityItem != null && playClarityItem.isEnabled()));
 
         mMessage = "Verify the default play clarity setting item is default focused.";
         Assert.assertTrue(mMessage, playClarityItem.isFocused());
 
         mMessage = "Verify the title of default play clarity setting item.";
-        UiObject2 playClarityTitle =
-                playClarityItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
+        UiObject2 playClarityTitle = playClarityItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
         Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0],
                 playClarityTitle.getText());
 
@@ -113,12 +116,13 @@ public final class TestImageAndSoundSettings {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test02_02TitleOfImageParamsSettingItem() {
         mMessage = "Verify the image params setting item is enabled.";
-        UiObject2 imageParamsItem = mDevice.findObject(mTask.getImageParamsSettingItemSelector());
+        UiObject2 imageParamsItem =
+                mDevice.findObject(mFunUiObjects.getImageParamsSettingItemSelector());
         Assert.assertTrue(mMessage, (imageParamsItem != null && imageParamsItem.isEnabled()));
 
         mMessage = "Verify the title of image params setting item.";
-        UiObject2 imageParamsTitle =
-                imageParamsItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
+        UiObject2 imageParamsTitle = imageParamsItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
         Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1],
                 imageParamsTitle.getText());
     }
@@ -128,18 +132,18 @@ public final class TestImageAndSoundSettings {
     public void test03TitleAndDefaultValueOfPressKeySoundSettingItem() {
         mMessage = "Verify the press key sound setting item is enabled.";
         UiObject2 pressKeySoundItem =
-                mDevice.findObject(mTask.getPressKeySoundSettingItemSelector());
+                mDevice.findObject(mFunUiObjects.getPressKeySoundSettingItemSelector());
         Assert.assertTrue(mMessage, (pressKeySoundItem != null && pressKeySoundItem.isEnabled()));
 
         mMessage = "Verify the title of image params setting item.";
-        UiObject2 pressKeySoundTitle =
-                pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
+        UiObject2 pressKeySoundTitle = pressKeySoundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
         Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2],
                 pressKeySoundTitle.getText());
 
         mMessage = "Verify the default value of image params setting item.";
-        UiObject2 pressKeySoundValue =
-                pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
+        UiObject2 pressKeySoundValue = pressKeySoundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
     }
 
@@ -151,15 +155,15 @@ public final class TestImageAndSoundSettings {
         mMessage = "Verify the text after turn off the press key sound setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
         UiObject2 pressKeySoundItem =
-                mDevice.findObject(mTask.getPressKeySoundSettingItemSelector());
-        UiObject2 pressKeySoundValue =
-                pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
+                mDevice.findObject(mFunUiObjects.getPressKeySoundSettingItemSelector());
+        UiObject2 pressKeySoundValue = pressKeySoundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_OFF_TEXT, pressKeySoundValue.getText());
 
         mMessage = "Verify the text after turn on the press key sound setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
-        pressKeySoundValue =
-                pressKeySoundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
+        pressKeySoundValue = pressKeySoundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_ON_TEXT, pressKeySoundValue.getText());
     }
 
@@ -168,18 +172,18 @@ public final class TestImageAndSoundSettings {
     public void test05TitleAndDefaultValueOfAudioAroundSettingItem() {
         mMessage = "Verify the audio around setting item is enabled.";
         UiObject2 audioAroundItem =
-                mDevice.findObject(mTask.getAudioAroundSettingItemSelector());
+                mDevice.findObject(mFunUiObjects.getAudioAroundSettingItemSelector());
         Assert.assertTrue(mMessage, (audioAroundItem != null && audioAroundItem.isEnabled()));
 
         mMessage = "Verify the title of audio around setting item.";
-        UiObject2 audioAroundTitle =
-                audioAroundItem.findObject(mTask.getImageAndSoundSettingItemTitleSelector());
+        UiObject2 audioAroundTitle = audioAroundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
         Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[3],
                 audioAroundTitle.getText());
 
         mMessage = "Verify the default value of audio around setting item.";
-        UiObject2 audioAroundValue =
-                audioAroundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
+        UiObject2 audioAroundValue = audioAroundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_OFF_TEXT, audioAroundValue.getText());
     }
 
@@ -191,15 +195,15 @@ public final class TestImageAndSoundSettings {
         mMessage = "Verify the text after turn on the audio around setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
         UiObject2 audioAroundItem =
-                mDevice.findObject(mTask.getAudioAroundSettingItemSelector());
-        UiObject2 audioAroundValue =
-                audioAroundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
+                mDevice.findObject(mFunUiObjects.getAudioAroundSettingItemSelector());
+        UiObject2 audioAroundValue = audioAroundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_ON_TEXT, audioAroundValue.getText());
 
         mMessage = "Verify the text after turn off the audio around setting item.";
         mAction.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
-        audioAroundValue =
-                audioAroundItem.findObject(mTask.getImageAndSoundSettingItemValueSelector());
+        audioAroundValue = audioAroundItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
         Assert.assertEquals(mMessage, TURN_OFF_TEXT, audioAroundValue.getText());
     }
 
@@ -218,14 +222,15 @@ public final class TestImageAndSoundSettings {
 
         mMessage = "Verify the color tmp setting item is enabled on image params page.";
         UiObject2 colorTmpItem =
-                mDevice.findObject(mTask.getColorTmpSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getColorTmpSettingItemOfImageParamsSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(colorTmpItem));
 
         mMessage = "Verify the color tmp setting item is default focused.";
         Assert.assertTrue(mMessage, colorTmpItem.isFocused());
 
         mMessage = "Verify the title of color tmp setting item.";
-        UiObject2 itemTitle = colorTmpItem.findObject(mTask.getTitleOfColorTmpSettingSelector());
+        UiObject2 itemTitle =
+                colorTmpItem.findObject(mFunUiObjects.getTitleOfColorTmpSettingSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[0], itemTitle.getText());
 
         mMessage = "Verify the default value of color tmp setting item.";
@@ -239,7 +244,7 @@ public final class TestImageAndSoundSettings {
         this.openImageParamsPageFromImageAndSound();
 
         UiObject2 colorTmpItem =
-                mDevice.findObject(mTask.getColorTmpSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getColorTmpSettingItemOfImageParamsSelector());
         TestHelper.waitForUiObjectEnabled(colorTmpItem);
 
         mMessage = "Verify sub values of color tmp setting item at position %s";
@@ -260,17 +265,17 @@ public final class TestImageAndSoundSettings {
 
         mMessage = "Verify the background light setting item is enabled on image params page.";
         UiObject2 backLightItem =
-                mDevice.findObject(mTask.getBackLightSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getBackLightSettingItemOfImageParamsSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(backLightItem));
 
         mMessage = "Verify the title of background light setting item.";
-        UiObject2 itemTitle =
-                backLightItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemTitle = backLightItem.findObject(
+                mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[1], itemTitle.getText());
 
         mMessage = "Verify the default value of background light setting item.";
-        UiObject2 itemValue =
-                backLightItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = backLightItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[1], itemValue.getText());
     }
 
@@ -279,19 +284,20 @@ public final class TestImageAndSoundSettings {
     public void test14SetValueOfBackLightOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
         UiObject2 backLightItem =
-                mDevice.findObject(mTask.getBackLightSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getBackLightSettingItemOfImageParamsSelector());
         TestHelper.waitForUiObjectEnabled(backLightItem);
 
         mMessage = "Verify text after minus background light value.";
         mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[1]);
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
-        UiObject2 itemValue =
-                backLightItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = backLightItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("8", itemValue.getText());
 
         mMessage = "Verify text after plus background light value.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        itemValue = backLightItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        itemValue = backLightItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("9", itemValue.getText());
     }
 
@@ -302,17 +308,17 @@ public final class TestImageAndSoundSettings {
 
         mMessage = "Verify the brightness setting item is enabled on image params page.";
         UiObject2 brightnessItem =
-                mDevice.findObject(mTask.getBrightnessSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getBrightnessSettingItemOfImageParamsSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(brightnessItem));
 
         mMessage = "Verify the title of brightness setting item.";
-        UiObject2 itemTitle =
-                brightnessItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemTitle = brightnessItem.findObject(
+                mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[2], itemTitle.getText());
 
         mMessage = "Verify the default value of brightness setting item.";
-        UiObject2 itemValue =
-                brightnessItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = brightnessItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[2], itemValue.getText());
     }
 
@@ -321,19 +327,20 @@ public final class TestImageAndSoundSettings {
     public void test22SetValueOfBrightnessOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
         UiObject2 brightnessItem =
-                mDevice.findObject(mTask.getBrightnessSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getBrightnessSettingItemOfImageParamsSelector());
         TestHelper.waitForUiObjectEnabled(brightnessItem);
 
         mMessage = "Verify text after minus brightness value.";
         mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[2]);
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 3);
-        UiObject2 itemValue =
-                brightnessItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = brightnessItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("47", itemValue.getText());
 
         mMessage = "Verify text after plus brightness value.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 5);
-        itemValue = brightnessItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        itemValue = brightnessItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("52", itemValue.getText());
     }
 
@@ -344,17 +351,17 @@ public final class TestImageAndSoundSettings {
 
         mMessage = "Verify the contrast setting item is enabled on image params page.";
         UiObject2 contrastItem =
-                mDevice.findObject(mTask.getContrastSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getContrastSettingItemOfImageParamsSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(contrastItem));
 
         mMessage = "Verify the title of contrast setting item.";
-        UiObject2 itemTitle =
-                contrastItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemTitle = contrastItem.findObject(
+                mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[3], itemTitle.getText());
 
         mMessage = "Verify the default value of contrast setting item.";
-        UiObject2 itemValue =
-                contrastItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = contrastItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[3], itemValue.getText());
     }
 
@@ -365,19 +372,20 @@ public final class TestImageAndSoundSettings {
 
         this.openImageParamsPageFromImageAndSound();
         UiObject2 contrastItem =
-                mDevice.findObject(mTask.getContrastSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getContrastSettingItemOfImageParamsSelector());
         TestHelper.waitForUiObjectEnabled(contrastItem);
 
         mMessage = "Verify text after minus contrast value.";
         mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[3]);
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 11, waitTime);
-        UiObject2 itemValue =
-                contrastItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = contrastItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("39", itemValue.getText());
 
         mMessage = "Verify text after plus contrast value.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2, waitTime);
-        itemValue = contrastItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        itemValue = contrastItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("41", itemValue.getText());
     }
 
@@ -388,17 +396,17 @@ public final class TestImageAndSoundSettings {
 
         mMessage = "Verify the saturation setting item is enabled on image params page.";
         UiObject2 saturationItem =
-                mDevice.findObject(mTask.getSaturationSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getSaturationSettingItemOfImageParamsSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(saturationItem));
 
         mMessage = "Verify the title of saturation setting item.";
-        UiObject2 itemTitle =
-                saturationItem.findObject(mTask.getTitleOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemTitle = saturationItem.findObject(
+                mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[4], itemTitle.getText());
 
         mMessage = "Verify the default value of saturation setting item.";
-        UiObject2 itemValue =
-                saturationItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = saturationItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], itemValue.getText());
     }
 
@@ -409,19 +417,20 @@ public final class TestImageAndSoundSettings {
 
         this.openImageParamsPageFromImageAndSound();
         UiObject2 saturationItem =
-                mDevice.findObject(mTask.getSaturationSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getSaturationSettingItemOfImageParamsSelector());
         TestHelper.waitForUiObjectEnabled(saturationItem);
 
         mMessage = "Verify text after minus saturationItem value.";
         mTask.focusOnSpecifiedImageParamsSettingsItem(IMAGE_PARAMS_SETTINGS_TITLE_ARR[4]);
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 4, waitTime);
-        UiObject2 itemValue =
-                saturationItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        UiObject2 itemValue = saturationItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("46", itemValue.getText());
 
         mMessage = "Verify text after plus saturationItem value.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 8, waitTime);
-        itemValue = saturationItem.findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+        itemValue = saturationItem.findObject(
+                mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals("54", itemValue.getText());
     }
 
@@ -431,12 +440,13 @@ public final class TestImageAndSoundSettings {
         this.openImageParamsPageFromImageAndSound();
 
         mMessage = "Verify the reset all to default setting item is enabled on image params.";
-        UiObject2 resetItem =
-                mDevice.findObject(mTask.getResetToDefaultSettingItemOfImageParamsSelector());
+        UiObject2 resetItem = mDevice.findObject(
+                mFunUiObjects.getResetToDefaultSettingItemOfImageParamsSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(resetItem));
 
         mMessage = "Verify the title of reset all to default setting item.";
-        UiObject2 title = resetItem.findObject(mTask.getTitleOfResetToDefaultSettingItemSelector());
+        UiObject2 title = resetItem.findObject(
+                mFunUiObjects.getTitleOfResetToDefaultSettingItemSelector());
         Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[5], title.getText());
     }
 
@@ -444,8 +454,8 @@ public final class TestImageAndSoundSettings {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test28ValuesSetToDefaultAfterResetOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
-        UiObject2 resetItem =
-                mDevice.findObject(mTask.getResetToDefaultSettingItemOfImageParamsSelector());
+        UiObject2 resetItem = mDevice.findObject(
+                mFunUiObjects.getResetToDefaultSettingItemOfImageParamsSelector());
         TestHelper.waitForUiObjectEnabled(resetItem);
 
         mTask.focusOnResetToDefaultImageParamsSettingsItem();
@@ -453,33 +463,33 @@ public final class TestImageAndSoundSettings {
 
         mMessage = "Verify the color tmp value is set to default after reset.";
         UiObject2 colorTmpItem =
-                mDevice.findObject(mTask.getColorTmpSettingItemOfImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getColorTmpSettingItemOfImageParamsSelector());
         UiObject2 colorTmpValue = mTask.getSwitcherValueOfColorTmpSetting(colorTmpItem);
         Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[0], colorTmpValue.getText());
 
         mMessage = "Verify the background light value is set to default after reset.";
         UiObject2 backLightValue =
-                mDevice.findObject(mTask.getBackLightSettingItemOfImageParamsSelector())
-                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getBackLightSettingItemOfImageParamsSelector())
+                        .findObject(mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[1], backLightValue.getText());
 
         mMessage = "Verify the brightness value is set to default after reset.";
         UiObject2 brightnessValue =
-                mDevice.findObject(mTask.getBrightnessSettingItemOfImageParamsSelector())
-                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getBrightnessSettingItemOfImageParamsSelector())
+                        .findObject(mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(mMessage,
                 IMAGE_PARAMS_SETTINGS_VALUE_ARR[2], brightnessValue.getText());
 
         mMessage = "Verify the contrast value is set to default after reset.";
         UiObject2 contrastValue =
-                mDevice.findObject(mTask.getContrastSettingItemOfImageParamsSelector())
-                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getContrastSettingItemOfImageParamsSelector())
+                        .findObject(mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[3], contrastValue.getText());
 
         mMessage = "Verify the saturation value is set to default after reset.";
         UiObject2 saturationValue =
-                mDevice.findObject(mTask.getSaturationSettingItemOfImageParamsSelector())
-                        .findObject(mTask.getValueOfImageSettingsOnImageParamsSelector());
+                mDevice.findObject(mFunUiObjects.getSaturationSettingItemOfImageParamsSelector())
+                        .findObject(mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
         Assert.assertEquals(mMessage,
                 IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], saturationValue.getText());
     }
@@ -488,6 +498,7 @@ public final class TestImageAndSoundSettings {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
+        mFunUiObjects.destroyInstance();
     }
 
     private void openImageParamsPageFromImageAndSound() {

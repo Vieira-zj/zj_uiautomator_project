@@ -46,6 +46,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 public final class TaskSettings {
 
     private static TaskSettings instance = null;
+
     private UiDevice device;
     private UiActionsManager action;
     private UiObjectsSettings funUiObjects;

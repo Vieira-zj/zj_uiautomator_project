@@ -14,6 +14,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -39,6 +40,7 @@ public final class TaskAboutInfo {
     private static TaskAboutInfo instance;
     private UiDevice device;
     private UiActionsManager action;
+    private UiObjectsAboutInfo funUiObjects;
 
     public static final String TAG = TaskAboutInfo.class.getSimpleName();
 
@@ -47,6 +49,7 @@ public final class TaskAboutInfo {
     private TaskAboutInfo() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         action = UiActionsManager.getInstance();
+        funUiObjects = UiObjectsAboutInfo.getInstance();
     }
 
     public static synchronized TaskAboutInfo getInstance() {
@@ -63,128 +66,12 @@ public final class TaskAboutInfo {
         }
     }
 
-    public BySelector getSettingsAboutInfoPageTitleSelector() {
-        return By.res("tv.fun.settings:id/setting_title");
-    }
-
-    public BySelector getSettingsAboutInfoSubPageTitleSelector() {
-        return By.res("tv.fun.settings:id/setting_title");
-    }
-
-    public BySelector getProductInfoItemOnAboutSelector() {
-        return By.res("tv.fun.settings:id/about_item_product_info");
-    }
-
-    public BySelector getNetworkInfoItemOnAboutSelector() {
-        return By.res("tv.fun.settings:id/about_item_network");
-    }
-
-    public BySelector getSystemVersionInfoItemOnAboutSelector() {
-        return By.res("tv.fun.settings:id/about_item_sysinfo");
-    }
-
-    public BySelector getLawInfoItemOnAboutSelector() {
-        return By.res("tv.fun.settings:id/about_item_law");
-    }
-
-    public BySelector getPlayControllerItemOnAboutSelector() {
-        return By.res("tv.fun.settings:id/about_item_programflatform");
-    }
-
-    public BySelector getItemTitleOnAboutInfoPageSelector() {
-        return By.res("tv.fun.settings:id/item_title");
-    }
-
-    public BySelector getItemValueOnAboutInfoPageSelector() {
-        return By.res("tv.fun.settings:id/item_value");
-    }
-
-    public BySelector getQrCodeContentOnProductInfoSelector() {
-        return By.res("tv.fun.settings:id/prompt");
-    }
-
-    public BySelector getTvNameItemOnProductInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_productinfo_tvname");
-    }
-
-    public BySelector getTvModelItemOnProductInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_productinfo_model");
-    }
-
-    public BySelector getRomSizeItemOnProductInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_productinfo_space");
-    }
-
-    public BySelector getSeriesIdItemOnProductInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_productinfo_code");
-    }
-
-    public BySelector getNetworkStatusItemOnNetworkInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_network_status");
-    }
-
-    public BySelector getNetworkIpAddrItemOnNetworkInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_network_ip");
-    }
-
-    public BySelector getNetworkWiredMacItemOnNetworkInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_network_mac_ethernet");
-    }
-
-    public BySelector getNetworkWirelessMacItemOnNetworkInfoSelector() {
-        return By.res("tv.fun.settings:id/activity_about_network_mac_wifi");
-    }
-
-    public BySelector getItemTitleOnAboutInfoSubPageSelector() {
-        return By.res("tv.fun.settings:id/display_item_title");
-    }
-
-    public BySelector getItemValueOnAboutInfoSubPageSelector() {
-        return By.res("tv.fun.settings:id/display_item_edit");
-    }
-
-    public BySelector getQuestionFeedbackItemOnAboutSelector() {
-        return By.res("tv.fun.settings:id/about_item_feedback");
-    }
-
-    public BySelector getQuestionFeedbackSubPageContentSelector() {
-        return By.res("tv.fun.settings:id/feedback_tips_5");
-    }
-
-    public BySelector getBottomFeedbackMenuSelector() {
-        return By.res("android:id/tv_fun_menu");
-    }
-
-    public BySelector getCatchLogButtonInFeedbackMenuSelector() {
-        return By.res("tv.fun.settings:id/about_item_feedback_menu_tcpdump");
-    }
-
-    public BySelector getDumpLogToDiskButtonInFeedbackMenuSelector() {
-        return By.res("tv.fun.settings:id/about_item_feedback_menu_dump_log");
-    }
-
-    public BySelector getFeedbackMenuButtonTextSelector() {
-        return By.res("android:id/tv_fun_menu_text");
-    }
-
-    public BySelector getCopyRightProtectItemOnLawInfoSelector() {
-        return By.res("tv.fun.settings:id/about_item_sub_complaint");
-    }
-
-    public BySelector getPrivacyPolicyItemOnLawInfoSelector() {
-        return By.res("tv.fun.settings:id/about_item_sub_policy");
-    }
-
-    public BySelector getUserAgreementItemOnLawInfoSelector() {
-        return By.res("tv.fun.settings:id/about_item_sub_protocol");
-    }
-
     public BySelector getContentWebViewOnLawItemSubPageSelector() {
         return By.clazz(TestConstants.CLASS_WEB_VIEW);
     }
 
     public UiObject2 getTitleInAboutInfoItem(UiObject2 parent) {
-        return parent.findObject(this.getItemTitleOnAboutInfoPageSelector());
+        return parent.findObject(funUiObjects.getItemTitleOnAboutInfoPageSelector());
     }
 
     public void openAboutInfoHomePage() {
@@ -222,7 +109,7 @@ public final class TaskAboutInfo {
     public void openBottomFeedBackMenu() {
         action.doDeviceActionAndWait(new DeviceActionMenu());
         Assert.assertTrue("openBottomFeedBackMenu, open bottom menu failed!",
-                TestHelper.waitForUiObjectExist(this.getBottomFeedbackMenuSelector()));
+                TestHelper.waitForUiObjectExist(funUiObjects.getBottomFeedbackMenuSelector()));
     }
 
     private void focusOnSpecifiedButtonInFeedbackMenu(String btnText) {

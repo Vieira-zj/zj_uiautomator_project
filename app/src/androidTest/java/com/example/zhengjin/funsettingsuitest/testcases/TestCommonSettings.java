@@ -23,7 +23,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsSettings;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskSettings;
-import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -61,7 +60,6 @@ public final class TestCommonSettings {
     private UiActionsManager mAction;
     private UiObjectsSettings mFunUiObjects;
     private TaskSettings mTask;
-    private TaskWeather mWeatherTask;
     private String mMessage;
 
     private final String SELECT_DEVICE_NAME = "书房的电视";
@@ -92,7 +90,6 @@ public final class TestCommonSettings {
         mAction = UiActionsManager.getInstance();
         mFunUiObjects = UiObjectsSettings.getInstance();
         mTask = TaskSettings.getInstance();
-        mWeatherTask = TaskWeather.getInstance();
 
         TaskLauncher.backToLauncher();
         mTask.openCommonSettingsHomePage();
@@ -861,9 +858,8 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mFunUiObjects.destroyInstance();
         mTask.destroyInstance();
-        mWeatherTask.destroyInstance();
+        mFunUiObjects.destroyInstance();
     }
 
     private boolean IsSubWallpaperIncluded(String wallpaper) {

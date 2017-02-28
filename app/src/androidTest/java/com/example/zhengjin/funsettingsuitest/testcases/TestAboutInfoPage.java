@@ -11,6 +11,7 @@ import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSound
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -40,6 +41,7 @@ public final class TestAboutInfoPage {
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
+    private UiObjectsAboutInfo mFunUiObjects;
     private TaskAboutInfo mTask;
     private String mMessage;
 
@@ -58,6 +60,7 @@ public final class TestAboutInfoPage {
     public void setUp() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mAction = UiActionsManager.getInstance();
+        mFunUiObjects = UiObjectsAboutInfo.getInstance();
         mTask = TaskAboutInfo.getInstance();
 
         TaskLauncher.backToLauncher();
@@ -72,7 +75,8 @@ public final class TestAboutInfoPage {
     @Test
     @Category({CategoryAboutInfoTests.class, CategoryDemoTests.class})
     public void test01AboutInfoPageTitle() {
-        UiObject2 pageTitle = mDevice.findObject(mTask.getSettingsAboutInfoPageTitleSelector());
+        UiObject2 pageTitle =
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoPageTitleSelector());
 
         mMessage = "Verify the About Info page title is enabled.";
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(pageTitle));
@@ -84,7 +88,8 @@ public final class TestAboutInfoPage {
     @Category({CategoryAboutInfoTests.class})
     public void test02ProductInfoItemOnAboutInfo() {
         mMessage = "Verify the product info item on About Info page is enabled.";
-        UiObject2 productItem = mDevice.findObject(mTask.getProductInfoItemOnAboutSelector());
+        UiObject2 productItem =
+                mDevice.findObject(mFunUiObjects.getProductInfoItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
 
         mMessage = "Verify the title of product info item.";
@@ -98,14 +103,16 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
 
         mMessage = "Verify the tile on Product Info is enabled.";
-        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        UiObject2 title =
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
 
         mMessage = "Verify the text of title on Product Info.";
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[0], title.getText());
 
         mMessage = "Verify the QR code content.";
-        UiObject2 qrCodeText = mDevice.findObject(mTask.getQrCodeContentOnProductInfoSelector());
+        UiObject2 qrCodeText =
+                mDevice.findObject(mFunUiObjects.getQrCodeContentOnProductInfoSelector());
         Assert.assertEquals(mMessage, "扫描微信二维码，关注公众号", qrCodeText.getText());
     }
 
@@ -115,15 +122,18 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
 
         mMessage = "Verify the device name item is enabled.";
-        UiObject2 tvNameItem = mDevice.findObject(mTask.getTvNameItemOnProductInfoSelector());
+        UiObject2 tvNameItem =
+                mDevice.findObject(mFunUiObjects.getTvNameItemOnProductInfoSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(tvNameItem));
 
         mMessage = "Verify the device name item title.";
-        UiObject2 itemTitle = tvNameItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        UiObject2 itemTitle =
+                tvNameItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "设备名称：", itemTitle.getText());
 
         mMessage = "Verify the device name item value.";
-        UiObject2 itemValue = tvNameItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        UiObject2 itemValue = tvNameItem.findObject(
+                mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, RunnerProfile.deviceName, itemValue.getText());
     }
 
@@ -133,17 +143,18 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
 
         mMessage = "Verify the device model item is enabled.";
-        UiObject2 tvModelItem = mDevice.findObject(mTask.getTvModelItemOnProductInfoSelector());
+        UiObject2 tvModelItem =
+                mDevice.findObject(mFunUiObjects.getTvModelItemOnProductInfoSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(tvModelItem));
 
         mMessage = "Verify the device model item title.";
         UiObject2 itemTitle =
-                tvModelItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+                tvModelItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "产品型号：", itemTitle.getText());
 
         mMessage = "Verify the device model item value.";
         UiObject2 itemValue =
-                tvModelItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+                tvModelItem.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, mTask.getDeviceModelInfo(), itemValue.getText());
     }
 
@@ -153,15 +164,17 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
 
         mMessage = "Verify the device rom size item is enabled.";
-        UiObject2 romSize = mDevice.findObject(mTask.getRomSizeItemOnProductInfoSelector());
+        UiObject2 romSize = mDevice.findObject(mFunUiObjects.getRomSizeItemOnProductInfoSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(romSize));
 
         mMessage = "Verify the device rom size item title.";
-        UiObject2 itemTitle = romSize.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        UiObject2 itemTitle =
+                romSize.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "本机容量：", itemTitle.getText());
 
         mMessage = "Verify the device rom item value.";
-        UiObject2 itemValue = romSize.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        UiObject2 itemValue =
+                romSize.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, mTask.getDeviceRomSizeInfo(), itemValue.getText());
     }
 
@@ -171,15 +184,18 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
 
         mMessage = "Verify the device series id item is enabled.";
-        UiObject2 seriesId = mDevice.findObject(mTask.getSeriesIdItemOnProductInfoSelector());
+        UiObject2 seriesId =
+                mDevice.findObject(mFunUiObjects.getSeriesIdItemOnProductInfoSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(seriesId));
 
         mMessage = "Verify the device series id item title.";
-        UiObject2 itemTitle = seriesId.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+        UiObject2 itemTitle =
+                seriesId.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "设备序列号：", itemTitle.getText());
 
         mMessage = "Verify the device series id item value.";
-        UiObject2 itemValue = seriesId.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+        UiObject2 itemValue =
+                seriesId.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, mTask.isDeviceSeriesIdValid(itemValue.getText()));
     }
 
@@ -187,7 +203,8 @@ public final class TestAboutInfoPage {
     @Category(CategoryAboutInfoTests.class)
     public void test06NetworkInfoItemOnAboutInfo() {
         mMessage = "Verify the network info item on About Info page is enabled.";
-        UiObject2 productItem = mDevice.findObject(mTask.getNetworkInfoItemOnAboutSelector());
+        UiObject2 productItem =
+                mDevice.findObject(mFunUiObjects.getNetworkInfoItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
 
         mMessage = "Verify the title of network info item.";
@@ -202,7 +219,8 @@ public final class TestAboutInfoPage {
 
         // verification 1
         mMessage = "Verify the network info page title is enabled.";
-        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        UiObject2 title =
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
 
         mMessage = "Verify the text of title on network info.";
@@ -211,14 +229,14 @@ public final class TestAboutInfoPage {
         // verification 2
         mMessage = "Verify the title of network status item.";
         UiObject2 statusItem =
-                mDevice.findObject(mTask.getNetworkStatusItemOnNetworkInfoSelector());
+                mDevice.findObject(mFunUiObjects.getNetworkStatusItemOnNetworkInfoSelector());
         UiObject2 itemTitle =
-                statusItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+                statusItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "已连接", itemTitle.getText());
 
         mMessage = "Verify the value of network status item.";
         UiObject2 itemValue =
-                statusItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+                statusItem.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "有线网络", itemValue.getText());
     }
 
@@ -231,26 +249,26 @@ public final class TestAboutInfoPage {
 
         mMessage = "Verify the title of network IP address.";
         UiObject2 ipAddrItem =
-                mDevice.findObject(mTask.getNetworkIpAddrItemOnNetworkInfoSelector());
+                mDevice.findObject(mFunUiObjects.getNetworkIpAddrItemOnNetworkInfoSelector());
         UiObject2 ipItemTitle =
-                ipAddrItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+                ipAddrItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "IP地址", ipItemTitle.getText());
 
         mMessage = "Verify the value of network IP address.";
         UiObject2 ipItemValue =
-                ipAddrItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+                ipAddrItem.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, wiredInfo.getIpAddr().equalsIgnoreCase(ipItemValue.getText()));
 
         mMessage = "Verify the title of wired mac.";
         UiObject2 macIdItem =
-                mDevice.findObject(mTask.getNetworkWiredMacItemOnNetworkInfoSelector());
+                mDevice.findObject(mFunUiObjects.getNetworkWiredMacItemOnNetworkInfoSelector());
         UiObject2 macItemTitle =
-                macIdItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+                macIdItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "有线网络mac地址", macItemTitle.getText());
 
         mMessage = "Verify the value of wired mac.";
         UiObject2 macItemValue =
-                macIdItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector());
+                macIdItem.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, wiredInfo.getMacId().equalsIgnoreCase(macItemValue.getText()));
     }
 
@@ -263,14 +281,14 @@ public final class TestAboutInfoPage {
 
         mMessage = "Verify the title of wireless mac.";
         UiObject2 macIdItem =
-                mDevice.findObject(mTask.getNetworkWirelessMacItemOnNetworkInfoSelector());
+                mDevice.findObject(mFunUiObjects.getNetworkWirelessMacItemOnNetworkInfoSelector());
         UiObject2 macItemTitle =
-                macIdItem.findObject(mTask.getItemTitleOnAboutInfoSubPageSelector());
+                macIdItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoSubPageSelector());
         Assert.assertEquals(mMessage, "无线网络mac地址", macItemTitle.getText());
 
         mMessage = "Verify the value of wireless mac.";
-        String macAddrWireless  =
-                macIdItem.findObject(mTask.getItemValueOnAboutInfoSubPageSelector()).getText();
+        String macAddrWireless = macIdItem.findObject(
+                mFunUiObjects.getItemValueOnAboutInfoSubPageSelector()).getText();
         Assert.assertTrue(mMessage, (wiredInfo.getMacId().equalsIgnoreCase(macAddrWireless)
                 || "00:00:00:00:00:00".equals(macAddrWireless)));
     }
@@ -279,7 +297,8 @@ public final class TestAboutInfoPage {
     @Category(CategoryAboutInfoTests.class)
     public void test11QuestionFeedbackItem() {
         mMessage = "Verify the feedback item on About Info page is enabled.";
-        UiObject2 feedback = mDevice.findObject(mTask.getQuestionFeedbackItemOnAboutSelector());
+        UiObject2 feedback =
+                mDevice.findObject(mFunUiObjects.getQuestionFeedbackItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(feedback));
 
         mMessage = "Verify the title of feedback item.";
@@ -294,19 +313,19 @@ public final class TestAboutInfoPage {
 
         mMessage = "Verify the title on question feedback sub page.";
         UiObject2 subPageTitle =
-                mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(subPageTitle));
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[3], subPageTitle.getText());
 
         mMessage = "Verify the content on question feedback sub page.";
         UiObject2 subPageContent =
-                mDevice.findObject(mTask.getQuestionFeedbackSubPageContentSelector());
+                mDevice.findObject(mFunUiObjects.getQuestionFeedbackSubPageContentSelector());
         Assert.assertEquals(mMessage, "如需上传日志，请按 “菜单” 键", subPageContent.getText());
 
         mMessage = "Verify the bottom feedback menu is exist on sub page!";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
         Assert.assertTrue(mMessage,
-                TestHelper.waitForUiObjectExist(mTask.getBottomFeedbackMenuSelector()));
+                TestHelper.waitForUiObjectExist(mFunUiObjects.getBottomFeedbackMenuSelector()));
     }
 
     @Test
@@ -318,24 +337,26 @@ public final class TestAboutInfoPage {
         // verification 1
         mMessage = "Verify the catch log button in bottom menu is enabled.";
         UiObject2 catchLogBtn =
-                mDevice.findObject(mTask.getCatchLogButtonInFeedbackMenuSelector());
+                mDevice.findObject(mFunUiObjects.getCatchLogButtonInFeedbackMenuSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(catchLogBtn));
 
         mMessage = "Verify the catch log button is default focused.";
         Assert.assertTrue(mMessage, catchLogBtn.isFocused());
 
         mMessage = "Verify the text of catch log button.";
-        UiObject2 catchBtnText = catchLogBtn.findObject(mTask.getFeedbackMenuButtonTextSelector());
+        UiObject2 catchBtnText =
+                catchLogBtn.findObject(mFunUiObjects.getFeedbackMenuButtonTextSelector());
         Assert.assertEquals(mMessage, START_CATCH_LOG_MENU_BTN_TEXT, catchBtnText.getText());
 
         // verification 2
         mMessage = "Verify the dump log to U disk button in bottom menu is enabled.";
         UiObject2 dumpLogBtn =
-                mDevice.findObject(mTask.getDumpLogToDiskButtonInFeedbackMenuSelector());
+                mDevice.findObject(mFunUiObjects.getDumpLogToDiskButtonInFeedbackMenuSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(dumpLogBtn));
 
         mMessage = "Verify the text of dump log button.";
-        UiObject2 dumpBtnText = dumpLogBtn.findObject(mTask.getFeedbackMenuButtonTextSelector());
+        UiObject2 dumpBtnText =
+                dumpLogBtn.findObject(mFunUiObjects.getFeedbackMenuButtonTextSelector());
         Assert.assertEquals(mMessage, DUMP_LOG_MENU_BTN_TEXT, dumpBtnText.getText());
     }
 
@@ -350,7 +371,7 @@ public final class TestAboutInfoPage {
         mTask.openBottomFeedBackMenu();
         mTask.enterOnSpecifiedButtonInFeedbackMenu(START_CATCH_LOG_MENU_BTN_TEXT);
         Assert.assertFalse(mMessage,
-                TestHelper.waitForUiObjectExist(mTask.getBottomFeedbackMenuSelector()));
+                TestHelper.waitForUiObjectExist(mFunUiObjects.getBottomFeedbackMenuSelector()));
 
         mMessage = "Verify the stop catch log button in feedback menu.";
         mTask.openBottomFeedBackMenu();
@@ -360,7 +381,7 @@ public final class TestAboutInfoPage {
         mMessage = "Verify feedback menu disappear after stop catch log on feedback page.";
         mTask.enterOnSpecifiedButtonInFeedbackMenu(STOP_CATCH_LOG_MENU_BTN_TEXT);
         Assert.assertFalse(mMessage,
-                TestHelper.waitForUiObjectExist(mTask.getBottomFeedbackMenuSelector()));
+                TestHelper.waitForUiObjectExist(mFunUiObjects.getBottomFeedbackMenuSelector()));
 
         mMessage = "Verify the start catch log button in feedback menu.";
         mTask.openBottomFeedBackMenu();
@@ -377,10 +398,10 @@ public final class TestAboutInfoPage {
         mTask.openBottomFeedBackMenu();
         mTask.enterOnSpecifiedButtonInFeedbackMenu(DUMP_LOG_MENU_BTN_TEXT);
         Assert.assertFalse(mMessage,
-                TestHelper.waitForUiObjectExist(mTask.getBottomFeedbackMenuSelector()));
+                TestHelper.waitForUiObjectExist(mFunUiObjects.getBottomFeedbackMenuSelector()));
 
         mMessage = "Verify back to question feedback home page.";
-        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoPageTitleSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getSettingsAboutInfoPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
     }
 
@@ -388,15 +409,18 @@ public final class TestAboutInfoPage {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test17SystemVersionItemOnAboutInfo() {
         mMessage = "Verify the System Version item on about info page.";
-        UiObject2 sysVersion = mDevice.findObject(mTask.getSystemVersionInfoItemOnAboutSelector());
+        UiObject2 sysVersion =
+                mDevice.findObject(mFunUiObjects.getSystemVersionInfoItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(sysVersion));
 
         mMessage = "Verify the system version title text.";
-        UiObject2 itemTitle = sysVersion.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        UiObject2 itemTitle =
+                sysVersion.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, "系统版本", itemTitle.getText());
 
         mMessage = "Verify the system version number value.";
-        UiObject2 itemValue = sysVersion.findObject(mTask.getItemValueOnAboutInfoPageSelector());
+        UiObject2 itemValue =
+                sysVersion.findObject(mFunUiObjects.getItemValueOnAboutInfoPageSelector());
         Assert.assertTrue(mMessage, itemValue.getText().contains(mTask.getSystemVersionInfo()));
     }
 
@@ -404,15 +428,18 @@ public final class TestAboutInfoPage {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test18PlayControllerItemOnAboutInfo() {
         mMessage = "Verify the play controller item on about info page.";
-        UiObject2 controller = mDevice.findObject(mTask.getPlayControllerItemOnAboutSelector());
+        UiObject2 controller =
+                mDevice.findObject(mFunUiObjects.getPlayControllerItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(controller));
 
         mMessage = "Verify the play controller title text.";
-        UiObject2 itemTitle = controller.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        UiObject2 itemTitle =
+                controller.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, "播控方", itemTitle.getText());
 
         mMessage = "Verify the play controller value.";
-        UiObject2 itemValue = controller.findObject(mTask.getItemValueOnAboutInfoPageSelector());
+        UiObject2 itemValue =
+                controller.findObject(mFunUiObjects.getItemValueOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, "BesTV", itemValue.getText());
     }
 
@@ -420,11 +447,11 @@ public final class TestAboutInfoPage {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test21LawInfoItemOnAboutInfo() {
         mMessage = "Verify the law info item on about info page.";
-        UiObject2 law = mDevice.findObject(mTask.getLawInfoItemOnAboutSelector());
+        UiObject2 law = mDevice.findObject(mFunUiObjects.getLawInfoItemOnAboutSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(law));
 
         mMessage = "Verify the law info title text.";
-        UiObject2 title = law.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+        UiObject2 title = law.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[4], title.getText());
     }
 
@@ -436,7 +463,7 @@ public final class TestAboutInfoPage {
         // verification 1
         mMessage = "Verify the title on Law Info sub page is enabled.";
         UiObject2 title =
-                mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
 
         mMessage = "Verify the title text on Law Info sub page.";
@@ -445,21 +472,23 @@ public final class TestAboutInfoPage {
         // verification 2
         mMessage = "Verify the Copy Right Protect item title text.";
         UiObject2 copyRightItem =
-                mDevice.findObject(mTask.getCopyRightProtectItemOnLawInfoSelector());
+                mDevice.findObject(mFunUiObjects.getCopyRightProtectItemOnLawInfoSelector());
         UiObject2 titleCopyRight =
-                copyRightItem.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+                copyRightItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[0], titleCopyRight.getText());
 
         mMessage = "Verify the Privacy Policy item title text.";
-        UiObject2 privacyItem = mDevice.findObject(mTask.getPrivacyPolicyItemOnLawInfoSelector());
+        UiObject2 privacyItem =
+                mDevice.findObject(mFunUiObjects.getPrivacyPolicyItemOnLawInfoSelector());
         UiObject2 titlePrivacy =
-                privacyItem.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+                privacyItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[1], titlePrivacy.getText());
 
         mMessage = "Verify the user agreement item title text.";
-        UiObject2 agreementItem = mDevice.findObject(mTask.getUserAgreementItemOnLawInfoSelector());
+        UiObject2 agreementItem =
+                mDevice.findObject(mFunUiObjects.getUserAgreementItemOnLawInfoSelector());
         UiObject2 titleAgreement =
-                agreementItem.findObject(mTask.getItemTitleOnAboutInfoPageSelector());
+                agreementItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
         Assert.assertEquals(mMessage, LAW_ITEM_TITLES_ARR[2], titleAgreement.getText());
     }
 
@@ -470,7 +499,8 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[0]);
 
         mMessage = "Verify the title is enabled on Copy Right Protect sub page.";
-        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        UiObject2 title =
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
 
         mMessage = "Verify the title text on Copy Right Protect sub page.";
@@ -489,7 +519,8 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[1]);
 
         mMessage = "Verify the title is enabled on Privacy Policy sub page.";
-        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        UiObject2 title =
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
 
         mMessage = "Verify the title text on Privacy Policy sub page.";
@@ -508,7 +539,8 @@ public final class TestAboutInfoPage {
         mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[2]);
 
         mMessage = "Verify the title is enabled on User Agreement sub page.";
-        UiObject2 title = mDevice.findObject(mTask.getSettingsAboutInfoSubPageTitleSelector());
+        UiObject2 title =
+                mDevice.findObject(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
         Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
 
         mMessage = "Verify the title text on User Agreement sub page.";
@@ -524,11 +556,13 @@ public final class TestAboutInfoPage {
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
+        mFunUiObjects.destroyInstance();
     }
 
     private String getCatchLogBtnTextInFeedbackMenu() {
         UiObject2 CatchBtn =
-                mDevice.findObject(mTask.getCatchLogButtonInFeedbackMenuSelector());
-        return CatchBtn.findObject(mTask.getFeedbackMenuButtonTextSelector()).getText();
+                mDevice.findObject(mFunUiObjects.getCatchLogButtonInFeedbackMenuSelector());
+        return CatchBtn.findObject(mFunUiObjects.getFeedbackMenuButtonTextSelector()).getText();
     }
+
 }

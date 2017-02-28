@@ -11,6 +11,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsWeather;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -49,6 +50,7 @@ public final class TestWeather {
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
+    private UiObjectsWeather mFunUiObjects;
     private TaskWeather mTask;
     private String mMessage;
 
@@ -68,6 +70,7 @@ public final class TestWeather {
     public void setUp() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mAction = UiActionsManager.getInstance();
+        mFunUiObjects = UiObjectsWeather.getInstance();
         mTask = TaskWeather.getInstance();
 
         TaskLauncher.backToLauncher();
@@ -97,7 +100,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test12BottomTipOnWeatherHome() {
         mMessage = "Verify the tip at the bottom of weather home.";
-        UiObject2 tip = mDevice.findObject(mTask.getTipTextAtBottomOfWeatherHomeSelector());
+        UiObject2 tip = mDevice.findObject(mFunUiObjects.getTipTextAtBottomOfWeatherHomeSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(tip));
         Assert.assertTrue(mMessage, tip.getText().contains("菜单键管理城市"));
     }
@@ -108,7 +111,7 @@ public final class TestWeather {
         final int forecastDaysCount = 5;
 
         List<String> actualDates = new ArrayList<>(forecastDaysCount);
-        List<UiObject2> dates = mDevice.findObjects(mTask.getWeatherForecastDateSelector());
+        List<UiObject2> dates = mDevice.findObjects(mFunUiObjects.getWeatherForecastDateSelector());
         for (UiObject2 date : dates) {
             actualDates.add(mTask.getWeatherForecastDateFromUiText(date.getText()));
         }
@@ -161,7 +164,8 @@ public final class TestWeather {
         TestHelper.waitForLoadingComplete();
 
         mMessage = "Verify the refresh time is updated after click Update menu button.";
-        UiObject2 refreshTime = mDevice.findObject(mTask.getTopRefreshTimeOfWeatherHomeSelector());
+        UiObject2 refreshTime =
+                mDevice.findObject(mFunUiObjects.getTopRefreshTimeOfWeatherHomeSelector());
         Assert.assertNotNull(refreshTime);
         Assert.assertEquals(mMessage, "刚刚更新", refreshTime.getText());
     }
@@ -173,7 +177,7 @@ public final class TestWeather {
         mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_ADD_CITY);
 
         mMessage = "Verify the title of add city page.";
-        UiObject2 title = mDevice.findObject(mTask.getCityManagerTitleSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getCityManagerTitleSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(title));
         Assert.assertEquals(mMessage, "添加城市", title.getText());
 
@@ -226,7 +230,7 @@ public final class TestWeather {
         mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_MODIFY_DEFAULT);
 
         mMessage = "Verify the title of modify default city page.";
-        UiObject2 title = mDevice.findObject(mTask.getCityManagerTitleSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getCityManagerTitleSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(title));
         Assert.assertEquals(mMessage, "修改默认城市", title.getText());
 
@@ -374,12 +378,12 @@ public final class TestWeather {
         mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_DELETE_CITY);
 
         mMessage = "Verify the title text of remove dialog.";
-        UiObject2 title = mDevice.findObject(mTask.getDialogTitleSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getDialogTitleSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(title));
         Assert.assertEquals(String.format("删除城市\"%s\"?", ADD_CITY_1), title.getText());
 
         mMessage = "Verify the cancel button of dialog.";
-        UiObject2 cancelBtn = mDevice.findObject(mTask.getDialogCancelButtonSelector());
+        UiObject2 cancelBtn = mDevice.findObject(mFunUiObjects.getDialogCancelButtonSelector());
         Assert.assertTrue(mMessage, cancelBtn.isClickable());
 
         mMessage = "Verify the city on home after cancel delete city.";
@@ -399,7 +403,7 @@ public final class TestWeather {
         mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_DELETE_CITY);
 
         mMessage = "Verify the confirm button of dialog.";
-        UiObject2 confirmBtn = mDevice.findObject(mTask.getDialogConfirmButtonSelector());
+        UiObject2 confirmBtn = mDevice.findObject(mFunUiObjects.getDialogConfirmButtonSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(confirmBtn));
         Assert.assertTrue(mMessage, confirmBtn.isClickable());
 
@@ -418,12 +422,12 @@ public final class TestWeather {
         mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_DELETE_CITY);
 
         mMessage = "Verify the title text of remove dialog.";
-        UiObject2 title = mDevice.findObject(mTask.getDialogTitleSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getDialogTitleSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(title));
         Assert.assertEquals(String.format("删除城市\"%s\"?", INIT_CITY), title.getText());
 
         mMessage = "Verify the cancel button of dialog.";
-        UiObject2 cancelBtn = mDevice.findObject(mTask.getDialogCancelButtonSelector());
+        UiObject2 cancelBtn = mDevice.findObject(mFunUiObjects.getDialogCancelButtonSelector());
         Assert.assertTrue(mMessage, cancelBtn.isClickable());
 
         mMessage = "Verify home city after cancel delete default city.";
@@ -442,7 +446,7 @@ public final class TestWeather {
         mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_DELETE_CITY);
 
         mMessage = "Verify the confirm button of dialog.";
-        UiObject2 confirmBtn = mDevice.findObject(mTask.getDialogConfirmButtonSelector());
+        UiObject2 confirmBtn = mDevice.findObject(mFunUiObjects.getDialogConfirmButtonSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(confirmBtn));
         Assert.assertTrue(mMessage, confirmBtn.isClickable());
 
@@ -473,6 +477,7 @@ public final class TestWeather {
     @Category(CategoryWeatherTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
+        mFunUiObjects.destroyInstance();
     }
 
     private class dateComparator implements Comparator<String> {
