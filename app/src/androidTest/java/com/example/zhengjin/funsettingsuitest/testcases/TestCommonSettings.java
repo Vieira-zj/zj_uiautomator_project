@@ -9,6 +9,7 @@ import android.support.test.uiautomator.Until;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
@@ -68,11 +69,14 @@ public final class TestCommonSettings {
     private final String TEXT_SYSTEM_RECOVERY = "恢复出厂设置";
     private final String TEXT_FORBIDDEN = "禁止";
     private final String TEXT_CLOSED = "关闭";
+    private final String TEXT_SHUTDOWN_TV_TIME = "定时关机";
 
     private final String[] SUB_VALUES_SLEEP_TIME =
             {"永不休眠", "15分钟", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_SCREEN_SAVER =
             {"5分钟（默认）", "10分钟", "15分钟", "20分钟", "关闭"};
+    private final String[] SUB_VALUES_SHUTDOWN_TV_TIME =
+            {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_WALLPAPER = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
@@ -314,7 +318,7 @@ public final class TestCommonSettings {
         UiObject2 shutDownTimeItem =
                 mDevice.findObject(mTask.getShutDownTimeSettingItemContainerSelector());
         UiObject2 itemKey = shutDownTimeItem.findObject(mTask.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "定时关机", itemKey.getText());
+        Assert.assertEquals(mMessage, TEXT_SHUTDOWN_TV_TIME, itemKey.getText());
 
         mMessage = "Verify the default value of set shutdown tv time.";
         UiObject2 itemValue = shutDownTimeItem.findObject(mTask.getSettingItemValueSelector());
@@ -529,6 +533,46 @@ public final class TestCommonSettings {
                 mTask.getShutDownTimeSettingItemContainerSelector());
         UiObject2 itemValue = shutDownTimeItem.findObject(mTask.getSettingItemValueSelector());
         Assert.assertEquals(mMessage, TEXT_CLOSED, itemValue.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion20.class})
+    public void test17_21SetShutDownTvTimeDefaultValue() {
+        UiObject2 itemContainer =
+                mDevice.findObject(mTask.getShutDownTimeSettingItemContainerSelector());
+
+        mMessage = "Verify the key text of set shutdown tv time.";
+        UiObject2 itemKey = itemContainer.findObject(mTask.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, TEXT_SHUTDOWN_TV_TIME, itemKey.getText());
+
+        mMessage = "Verify the default value of set shutdown tv time.";
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(itemContainer);
+        Assert.assertNotNull(itemValue);
+        Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion20.class})
+    public void test17_22SetShutDownTvTimeSubValues() {
+        mTask.openAdvancedSettingsPage();
+        mTask.moveToSpecifiedSettingsItem(mTask.getShutDownTimeSettingItemContainerSelector());
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
+
+        mMessage = "Verify the set shutdown tv time sub value at position %d.";
+        UiObject2 itemContainer =
+                mDevice.findObject(mTask.getShutDownTimeSettingItemContainerSelector());
+        UiObject2 itemValue;
+        for (int i = 1; i < SUB_VALUES_SHUTDOWN_TV_TIME.length; i++) {
+            mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+            itemValue = mTask.getTextViewOfSwitcher(itemContainer);
+            Assert.assertEquals(String.format(mMessage, i + 1),
+                    SUB_VALUES_SHUTDOWN_TV_TIME[i], itemValue.getText());
+        }
+
+        mMessage = "Verify move from last to first value of set shutdown tv time.";
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+        itemValue = mTask.getTextViewOfSwitcher(itemContainer);
+        Assert.assertEquals(mMessage, SUB_VALUES_SHUTDOWN_TV_TIME[0], itemValue.getText());
     }
 
     @Test

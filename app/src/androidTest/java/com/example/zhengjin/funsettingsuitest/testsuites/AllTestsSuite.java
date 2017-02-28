@@ -9,6 +9,7 @@ import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTest
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
 
 import org.junit.experimental.categories.Categories;
@@ -28,7 +29,7 @@ import org.junit.runners.Suite;
         CategoryImageAndSoundSettingsTests.class,
         CategoryAboutInfoTests.class})
 //@Categories.IncludeCategory(CategoryDemoTests.class)
-//@Categories.ExcludeCategory({CategoryDemoTests.class})
+@Categories.ExcludeCategory({CategoryVersion20.class})
 @Suite.SuiteClasses({
         TestCommonSettings.class,
         TestFileManager.class,
