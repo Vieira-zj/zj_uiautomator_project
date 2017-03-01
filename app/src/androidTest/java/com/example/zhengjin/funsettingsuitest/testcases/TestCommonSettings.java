@@ -604,25 +604,23 @@ public final class TestCommonSettings {
         ShellUtils.systemWaitByMillis(SHORT_WAIT);
 
         mMessage = "Verify the sub values of screen saver at position %d.";
-        UiObject2 itemSubValueContainer;
+        UiObject2 itemValue;
         for (int i = 1; i < SUB_VALUES_SCREEN_SAVER.length; i++) {
-            mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-            itemSubValueContainer =
-                    mDevice.findObject(mFunUiObjects.getScreenSaverSettingItemContainerSelector());
-            Assert.assertTrue(TestHelper.waitForTextGone(
-                    itemSubValueContainer, SUB_VALUES_SCREEN_SAVER[i - 1]));
-            Assert.assertTrue(String.format(mMessage, (i + 1)), TestHelper.waitForTextVisible(
-                    itemSubValueContainer, SUB_VALUES_SCREEN_SAVER[i]));
+            mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+            itemValue = mTask.getTextViewOfSwitcher(
+                    mDevice.findObject(mFunUiObjects.getScreenSaverSettingItemContainerSelector()));
+            Assert.assertEquals(String.format(mMessage, (i + 1)),
+                    SUB_VALUES_SCREEN_SAVER[i], itemValue.getText());
         }
 
         mMessage = "Verify screen saver item value when move from last to first.";
-        mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-        UiObject2 itemValueContainer =
-                mDevice.findObject(mFunUiObjects.getScreenSaverSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionMoveRight(), WAIT);
+        UiObject2 itemValueContainer = mDevice.findObject(
+                mFunUiObjects.getScreenSaverSettingItemContainerSelector());
         Assert.assertTrue(TestHelper.waitForTextGone(itemValueContainer,
                 SUB_VALUES_SCREEN_SAVER[SUB_VALUES_SCREEN_SAVER.length - 1]));
-        Assert.assertTrue(mMessage, TestHelper.waitForTextVisible(
-                itemValueContainer, SUB_VALUES_SCREEN_SAVER[0]));
+        Assert.assertTrue(mMessage,
+                TestHelper.waitForTextVisible(itemValueContainer, SUB_VALUES_SCREEN_SAVER[0]));
     }
 
     @Test

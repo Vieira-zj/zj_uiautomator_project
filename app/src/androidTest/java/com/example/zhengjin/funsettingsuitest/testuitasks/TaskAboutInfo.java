@@ -37,14 +37,16 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskAboutInfo {
 
+    public static final String TAG = TaskAboutInfo.class.getSimpleName();
+
     private static TaskAboutInfo instance;
+
     private UiDevice device;
     private UiActionsManager action;
     private UiObjectsAboutInfo funUiObjects;
 
-    public static final String TAG = TaskAboutInfo.class.getSimpleName();
-
     public final String ABOUT_INFO_PAGE_TEXT = "关于";
+    private final String MAC_NULL = "00:00:00:00:00:00";
 
     private TaskAboutInfo() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -219,28 +221,34 @@ public final class TaskAboutInfo {
     public String getSystemVersionInfo() {
         String ret = "0.0.0.0";
 
-        String results = this.runShellCommandAndCheck("getprop | grep version.incremental");
         try {
+            String results = this.runShellCommandAndCheck("getprop | grep version.incremental");
             String version = results.split("\\s+")[1];
             ret = version.substring(1, (version.length() - 1));
         } catch (Exception e) {
-            Assert.assertTrue("Failed to get system version from " + results, false);
+            Log.e(TAG, e.getMessage());
+            Assert.assertTrue("getSystemVersionInfo, failed to get system version!", false);
         }
 
         return ret;
     }
 
     public NetworkInfo getSysNetworkInfo(NetworkType type) {
-        if (RunnerProfile.isPlatform938) {
-            return this.getSysNetworkInfoForPlatform938(type);
-        }
-        return this.getSysNetworkInfoForPlatform638(type);
+        return RunnerProfile.isPlatform938 ?
+                this.getSysNetworkInfoForPlatform938(type) :
+                this.getSysNetworkInfoForPlatform638(type);
     }
 
     private NetworkInfo getSysNetworkInfoForPlatform638(NetworkType type) {
         String cmd = this.buildCommandByNetworkType(type, "netcfg | grep %s");
-        String[] valuesArr = this.runShellCommandAndCheck(cmd).split("\\s+");
-        return new NetworkInfo(valuesArr[2].split("/")[0], valuesArr[4]);
+
+        try {
+            String[] valuesArr = this.runShellCommandAndCheck(cmd).split("\\s+");
+            return new NetworkInfo(valuesArr[2].split("/")[0], valuesArr[4]);
+        } catch (Exception e) {
+            Log.w(TAG, e.getMessage());
+            return new NetworkInfo("null", MAC_NULL);
+        }
     }
 
     private NetworkInfo getSysNetworkInfoForPlatform938(NetworkType type) {
@@ -264,17 +272,25 @@ public final class TaskAboutInfo {
                 return item.split(":")[1];
             }
         }
+
         return DEFAULT_IP;
     }
 
     private String getNetworkMacForPlatform938(NetworkType type) {
         String cmd = this.buildCommandByNetworkType(type, "ifconfig %s | grep HWaddr");
         Pattern pattern = Pattern.compile("(([0-9]|[A-Z]){2}:){5}([0-9]|[A-Z]){2}");
-        Matcher matcher = pattern.matcher(this.runShellCommandAndCheck(cmd));
+        Matcher matcher;
 
+        try {
+            matcher = pattern.matcher(this.runShellCommandAndCheck(cmd));
+        } catch (Exception e) {
+            Log.w(TAG, e.getMessage());
+            return MAC_NULL;
+        }
         if (matcher.find()) {
             return matcher.group();
         }
+
         Assert.assertTrue("No mac found in results for command " + cmd, false);
         return "";  // not go here
     }
@@ -288,16 +304,15 @@ public final class TaskAboutInfo {
                 String.format(baseCmd, NETWORK_TYPE_WIRED);
     }
 
-    private String runShellCommandAndCheck(String cmd) {
+    private String runShellCommandAndCheck(String cmd) throws Exception {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
         if (cr.mResult != 0) {
-            Log.e(TAG, "Failed to get the network info by " + cmd);
-            Assert.assertTrue(String.format(Locale.getDefault()
-                    , "The return code is (%d) for command (%s)", cr.mResult, cmd), false);
+            throw new Exception(String.format(Locale.getDefault(),
+                    "The return code is (%d) for command (%s)", cr.mResult, cmd));
         }
         if (StringUtils.isEmpty(cr.mSuccessMsg)) {
-            Log.e(TAG, "The return info is empty by command " + cmd);
-            Assert.assertTrue("Return empty for command " + cmd, false);
+            Log.e(TAG, "The return info is empty by command: " + cmd);
+            Assert.assertTrue("Return empty for command: " + cmd, false);
         }
 
         return cr.mSuccessMsg;
