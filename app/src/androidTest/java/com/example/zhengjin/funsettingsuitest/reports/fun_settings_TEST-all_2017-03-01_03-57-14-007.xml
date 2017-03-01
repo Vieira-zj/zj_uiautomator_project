@@ -1,0 +1,301 @@
+<?xml version='1.0' ?>
+<testsuites datetime="2017-03-01_03-57-14-023">
+    <systeminfo devicetype="FD5551A-SU" sdkversion="4.4.4" />
+    <testsuite name="com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings">
+        <testcase classname="TestCommonSettings" methodname="test11TitleNameOfSettingsPage"
+            testresult="pass" time="28.9s" />
+        <testcase classname="TestCommonSettings" methodname="test12DeviceNameDefaultValue"
+            testresult="pass" time="25.1s" />
+        <testcase classname="TestCommonSettings" methodname="test13DeviceNameSubValues" testresult="pass"
+            time="26.6s" />
+        <testcase classname="TestCommonSettings" methodname="test14_01SelectDeviceName" testresult="pass"
+            time="37.2s" />
+        <testcase classname="TestCommonSettings" methodname="test14_02SelfDefineDeviceNameAndCancel"
+            testresult="pass" time="40.9s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test14_03SelfDefineDeviceNameAndConfirm" testresult="pass" time="44.3s" />
+        <testcase classname="TestCommonSettings" methodname="test14_04SelfDefineEmptyNameAndConfirm"
+            testresult="pass" time="46.5s" />
+        <testcase classname="TestCommonSettings" methodname="test15_01OpenAdvancedSettingItem"
+            testresult="pass" time="33.3s" />
+        <testcase classname="TestCommonSettings" methodname="test15_01SleepTimeSubValues"
+            testresult="pass" time="53.2s" />
+        <testcase classname="TestCommonSettings" methodname="test15_02SleepTimeDefaultValue"
+            testresult="pass" time="33.1s" />
+        <testcase classname="TestCommonSettings" methodname="test16SelectSleepTime" testresult="pass"
+            time="38.4s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_01TitleAndValueOfSetShutDownTime" testresult="pass" time="33.3s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_02TitleAndTipsOnSetShutDownTimeDialog" testresult="pass"
+            time="37.2s" />
+        <testcase classname="TestCommonSettings" methodname="test17_03ShutDownTimeCheckboxOnDialog"
+            testresult="pass" time="39.9s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_04TimesControlOnShutDownTimeDialog" testresult="pass" time="37.5s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_05EditHoursControlOnShutDownTimeDialog" testresult="pass"
+            time="47.1s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_06EditMinutesControlOnSetShutDownTimeDialog" testresult="pass"
+            time="49.4s" />
+        <testcase classname="TestCommonSettings" methodname="test17_11SetShutDownTimeAndSave"
+            testresult="pass" time="52.9s" />
+        <testcase classname="TestCommonSettings" methodname="test17_12SetShutDownTimeEqualCurTime"
+            testresult="pass" time="24.0s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_13SetShutDownTimeLessThanCurTime" testresult="pass" time="24.6s" />
+        <testcase classname="TestCommonSettings" methodname="test17_14UnsetShutDownTime"
+            testresult="pass" time="39.0s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test17_15SetShutDownTimeLessThanFiveMinutes" testresult="pass"
+            time="46.3s" />
+        <testcase classname="TestCommonSettings" methodname="test18_01ScreenSaverDefaultValue"
+            testresult="pass" time="24.9s" />
+        <testcase classname="TestCommonSettings" methodname="test18_02ScreenSaverSubValues"
+            testresult="pass" time="45.8s" />
+        <testcase classname="TestCommonSettings" methodname="test19SelectScreenSaver" testresult="pass"
+            time="32.7s" />
+        <testcase classname="TestCommonSettings" methodname="test21InstallUnknownAppDefaultValue"
+            testresult="pass" time="27.7s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test22AllowedInstallUnknownAppAndCancel" testresult="pass" time="34.7s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test23AllowedInstallUnknownAppAndConfirm" testresult="pass" time="35.1s" />
+        <testcase classname="TestCommonSettings" methodname="test24ForbiddenInstallUnknownApp"
+            testresult="pass" time="35.6s" />
+        <testcase classname="TestCommonSettings"
+            methodname="test25SystemRecoverDialogAndClickCancel" testresult="pass" time="29.8s" />
+        <testcase classname="TestCommonSettings" methodname="test26SaveInfoOnSystemRecoverDialog"
+            testresult="pass" time="31.5s" />
+        <testcase classname="TestCommonSettings" methodname="test31WallpaperDefaultValue"
+            testresult="pass" time="24.3s" />
+        <testcase classname="TestCommonSettings" methodname="test32SubWallpapersOnSelectPage"
+            testresult="pass" time="31.2s" />
+        <testcase classname="TestCommonSettings" methodname="test33SelectWallpaper" testresult="pass"
+            time="38.4s" />
+        <testcase classname="TestCommonSettings" methodname="test34InputMethodDefaultValue"
+            testresult="pass" time="24.6s" />
+        <testcase classname="TestCommonSettings" methodname="test35SelectInputMethod" testresult="pass"
+            time="39.6s" />
+        <testcase classname="TestCommonSettings" methodname="test99ClearUpAfterAllTestCasesDone"
+            testresult="pass" time="24.4s" />
+        <suiteinfo count="37" runtime="1320.7s" />
+    </testsuite>
+    <testsuite name="com.example.zhengjin.funsettingsuitest.testcases.TestFileManager">
+        <testcase classname="TestFileManager" methodname="test13OpenAllFilesCardFromSdcardTab"
+            testresult="pass" time="29.4s" />
+        <testcase classname="TestFileManager" methodname="test14NavigateToSpecifiedPath"
+            testresult="pass" time="34.3s" />
+        <testcase classname="TestFileManager" methodname="test16OpenUnknownTypeFile" testresult="pass"
+            time="33.7s" />
+        <testcase classname="TestFileManager" methodname="test21MenuHideBtnExistForDir" testresult="pass"
+            time="40.3s" />
+        <testcase classname="TestFileManager" methodname="test22MenuRemoveAndHideBtnExistForFile"
+            testresult="pass" time="39.6s" />
+        <testcase classname="TestFileManager" methodname="test23HideAndShowDirectory" testresult="pass"
+            time="49.4s" />
+        <testcase classname="TestFileManager" methodname="test24HideAndShowFile" testresult="pass"
+            time="46.3s" />
+        <testcase classname="TestFileManager" methodname="test25RemoveFileAndCancel" testresult="pass"
+            time="42.0s" />
+        <testcase classname="TestFileManager" methodname="test26RemoveFileAndConfirm" testresult="pass"
+            time="41.7s" />
+        <testcase classname="TestFileManager" methodname="test27HideAndShowOnlyFileOfDirectory"
+            testresult="pass" time="47.0s" />
+        <testcase classname="TestFileManager" methodname="test28RemoveOnlyFileOfDirectory"
+            testresult="pass" time="42.9s" />
+        <testcase classname="TestFileManager" methodname="test32MessageWhenEmptyForAppCard"
+            testresult="pass" time="31.9s" />
+        <testcase classname="TestFileManager" methodname="test33MessageWhenEmptyForMusicCard"
+            testresult="pass" time="31.0s" />
+        <testcase classname="TestFileManager" methodname="test34MessageWhenEmptyForPictureCard"
+            testresult="pass" time="32.3s" />
+        <testcase classname="TestFileManager" methodname="test41_01HideVideoFile" testresult="pass"
+            time="54.4s" />
+        <testcase classname="TestFileManager" methodname="test41_02ShowVideoFile" testresult="pass"
+            time="52.2s" />
+        <testcase classname="TestFileManager" methodname="test41_03HideVideoDirectory" testresult="pass"
+            time="53.2s" />
+        <testcase classname="TestFileManager" methodname="test41_04ShowVideoDirectory" testresult="pass"
+            time="47.8s" />
+        <testcase classname="TestFileManager"
+            methodname="test41_05RemoveVideoFileFromAllFilesCategory" testresult="pass"
+            time="53.4s" />
+        <testcase classname="TestFileManager" methodname="test41_06RemoveVideoFileFromVideoCategory"
+            testresult="pass" time="54.3s" />
+        <testcase classname="TestFileManager" methodname="test41_07MessageWhenEmptyForVideoCard"
+            testresult="pass" time="31.7s" />
+        <testcase classname="TestFileManager" methodname="test42_01HideApkFile" testresult="pass"
+            time="24.8s" />
+        <testcase classname="TestFileManager" methodname="test42_01HidePictureFile" testresult="pass"
+            time="25.1s" />
+        <testcase classname="TestFileManager" methodname="test43_01HideMusicFile" testresult="pass"
+            time="24.6s" />
+        <testcase classname="TestFileManager" methodname="test99ClearUpAfterAllTestCasesDone"
+            testresult="pass" time="24.9s" />
+        <suiteinfo count="25" runtime="990.3s" />
+    </testsuite>
+    <testsuite name="com.example.zhengjin.funsettingsuitest.testcases.TestWeather">
+        <testcase classname="TestWeather" methodname="test11DefaultLocatedCity" testresult="pass"
+            time="19.0s" />
+        <testcase classname="TestWeather" methodname="test12BottomTipOnWeatherHome" testresult="pass"
+            time="18.5s" />
+        <testcase classname="TestWeather" methodname="test13WeatherForecastDates" testresult="pass"
+            time="18.6s" />
+        <testcase classname="TestWeather" methodname="test14FunctionButtonsInMenu" testresult="pass"
+            time="21.6s" />
+        <testcase classname="TestWeather" methodname="test15UpdateWeatherData" testresult="pass"
+            time="26.9s" />
+        <testcase classname="TestWeather" methodname="test21_01TitleAndLocationListOnAddCityPage"
+            testresult="pass" time="29.3s" />
+        <testcase classname="TestWeather" methodname="test21_02AddCityAndCancel" testresult="pass"
+            time="45.9s" />
+        <testcase classname="TestWeather" methodname="test21_03AddNewCityWeather" testresult="pass"
+            time="45.5s" />
+        <testcase classname="TestWeather" methodname="test23_01TitleAndLocationListOnAddDefaultPage"
+            testresult="pass" time="28.3s" />
+        <testcase classname="TestWeather" methodname="test23_02AddDefaultCityAndCancel" testresult="pass"
+            time="48.6s" />
+        <testcase classname="TestWeather" methodname="test23_03AddDefaultCityWeather" testresult="pass"
+            time="48.2s" />
+        <testcase classname="TestWeather" methodname="test23_04HomeCityAfterAddDefaultCity"
+            testresult="pass" time="18.0s" />
+        <testcase classname="TestWeather" methodname="test25_01ModifyDefaultCity" testresult="pass"
+            time="45.9s" />
+        <testcase classname="TestWeather" methodname="test25_02HomeCityAfterModifyDefaultCity"
+            testresult="pass" time="18.4s" />
+        <testcase classname="TestWeather" methodname="test25_03ReAddDefaultCity" testresult="pass"
+            time="33.4s" />
+        <testcase classname="TestWeather" methodname="test27CityListSequenceAfterUpdates"
+            testresult="pass" time="26.3s" />
+        <testcase classname="TestWeather" methodname="test31DeleteButtonOnMenu" testresult="pass"
+            time="22.1s" />
+        <testcase classname="TestWeather" methodname="test32_01DeleteCityAndCancel" testresult="pass"
+            time="35.5s" />
+        <testcase classname="TestWeather" methodname="test32_02DeleteCityAndConfirm" testresult="pass"
+            time="37.0s" />
+        <testcase classname="TestWeather" methodname="test33_01DeleteDefaultCityAndCancel"
+            testresult="pass" time="31.6s" />
+        <testcase classname="TestWeather" methodname="test33_02DeleteDefaultCityAndConfirm"
+            testresult="pass" time="34.0s" />
+        <testcase classname="TestWeather"
+            methodname="test36HomeCityAndDeleteBtnNotExistForOnlyOneCity" testresult="pass"
+            time="22.1s" />
+        <testcase classname="TestWeather" methodname="test99ClearUpAfterAllTestCasesDone"
+            testresult="pass" time="18.0s" />
+        <suiteinfo count="23" runtime="694.3s" />
+    </testsuite>
+    <testsuite name="com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSoundSettings">
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test01TitleOfImageAndSoundSettingsPage" testresult="pass" time="31.6s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test02_01TitleAndValueOfDefaultPlayClarity" testresult="pass"
+            time="28.7s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test02_02TitleOfImageParamsSettingItem" testresult="pass" time="28.5s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test03TitleAndDefaultValueOfPressKeySoundSettingItem" testresult="pass"
+            time="29.1s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test04TurnOffPressKeySoundSettingItem" testresult="pass" time="37.8s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test05TitleAndDefaultValueOfAudioAroundSettingItem" testresult="pass"
+            time="28.9s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test06TurnOnAudioAroundSettingItem" testresult="pass" time="39.6s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test07EnergySaverSettingItemIsHidden" testresult="pass" time="28.1s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test11TitleAndDefaultValueOfColorTmpOnImageParams" testresult="pass"
+            time="36.6s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test12SubValuesOfColorTmpOnImageParams" testresult="pass" time="68.9s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test13TitleAndDefaultValueOfBackLightOnImageParams" testresult="pass"
+            time="36.3s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test14SetValueOfBackLightOnImageParams" testresult="pass" time="41.1s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test21TitleAndDefaultValueOfBrightnessOnImageParams" testresult="pass"
+            time="36.5s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test22SetValueOfBrightnessOnImageParams" testresult="pass" time="47.2s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test23TitleAndDefaultValueOfContrastOnImageParams" testresult="pass"
+            time="36.2s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test24SetValueOfContrastOnImageParams" testresult="pass" time="50.0s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test25TitleAndDefaultValueOfSaturationOnImageParams" testresult="pass"
+            time="35.8s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test26SetValueOfSaturationOnImageParams" testresult="pass" time="50.1s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test27TitleOfResetAllToDefaultOnImageParams" testresult="pass"
+            time="37.0s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test28ValuesSetToDefaultAfterResetOnImageParams" testresult="pass"
+            time="50.5s" />
+        <testcase classname="TestImageAndSoundSettings"
+            methodname="test99ClearUpAfterAllTestCasesDone" testresult="pass" time="28.0s" />
+        <suiteinfo count="21" runtime="807.8s" />
+    </testsuite>
+    <testsuite name="com.example.zhengjin.funsettingsuitest.testcases.TestAboutInfoPage">
+        <testcase classname="TestAboutInfoPage" methodname="test01AboutInfoPageTitle" testresult="pass"
+            time="30.2s" />
+        <testcase classname="TestAboutInfoPage" methodname="test02ProductInfoItemOnAboutInfo"
+            testresult="pass" time="29.7s" />
+        <testcase classname="TestAboutInfoPage"
+            methodname="test03TitleAndQrCodeOnProductInfoSubPage" testresult="pass" time="34.8s" />
+        <testcase classname="TestAboutInfoPage" methodname="test04_01TvNameOnProductInfoSubPage"
+            testresult="pass" time="33.9s" />
+        <testcase classname="TestAboutInfoPage" methodname="test04_02TvModelOnProductInfoSubPage"
+            testresult="pass" time="33.1s" />
+        <testcase classname="TestAboutInfoPage" methodname="test04_03TvRomSizeOnProductInfoSubPage"
+            testresult="pass" time="34.3s" />
+        <testcase classname="TestAboutInfoPage" methodname="test04_04TvSeriesIdOnProductInfoSubPage"
+            testresult="pass" time="33.0s" />
+        <testcase classname="TestAboutInfoPage" methodname="test06NetworkInfoItemOnAboutInfo"
+            testresult="pass" time="30.0s" />
+        <testcase classname="TestAboutInfoPage" methodname="test07NetworkStatusInfoOnSubPage"
+            testresult="pass" time="34.6s" />
+        <testcase classname="TestAboutInfoPage" methodname="test08NetworkWiredInfoOnSubPage"
+            testresult="pass" time="34.8s" />
+        <testcase classname="TestAboutInfoPage" methodname="test09NetworkWirelessInfoMacOnSubPage"
+            testresult="pass" time="34.3s" />
+        <testcase classname="TestAboutInfoPage" methodname="test11QuestionFeedbackItem" testresult="pass"
+            time="30.2s" />
+        <testcase classname="TestAboutInfoPage"
+            methodname="test12ContentAndMenuInQuestionFeedbackSubPage" testresult="pass"
+            time="38.5s" />
+        <testcase classname="TestAboutInfoPage" methodname="test13ButtonsInFeedbackMenuOfSubPage"
+            testresult="pass" time="38.6s" />
+        <testcase classname="TestAboutInfoPage"
+            methodname="test14StartAndStopCatchLogOnFeedbackSubPage" testresult="pass"
+            time="60.8s" />
+        <testcase classname="TestAboutInfoPage" methodname="test15DumpLogToDiskOnFeedbackSubPage"
+            testresult="pass" time="49.0s" />
+        <testcase classname="TestAboutInfoPage" methodname="test17SystemVersionItemOnAboutInfo"
+            testresult="pass" time="29.9s" />
+        <testcase classname="TestAboutInfoPage" methodname="test18PlayControllerItemOnAboutInfo"
+            testresult="pass" time="30.3s" />
+        <testcase classname="TestAboutInfoPage" methodname="test21LawInfoItemOnAboutInfo"
+            testresult="pass" time="30.0s" />
+        <testcase classname="TestAboutInfoPage" methodname="test22TitleAndItemsOnLawInfoSubPage"
+            testresult="pass" time="38.2s" />
+        <testcase classname="TestAboutInfoPage"
+            methodname="test23TitleAndContentOnCopyRightProtectSubPage" testresult="pass"
+            time="42.0s" />
+        <testcase classname="TestAboutInfoPage"
+            methodname="test24TitleAndContentOnPrivacyPolicySubPage" testresult="pass"
+            time="42.6s" />
+        <testcase classname="TestAboutInfoPage"
+            methodname="test25TitleAndContentOnUserAgreementSubPage" testresult="pass"
+            time="44.4s" />
+        <testcase classname="TestAboutInfoPage" methodname="test99ClearUpAfterAllTestCasesDone"
+            testresult="pass" time="29.8s" />
+        <suiteinfo count="24" runtime="867.7s" />
+    </testsuite>
+    <summary ignore="0" runtime="4682.1s" total="130" totalfailed="0" totalpass="130" />
+</testsuites>
