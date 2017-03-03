@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
@@ -312,7 +313,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_01TitleAndValueOfSetShutDownTime() {
         mTask.openAdvancedSettingsPage();
 
@@ -329,7 +330,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_02TitleAndTipsOnSetShutDownTimeDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -344,7 +345,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_03ShutDownTimeCheckboxOnDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -364,7 +365,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_04TimesControlOnShutDownTimeDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -391,7 +392,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_05EditHoursControlOnShutDownTimeDialog() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -431,7 +432,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_06EditMinutesControlOnSetShutDownTimeDialog() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -471,7 +472,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_11SetShutDownTimeAndSave() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -522,7 +523,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test17_15SetShutDownTimeLessThanFiveMinutes() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();

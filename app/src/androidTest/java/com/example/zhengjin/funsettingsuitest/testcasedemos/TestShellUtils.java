@@ -177,9 +177,9 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testGetPlatformChipType() {
         if (RunnerProfile.isPlatform938) {
-            Log.d(TAG, "Platform chiptype is 938");
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "Platform chiptype is 938");
         } else {
-            Log.d(TAG, "Platform chiptype is 638");
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "Platform chiptype is 638");
         }
     }
 
@@ -187,9 +187,9 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void testGetVersion30() {
         if (RunnerProfile.isVersion30) {
-            Log.d(TAG, "Version number is 3.0");
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 3.0");
         } else {
-            Log.d(TAG, "Version number is 2.0");
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 2.0");
         }
     }
 

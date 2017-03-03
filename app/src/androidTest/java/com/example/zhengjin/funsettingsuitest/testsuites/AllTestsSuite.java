@@ -20,6 +20,13 @@ import org.junit.runners.Suite;
  * Created by zhengjin on 2016/6/17.
  * <p>
  * Run all test cases by include and exclude rules.
+ *
+ * Run commands:
+ * adb shell am instrument -w -r
+ * -e listener com.example.zhengjin.funsettingsuitest.testrunner.RunnerListenerFunSettings
+ * -e debug false
+ * -e class com.example.zhengjin.funsettingsuitest.testsuites.AllTestsSuite
+ * com.example.zhengjin.funsettingsuitest.test/android.support.test.runner.AndroidJUnitRunner
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory({
