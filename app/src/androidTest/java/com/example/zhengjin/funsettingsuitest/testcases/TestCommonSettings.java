@@ -34,6 +34,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -497,12 +498,14 @@ public final class TestCommonSettings {
     }
 
     @Test
+    @Ignore
     @Category({CategorySettingsTests.class})
     public void test17_12SetShutDownTimeEqualCurTime() {
         // TODO: 2017/2/24
     }
 
     @Test
+    @Ignore
     @Category({CategorySettingsTests.class})
     public void test17_13SetShutDownTimeLessThanCurTime() {
         // TODO: 2017/2/24

@@ -42,7 +42,6 @@ import static com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTa
  * <p>
  * Test playing videos, include test cases to run more than 8 hours.
  */
-
 @RunWith(AndroidJUnit4.class)
 public final class TestPlayingVideos {
 

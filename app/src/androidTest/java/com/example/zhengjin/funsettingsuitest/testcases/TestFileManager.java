@@ -147,6 +147,7 @@ public final class TestFileManager {
         ShellUtils.stopProcessByPackageName(FILE_MANAGER_PKG_NAME);
     }
 
+    @Test
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test11FileManagerHomeTabShow() {
@@ -182,6 +183,7 @@ public final class TestFileManager {
         Assert.assertEquals(mMessage, TEST_ROOT_DIR_NAME, subTitle.getText());
     }
 
+    @Test
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test15OpenSpecifiedPicture() {
@@ -428,6 +430,7 @@ public final class TestFileManager {
         Assert.assertNull(mMessage, menu);
     }
 
+    @Test
     @Ignore
     @Category(CategoryFileManagerTests.class)
     public void test35VideoCardNameAndItemsCount() {
@@ -606,20 +609,23 @@ public final class TestFileManager {
     }
 
     @Test
+    @Ignore
     @Category({CategoryFileManagerTests.class})
     public void test42_01HidePictureFile() {
         // TODO: 2016/11/21 pic category
     }
 
     @Test
+    @Ignore
     @Category({CategoryFileManagerTests.class})
     public void test43_01HideMusicFile() {
         // TODO: 2016/11/21 music category
     }
 
     @Test
+    @Ignore
     @Category({CategoryFileManagerTests.class})
-    public void test42_01HideApkFile() {
+    public void test44_01HideApkFile() {
         // TODO: 2016/11/21 APK category
     }
 
