@@ -37,6 +37,9 @@ public final class ShellUtils {
     private static final String COMMAND_EXIT = "exit\n";
     private static final String COMMAND_LINE_END = "\n";
 
+    private ShellUtils() {
+    }
+
     public static CommandResult execCommand(
             String command, boolean isRoot, boolean isNeedResultMsg) {
         return execCommand(new String[]{command}, isRoot, isNeedResultMsg);

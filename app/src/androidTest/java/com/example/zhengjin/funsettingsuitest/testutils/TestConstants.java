@@ -50,6 +50,9 @@ public final class TestConstants {
     final static String SNAPSHOT_PATH = getSnapshotDirPath();
     final static String LOGCAT_LOG_PATH = getLogcatLogDirPath();
 
+    private TestConstants() {
+    }
+
     private static String getExternalStoragePath() {
         try {
             return FileUtils.getExternalStoragePath();

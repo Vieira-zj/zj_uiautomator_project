@@ -12,7 +12,7 @@ public final class UiObjectsSettings {
 
     private static UiObjectsSettings ourInstance = new UiObjectsSettings();
 
-    public static synchronized UiObjectsSettings getInstance() {
+    public static UiObjectsSettings getInstance() {
         return ourInstance;
     }
 

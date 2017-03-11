@@ -32,6 +32,9 @@ public final class RunnerProfile {
     // Global properties set in test cases
     public static String deviceName = "风行电视";
 
+    private RunnerProfile() {
+    }
+
     public static int countAndPrintTestCasesForClass(Class<?> cls) {
         int count = 0;
         String clsName = cls.getSimpleName();
@@ -65,7 +68,7 @@ public final class RunnerProfile {
         return getSystemVersion() == TestConstants.FunSystemVersion.V3;
     }
 
-        private static TestConstants.FunSystemVersion getSystemVersion() {
+    private static TestConstants.FunSystemVersion getSystemVersion() {
         String results = runShellCommand("getprop | grep version.incremental");
         if (StringUtils.isEmpty(results)) {
             return TestConstants.FunSystemVersion.V2;

@@ -32,6 +32,9 @@ public final class TestHelper {
     private static final UiDevice device =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
+    private TestHelper() {
+    }
+
     public static void assertTrueAndTakeCaptureIfFailed(String message, boolean result) {
         if (!result) {
             ShellUtils.takeScreenCapture(device);
