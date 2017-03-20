@@ -10,16 +10,14 @@ import android.support.test.uiautomator.UiWatcher;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsPlayingVideos;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab;
@@ -56,6 +54,7 @@ public final class TestPlayingVideos {
     private UiDevice mDevice;
     private UiActionsManager mAction;
     private UiObjectsPlayingVideos mFunUiObjects;
+    private UiObjectsVideoHomeTab mFunUiObjects2;
     private TaskPlayingVideos mTask;
     private TaskVideoHomeTab mTaskVideoHomeTab;
 
@@ -63,6 +62,7 @@ public final class TestPlayingVideos {
     public void setUp() {
         mAction = UiActionsManager.getInstance();
         mFunUiObjects = UiObjectsPlayingVideos.getInstance();
+        mFunUiObjects2 = UiObjectsVideoHomeTab.getInstance();
         mTask = TaskPlayingVideos.getInstance();
         mTaskVideoHomeTab = TaskVideoHomeTab.getInstance();
 
@@ -225,22 +225,6 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
-    public void test31OpenFactoryMenuFromSignalSourceDialog() {
-        mTask.openSignalSourceDialog();
-
-        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
-                .doDeviceActionAndWait(new DeviceActionMoveLeft());
-        UiObject2 hdmi1 = mDevice.findObject(mFunUiObjects.getHdmi1ItemFromSignalSourceDialog());
-        Assert.assertTrue("Focus on hdmi 1 signal source.", hdmi1.isFocused());
-
-        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
-                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
-                new DeviceActionMoveUp(), new DeviceActionMoveRight()});
-        // TODO: 2017/3/20, wait for new release
-    }
-
-    @Test
     @Category({Category24x7LauncherTests.class})
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
@@ -326,7 +310,7 @@ public final class TestPlayingVideos {
 
         UiObject2 cell = mTaskVideoHomeTab.getSpecifiedTvCellByIndex(String.valueOf(number));
         UiObject2 bottomTabContainer = mDevice.findObject(
-                mTaskVideoHomeTab.getBottomTabContainerOfVideoDetailsPageSelector());
+                mFunUiObjects2.getBottomTabContainerOfVideoDetailsPageSelector());
         if (cell == null && bottomTabContainer != null) {
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), 4);  // move at bottom
             if (info.getIsEnd()) {
@@ -380,7 +364,7 @@ public final class TestPlayingVideos {
 
         String tvNumber = String.format(Locale.getDefault(), "第%d集", idx);
         UiObject2 numObject =
-                mDevice.findObject(mTaskVideoHomeTab.getTvNumberTipsOfVideoDetailsPageSelector());
+                mDevice.findObject(mFunUiObjects2.getTvNumberTipsOfVideoDetailsPageSelector());
         Assert.assertEquals("Verify the TV series number in tips.", tvNumber, numObject.getText());
     }
 

@@ -50,12 +50,4 @@ public final class UiObjectsPlayingVideos {
         return By.res("com.bestv.ott:id/time_total");
     }
 
-    public BySelector getSignalSourceCardOnHomeTvTabSelector() {
-        return By.res("com.bestv.ott:id/home_tv");
-    }
-
-    public BySelector getHdmi1ItemFromSignalSourceDialog() {
-        return By.res("tv.fun.settings:id/source_item_hdmi1");
-    }
-
 }

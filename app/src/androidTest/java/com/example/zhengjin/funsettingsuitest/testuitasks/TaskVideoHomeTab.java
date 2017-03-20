@@ -3,17 +3,18 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
@@ -41,12 +42,14 @@ public final class TaskVideoHomeTab {
 
     private UiDevice device;
     private UiActionsManager action;
+    private UiObjectsVideoHomeTab funUiObjects;
 
     public static final String TEXT_CARD_FILM = "电影";
     public static final String TEXT_CARD_TV = "电视剧";
 
     private TaskVideoHomeTab() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        funUiObjects = UiObjectsVideoHomeTab.getInstance();
         action = UiActionsManager.getInstance();
     }
 
@@ -61,71 +64,6 @@ public final class TaskVideoHomeTab {
         if (instance != null) {
             instance = null;
         }
-    }
-
-    private BySelector getCardTitleOfLauncherHomeLeftAreaSelector() {
-        return By.res("com.bestv.ott:id/title");
-    }
-
-    private BySelector getCardMainTitleOfLauncherHomeRightAreaSelector() {
-        return By.res("com.bestv.ott:id/maintitle");
-    }
-
-    private BySelector getAllImagesOfMainCateOnCateDetailsSelector() {
-        return By.res("com.bestv.ott:id/poster");
-    }
-
-    public BySelector getCardContainerOfVideoRecommendPageSelector() {
-        return By.res("com.bestv.ott:id/grid");
-    }
-
-    public BySelector getTopTabTextOfVideoSubPageSelector() {
-        return By.res("com.bestv.ott:id/tab_title");
-    }
-
-    public BySelector getCardMainTitleOfVideoSubPageSelector() {
-        return By.res("com.bestv.ott:id/maintitle");
-    }
-
-    public BySelector getCardSubTitleOfVideoSubPageSelector() {
-        return By.res("com.bestv.ott:id/subtitle");
-    }
-
-    @SuppressWarnings("unused")
-    public BySelector getVideoTitleOfVideoSubPageSelector() {
-        return By.res("com.bestv.ott:id/title");
-    }
-
-    public BySelector getTitleTextOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/detail_title");
-    }
-
-    private BySelector getPlayButtonOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/detail_play_button");
-    }
-
-    private BySelector getSelectButtonOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/detail_select_button");
-    }
-
-    private BySelector getTryWatchButtonOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/detail_try_button");
-    }
-
-    public BySelector getTvNumberTipsOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/detail_tip_button");
-    }
-
-    public BySelector getRelatedVideoListOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/relate_list_view");
-    }
-
-    private BySelector getAllTvCellsOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/tv_cell");
-    }
-
-    public BySelector getBottomTabContainerOfVideoDetailsPageSelector() {
-        return By.res("com.bestv.ott:id/episode_view");
     }
 
     public void openFilmSubPageFromLauncherHome() {
@@ -181,7 +119,7 @@ public final class TaskVideoHomeTab {
     @Nullable
     private UiObject2 getMainCateCardOnCateDetailsByText(String title) {
         List<UiObject2> images =
-                device.findObjects(this.getAllImagesOfMainCateOnCateDetailsSelector());
+                device.findObjects(funUiObjects.getAllImagesOfMainCateOnCateDetailsSelector());
         for (UiObject2 image : images) {
             UiObject2 container = image.getParent();
             if (container.findObject(By.text(title)) != null) {
@@ -194,13 +132,13 @@ public final class TaskVideoHomeTab {
 
     public UiObject2 getSpecifiedCardFromHomeLeftAreaByText(String search) {
         List<UiObject2> textList =
-                device.findObjects(this.getCardTitleOfLauncherHomeLeftAreaSelector());
+                device.findObjects(funUiObjects.getCardTitleOfLauncherHomeLeftAreaSelector());
         return this.getSpecifiedTextViewFromUiCollection(textList, search);
     }
 
     public UiObject2 getSpecifiedCardFromHomeRightAreaByText(String search) {
         List<UiObject2> textList =
-                device.findObjects(this.getCardMainTitleOfLauncherHomeRightAreaSelector());
+                device.findObjects(funUiObjects.getCardMainTitleOfLauncherHomeRightAreaSelector());
         return this.getSpecifiedTextViewFromUiCollection(textList, search);
     }
 
@@ -229,9 +167,9 @@ public final class TaskVideoHomeTab {
         TestHelper.waitForLoadingComplete();
         Assert.assertTrue("waitVideoDetailsPageOpenedAndRetTitle, failed open video details page."
                 , TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
-                        this.getTitleTextOfVideoDetailsPageSelector(), LONG_TIME_OUT));
+                        funUiObjects.getTitleTextOfVideoDetailsPageSelector(), LONG_TIME_OUT));
 
-        return device.findObject(this.getTitleTextOfVideoDetailsPageSelector()).getText();
+        return device.findObject(funUiObjects.getTitleTextOfVideoDetailsPageSelector()).getText();
     }
 
     public String selectVideoAtPositionAndOpenDetails(int position) {
@@ -267,9 +205,9 @@ public final class TaskVideoHomeTab {
     public void enterOnPlayButtonOnVideoDetailsPage(TaskPlayingVideos.videoInfo info) {
         UiObject2 btn;
         if (!RunnerProfile.isAccountVipFree && info != null && info.isVip()) {
-            btn = device.findObject(this.getTryWatchButtonOfVideoDetailsPageSelector());
+            btn = device.findObject(funUiObjects.getTryWatchButtonOfVideoDetailsPageSelector());
         } else {
-            btn = device.findObject(this.getPlayButtonOfVideoDetailsPageSelector());
+            btn = device.findObject(funUiObjects.getPlayButtonOfVideoDetailsPageSelector());
         }
 
         if (!btn.isFocused()) {
@@ -279,7 +217,8 @@ public final class TaskVideoHomeTab {
     }
 
     public void focusOnTvSelectButtonOnVideoDetailsPage() {
-        UiObject2 selectBtn = device.findObject(this.getSelectButtonOfVideoDetailsPageSelector());
+        UiObject2 selectBtn =
+                device.findObject(funUiObjects.getSelectButtonOfVideoDetailsPageSelector());
         if (!selectBtn.isFocused()) {
             action.doClickActionAndWait(selectBtn, WAIT);
         }
@@ -288,7 +227,7 @@ public final class TaskVideoHomeTab {
     @Nullable
     public UiObject2 getSpecifiedTvCellByIndex(String index) {
         List<UiObject2> tvCells =
-                device.findObjects(this.getAllTvCellsOfVideoDetailsPageSelector());
+                device.findObjects(funUiObjects.getAllTvCellsOfVideoDetailsPageSelector());
         for (UiObject2 cell : tvCells) {
             if (index.equals(cell.getText())) {
                 return cell;
@@ -313,6 +252,21 @@ public final class TaskVideoHomeTab {
                 "text(%s) is NOT found on launcher home page.", search), retUiObject);
 
         return retUiObject;
+    }
+
+    public void openSignalSourceDialog() {
+        this.focusedOnSignalSourceCardOnHomeTvTab();
+        action.doDeviceActionAndWait(new DeviceActionCenter());
+        Assert.assertTrue("openSignalSourceDialog, failed to open!",
+                TestHelper.waitForUiObjectExist(funUiObjects.getHdmi1ItemFromSignalSourceDialog()));
+    }
+
+    private void focusedOnSignalSourceCardOnHomeTvTab() {
+        TaskLauncher.navigateToSpecifiedTopTab(TaskLauncher.LAUNCHER_HOME_TABS[0]);
+        action.doDeviceActionAndWait(new DeviceActionMoveDown());
+        UiObject2 card = device.findObject(funUiObjects.getSignalSourceCardOnHomeTvTabSelector());
+        Assert.assertTrue("focusedOnSignalSourceCardOnHomeTvTab, failed to focus!",
+                card.isFocused());
     }
 
 }

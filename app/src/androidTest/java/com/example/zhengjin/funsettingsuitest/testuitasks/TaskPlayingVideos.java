@@ -11,9 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
-import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
@@ -22,8 +20,6 @@ import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.HttpUtils;
 import com.squareup.okhttp.Request;
-
-import junit.framework.Assert;
 
 import org.apache.http.message.BasicNameValuePair;
 
@@ -69,21 +65,6 @@ public final class TaskPlayingVideos {
         if (instance != null) {
             instance = null;
         }
-    }
-
-    public void openSignalSourceDialog() {
-        this.focusedOnSignalSourceCardOnHomeTvTab();
-        action.doDeviceActionAndWait(new DeviceActionCenter());
-        Assert.assertTrue("openSignalSourceDialog, failed to open!",
-                TestHelper.waitForUiObjectExist(funUiObjects.getHdmi1ItemFromSignalSourceDialog()));
-    }
-
-    private void focusedOnSignalSourceCardOnHomeTvTab() {
-        TaskLauncher.navigateToSpecifiedTopTab(TaskLauncher.LAUNCHER_HOME_TABS[0]);
-        action.doDeviceActionAndWait(new DeviceActionMoveDown());
-        UiObject2 card = device.findObject(funUiObjects.getSignalSourceCardOnHomeTvTabSelector());
-        Assert.assertTrue("focusedOnSignalSourceCardOnHomeTvTab, failed to focus!",
-                card.isFocused());
     }
 
     public void waitForVideoPlayerOpenedAndOnTop() {
