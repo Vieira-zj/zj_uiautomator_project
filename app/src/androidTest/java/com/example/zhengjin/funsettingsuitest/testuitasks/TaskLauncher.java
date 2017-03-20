@@ -15,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionHome;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
@@ -62,13 +63,14 @@ public final class TaskLauncher {
         return By.res("com.bestv.ott:id/setting");
     }
 
-    public static BySelector getQuickAccessBtnWeatherSelector() {
+    static BySelector getQuickAccessBtnWeatherSelector() {
         return By.res("com.bestv.ott:id/weather");
     }
 
-//    public static BySelector getQuickAccessBtnNetworkSelector() {
-//        return By.res("com.bestv.ott:id/network");
-//    }
+    @SuppressWarnings("unused")
+    public static BySelector getQuickAccessBtnNetworkSelector() {
+        return By.res("com.bestv.ott:id/network");
+    }
 
     private static BySelector getSettingsEntrySelector() {
         return By.res("com.bestv.ott:id/setting_entry");
@@ -77,6 +79,7 @@ public final class TaskLauncher {
     public static BySelector getLoadingCircleSelector() {
         return By.res("com.bestv.ott:id/progressBar");
     }
+
     public static void backToLauncher() {
         if (RunnerProfile.isPlatform938) {
             backToLauncherByShell();
@@ -121,17 +124,25 @@ public final class TaskLauncher {
         } else {
             tabApp = getSpecifiedTab(tabText);
         }
-        for (int i = 0, moveTimes = 7; i < moveTimes; i++) {
-            ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-            if (tabApp != null) {
-                if (tabApp.isFocused() || tabApp.isSelected()) {
-                    return;
+
+        if (LAUNCHER_HOME_TABS[0].equals(tabText)) {
+            ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
+            if (tabApp != null && (tabApp.isFocused() || tabApp.isSelected())) {
+                return;
+            }
+        } else {
+            for (int i = 0, moveTimes = 7; i < moveTimes; i++) {
+                ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
+                if (tabApp != null) {
+                    if (tabApp.isFocused() || tabApp.isSelected()) {
+                        return;
+                    }
                 }
             }
         }
 
         Assert.assertTrue(String.format(
-                "navigateToSpecifiedTopTab, tab %s is NOT focused.", tabText), false);
+                "navigateToSpecifiedTopTab, tab %s is NOT focused!", tabText), false);
     }
 
     public static void navigateToVideoTab() {
@@ -139,8 +150,8 @@ public final class TaskLauncher {
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());
 
         UiObject2 tabVideo = getSpecifiedTab(LAUNCHER_HOME_TABS[1]);
-        Assert.assertNotNull("navigateToVideoTab, video tab is NOT found.", tabVideo);
-        Assert.assertTrue("navigateToVideoTab, video is NOT focused.",
+        Assert.assertNotNull("navigateToVideoTab, video tab is NOT found!", tabVideo);
+        Assert.assertTrue("navigateToVideoTab, video is NOT focused!",
                 (tabVideo.isFocused() || tabVideo.isSelected()));
     }
 

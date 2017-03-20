@@ -11,12 +11,15 @@ import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab;
@@ -52,12 +55,14 @@ public final class TestPlayingVideos {
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
+    private UiObjectsPlayingVideos mFunUiObjects;
     private TaskPlayingVideos mTask;
     private TaskVideoHomeTab mTaskVideoHomeTab;
 
     @Before
     public void setUp() {
         mAction = UiActionsManager.getInstance();
+        mFunUiObjects = UiObjectsPlayingVideos.getInstance();
         mTask = TaskPlayingVideos.getInstance();
         mTaskVideoHomeTab = TaskVideoHomeTab.getInstance();
 
@@ -222,7 +227,17 @@ public final class TestPlayingVideos {
     @Test
     @Category(CategorySettingsTests.class)
     public void test31OpenFactoryMenuFromSignalSourceDialog() {
-        // TODO: 2017/3/20
+        mTask.openSignalSourceDialog();
+
+        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
+                .doDeviceActionAndWait(new DeviceActionMoveLeft());
+        UiObject2 hdmi1 = mDevice.findObject(mFunUiObjects.getHdmi1ItemFromSignalSourceDialog());
+        Assert.assertTrue("Focus on hdmi 1 signal source.", hdmi1.isFocused());
+
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
+                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
+                new DeviceActionMoveUp(), new DeviceActionMoveRight()});
+        // TODO: 2017/3/20, wait for new release
     }
 
     @Test
@@ -230,6 +245,7 @@ public final class TestPlayingVideos {
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
         mTaskVideoHomeTab.destroyInstance();
+        mFunUiObjects.destroyInstance();
     }
 
     private void logTestVideoStart(String videoTitle) {
@@ -241,7 +257,7 @@ public final class TestPlayingVideos {
     }
 
     private void verifyVideoPlayerOnTop() {
-        UiObject2 player = mDevice.findObject(mTask.getVideoPlayerByClassSelector());
+        UiObject2 player = mDevice.findObject(mFunUiObjects.getVideoPlayerByClassSelector());
         TestHelper.assertTrueAndTakeCaptureIfFailed("Verify player is playing and on the top."
                 , (player != null && player.isEnabled()));
         ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
@@ -251,19 +267,20 @@ public final class TestPlayingVideos {
         ShellUtils.systemWaitByMillis(playTimeBySec * 1000L);
         mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
 
-        UiObject2 title = mDevice.findObject(mTask.getVideoTitleOfVideoPlayerSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getVideoTitleOfVideoPlayerSelector());
         Assert.assertNotNull(title);
         Assert.assertEquals("Verify film title when pause player.",
                 filmTitleText.trim(), title.getText().trim());
 
-        UiObject2 pauseBtn = mDevice.findObject(mTask.getPauseButtonOfVideoPlayerSelector());
+        UiObject2 pauseBtn = mDevice.findObject(
+                mFunUiObjects.getPauseButtonOfVideoPlayerSelector());
         Assert.assertNotNull("Verify pause icon when pause player.", pauseBtn);
 
-        UiObject2 seekBar = mDevice.findObject(mTask.getSeekBarOfVideoPlayerSelector());
+        UiObject2 seekBar = mDevice.findObject(mFunUiObjects.getSeekBarOfVideoPlayerSelector());
         Assert.assertNotNull("Verify seek bar when pause player.", seekBar);
 
         UiObject2 totalTime =
-                mDevice.findObject(mTask.getTotalTimeInSeekBarOfVideoPlayerSelector());
+                mDevice.findObject(mFunUiObjects.getTotalTimeInSeekBarOfVideoPlayerSelector());
         Assert.assertNotNull(totalTime);
         Assert.assertTrue("Verify film total time when pause player."
                 , totalTime.getText().contains(":"));
@@ -276,7 +293,7 @@ public final class TestPlayingVideos {
         ShellUtils.systemWaitByMillis(TestConstants.LONG_WAIT);
         mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause
 
-        UiObject2 title = mDevice.findObject(mTask.getVideoTitleOfVideoPlayerSelector());
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getVideoTitleOfVideoPlayerSelector());
         Assert.assertNotNull(title);
         Assert.assertEquals("Verify film title when pause player."
                 , fileTitle.trim(), title.getText().trim());
@@ -338,7 +355,8 @@ public final class TestPlayingVideos {
 
     private void verifyTvNameAndNumberInVideoPlayer(String tvName, int TvNumber) {
         String titleOnPlayer = String.format(Locale.getDefault(), "%s 第%d集", tvName, TvNumber);
-        UiObject2 titleUiObject = mDevice.findObject(mTask.getVideoTitleOfVideoPlayerSelector());
+        UiObject2 titleUiObject =
+                mDevice.findObject(mFunUiObjects.getVideoTitleOfVideoPlayerSelector());
         Assert.assertEquals("Verify the tv series name and number."
                 , titleOnPlayer, titleUiObject.getText());
     }
@@ -381,7 +399,7 @@ public final class TestPlayingVideos {
     private void isPlayerProcessReset() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
         UiObject2 curTimeObj =
-                mDevice.findObject(mTask.getCurrentTimeInSeekBarOfVideoPlayerSelector());
+                mDevice.findObject(mFunUiObjects.getCurrentTimeInSeekBarOfVideoPlayerSelector());
 
         final int timeAfterReset = 300;  // 5 minutes
         if (mTask.formatPlayTimeInVideoPlayer(curTimeObj.getText()) > timeAfterReset) {

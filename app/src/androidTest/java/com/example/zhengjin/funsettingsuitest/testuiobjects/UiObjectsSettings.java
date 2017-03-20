@@ -6,7 +6,7 @@ import android.support.test.uiautomator.BySelector;
 /**
  * Created by zhengjin on 2017/2/28.
  * <p>
- * Include the UI objects for for settings apk.
+ * Include the UI objects for settings apk.
  */
 public final class UiObjectsSettings {
 

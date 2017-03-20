@@ -2,8 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.Direction;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -13,14 +11,19 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.HttpUtils;
 import com.squareup.okhttp.Request;
+
+import junit.framework.Assert;
 
 import org.apache.http.message.BasicNameValuePair;
 
@@ -47,10 +50,12 @@ public final class TaskPlayingVideos {
 
     private UiDevice device;
     private UiActionsManager action;
+    private UiObjectsPlayingVideos funUiObjects;
 
     private TaskPlayingVideos() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         action = UiActionsManager.getInstance();
+        funUiObjects = UiObjectsPlayingVideos.getInstance();
     }
 
     public static synchronized TaskPlayingVideos getInstance() {
@@ -66,28 +71,19 @@ public final class TaskPlayingVideos {
         }
     }
 
-    public BySelector getVideoPlayerByClassSelector() {
-        return By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer");
+    public void openSignalSourceDialog() {
+        this.focusedOnSignalSourceCardOnHomeTvTab();
+        action.doDeviceActionAndWait(new DeviceActionCenter());
+        Assert.assertTrue("openSignalSourceDialog, failed to open!",
+                TestHelper.waitForUiObjectExist(funUiObjects.getHdmi1ItemFromSignalSourceDialog()));
     }
 
-    public BySelector getVideoTitleOfVideoPlayerSelector() {
-        return By.res("com.bestv.ott:id/video_player_title");
-    }
-
-    public BySelector getPauseButtonOfVideoPlayerSelector() {
-        return By.res("com.bestv.ott:id/control_panel_pause_layout_btn");
-    }
-
-    public BySelector getSeekBarOfVideoPlayerSelector() {
-        return By.res("com.bestv.ott:id/media_progress");
-    }
-
-    public BySelector getCurrentTimeInSeekBarOfVideoPlayerSelector() {
-        return By.res("com.bestv.ott:id/time_current");
-    }
-
-    public BySelector getTotalTimeInSeekBarOfVideoPlayerSelector() {
-        return By.res("com.bestv.ott:id/time_total");
+    private void focusedOnSignalSourceCardOnHomeTvTab() {
+        TaskLauncher.navigateToSpecifiedTopTab(TaskLauncher.LAUNCHER_HOME_TABS[0]);
+        action.doDeviceActionAndWait(new DeviceActionMoveDown());
+        UiObject2 card = device.findObject(funUiObjects.getSignalSourceCardOnHomeTvTabSelector());
+        Assert.assertTrue("focusedOnSignalSourceCardOnHomeTvTab, failed to focus!",
+                card.isFocused());
     }
 
     public void waitForVideoPlayerOpenedAndOnTop() {
@@ -96,7 +92,7 @@ public final class TaskPlayingVideos {
                 LAUNCHER_PKG_NAME, VIDEO_PLAYER_ACT, LONG_TIME_OUT);
         // wait for adv, and loading in video player
         TestHelper.waitForUiObjectEnabledByCheckIsEnabled(
-                this.getVideoPlayerByClassSelector(), LONG_TIME_OUT);
+                funUiObjects.getVideoPlayerByClassSelector(), LONG_TIME_OUT);
     }
 
     public void exitVideoPlayerByBack() {
@@ -120,7 +116,7 @@ public final class TaskPlayingVideos {
 
         action.doDeviceActionAndWait(new DeviceActionMoveRight(), wait);  // show seek bar
         UiObject2 seekBar = TestHelper.waitForUiObjectExistAndReturn(
-                this.getSeekBarOfVideoPlayerSelector());
+                funUiObjects.getSeekBarOfVideoPlayerSelector());
         action.doDeviceActionAndWait(new DeviceActionMoveRight(), wait);  // show seek bar
         seekBar.swipe(direction, percent, step);
     }
@@ -128,7 +124,7 @@ public final class TaskPlayingVideos {
     public int getCurrentPlayTimeInVideoPlayer() {
         action.doDeviceActionAndWait(new DeviceActionEnter());  // pause player
         UiObject2 curTime =
-                device.findObject(this.getCurrentTimeInSeekBarOfVideoPlayerSelector());
+                device.findObject(funUiObjects.getCurrentTimeInSeekBarOfVideoPlayerSelector());
         int playingTime = formatPlayTimeInVideoPlayer(curTime.getText());
         action.doDeviceActionAndWait(new DeviceActionEnter());  // play
 
@@ -229,9 +225,8 @@ public final class TaskPlayingVideos {
         if ("200".equals(retCode) && "ok".equals(retMsg)) {
             return true;
         } else {
-            Log.e(TAG, String.format(
-                    "isResponseOk, error: response ret code: %s, ret message: %s"
-                    , retCode, retMsg));
+            Log.e(TAG, String.format("isResponseOk, error: response ret code: %s, ret message: %s",
+                    retCode, retMsg));
             return false;
         }
     }
@@ -345,7 +340,7 @@ public final class TaskPlayingVideos {
             } else if (vipFree.equals(this.vipType)) {
                 return true;
             } else {
-                Log.e(TAG, String.format("isVip, invalid vip type %s", this.vipType));
+                Log.e(TAG, "isVip, invalid vip type: " + this.vipType);
                 return false;
             }
         }
