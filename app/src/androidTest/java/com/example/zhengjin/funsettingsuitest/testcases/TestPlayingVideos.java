@@ -10,8 +10,7 @@ import android.support.test.uiautomator.UiWatcher;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.Category24x7LauncherTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
@@ -76,7 +75,7 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({Category24x7LauncherTests.class, CategoryDemoTests.class})
+    @Category({Category24x7LauncherTests.class})
     public void test11VideoPlayerUIWhenPauseFilm() {
         // test for one film
         mTaskVideoHomeTab.openFilmSubPageFromLauncherHome();
@@ -221,7 +220,13 @@ public final class TestPlayingVideos {
     }
 
     @Test
-    @Category({CategoryHomeVideoTabTests.class})
+    @Category(CategorySettingsTests.class)
+    public void test31OpenFactoryMenuFromSignalSourceDialog() {
+        // TODO: 2017/3/20
+    }
+
+    @Test
+    @Category({Category24x7LauncherTests.class})
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
         mTaskVideoHomeTab.destroyInstance();

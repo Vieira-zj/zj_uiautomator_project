@@ -72,7 +72,7 @@ public final class UiActionsManager {
         doMultipleDeviceActionsAndWait(actions, SHORT_WAIT);
     }
 
-    private void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
+    public void doMultipleDeviceActionsAndWait(DeviceAction[] actions, long wait) {
         for (DeviceAction action : actions) {
             action.doDeviceAction(mDevice);
             ShellUtils.systemWaitByMillis(wait);

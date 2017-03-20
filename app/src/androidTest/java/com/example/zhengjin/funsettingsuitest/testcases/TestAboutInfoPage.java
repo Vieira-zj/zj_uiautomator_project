@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
+import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -9,12 +10,17 @@ import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTest
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -27,6 +33,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 
@@ -156,7 +165,9 @@ public final class TestAboutInfoPage {
         mMessage = "Verify the device model item value.";
         UiObject2 itemValue =
                 tvModelItem.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
-        Assert.assertEquals(mMessage, mTask.getDeviceModelInfo(), itemValue.getText());
+        Pattern pattern = Pattern.compile(mTask.getDeviceModelInfo());
+        Matcher matcher = pattern.matcher(itemValue.getText());
+        Assert.assertTrue(mMessage, matcher.find());
     }
 
     @Test
@@ -198,6 +209,46 @@ public final class TestAboutInfoPage {
         UiObject2 itemValue =
                 seriesId.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
         Assert.assertTrue(mMessage, mTask.isDeviceSeriesIdValid(itemValue.getText()));
+    }
+
+    @Test
+    @Category({CategoryAboutInfoTests.class})
+    public void test04_05HiddenFullInfoOnProductInfo() {
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
+        TestHelper.waitForUiObjectExist(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
+
+        mMessage = "Verify hidden product information page is open after shorten keys.";
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
+                new DeviceActionMoveRight(), new DeviceActionMoveRight(),
+                new DeviceActionMoveDown(), new DeviceActionMoveLeft()}, 500L);
+        Assert.assertTrue(mMessage, TestHelper.waitForActivityOpenedByShellCmd(
+                TestConstants.SETTINGS_PKG_NAME, ".about.SystemInfoActivity"));
+
+        // verification 1
+        mMessage = "Verify OS name title on hidden product information page.";
+        UiObject2 osNameContainer = mDevice.findObject(
+                mFunUiObjects.getOsNameContainterOnHiddenSystemInfoSelector());
+        UiObject2 itemKey = osNameContainer.findObject(
+                mFunUiObjects.getSystemItemKeyOnHiddenSystemInfoSelector());
+        Assert.assertEquals(mMessage, "操作系统:", itemKey.getText());
+
+        mMessage = "Verify OS name value on hidden product information page.";
+        UiObject2 itemValue = osNameContainer.findObject(
+                mFunUiObjects.getSystemItemValueOnHiddenSystemInfoSelector());
+        Assert.assertTrue("", itemValue.getText().contains(Build.VERSION.RELEASE));
+
+        // verification 2
+        mMessage = "Verify device model title on hidden product information page.";
+        UiObject2 modelContainer = mDevice.findObject(
+                mFunUiObjects.getDeviceModelContainerOnHiddenSystemInfoSelector());
+        itemKey = modelContainer.findObject(
+                mFunUiObjects.getSystemItemKeyOnHiddenSystemInfoSelector());
+        Assert.assertEquals(mMessage, "设备型号:", itemKey.getText());
+
+        mMessage = "Verify device model value on hidden product information page.";
+        itemValue = modelContainer.findObject(
+                mFunUiObjects.getSystemItemValueOnHiddenSystemInfoSelector());
+        Assert.assertTrue(mMessage, mTask.getFullDeviceModelInfo().contains(itemValue.getText()));
     }
 
     @Test

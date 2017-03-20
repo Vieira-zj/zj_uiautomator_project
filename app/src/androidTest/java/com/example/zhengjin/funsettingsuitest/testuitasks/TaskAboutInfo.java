@@ -133,11 +133,36 @@ public final class TaskAboutInfo {
     }
 
     public String getDeviceModelInfo() {
-        String productSeriesNo = this.getTvSeriesNoByShellCmd("getprop | grep product.model");
+        String productSeriesNo = this.getTvSeriesNoByShellCmd();
         String tvModel = this.getDeviceModel(productSeriesNo);
         String suffix = this.getDeviceModelSuffix(productSeriesNo);
 
-        return String.format("%s%s%s", "G", tvModel, suffix);
+        return String.format("%s%s%s", "(G|F)", tvModel, suffix);
+    }
+
+    private String getTvSeriesNoByShellCmd() {
+        String deviceInfo = this.getFullDeviceModelInfo();
+        if (StringUtils.isEmpty(deviceInfo)) {
+            return "";
+        }
+
+        Pattern pattern = Pattern.compile("[0-9]{4}");
+        Matcher matcher = pattern.matcher(this.getFullDeviceModelInfo());
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return "";
+    }
+
+    public String getFullDeviceModelInfo() {
+        ShellUtils.CommandResult cr =
+                ShellUtils.execCommand("getprop | grep product.model", false, true);
+
+        if (cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
+            String[] items = cr.mSuccessMsg.split("\\s*:\\s*");
+            return items[1];
+        }
+        return "";
     }
 
     private String getDeviceModel(String seriesNo) {
@@ -170,19 +195,6 @@ public final class TaskAboutInfo {
         }
 
         return DEFAULT_MODEL_SUFFIX;
-    }
-
-    private String getTvSeriesNoByShellCmd(String cmd) {
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
-        if (cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
-            Pattern pattern = Pattern.compile("[0-9]{4}");
-            Matcher matcher = pattern.matcher(cr.mSuccessMsg);
-            if (matcher.find()) {
-                return matcher.group();
-            }
-        }
-
-        return "";
     }
 
     public String getDeviceRomSizeInfo() {

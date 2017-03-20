@@ -141,4 +141,20 @@ public final class UiObjectsAboutInfo {
         return By.res("tv.fun.settings:id/about_item_sub_protocol");
     }
 
+    public BySelector getOsNameContainterOnHiddenSystemInfoSelector() {
+        return By.res("tv.fun.settings:id/part_one_left");
+    }
+
+    public BySelector getDeviceModelContainerOnHiddenSystemInfoSelector() {
+        return By.res("tv.fun.settings:id/part_one_right");
+    }
+
+    public BySelector getSystemItemKeyOnHiddenSystemInfoSelector() {
+        return By.res("tv.fun.settings:id/sysytem_item_label");
+    }
+
+    public BySelector getSystemItemValueOnHiddenSystemInfoSelector() {
+        return By.res("tv.fun.settings:id/sysytem_item_text");
+    }
+
 }
