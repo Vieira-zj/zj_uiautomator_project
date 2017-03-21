@@ -7,10 +7,12 @@ import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskImageAndSound;
@@ -25,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -93,29 +96,7 @@ public final class TestImageAndSoundSettings {
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02_01TitleAndValueOfDefaultPlayClarity() {
-        mMessage = "Verify the default play clarity setting item is enabled.";
-        UiObject2 playClarityItem =
-                mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
-        Assert.assertTrue(mMessage, (playClarityItem != null && playClarityItem.isEnabled()));
-
-        mMessage = "Verify the default play clarity setting item is default focused.";
-        Assert.assertTrue(mMessage, playClarityItem.isFocused());
-
-        mMessage = "Verify the title of default play clarity setting item.";
-        UiObject2 playClarityTitle = playClarityItem.findObject(
-                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
-        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0],
-                playClarityTitle.getText());
-
-        mMessage = "Verify the value of default play clarity setting item.";
-        UiObject2 playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
-        Assert.assertEquals(mMessage, "超清", playClarityValue.getText());
-    }
-
-    @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02_02TitleOfImageParamsSettingItem() {
+    public void test02_01TitleOfImageParamsSettingItem() {
         mMessage = "Verify the image params setting item is enabled.";
         UiObject2 imageParamsItem =
                 mDevice.findObject(mFunUiObjects.getImageParamsSettingItemSelector());
@@ -126,6 +107,42 @@ public final class TestImageAndSoundSettings {
                 mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
         Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1],
                 imageParamsTitle.getText());
+    }
+
+    @Test
+    @Ignore
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test02_02ShowSavePowerModeHiddenItem() {
+        mMessage = "Verify the image params setting item is default focused.";
+        UiObject2 imageParamsItem =
+                mDevice.findObject(mFunUiObjects.getImageParamsSettingItemSelector());
+        Assert.assertTrue(mMessage, imageParamsItem.isFocused());
+
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
+                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
+                new DeviceActionMoveUp(), new DeviceActionMoveLeft()}, 500L);
+
+        mMessage = "Verify save power mode hidden item is shown after shorten keys.";
+        // TODO: 2017/3/21 wait for new release
+    }
+
+    @Test
+    @Category(CategoryImageAndSoundSettingsTests.class)
+    public void test02_03TitleAndValueOfDefaultPlayClarity() {
+        mMessage = "Verify the default play clarity setting item is enabled.";
+        UiObject2 playClarityItem =
+                mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
+        Assert.assertTrue(mMessage, (playClarityItem != null && playClarityItem.isEnabled()));
+
+        mMessage = "Verify the title of default play clarity setting item.";
+        UiObject2 playClarityTitle = playClarityItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0],
+                playClarityTitle.getText());
+
+        mMessage = "Verify the value of default play clarity setting item.";
+        UiObject2 playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
+        Assert.assertEquals(mMessage, "超清", playClarityValue.getText());
     }
 
     @Test

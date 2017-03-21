@@ -208,6 +208,7 @@ public final class TestHomeVideoTab {
     }
 
     @Test
+    @Ignore
     @Category(CategoryHomeVideoTabTests.class)
     public void test31OpenFactoryMenuFromSignalSourceDialog() {
         mTask.openSignalSourceDialog();
