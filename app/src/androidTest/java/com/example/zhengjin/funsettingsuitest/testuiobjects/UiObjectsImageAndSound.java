@@ -45,6 +45,14 @@ public final class UiObjectsImageAndSound {
         return By.res("tv.fun.settings:id/setting_item_around_audio");
     }
 
+    public BySelector getSavePowerModeSettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_dynamic_backlight");
+    }
+
+    public BySelector getCECRemoteControlSettingItemSelector() {
+        return By.res("tv.fun.settings:id/setting_item_cec_control");
+    }
+
     public BySelector getImageAndSoundSettingItemTitleSelector() {
         return By.res("tv.fun.settings:id/item_title");
     }

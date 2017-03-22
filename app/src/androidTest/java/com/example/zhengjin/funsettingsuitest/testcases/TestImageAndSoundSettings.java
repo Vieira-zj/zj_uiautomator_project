@@ -6,6 +6,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
@@ -27,7 +28,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -50,7 +50,7 @@ public final class TestImageAndSoundSettings {
     private final String TURN_OFF_TEXT = "已关闭";
 
     private final String[] IMAGE_AND_SOUND_SETTINGS_TITLE_ARR =
-            {"默认播放清晰度", "图像参数", "按键音", "环绕立体声道"};
+            {"默认播放清晰度", "图像参数", "按键音", "环绕立体声道", "节能模式", "CEC遥控"};
     private final String[] IMAGE_PARAMS_SETTINGS_TITLE_ARR =
             {"色温", "背光", "亮度", "对比度", "饱和度", "恢复默认选项"};
     private final String[] IMAGE_PARAMS_SETTINGS_VALUE_ARR =
@@ -96,7 +96,7 @@ public final class TestImageAndSoundSettings {
 
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02_01TitleOfImageParamsSettingItem() {
+    public void test02TitleOfImageParamsSettingItem() {
         mMessage = "Verify the image params setting item is enabled.";
         UiObject2 imageParamsItem =
                 mDevice.findObject(mFunUiObjects.getImageParamsSettingItemSelector());
@@ -107,42 +107,6 @@ public final class TestImageAndSoundSettings {
                 mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
         Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[1],
                 imageParamsTitle.getText());
-    }
-
-    @Test
-    @Ignore
-    @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02_02ShowSavePowerModeHiddenItem() {
-        mMessage = "Verify the image params setting item is default focused.";
-        UiObject2 imageParamsItem =
-                mDevice.findObject(mFunUiObjects.getImageParamsSettingItemSelector());
-        Assert.assertTrue(mMessage, imageParamsItem.isFocused());
-
-        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
-                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
-                new DeviceActionMoveUp(), new DeviceActionMoveLeft()}, 500L);
-
-        mMessage = "Verify save power mode hidden item is shown after shorten keys.";
-        // TODO: 2017/3/21 wait for new release
-    }
-
-    @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test02_03TitleAndValueOfDefaultPlayClarity() {
-        mMessage = "Verify the default play clarity setting item is enabled.";
-        UiObject2 playClarityItem =
-                mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
-        Assert.assertTrue(mMessage, (playClarityItem != null && playClarityItem.isEnabled()));
-
-        mMessage = "Verify the title of default play clarity setting item.";
-        UiObject2 playClarityTitle = playClarityItem.findObject(
-                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
-        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0],
-                playClarityTitle.getText());
-
-        mMessage = "Verify the value of default play clarity setting item.";
-        UiObject2 playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
-        Assert.assertEquals(mMessage, "超清", playClarityValue.getText());
     }
 
     @Test
@@ -229,11 +193,74 @@ public final class TestImageAndSoundSettings {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
-    public void test07EnergySaverSettingItemIsHidden() {
-        final String ENERGY_SAVER_TITLE_TEXT = "节能模式";
-        mMessage = "Verify the energy saver setting item is default hidden on Image and Sound.";
-        Assert.assertTrue(mMessage, TestHelper.waitForTextGone(ENERGY_SAVER_TITLE_TEXT));
+    @Category({CategoryImageAndSoundSettingsTests.class, CategoryVersion30.class})
+    public void test07ShowSavePowerModeHiddenItem() {
+        mMessage = "Verify the image params setting item is default focused.";
+        UiObject2 imageParamsItem =
+                mDevice.findObject(mFunUiObjects.getImageParamsSettingItemSelector());
+        Assert.assertTrue(mMessage, imageParamsItem.isFocused());
+
+        mMessage = "Verify save power mode item is default hidden.";
+        UiObject2 savePowerItem = mDevice.findObject(
+                mFunUiObjects.getSavePowerModeSettingItemSelector());
+        Assert.assertEquals(mMessage, null, savePowerItem);
+
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
+                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
+                new DeviceActionMoveUp(), new DeviceActionMoveLeft()}, 500L);
+
+        mMessage = "Verify save power mode hidden item is shown after shorten keys.";
+        savePowerItem = mDevice.findObject(
+                mFunUiObjects.getSavePowerModeSettingItemSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(savePowerItem));
+
+        mMessage = "Verify save power mode settings item title.";
+        UiObject2 itemTitle = savePowerItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[4], itemTitle.getText());
+
+        mMessage = "Verify save power mode settings item value.";
+        UiObject2 itemValue = savePowerItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
+        Assert.assertEquals(mMessage, TURN_ON_TEXT, itemValue.getText());
+    }
+
+    @Test
+    @Category({CategoryImageAndSoundSettingsTests.class, CategoryVersion30.class})
+    public void test08TitleAndValueOfCECRemoteControl() {
+        mMessage = "Verify CEC remote control setting item is enabled.";
+        UiObject2 cecControl = mDevice.findObject(
+                mFunUiObjects.getCECRemoteControlSettingItemSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(cecControl));
+
+        mMessage = "Verify CEC remote control setting item title.";
+        UiObject2 itemTitle = cecControl.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[5], itemTitle.getText());
+
+        mMessage = "Verify CEC remote control setting item value.";
+        UiObject2 itemValue = cecControl.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemValueSelector());
+        Assert.assertEquals(mMessage, TURN_OFF_TEXT, itemValue.getText());
+    }
+
+    @Test
+    @Category({CategoryImageAndSoundSettingsTests.class, CategoryVersion30.class})
+    public void test09TitleAndValueOfDefaultPlayClarity() {
+        mMessage = "Verify the default play clarity setting item is enabled.";
+        UiObject2 playClarityItem =
+                mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
+        Assert.assertTrue(mMessage, (playClarityItem != null && playClarityItem.isEnabled()));
+
+        mMessage = "Verify the title of default play clarity setting item.";
+        UiObject2 playClarityTitle = playClarityItem.findObject(
+                mFunUiObjects.getImageAndSoundSettingItemTitleSelector());
+        Assert.assertEquals(mMessage, IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0],
+                playClarityTitle.getText());
+
+        mMessage = "Verify the value of default play clarity setting item.";
+        UiObject2 playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
+        Assert.assertEquals(mMessage, "超清", playClarityValue.getText());
     }
 
     @Test
