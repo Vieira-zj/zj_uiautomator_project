@@ -258,7 +258,8 @@ public final class TaskVideoHomeTab {
         this.focusedOnSignalSourceCardOnHomeTvTab();
         action.doDeviceActionAndWait(new DeviceActionCenter());
         Assert.assertTrue("openSignalSourceDialog, failed to open!",
-                TestHelper.waitForUiObjectExist(funUiObjects.getHdmi1ItemFromSignalSourceDialog()));
+                TestHelper.waitForUiObjectExist(
+                        funUiObjects.getHdmi1ItemFromSignalSourceDialogSelector()));
     }
 
     private void focusedOnSignalSourceCardOnHomeTvTab() {

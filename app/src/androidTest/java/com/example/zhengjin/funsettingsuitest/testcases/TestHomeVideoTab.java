@@ -6,6 +6,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
@@ -37,7 +38,7 @@ import java.util.List;
  * Created by Vieira on 2016/7/4.
  * <p>
  * Include the test cases to test the tabs of launcher home.
- * These test cases are unstable (video 2nd level page).
+ * Test cases for video 2nd level sub-page are unstable.
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -208,20 +209,28 @@ public final class TestHomeVideoTab {
     }
 
     @Test
-    @Ignore
-    @Category(CategoryHomeVideoTabTests.class)
+    @Category({CategoryHomeVideoTabTests.class, CategoryVersion30.class})
     public void test31OpenFactoryMenuFromSignalSourceDialog() {
         mTask.openSignalSourceDialog();
 
         mAction.doChainedDeviceActionAndWait(new DeviceActionMoveDown())
                 .doDeviceActionAndWait(new DeviceActionMoveLeft());
-        UiObject2 hdmi1 = mDevice.findObject(mFunUiObjects.getHdmi1ItemFromSignalSourceDialog());
-        Assert.assertTrue("Focus on hdmi 1 signal source.", hdmi1.isFocused());
+        UiObject2 hdmi1 = mDevice.findObject(
+                mFunUiObjects.getHdmi1ItemFromSignalSourceDialogSelector());
+        Assert.assertTrue("Focus on hdmi1 signal source.", hdmi1.isFocused());
 
         mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
                 new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
-                new DeviceActionMoveUp(), new DeviceActionMoveRight()});
-        // TODO: 2017/3/20, wait for new release
+                new DeviceActionMoveUp(), new DeviceActionMoveRight()}, 500L);
+
+        Assert.assertTrue("Verify factory mode activity is opened.",
+                TestHelper.waitForActivityOpenedByShellCmd(
+                        "mstar.factorymenu.ui",
+                        "mstar.tvsetting.factory.ui.designmenu.DesignMenuActivity"));
+
+        UiObject2 menu = mDevice.findObject(mFunUiObjects.getFactoryMenuFlipperSelector());
+        Assert.assertTrue("Verify factory menu flipper is enabled.",
+                TestHelper.waitForUiObjectEnabled(menu));
     }
 
     @Test

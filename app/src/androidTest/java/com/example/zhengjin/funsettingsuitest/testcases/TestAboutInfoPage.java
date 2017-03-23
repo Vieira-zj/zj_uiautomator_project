@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiObject2;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
@@ -212,7 +213,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category({CategoryAboutInfoTests.class})
+    @Category({CategoryAboutInfoTests.class, CategoryVersion30.class})
     public void test04_05HiddenFullInfoOnProductInfo() {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[0]);
         TestHelper.waitForUiObjectExist(mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());

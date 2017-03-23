@@ -95,8 +95,12 @@ public final class UiObjectsVideoHomeTab {
         return By.res("com.bestv.ott:id/home_tv");
     }
 
-    public BySelector getHdmi1ItemFromSignalSourceDialog() {
+    public BySelector getHdmi1ItemFromSignalSourceDialogSelector() {
         return By.res("tv.fun.settings:id/source_item_hdmi1");
+    }
+
+    public BySelector getFactoryMenuFlipperSelector() {
+        return By.res("mstar.factorymenu.ui:id/factory_view_flipper");
     }
 
 }
