@@ -107,6 +107,14 @@ public final class RunnerListenerFunSettings extends RunListener {
             mTestSuiteSerializer.startTag(null, "systeminfo");
             mTestSuiteSerializer.attribute(null, "sdkversion", android.os.Build.VERSION.RELEASE);
             mTestSuiteSerializer.attribute(null, "devicetype", android.os.Build.MODEL);
+            mTestSuiteSerializer.attribute(null, "platformchiptype",
+                    (RunnerProfile.isPlatform938 ?
+                            TestConstants.PlatformChipType.MSTAR938.getName() :
+                            TestConstants.PlatformChipType.MSTAR638.getName()));
+            mTestSuiteSerializer.attribute(null, "funuiversion",
+                    (RunnerProfile.isVersion30 ?
+                            TestConstants.FunSystemVersion.V3.getName() :
+                            TestConstants.FunSystemVersion.V2.getName()));
             mTestSuiteSerializer.endTag(null, "systeminfo");
         } catch (IOException e) {
             e.printStackTrace();

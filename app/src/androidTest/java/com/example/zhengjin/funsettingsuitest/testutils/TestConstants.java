@@ -81,13 +81,35 @@ public final class TestConstants {
     }
 
     public enum FunSystemVersion {
-        V2,
-        V3
+
+        V2("FunUI_v2.0"),
+        V3("FunUI_v3.0");
+
+        private final String name;
+
+        FunSystemVersion(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
 
     public enum PlatformChipType {
-        MSTAR638,
-        MSTAR938
+
+        MSTAR638("Mstar_638"),
+        MSTAR938("Mstar_938");
+
+        private final String name;
+
+        PlatformChipType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
 
     @SuppressWarnings("unused")
