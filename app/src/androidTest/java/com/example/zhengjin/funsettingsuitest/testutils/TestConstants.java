@@ -45,6 +45,7 @@ public final class TestConstants {
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
     public final static String CLASS_TEXT_SWITCHER = "android.widget.TextSwitcher";
     public final static String CLASS_WEB_VIEW = "android.webkit.WebView";
+    public final static String CLASS_RELATIVE_LAYOUT = "android.widget.RelativeLayout";
 
     public final static String TEST_ROOT_DIR_PATH = getTestingRootPath();
     final static String SNAPSHOT_PATH = getSnapshotDirPath();

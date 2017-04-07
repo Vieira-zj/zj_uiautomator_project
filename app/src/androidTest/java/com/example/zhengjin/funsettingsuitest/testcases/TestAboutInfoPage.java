@@ -3,11 +3,11 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
@@ -16,6 +16,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
@@ -35,10 +36,12 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
  * Created by zhengjin on 2017/1/5.
@@ -50,7 +53,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SET
 public final class TestAboutInfoPage {
 
     private final String[] ABOUT_ITEM_TITLES_ARR =
-            {"产品信息", "网络信息", "系统版本", "问题反馈", "法律信息", "播控方"};
+            {"产品信息", "网络信息", "系统版本", "问题反馈", "法律信息", "播控方", "应用版本"};
     private final String START_CATCH_LOG_MENU_BTN_TEXT = "开始抓日志";
     private final String DUMP_LOG_MENU_BTN_TEXT = "导入U盘";
     private final String[] LAW_ITEM_TITLES_ARR = {"版权保护投诉指引", "隐私政策", "用户协议"};
@@ -84,8 +87,8 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category({CategoryAboutInfoTests.class, CategoryDemoTests.class})
-    public void test01AboutInfoPageTitle() {
+    @Category({CategoryAboutInfoTests.class})
+    public void test01_01AboutInfoPageTitle() {
         UiObject2 pageTitle =
                 mDevice.findObject(mFunUiObjects.getSettingsAboutInfoPageTitleSelector());
 
@@ -96,15 +99,64 @@ public final class TestAboutInfoPage {
     }
 
     @Test
+    @Category({CategoryAboutInfoTests.class, CategoryVersion30.class})
+    public void test01_02HiddenAppsVersionItemOnAboutInfo() {
+        mMessage = "Verify the product info item is default focused on about info page.";
+        UiObject2 productInfoItem =
+                mDevice.findObject(mFunUiObjects.getProductInfoItemOnAboutSelector());
+        Assert.assertTrue(mMessage, productInfoItem.isFocused());
+
+        mMessage = "Verify the setting items count before hidden is show.";
+        UiObject2 itemsContainer =
+                mDevice.findObject(mFunUiObjects.getSettingsItemsContainerOnAboutSelector());
+        List<UiObject2> settingItems = itemsContainer.findObjects(
+                By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).maxDepth(1));
+        final int initSize = 6;
+        Assert.assertEquals(mMessage, initSize, settingItems.size());
+
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
+                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
+                new DeviceActionMoveUp(), new DeviceActionMoveLeft()}, 500L);
+        ShellUtils.systemWaitByMillis(WAIT);
+
+        mMessage = "Verify the setting items count after hidden is show.";
+        settingItems = itemsContainer.findObjects(
+                By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).maxDepth(1));
+        Assert.assertEquals(mMessage, (initSize + 1), settingItems.size());
+    }
+
+    @Test
+    @Category({CategoryAboutInfoTests.class, CategoryVersion30.class})
+    public void test01_03OpenHiddenAppsVersionSubPage() {
+        mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
+                new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
+                new DeviceActionMoveUp(), new DeviceActionMoveLeft()}, 500L);
+        ShellUtils.systemWaitByMillis(WAIT);
+
+        mMessage = "Verify the hidden apps version item is shown after short keys.";
+        UiObject2 appsVersionItem =
+                mDevice.findObject(mFunUiObjects.getAppsVersionItemOnAboutSelector());
+        UiObject2 itemTitle =
+                appsVersionItem.findObject(mFunUiObjects.getItemTitleOnAboutInfoPageSelector());
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[6], itemTitle.getText());
+
+        mMessage = "Verify the title of apps version sub page.";
+        mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[6]);
+        UiObject2 title = mDevice.findObject(
+                mFunUiObjects.getSettingsAboutInfoSubPageTitleSelector());
+        Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[6], title.getText());
+    }
+
+    @Test
     @Category({CategoryAboutInfoTests.class})
     public void test02ProductInfoItemOnAboutInfo() {
         mMessage = "Verify the product info item on About Info page is enabled.";
-        UiObject2 productItem =
+        UiObject2 productInfoItem =
                 mDevice.findObject(mFunUiObjects.getProductInfoItemOnAboutSelector());
-        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productItem));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(productInfoItem));
 
         mMessage = "Verify the title of product info item.";
-        UiObject2 itemTitle = mTask.getTitleInAboutInfoItem(productItem);
+        UiObject2 itemTitle = mTask.getTitleInAboutInfoItem(productInfoItem);
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[0], itemTitle.getText());
     }
 

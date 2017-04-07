@@ -44,7 +44,7 @@ public final class TaskLauncher {
     public static final String TAG = TaskLauncher.class.getSimpleName();
 
     public static final String[] LAUNCHER_HOME_TABS =
-            {"电视", "视频", "体育", "少儿", "应用", "设置"};
+            {"电视", "视频", "体育", "少儿", "应用", "设置", "设置icon"};
 
     static {
         ACTION = UiActionsManager.getInstance();
@@ -119,7 +119,7 @@ public final class TaskLauncher {
         navigateToVideoTab();
 
         UiObject2 tabApp;
-        if (RunnerProfile.isVersion30 && LAUNCHER_HOME_TABS[5].equals(tabText)) {
+        if (RunnerProfile.isVersion30 && LAUNCHER_HOME_TABS[6].equals(tabText)) {
             tabApp = DEVICE.findObject(getSettingsEntrySelector());
         } else {
             tabApp = getSpecifiedTab(tabText);

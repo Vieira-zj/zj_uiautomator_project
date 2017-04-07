@@ -42,7 +42,6 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
@@ -73,7 +72,8 @@ public final class TestCommonSettings {
             {"5分钟（默认）", "10分钟", "15分钟", "20分钟", "关闭"};
     private final String[] SUB_VALUES_SHUTDOWN_TV_TIME =
             {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
-    private final String[] SUB_VALUES_WALLPAPER = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
+    private final String[] SUB_VALUES_WALLPAPER =
+            {"星夜如梦", "神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
@@ -259,18 +259,75 @@ public final class TestCommonSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
-    public void test15_02SleepTimeDefaultValue() {
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test15_02FullScreenSettingItemOnAdvance() {
         mTask.openAdvancedSettingsPage();
 
-        mMessage = "Verify the key text of sleep setting.";
+        mMessage = "Verify the title of full screen setting item.";
+        UiObject2 itemContainer = mDevice.findObject(
+                mFunUiObjects.getFullScreenSettingItemContainerSelector());
+        UiObject2 itemTitle = itemContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, "信源自动全屏", itemTitle.getText());
+
+        mMessage = "Verify the tips of full screen setting item.";
+        UiObject2 itemTips = itemContainer.findObject(mFunUiObjects.getSettingItemTipsSelector());
+        Assert.assertEquals(mMessage, "信源下重启，自动全屏播放", itemTips.getText());
+
+        mMessage = "Verify the full screen setting item is default turn off.";
+        UiObject2 itemValue = itemContainer.findObject(mFunUiObjects.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, "已关闭", itemValue.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test15_03ScreenProjectionSettingItemOnAdvance() {
+        mTask.openAdvancedSettingsPage();
+
+        mMessage = "Verify the title of screen projection setting item.";
+        UiObject2 itemContainer = mDevice.findObject(
+                mFunUiObjects.getScreenProjectionSettingItemContainerSelector());
+        UiObject2 itemTitle = itemContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, "无线投屏", itemTitle.getText());
+
+        mMessage = "Verify the value of screen projection setting item.";
+        UiObject2 itemValue = itemContainer.findObject(mFunUiObjects.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, "已开启", itemValue.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test15_04ExternalSettingItemsIsHidden() {
+        mTask.openAdvancedSettingsPage();
+
+        mMessage = "Verify the sleep time setting item is default focused.";
+        UiObject2 sleepSettingContainer =
+                mDevice.findObject(mFunUiObjects.getSleepTimeSettingItemContainerSelector());
+        Assert.assertTrue(mMessage, sleepSettingContainer.isFocused());
+
+        mMessage = "Verify hidden items is NOT shown after shorten keys, and items count is 4.";
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionCenter(), 5, 500L);
+        ShellUtils.systemWaitByMillis(WAIT);
+
+        UiObject2 settingItemsContainer =
+                mDevice.findObject(mFunUiObjects.getSettingItemsContainerOnAdvancedSelector());
+        List<UiObject2> settingItems = settingItemsContainer.findObjects(
+                By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).maxDepth(1));
+        Assert.assertEquals(mMessage, 4, settingItems.size());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test16_01SleepTimeDefaultValue() {
+        mTask.openAdvancedSettingsPage();
+
+        mMessage = "Verify the key text of sleep time setting.";
         UiObject2 sleepSettingContainer =
                 mDevice.findObject(mFunUiObjects.getSleepTimeSettingItemContainerSelector());
         UiObject2 itemKey =
                 sleepSettingContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
         Assert.assertEquals(mMessage, "休眠设置", itemKey.getText());
 
-        mMessage = "Verify the default value of sleep setting.";
+        mMessage = "Verify the default value of sleep time setting.";
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(sleepSettingContainer);
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(itemValue));
         Assert.assertEquals(mMessage, SUB_VALUES_SLEEP_TIME[0], itemValue.getText());
@@ -278,7 +335,7 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test15_01SleepTimeSubValues() {
+    public void test16_02SleepTimeSubValues() {
         mTask.openAdvancedSettingsPage();
 
         mMessage = "Verify the sleep time sub value at position %d.";
@@ -299,7 +356,7 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test16SelectSleepTime() {
+    public void test16_03SelectSleepTime() {
         mTask.openAdvancedSettingsPage();
 
         mMessage = "Verify select the sleep time.";
@@ -602,7 +659,23 @@ public final class TestCommonSettings {
 
     @Test
     @Category(CategorySettingsTests.class)
-    public void test18_02ScreenSaverSubValues() {
+    public void test18_02SelectScreenSaver() {
+        mTask.moveToSpecifiedSettingsItem(
+                mFunUiObjects.getScreenSaverSettingItemContainerSelector());
+        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveLeft())
+                .doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
+
+        mMessage = "Verify select the screen saver value.";
+        UiObject2 screenSaverContainer =
+                mDevice.findObject(mFunUiObjects.getScreenSaverSettingItemContainerSelector());
+        UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
+        Assert.assertNotNull(itemValue);
+        Assert.assertEquals(mMessage, SUB_VALUES_SCREEN_SAVER[3], itemValue.getText());
+    }
+
+    @Test
+    @Category(CategorySettingsTests.class)
+    public void test18_03ScreenSaverSubValues() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getScreenSaverSettingItemContainerSelector());
         ShellUtils.systemWaitByMillis(SHORT_WAIT);
@@ -625,22 +698,6 @@ public final class TestCommonSettings {
                 SUB_VALUES_SCREEN_SAVER[SUB_VALUES_SCREEN_SAVER.length - 1]));
         Assert.assertTrue(mMessage,
                 TestHelper.waitForTextVisible(itemValueContainer, SUB_VALUES_SCREEN_SAVER[0]));
-    }
-
-    @Test
-    @Category(CategorySettingsTests.class)
-    public void test19SelectScreenSaver() {
-        mTask.moveToSpecifiedSettingsItem(
-                mFunUiObjects.getScreenSaverSettingItemContainerSelector());
-        mAction.doChainedDeviceActionAndWait(new DeviceActionMoveLeft())
-                .doDeviceActionAndWait(new DeviceActionMoveLeft(), WAIT);
-
-        mMessage = "Verify select the screen saver value.";
-        UiObject2 screenSaverContainer =
-                mDevice.findObject(mFunUiObjects.getScreenSaverSettingItemContainerSelector());
-        UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
-        Assert.assertNotNull(itemValue);
-        Assert.assertEquals(mMessage, SUB_VALUES_SCREEN_SAVER[3], itemValue.getText());
     }
 
     @Test
@@ -790,19 +847,15 @@ public final class TestCommonSettings {
         mTask.moveToSpecifiedSettingsItem(mFunUiObjects.getWallpaperSettingItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
 
-        mMessage = "Verify there are 4 sub wallpapers on wallpaper select page.";
-        List<UiObject2> wallpapers = mDevice.findObjects(By.clazz(CLASS_TEXT_VIEW));
-        Assert.assertEquals(mMessage, SUB_VALUES_WALLPAPER.length, wallpapers.size());
+        UiObject2 selectedWallpaper;
+        for (String wallpaper : SUB_VALUES_WALLPAPER) {
+            selectedWallpaper = mDevice.findObject(By.text(wallpaper));
+            mMessage = String.format("Verify the sub wallpaper %s is enabled.", wallpaper);
+            Assert.assertTrue(mMessage, selectedWallpaper.isEnabled());
+            mMessage = String.format("Verify the sub wallpaper %s is selected.", wallpaper);
+            Assert.assertTrue(mMessage, selectedWallpaper.getParent().isSelected());
 
-        mMessage = "Verify the 1st sub wallpaper is default selected.";
-        UiObject2 defaultWallpaper =
-                mDevice.findObject(By.text(SUB_VALUES_WALLPAPER[0])).getParent();
-        Assert.assertTrue(mMessage, defaultWallpaper.isSelected());
-
-        for (UiObject2 wallpaper : wallpapers) {
-            String title = wallpaper.getText();
-            mMessage = String.format("Verify the sub wallpaper %s is shown.", title);
-            Assert.assertTrue(mMessage, this.IsSubWallpaperIncluded(title));
+            mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
         }
     }
 
@@ -863,15 +916,6 @@ public final class TestCommonSettings {
     public void test99ClearUpAfterAllTestCasesDone() {
         mTask.destroyInstance();
         mFunUiObjects.destroyInstance();
-    }
-
-    private boolean IsSubWallpaperIncluded(String wallpaper) {
-        for (String text : SUB_VALUES_WALLPAPER) {
-            if (text.equals(wallpaper)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

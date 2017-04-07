@@ -29,6 +29,10 @@ public final class UiObjectsAboutInfo {
         return By.res("tv.fun.settings:id/setting_title");
     }
 
+    public BySelector getSettingsItemsContainerOnAboutSelector() {
+        return By.res("tv.fun.settings:id/settings_container");
+    }
+
     public BySelector getSettingsAboutInfoSubPageTitleSelector() {
         return By.res("tv.fun.settings:id/setting_title");
     }
@@ -51,6 +55,10 @@ public final class UiObjectsAboutInfo {
 
     public BySelector getPlayControllerItemOnAboutSelector() {
         return By.res("tv.fun.settings:id/about_item_programflatform");
+    }
+
+    public BySelector getAppsVersionItemOnAboutSelector() {
+        return By.res("tv.fun.settings:id/about_item_app_version");
     }
 
     public BySelector getItemTitleOnAboutInfoPageSelector() {

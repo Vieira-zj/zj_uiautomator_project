@@ -49,12 +49,24 @@ public final class UiObjectsSettings {
         return By.res("tv.fun.settings:id/setting_item_advanced");
     }
 
+    public BySelector getSettingItemsContainerOnAdvancedSelector() {
+        return By.res("tv.fun.settings:id/settings_container");
+    }
+
     public BySelector getSleepTimeSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_sleep");
     }
 
     public BySelector getShutDownTimeSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_screen_shutdown_time");
+    }
+
+    public BySelector getFullScreenSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_input_source");
+    }
+
+    public BySelector getScreenProjectionSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_wifi_display");
     }
 
     public BySelector getScreenSaverSettingItemContainerSelector() {
@@ -112,6 +124,10 @@ public final class UiObjectsSettings {
 
     public BySelector getSettingItemKeySelector() {
         return By.res("tv.fun.settings:id/item_title");
+    }
+
+    public BySelector getSettingItemTipsSelector() {
+        return By.res("tv.fun.settings:id/item_title_tips");
     }
 
     public BySelector getSettingItemValueSelector() {
