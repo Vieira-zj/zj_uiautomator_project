@@ -8,6 +8,7 @@ import com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSoundSetting
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
@@ -32,10 +33,11 @@ import org.junit.runners.Suite;
 @RunWith(Categories.class)
 @Categories.IncludeCategory({
         CategorySettingsTests.class,
+        CategoryImageAndSoundSettingsTests.class,
+        CategoryAboutInfoTests.class,
         CategoryFileManagerTests.class,
         CategoryWeatherTests.class,
-        CategoryImageAndSoundSettingsTests.class,
-        CategoryAboutInfoTests.class})
+        CategoryHomeVideoTabTests.class})
 //@Categories.IncludeCategory(CategoryDemoTests.class)
 @Categories.ExcludeCategory({CategoryVersion20.class})
 @Suite.SuiteClasses({
