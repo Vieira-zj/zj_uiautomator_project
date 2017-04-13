@@ -671,6 +671,9 @@ public final class TestCommonSettings {
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(screenSaverContainer);
         Assert.assertNotNull(itemValue);
         Assert.assertEquals(mMessage, SUB_VALUES_SCREEN_SAVER[3], itemValue.getText());
+
+        // reset to default
+        mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2);
     }
 
     @Test
