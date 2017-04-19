@@ -18,6 +18,7 @@ import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTa
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
@@ -228,6 +229,7 @@ public final class TestHomeVideoTab {
                         "mstar.factorymenu.ui",
                         "mstar.tvsetting.factory.ui.designmenu.DesignMenuActivity"));
 
+        ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
         UiObject2 menu = mDevice.findObject(mFunUiObjects.getFactoryMenuFlipperSelector());
         Assert.assertTrue("Verify factory menu flipper is enabled.",
                 TestHelper.waitForUiObjectEnabled(menu));

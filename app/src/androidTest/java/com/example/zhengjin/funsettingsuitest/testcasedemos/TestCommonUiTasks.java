@@ -31,7 +31,6 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
  * <p>
  * Test the functions in test cases task.
  */
-
 @RunWith(AndroidJUnit4.class)
 public final class TestCommonUiTasks {
 
