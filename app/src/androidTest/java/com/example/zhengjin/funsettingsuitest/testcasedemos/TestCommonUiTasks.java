@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.Configurator;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 
 import junit.framework.Assert;
 
@@ -33,6 +37,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
  */
 @RunWith(AndroidJUnit4.class)
 public final class TestCommonUiTasks {
+
+    private static final String TAG = TestCommonUiTasks.class.getSimpleName();
 
     private UiDevice mDevice;
     private TaskFileManager mFileManagerTask;
@@ -68,6 +74,32 @@ public final class TestCommonUiTasks {
         Assert.assertNotNull(info);
         Assert.assertEquals("0.0.0.0", info.getIpAddr());
         Assert.assertEquals("34:c3:d2:0f:1d:03", info.getMacId());
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test03SetConfigurator() {
+        Configurator configurator = Configurator.getInstance();
+
+        long defaultKeyInjectDelay = configurator.getKeyInjectionDelay();  // 0
+        Log.d(TAG, TestConstants.LOG_KEYWORD +
+                "default key inject delay: " + defaultKeyInjectDelay);
+
+        UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "editor class: " + editor.getClassName());
+        if (!editor.isFocused()) {
+            Assert.fail("Editor is not focused!");
+        }
+        if (TextUtils.isEmpty(editor.getText())) {
+            Assert.fail("Text in editor is empty!");
+        }
+
+        // setText: 1. text in editor cannot be empty; 2. clear and set text
+        editor.setText("before config");
+        configurator.setKeyInjectionDelay(500L);
+        editor.setText("after config");
+
+        Assert.assertTrue(true);
     }
 
     @Ignore
