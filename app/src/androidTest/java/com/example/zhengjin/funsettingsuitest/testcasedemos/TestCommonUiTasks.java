@@ -3,6 +3,7 @@ package com.example.zhengjin.funsettingsuitest.testcasedemos;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.Configurator;
@@ -36,6 +37,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
  * Test the functions in test cases task.
  */
 @RunWith(AndroidJUnit4.class)
+@SdkSuppress(minSdkVersion = 18)
 public final class TestCommonUiTasks {
 
     private static final String TAG = TestCommonUiTasks.class.getSimpleName();

@@ -10,7 +10,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsLauncher;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
@@ -29,15 +29,16 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.TIM
 public final class TestHelper {
 
     private static final String TAG = TestHelper.class.getSimpleName();
-    private static final UiDevice device =
+    private static final UiDevice DEVICE =
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private static final UiObjectsLauncher FUN_OBJECTS = UiObjectsLauncher.getInstance();
 
     private TestHelper() {
     }
 
     public static void assertTrueAndTakeCaptureIfFailed(String message, boolean result) {
         if (!result) {
-            ShellUtils.takeScreenCapture(device);
+            ShellUtils.takeScreenCapture(DEVICE);
         }
         Assert.assertTrue(message, result);
     }
@@ -48,10 +49,10 @@ public final class TestHelper {
     }
 
     private static boolean waitForAppOpenedByCheckCurPackage(String pkgName, long timeOut) {
-        device.waitForIdle();
+        DEVICE.waitForIdle();
         long start = SystemClock.uptimeMillis();
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
-            if (pkgName.equalsIgnoreCase(device.getCurrentPackageName())) {
+            if (pkgName.equalsIgnoreCase(DEVICE.getCurrentPackageName())) {
                 return true;
             }
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
@@ -65,8 +66,8 @@ public final class TestHelper {
     }
 
     private static boolean waitForAppOpenedByUntil(String pkgName, long wait) {
-        device.waitForIdle();
-        return device.wait(Until.hasObject(By.pkg(pkgName).depth(0)), wait);
+        DEVICE.waitForIdle();
+        return DEVICE.wait(Until.hasObject(By.pkg(pkgName).depth(0)), wait);
     }
 
     public static boolean waitForActivityOpenedByShellCmd(String pkgName, String activityName) {
@@ -105,7 +106,7 @@ public final class TestHelper {
 
     public static boolean waitForUiObjectEnabledByCheckIsEnabled(
             BySelector selector, long timeOut) {
-        device.waitForIdle();
+        DEVICE.waitForIdle();
         long start = SystemClock.uptimeMillis();
 
         while ((SystemClock.uptimeMillis() - start) < timeOut) {
@@ -129,53 +130,53 @@ public final class TestHelper {
     }
 
     public static boolean waitForUiObjectExist(BySelector selector) {
-        device.waitForIdle();
-        return device.wait(Until.hasObject(selector), TIME_OUT);
+        DEVICE.waitForIdle();
+        return DEVICE.wait(Until.hasObject(selector), TIME_OUT);
     }
 
     public static UiObject2 waitForUiObjectExistAndReturn(BySelector selector) {
-        device.waitForIdle();
-        return device.wait(Until.findObject(selector), TIME_OUT);
+        DEVICE.waitForIdle();
+        return DEVICE.wait(Until.findObject(selector), TIME_OUT);
     }
 
     public static List<UiObject2> waitForUiObjectsExistAndReturn(BySelector selector) {
-        device.waitForIdle();
-        return device.wait(Until.findObjects(selector), TIME_OUT);
+        DEVICE.waitForIdle();
+        return DEVICE.wait(Until.findObjects(selector), TIME_OUT);
     }
 
     @SuppressWarnings("unused")
     public static boolean waitForTextGone(String uiText) {
-        device.waitForIdle();
-        return device.wait(Until.gone(By.text(uiText)), TIME_OUT);
+        DEVICE.waitForIdle();
+        return DEVICE.wait(Until.gone(By.text(uiText)), TIME_OUT);
     }
 
     public static boolean waitForTextGone(UiObject2 parent, String uiText) {
-        device.waitForIdle();
+        DEVICE.waitForIdle();
         return parent.wait(Until.gone(By.text(uiText)), TIME_OUT);
     }
 
     @SuppressWarnings("unused")
     public static boolean waitForTextVisible(String uiText) {
-        device.waitForIdle();
-        return device.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
+        DEVICE.waitForIdle();
+        return DEVICE.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
     }
 
     public static boolean waitForTextVisible(UiObject2 parent, String uiText) {
-        device.waitForIdle();
+        DEVICE.waitForIdle();
         return parent.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
     }
 
     public static boolean waitForLoadingComplete() {
         // if loading is showing, wait for loading disappear
         UiObject2 loading =
-                findUiObjectIgnoreRootNullException(TaskLauncher.getLoadingCircleSelector());
+                findUiObjectIgnoreRootNullException(FUN_OBJECTS.getLoadingCircleSelector());
         if (loading == null) {
             return false;
         }
 
         for (int i = 0, waitTimes = 15; i < waitTimes; i++) {
             SystemClock.sleep(SHORT_WAIT);
-            loading = findUiObjectIgnoreRootNullException(TaskLauncher.getLoadingCircleSelector());
+            loading = findUiObjectIgnoreRootNullException(FUN_OBJECTS.getLoadingCircleSelector());
             if (loading == null) {
                 return true;
             }
@@ -187,7 +188,7 @@ public final class TestHelper {
     private static UiObject2 findUiObjectIgnoreRootNullException(BySelector selector) {
         UiObject2 uiObject = null;
         try {
-            uiObject = device.findObject(selector);
+            uiObject = DEVICE.findObject(selector);
         } catch (NullPointerException e) {
             // NullPointerException from root element, no handler
         }

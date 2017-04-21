@@ -11,6 +11,7 @@ import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -38,6 +39,7 @@ public class TestTaskLauncher {
     private final static String TAG = TestTaskLauncher.class.getSimpleName();
     private UiDevice mDevice;
     private UiActionsManager mAction;
+    private UiObjectsLauncher mFunUiObjects;
 
     public TestTaskLauncher() {
         Log.d(TAG, String.format("***** Test class (%s) init.", TAG));
@@ -48,6 +50,7 @@ public class TestTaskLauncher {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mAction = UiActionsManager.getInstance();
+        mFunUiObjects = UiObjectsLauncher.getInstance();
     }
 
     @After
@@ -93,7 +96,7 @@ public class TestTaskLauncher {
     @Category(CategoryDemoTests.class)
     public void test06OpenSettingsFromTopBar() {
         TaskLauncher.clickOnButtonFromTopQuickAccessBar(
-                TaskLauncher.getQuickAccessBtnSettingsSelector());
+                mFunUiObjects.getQuickAccessBtnSettingsSelector());
     }
 
     @Test

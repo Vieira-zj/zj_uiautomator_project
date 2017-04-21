@@ -9,7 +9,6 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 
-import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
@@ -34,7 +33,6 @@ import java.util.Locale;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_SCROLL_VIEW;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.CLASS_TEXT_VIEW;
-import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
@@ -51,7 +49,6 @@ public final class TaskSettings {
     private UiActionsManager action;
     private UiObjectsSettings funUiObjects;
 
-    public final String TEXT_COMMON_SETTINGS = "通用设置";
     public final String TITLE_SET_SHUTDOWN_TIME_DIALOG = "设置定时关机";
 
     private TaskSettings() {
@@ -71,22 +68,6 @@ public final class TaskSettings {
         if (instance != null) {
             instance = null;
         }
-    }
-
-    public void openCommonSettingsHomePage() {
-        TaskLauncher.clickOnButtonFromTopQuickAccessBar(
-                TaskLauncher.getQuickAccessBtnSettingsSelector());
-
-        if (RunnerProfile.isVersion30) {
-            UiObject2 settingsCard =
-                    TestHelper.waitForUiObjectExistAndReturn(By.text(TEXT_COMMON_SETTINGS));
-            action.doClickActionAndWait(settingsCard);
-            action.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
-        }
-        Assert.assertTrue("openCommonSettingsHomePage, open failed!",
-                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
-
-        action.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     public UiObject2 getTextViewOfSwitcher(UiObject2 container) {

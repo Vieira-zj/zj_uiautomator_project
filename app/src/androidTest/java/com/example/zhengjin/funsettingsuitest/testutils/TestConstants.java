@@ -28,6 +28,8 @@ public final class TestConstants {
 //    public final static String LOG_LEVEL_ERROR = "E";
 //    public final static String LOG_LEVEL_ASSERT = "A";
 
+    public final static String TEXT_COMMON_SETTINGS = "通用设置";
+
     public final static String LAUNCHER_PKG_NAME = "com.bestv.ott";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
     public final static String FILE_MANAGER_PKG_NAME = "tv.fun.filemanager";

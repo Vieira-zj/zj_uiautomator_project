@@ -19,6 +19,8 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
+import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsLauncher;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -28,7 +30,9 @@ import java.util.List;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_HOME_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LAUNCHER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEATHER_PKG_NAME;
 
 /**
  * Created by zhengjin on 2016/6/1.
@@ -38,46 +42,18 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskLauncher {
 
-    private static UiActionsManager ACTION;
-    private static UiDevice DEVICE;
-
     public static final String TAG = TaskLauncher.class.getSimpleName();
-
     public static final String[] LAUNCHER_HOME_TABS =
             {"电视", "视频", "体育", "少儿", "应用", "设置", "设置icon"};
 
+    private static UiActionsManager ACTION;
+    private static UiDevice DEVICE;
+    private static UiObjectsLauncher UI_OBJECTS;
+
     static {
-        ACTION = UiActionsManager.getInstance();
         DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-    }
-
-    private static BySelector getAllLauncherTabsSelector() {
-        return By.res("com.bestv.ott:id/tab_title");
-    }
-
-    private static BySelector getLauncherTopBarSelector() {
-        return By.res("com.bestv.ott:id/container");
-    }
-
-    public static BySelector getQuickAccessBtnSettingsSelector() {
-        return By.res("com.bestv.ott:id/setting");
-    }
-
-    static BySelector getQuickAccessBtnWeatherSelector() {
-        return By.res("com.bestv.ott:id/weather");
-    }
-
-    @SuppressWarnings("unused")
-    public static BySelector getQuickAccessBtnNetworkSelector() {
-        return By.res("com.bestv.ott:id/network");
-    }
-
-    private static BySelector getSettingsEntrySelector() {
-        return By.res("com.bestv.ott:id/setting_entry");
-    }
-
-    public static BySelector getLoadingCircleSelector() {
-        return By.res("com.bestv.ott:id/progressBar");
+        ACTION = UiActionsManager.getInstance();
+        UI_OBJECTS = UiObjectsLauncher.getInstance();
     }
 
     public static void backToLauncher() {
@@ -120,7 +96,7 @@ public final class TaskLauncher {
 
         UiObject2 tabApp;
         if (RunnerProfile.isVersion30 && LAUNCHER_HOME_TABS[6].equals(tabText)) {
-            tabApp = DEVICE.findObject(getSettingsEntrySelector());
+            tabApp = DEVICE.findObject(UI_OBJECTS.getSettingsEntrySelector());
         } else {
             tabApp = getSpecifiedTab(tabText);
         }
@@ -157,7 +133,7 @@ public final class TaskLauncher {
 
     @Nullable
     private static UiObject2 getSpecifiedTab(String tabName) {
-        List<UiObject2> tabs = DEVICE.findObjects(getAllLauncherTabsSelector());
+        List<UiObject2> tabs = DEVICE.findObjects(UI_OBJECTS.getAllLauncherTabsSelector());
         if (tabs.size() == 0) {
             Log.e(TAG, "getSpecifiedTab, no tabs found on launcher!");
             return null;
@@ -205,9 +181,30 @@ public final class TaskLauncher {
         backToLauncher();
         ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), 2);
 
-        UiObject2 bar = DEVICE.findObject(getLauncherTopBarSelector());
+        UiObject2 bar = DEVICE.findObject(UI_OBJECTS.getLauncherTopBarSelector());
         Assert.assertNotNull(bar);
         Assert.assertTrue("showLauncherTopBar, top bar is NOT enabled.", bar.isEnabled());
+    }
+
+    public static void openSettingsFromLauncherQuickAccessBar() {
+        clickOnButtonFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessBtnSettingsSelector());
+
+        if (RunnerProfile.isVersion30) {
+            UiObject2 settingsCard = TestHelper.waitForUiObjectExistAndReturn(
+                    By.text(TestConstants.TEXT_COMMON_SETTINGS));
+            ACTION.doClickActionAndWait(settingsCard);
+            ACTION.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
+        }
+        Assert.assertTrue("openCommonSettingsHomePage, open failed!",
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
+
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+    }
+
+    public static void openWeatherFromLauncherQuickAccessBar() {
+        clickOnButtonFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessBtnWeatherSelector());
+        Assert.assertTrue("openWeatherHomePage, open failed!",
+                TestHelper.waitForAppOpenedByUntil(WEATHER_PKG_NAME));
     }
 
 }

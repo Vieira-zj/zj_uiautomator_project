@@ -75,7 +75,7 @@ public final class TestWeather {
         mTask = TaskWeather.getInstance();
 
         TaskLauncher.backToLauncher();
-        mTask.openWeatherHomePage();
+        TaskLauncher.openWeatherFromLauncherQuickAccessBar();
     }
 
     @After

@@ -95,7 +95,7 @@ public final class TestCommonSettings {
         mTask = TaskSettings.getInstance();
 
         TaskLauncher.backToLauncher();
-        mTask.openCommonSettingsHomePage();
+        TaskLauncher.openSettingsFromLauncherQuickAccessBar();
     }
 
     @After
@@ -114,7 +114,7 @@ public final class TestCommonSettings {
                 mDevice.findObject(mFunUiObjects.getTitleOfSettingsPageSelector());
         Assert.assertNotNull(settingsTitle);
         mMessage = "Verify the title name of common settings page.";
-        Assert.assertEquals(mMessage, mTask.TEXT_COMMON_SETTINGS, settingsTitle.getText());
+        Assert.assertEquals(mMessage, TestConstants.TEXT_COMMON_SETTINGS, settingsTitle.getText());
     }
 
     @Test
