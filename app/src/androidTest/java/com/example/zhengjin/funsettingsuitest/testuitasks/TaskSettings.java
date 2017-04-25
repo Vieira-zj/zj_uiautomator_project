@@ -27,6 +27,7 @@ import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 import junit.framework.Assert;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -208,15 +209,21 @@ public final class TaskSettings {
         TestHelper.waitForTextVisible(TITLE_SET_SHUTDOWN_TIME_DIALOG);
     }
 
-    public UiObject2 getValueOfTimeControlOnShutDownTimeDialog(UiObject2 container) {
+    public String getValueOfTimeControlOnShutdownDialog(UiObject2 container) {
         List<UiObject2> timeItems = container.findObjects(By.clazz(TestConstants.CLASS_TEXT_VIEW));
-        for (UiObject2 timeItem : timeItems) {
-            if (timeItem.isSelected()) {
-                return timeItem;
-            }
+
+        final int timeControlValuesCount = 3;
+        Assert.assertEquals(
+                "getValueOfTimeControlOnShutDownTimeDialog, verify 3 values show in time control.",
+                timeControlValuesCount, timeItems.size());
+
+        String[] arrTimeText = new String[timeControlValuesCount];
+        for (int i = 0; i < timeControlValuesCount; i++) {
+            arrTimeText[i] = timeItems.get(i).getText();
         }
 
-        return null;
+        Arrays.sort(arrTimeText);
+        return arrTimeText[1];
     }
 
     public void checkSetShutDownTimeCheckbox() {
@@ -330,12 +337,7 @@ public final class TaskSettings {
                 hoursContainer.isSelected());
 
         action.doRepeatDeviceActionAndWait(deviceAction, moveTimes);
-        UiObject2 hourControl =
-                this.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
-        Assert.assertNotNull("setAndGetHoursOfShutDownTime, hour control is not found!",
-                hourControl);
-
-        return hourControl.getText();
+        return this.getValueOfTimeControlOnShutdownDialog(hoursContainer);
     }
 
     public String setAndGetMinutesOfShutDownTime(DeviceAction deviceAction, int moveTimes) {
@@ -346,11 +348,7 @@ public final class TaskSettings {
                 minContainer.isSelected());
 
         action.doRepeatDeviceActionAndWait(deviceAction, moveTimes);
-        UiObject2 minControl = this.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
-        Assert.assertNotNull("setAndGetMinutesOfShutDownTime, minutes control is not found!",
-                minControl);
-
-        return minControl.getText();
+        return this.getValueOfTimeControlOnShutdownDialog(minContainer);
     }
 
     public void unSetShutDownTvTime() {

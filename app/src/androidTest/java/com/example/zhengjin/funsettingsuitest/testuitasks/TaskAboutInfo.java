@@ -132,7 +132,7 @@ public final class TaskAboutInfo {
         action.doDeviceActionAndWait(new DeviceActionCenter());
     }
 
-    public String getDeviceModelInfo() {
+    public String getRegExpDeviceModelInfo() {
         String productSeriesNo = this.getTvSeriesNoByShellCmd();
         String tvModel = this.getDeviceModel(productSeriesNo);
         String suffix = this.getDeviceModelSuffix(productSeriesNo);
@@ -185,15 +185,15 @@ public final class TaskAboutInfo {
             return DEFAULT_MODEL_SUFFIX;
         }
         if (RunnerProfile.isPlatform938) {
-            return "S";
+            return "C";
         }
+
         if (seriesNo.endsWith("51")) {
             return "F";
         }
         if (seriesNo.endsWith("52")) {
             return "Y";
         }
-
         return DEFAULT_MODEL_SUFFIX;
     }
 

@@ -428,25 +428,19 @@ public final class TestCommonSettings {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
 
-        int expectedHour = mTask.getHoursOfCurrentTime();
-        int expectedMin = mTask.getMinutesOfCurrentTime();
-
         mMessage = "Verify the value of hours time control is default as current time.";
         UiObject2 hoursContainer =
                 mDevice.findObject(mFunUiObjects.getHoursControlOnShutDownTimeDialogSelector());
-        UiObject2 actualHour = mTask.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
-        Assert.assertNotNull(actualHour);
-        Assert.assertEquals(mMessage, expectedHour,
-                mTask.getIntValueFromTimeControlText(actualHour.getText()));
+        int actualHour = mTask.getIntValueFromTimeControlText(
+                mTask.getValueOfTimeControlOnShutdownDialog(hoursContainer));
+        Assert.assertEquals(mMessage, mTask.getHoursOfCurrentTime(), actualHour);
 
         mMessage = "Verify the value of minutes time control is default as current time.";
         UiObject2 minContainer =
                 mDevice.findObject(mFunUiObjects.getMinutesControlOnShutDownTimeDialogSelector());
-        UiObject2 actualMin =
-                mTask.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
-        Assert.assertNotNull(actualMin);
-        Assert.assertEquals(mMessage, expectedMin,
-                mTask.getIntValueFromTimeControlText(actualMin.getText()));
+        int actualMin = mTask.getIntValueFromTimeControlText(
+                mTask.getValueOfTimeControlOnShutdownDialog(minContainer));
+        Assert.assertEquals(mMessage, mTask.getMinutesOfCurrentTime(), actualMin);
     }
 
     @Test
@@ -455,7 +449,6 @@ public final class TestCommonSettings {
         try {
             mTask.openAdvancedSettingsPage();
             mTask.openSetShutDownTimeDialog();
-            int expectedHour = mTask.getHoursOfCurrentTime();
 
             mMessage = "Verify the hours control can be focused after checkbox is checked.";
             mTask.checkSetShutDownTimeCheckbox();
@@ -465,24 +458,20 @@ public final class TestCommonSettings {
             Assert.assertTrue(mMessage, hoursContainer.isSelected());
 
             mMessage = "Verify the hours is updated when move up on hours control.";
-            int upMoveTimes = 1;
+            final int upMoveTimes = 1;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), upMoveTimes);
-            UiObject2 actualHour =
-                    mTask.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
-            Assert.assertNotNull(actualHour);
-
-            expectedHour = mTask.subHoursValue(expectedHour, upMoveTimes);
-            Assert.assertEquals(mMessage, expectedHour,
-                    mTask.getIntValueFromTimeControlText(actualHour.getText()));
+            int actualHour = mTask.getIntValueFromTimeControlText(
+                    mTask.getValueOfTimeControlOnShutdownDialog(hoursContainer));
+            int expectedHour = mTask.subHoursValue(mTask.getHoursOfCurrentTime(), upMoveTimes);
+            Assert.assertEquals(mMessage, expectedHour, actualHour);
 
             mMessage = "Verify the hours is updated when move down on hours control.";
-            int downMoveTimes = 3;
+            final int downMoveTimes = 3;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), downMoveTimes);
-            actualHour = mTask.getValueOfTimeControlOnShutDownTimeDialog(hoursContainer);
-            Assert.assertNotNull(actualHour);
-            Assert.assertEquals(mMessage,
-                    mTask.addHoursValue(expectedHour, downMoveTimes),
-                    mTask.getIntValueFromTimeControlText(actualHour.getText()));
+            actualHour = mTask.getIntValueFromTimeControlText(
+                    mTask.getValueOfTimeControlOnShutdownDialog(hoursContainer));
+            expectedHour = mTask.addHoursValue(expectedHour, downMoveTimes);
+            Assert.assertEquals(mMessage, expectedHour, actualHour);
         } finally {
             // exit with un-save the updated value
             mTask.unCheckSetShutDownTimeCheckbox();
@@ -505,24 +494,20 @@ public final class TestCommonSettings {
             Assert.assertTrue(mMessage, minContainer.isSelected());
 
             mMessage = "Verify the minutes is updated when move up on hours control.";
-            int upMoveTimes = 2;
+            final int upMoveTimes = 2;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveUp(), upMoveTimes);
-            UiObject2 actualMin =
-                    mTask.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
-            Assert.assertNotNull(actualMin);
-
+            int actualMin = mTask.getIntValueFromTimeControlText(
+                    mTask.getValueOfTimeControlOnShutdownDialog(minContainer));
             expectedMin = mTask.subMinutesValue(expectedMin, upMoveTimes);
-            Assert.assertEquals(mMessage, expectedMin,
-                    mTask.getIntValueFromTimeControlText(actualMin.getText()));
+            Assert.assertEquals(mMessage, expectedMin, actualMin);
 
             mMessage = "Verify the minutes is updated when move down on hours control.";
-            int downMoveTimes = 3;
+            final int downMoveTimes = 3;
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveDown(), downMoveTimes);
-            actualMin = mTask.getValueOfTimeControlOnShutDownTimeDialog(minContainer);
-            Assert.assertNotNull(actualMin);
-            Assert.assertEquals(mMessage,
-                    mTask.addMinutesValue(expectedMin, downMoveTimes),
-                    mTask.getIntValueFromTimeControlText(actualMin.getText()));
+            actualMin = mTask.getIntValueFromTimeControlText(
+                    mTask.getValueOfTimeControlOnShutdownDialog(minContainer));
+            expectedMin = mTask.addMinutesValue(expectedMin, downMoveTimes);
+            Assert.assertEquals(mMessage, expectedMin, actualMin);
         } finally {
             // exit with un-save the updated value
             mTask.unCheckSetShutDownTimeCheckbox();

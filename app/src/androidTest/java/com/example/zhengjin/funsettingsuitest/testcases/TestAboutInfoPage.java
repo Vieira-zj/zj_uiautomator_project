@@ -218,7 +218,7 @@ public final class TestAboutInfoPage {
         mMessage = "Verify the device model item value.";
         UiObject2 itemValue =
                 tvModelItem.findObject(mFunUiObjects.getItemValueOnAboutInfoSubPageSelector());
-        Pattern pattern = Pattern.compile(mTask.getDeviceModelInfo());
+        Pattern pattern = Pattern.compile(mTask.getRegExpDeviceModelInfo());
         Matcher matcher = pattern.matcher(itemValue.getText());
         Assert.assertTrue(mMessage, matcher.find());
     }
