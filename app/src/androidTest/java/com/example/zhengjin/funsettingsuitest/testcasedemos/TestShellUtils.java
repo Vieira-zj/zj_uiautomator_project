@@ -59,7 +59,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testPrintTestCasesName() {
+    public void test01PrintTestCasesName() {
         int count = 0;
         Class<?>[] classes = {TestCommonSettings.class, TestFileManager.class, TestWeather.class};
         for (Class<?> cls : classes) {
@@ -70,7 +70,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testExecShellShCommand() {
+    public void test02ExecShellShCommand() {
         String command = "cat /system/build.prop | grep ro.product.model";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
 
@@ -79,12 +79,22 @@ public final class TestShellUtils {
                 cr.mResult,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
-        Log.d(TAG, output);
+        Log.d(TAG, TestConstants.LOG_KEYWORD + output);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testStopAndStartFileManagerByShellCmd() {
+    public void test03ExecShellShCommand() {
+        // uid 1000 not allowed to su
+        final String command = "chmod 666 /dev/input/event3";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, true, true);
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "result code: " + cr.mResult);
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "error message: " + cr.mErrorMsg);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test04StopAndStartFileManager() {
         // Note: need system authorized to execute 'start' and 'stop' shell command
 
         String cmd = String.format("am force-stop %s", FILE_MANAGER_PKG_NAME);
@@ -114,7 +124,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testStopAndStartSettingsByShellCmd() {
+    public void test05StopAndStartCommonSettings() {
         String cmdStop = String.format("am force-stop %s", SETTINGS_PKG_NAME);
         String cmdStart = String.format("am start %s/%s", SETTINGS_PKG_NAME, SETTINGS_HOME_ACT);
 
@@ -129,14 +139,14 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testTakeScreenCapture() {
+    public void test06TakeScreenCapture() {
         TaskLauncher.backToLauncher();
         TestHelper.assertTrueAndTakeCaptureIfFailed("testTakeScreenCapture", false);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testClearAndDumpLogcatLog() {
+    public void test07ClearAndDumpLogcatLog() {
         ShellUtils.clearLogcatLog();
         this.wait10Seconds();
         ShellUtils.dumpLogcatLog();
@@ -149,33 +159,29 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testStartAndStopLogcatLog() {
+    public void test08StartAndStopLogcatLog() {
         Thread t = ShellUtils.startLogcatLog(TestConstants.LOG_LEVEL_WARN);
         this.wait10Seconds();
         ShellUtils.stopLogcatLog(t);
     }
 
-    private void wait10Seconds() {
-        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
-    }
-
     @Test
     @Category(CategoryDemoTests.class)
-    public void testPrintEnabledImeList() {
+    public void test09PrintEnabledImeList() {
         TaskSettings task = TaskSettings.getInstance();
         task.isInputMethodEnabled();
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testGetCurRunningMethodName() {
+    public void test10GetCurRunningMethodName() {
         Log.d(TAG, String.format("Current running test: %s", ShellUtils.getRunningMethodName()));
         Assert.assertTrue("Verify get current running test name.", true);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testGetPlatformChipType() {
+    public void test11GetPlatformChipType() {
         if (RunnerProfile.isPlatform938) {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "Platform chiptype is 938");
         } else {
@@ -185,12 +191,16 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void testGetVersion30() {
+    public void test12GetSystemVersion30() {
         if (RunnerProfile.isVersion30) {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 3.0");
         } else {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 2.0");
         }
+    }
+
+    private void wait10Seconds() {
+        ShellUtils.systemWaitByMillis(10 * SHORT_WAIT);
     }
 
 }
