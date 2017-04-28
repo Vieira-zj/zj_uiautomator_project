@@ -288,7 +288,7 @@ public final class TestAboutInfoPage {
         mMessage = "Verify OS name value on hidden product information page.";
         UiObject2 itemValue = osNameContainer.findObject(
                 mFunUiObjects.getSystemItemValueOnHiddenSystemInfoSelector());
-        Assert.assertTrue("", itemValue.getText().contains(Build.VERSION.RELEASE));
+        Assert.assertEquals(mMessage, this.buildOsNameOnHiddenFullInfoPanel(), itemValue.getText());
 
         // verification 2
         mMessage = "Verify device model title on hidden product information page.";
@@ -302,6 +302,15 @@ public final class TestAboutInfoPage {
         itemValue = modelContainer.findObject(
                 mFunUiObjects.getSystemItemValueOnHiddenSystemInfoSelector());
         Assert.assertTrue(mMessage, mTask.getFullDeviceModelInfo().contains(itemValue.getText()));
+    }
+
+    private String buildOsNameOnHiddenFullInfoPanel() {
+        final String osNameTemplate = "FunUI 智能电视系统（安卓%s）";
+        final String TextAndroidVersion4 = "4.4";
+        final String TextAndroidVersion6 = "6.0";
+
+        return String.format(osNameTemplate,
+                Build.VERSION.RELEASE.startsWith("4") ? TextAndroidVersion4 : TextAndroidVersion6);
     }
 
     @Test
