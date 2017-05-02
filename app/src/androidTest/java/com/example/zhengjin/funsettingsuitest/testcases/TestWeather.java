@@ -48,6 +48,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestWeather {
 
+    private final String TEXT_ADD_CITY = "添加城市";
+
     private final String INIT_PROVINCE = "湖北";
     private final String INIT_CITY = "武汉";
     private final String ADD_PROVINCE_1 = "山东";
@@ -180,7 +182,7 @@ public final class TestWeather {
         mMessage = "Verify the title of add city page.";
         UiObject2 title = mDevice.findObject(mFunUiObjects.getCityManagerTitleSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(title));
-        Assert.assertEquals(mMessage, "添加城市", title.getText());
+        Assert.assertEquals(mMessage, TEXT_ADD_CITY, title.getText());
 
         mMessage = "Verify the default located province.";
         Assert.assertEquals(mMessage, INIT_PROVINCE, mTask.getSelectedLocationProvince());
@@ -222,6 +224,29 @@ public final class TestWeather {
         UiObject2 location = mTask.getCurrentCityOnWeatherHomePage();
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(location));
         Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
+    }
+
+    @Test
+    @Category(CategoryWeatherTests.class)
+    public void test21_04AddDuplicatedCity() {
+        // pre-data: 武汉 - 青岛 after-data: 武汉 - 青岛
+        mTask.validateWeatherHomeDefaultCityName(INIT_CITY);
+        mTask.openMenuAndEnterOnButtonByText(mTask.MENU_BUTTON_TEXT_ADD_CITY);
+
+        // select 山东 青岛
+        mTask.selectSpecifiedLocation(
+                new String[]{ADD_PROVINCE_1, ADD_CITY_1}, new boolean[]{true, false});
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
+
+        mMessage = "Verify stay on the add city page after add duplicated city.";
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getCityManagerTitleSelector());
+        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(title));
+        Assert.assertEquals(mMessage, TEXT_ADD_CITY, title.getText());
+
+        mMessage = "Verify the selected located province.";
+        Assert.assertEquals(mMessage, ADD_PROVINCE_1, mTask.getSelectedLocationProvince());
+        mMessage = "Verify the selected located city.";
+        Assert.assertEquals(mMessage, ADD_CITY_1, mTask.getSelectedLocationCity());
     }
 
     @Test
