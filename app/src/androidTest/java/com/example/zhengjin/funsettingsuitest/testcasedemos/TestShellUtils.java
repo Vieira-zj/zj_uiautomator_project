@@ -1,5 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testcasedemos;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -45,11 +47,13 @@ public final class TestShellUtils {
     private final static String TAG = TestShellUtils.class.getSimpleName();
 
     private UiDevice mDevice;
+    private Context mContext;
 
     @Before
     public void setUp() {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mContext = InstrumentationRegistry.getContext();
     }
 
     @After
@@ -197,6 +201,44 @@ public final class TestShellUtils {
         } else {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 2.0");
         }
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test21StartActivityByActionFromContext() {
+        Intent intent = new Intent();
+        intent.setAction("android.settings.WIFI_SETTINGS");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+
+        Assert.assertTrue("Demo, start activity by action from testing context.", true);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test22StartActivityByClassNameFromContext() {
+        Intent intent = new Intent();
+        intent.setClassName("com.bestv.ott", "com.bestv.ott.screen.vip");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+
+        Assert.assertTrue("Demo, start activity by class name from testing context.", true);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test23SendBroadcastFromContext() {
+        Intent intent = new Intent();
+        intent.setAction("action.weather.changed");
+        mContext.sendBroadcast(intent);
+
+        Assert.assertTrue("Demo, send broadcast from testing context.", true);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test24ContentProviderFromContext() {
+        // TODO: 2017/5/4  
     }
 
     private void wait10Seconds() {
