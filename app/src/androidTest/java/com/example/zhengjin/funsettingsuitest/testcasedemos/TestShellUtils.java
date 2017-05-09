@@ -90,10 +90,17 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void test03ExecShellShCommand() {
         // uid 1000 not allowed to su
-        final String command = "chmod 666 /dev/input/event3";
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, true, true);
+//        final String command = "chmod 666 /dev/input/event3";
+        final String command = "ls /data/data/tv.fun.ottsecurity/databases";
+
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
         Log.d(TAG, TestConstants.LOG_KEYWORD + "result code: " + cr.mResult);
-        Log.d(TAG, TestConstants.LOG_KEYWORD + "error message: " + cr.mErrorMsg);
+        if (cr.mSuccessMsg.length() > 0) {
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "success message: " + cr.mErrorMsg);
+        }
+        if (cr.mErrorMsg.length() > 0) {
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "error message: " + cr.mErrorMsg);
+        }
     }
 
     @Test
@@ -227,17 +234,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test23SendBroadcastFromContext() {
-        Intent intent = new Intent();
-        intent.setAction("action.weather.changed");
-        mContext.sendBroadcast(intent);
-
-        Assert.assertTrue("Demo, send broadcast from testing context.", true);
-    }
-
-    @Test
-    @Category(CategoryDemoTests.class)
-    public void test24ContentProviderFromContext() {
+    public void test23ContentProviderFromContext() {
         // TODO: 2017/5/4  
     }
 

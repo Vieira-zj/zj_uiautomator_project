@@ -8,7 +8,10 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.Configurator;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,7 +19,9 @@ import android.util.Log;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
+import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
 
@@ -104,16 +109,44 @@ public final class TestCommonUiTasks {
         Assert.assertTrue(true);
     }
 
+    @Test
+    @Category(CategoryDemoTests.class)
+    @SuppressWarnings("deprecation")
+    public void test04ClickAndWaitForNewWindow() throws UiObjectNotFoundException {
+        mDevice.pressMenu();
+        ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
+        UiObject settingBtn = new UiObject(new UiSelector().text("设置"));
+        settingBtn.clickAndWaitForNewWindow(TestConstants.WAIT);
+
+        Assert.assertTrue(TestHelper.waitForActivityOpenedByShellCmd(
+                TestConstants.LAUNCHER_PKG_NAME, ".home.SettingActivity"));
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    @SuppressWarnings("deprecation")
+    public void test05ClickAndWaitForNewWindow() throws UiObjectNotFoundException {
+        UiObject tab = mDevice.findObject(new UiSelector().text("支付代扣"));
+        tab.click();  // get focus
+        ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
+        tab.clickAndWaitForNewWindow(TestConstants.WAIT);
+
+        Assert.assertTrue(TestHelper.waitForActivityOpenedByShellCmd(
+                TestConstants.LAUNCHER_PKG_NAME, ".account.unBindWithHoldActivity"));
+    }
+
+    @Test
     @Ignore
     @Category(CategoryDemoTests.class)
     public void test11LongPressKey() {
         // TODO: 2016/8/10 long press action
     }
 
+    /**
+     * It's a demo 1) use the wait(until) APIs for test case stability,
+     * and 2) use the "context" to start the specified APP.
+     */
     private void startFmMainActivityFromHomeScreen() {
-        /** It's a demo 1) use the wait(until) APIs for test case stability,
-         * and 2) use the "context" to start the specified activity.
-         */
         mDevice.pressHome();
         String launcherPkg = mDevice.getLauncherPackageName();
         Assert.assertNotNull(launcherPkg);
