@@ -301,7 +301,14 @@ public final class TestAboutInfoPage {
         mMessage = "Verify device model value on hidden product information page.";
         itemValue = modelContainer.findObject(
                 mFunUiObjects.getSystemItemValueOnHiddenSystemInfoSelector());
-        Assert.assertTrue(mMessage, mTask.getFullDeviceModelInfo().contains(itemValue.getText()));
+        if (RunnerProfile.isPlatform938) {
+            Assert.assertTrue(mMessage,
+                    mTask.getFullDeviceModelInfo().contains(itemValue.getText()));
+        } else {
+            Pattern pattern = Pattern.compile(mTask.getRegExpDeviceModelInfo());
+            Matcher matcher = pattern.matcher(itemValue.getText());
+            Assert.assertTrue(mMessage, matcher.find());
+        }
     }
 
     private String buildOsNameOnHiddenFullInfoPanel() {
