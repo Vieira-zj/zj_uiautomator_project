@@ -1,7 +1,11 @@
 package com.example.zhengjin.funsettingsuitest.testcasedemos;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -29,6 +33,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Locale;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.ShellUtils.execCommand;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_HOME_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_HOME_ACT;
@@ -76,11 +81,11 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void test02ExecShellShCommand() {
         String command = "cat /system/build.prop | grep ro.product.model";
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
+        ShellUtils.CommandResult cr = execCommand(command, false, true);
 
         String output = String.format(Locale.getDefault(),
                 "Result code: %d\n Success message: %s\n Error message: %s",
-                cr.mResult,
+                cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, TestConstants.LOG_KEYWORD + output);
@@ -93,8 +98,8 @@ public final class TestShellUtils {
 //        final String command = "chmod 666 /dev/input/event3";
         final String command = "ls /data/data/tv.fun.ottsecurity/databases";
 
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(command, false, true);
-        Log.d(TAG, TestConstants.LOG_KEYWORD + "result code: " + cr.mResult);
+        ShellUtils.CommandResult cr = execCommand(command, false, true);
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "result code: " + cr.mReturnCode);
         if (cr.mSuccessMsg.length() > 0) {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "success message: " + cr.mErrorMsg);
         }
@@ -109,10 +114,10 @@ public final class TestShellUtils {
         // Note: need system authorized to execute 'start' and 'stop' shell command
 
         String cmd = String.format("am force-stop %s", FILE_MANAGER_PKG_NAME);
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
+        ShellUtils.CommandResult cr = execCommand(cmd, false, true);
         String output = String.format(Locale.getDefault(),
                 "Stop file manager\nResult code: %d\nSuccess message: %s\nError message: %s",
-                cr.mResult,
+                cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
@@ -121,10 +126,10 @@ public final class TestShellUtils {
         // add extra option "--user 0"
         cmd = String.format("am start --user 0 %s/%s",
                 FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
-        cr = ShellUtils.execCommand(cmd, false, true);
+        cr = execCommand(cmd, false, true);
         output = String.format(Locale.getDefault(),
                 "Start file manager\nResult code: %d\nSuccess message: %s\nError message: %s",
-                cr.mResult,
+                cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
@@ -139,10 +144,10 @@ public final class TestShellUtils {
         String cmdStop = String.format("am force-stop %s", SETTINGS_PKG_NAME);
         String cmdStart = String.format("am start %s/%s", SETTINGS_PKG_NAME, SETTINGS_HOME_ACT);
 
-        ShellUtils.CommandResult cr = ShellUtils.execCommand(
+        ShellUtils.CommandResult cr = execCommand(
                 new String[]{cmdStop, cmdStart}, false, true);
         String output = String.format(Locale.getDefault(),
-                "Result code: %d\nSuccess message: %s\nError message: %s", cr.mResult,
+                "Result code: %d\nSuccess message: %s\nError message: %s", cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
         Log.d(TAG, output);
@@ -223,19 +228,84 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test22StartActivityByClassNameFromContext() {
-        Intent intent = new Intent();
-        intent.setClassName("com.bestv.ott", "com.bestv.ott.screen.vip");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
-
-        Assert.assertTrue("Demo, start activity by class name from testing context.", true);
+    public void test22StartActivityByActionFromCommand() {
+        final String cmd = "am start -a android.settings.WIFI_SETTINGS";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, false);
+        Assert.assertEquals("Demo, start activity by action from command line.",
+                0, cr.mReturnCode);
     }
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test23ContentProviderFromContext() {
-        // TODO: 2017/5/4  
+    public void test23StartActivityByComponentFromContext() {
+        Intent intent = new Intent();
+        intent.setClassName("com.bestv.ott", "com.bestv.ott.home.HomeActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+
+        Assert.assertTrue("Demo, start activity by component from testing context.", true);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test24StartActivityByComponentFromCommand() {
+        final String cmd = "am start -n \"com.bestv.ott/com.bestv.ott.home.HomeActivity\"";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, false);
+        Assert.assertEquals("Demo, start activity by component from command line.",
+                0, cr.mReturnCode);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test25StartServiceByActionFromCommand() {
+        final String cmd = "am startservice -a tv.fun.settings.action.inputsource";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, false);
+        Assert.assertEquals("Demo, start service by action from command line.",
+                0, cr.mReturnCode);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test25StartServiceByComponentFromCommand() {
+        final String cmd = "am startservice -n tv.fun.tvupgrade/.UpgradeService " +
+                "--es service_start_flag boot";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, false);
+        Assert.assertEquals("Demo, start service by component from command line.",
+                0, cr.mReturnCode);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test26AccessDataFromContentProvider() {
+        final String COL_AREA_NAME = "areaName";
+        final String COL_TEMP_CUR = "curTemp";
+
+        // WeatherContentProvider.query => content://tv.fun.weather.provider/weather/101200101
+        final String WEATHER_URL = "content://tv.fun.weather.provider/weather";
+        final long CITY_ID = 101200101;
+
+        Uri contentUri = ContentUris.withAppendedId(Uri.parse(WEATHER_URL), CITY_ID);
+        ContentResolver resolver = mContext.getContentResolver();
+        Cursor cursor = null;
+        try {
+            cursor = resolver.query(contentUri, null, null, null, null);
+            if (cursor != null) {
+                String results = "";
+                int areaNameIndex = cursor.getColumnIndex(COL_AREA_NAME);
+                int curTempIndex = cursor.getColumnIndex(COL_TEMP_CUR);
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    results += String.format("City name: %s, and current temp: %s\n",
+                            cursor.getString(areaNameIndex), cursor.getString(curTempIndex));
+                }
+                Log.d(TAG, TestConstants.LOG_KEYWORD + results);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        Assert.assertNotNull("Demo, access content provider from test context.", cursor);
     }
 
     private void wait10Seconds() {

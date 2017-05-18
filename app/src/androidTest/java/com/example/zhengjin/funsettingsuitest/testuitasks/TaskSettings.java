@@ -163,7 +163,7 @@ public final class TaskSettings {
 
     public boolean isInputMethodEnabled() {
         ShellUtils.CommandResult cr = ShellUtils.execCommand("ime list -s", false, true);
-        return cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg);
+        return cr.mReturnCode == 0 && !StringUtils.isEmpty(cr.mSuccessMsg);
     }
 
     public void enableInputMethod() {
@@ -184,7 +184,7 @@ public final class TaskSettings {
         ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
         ShellUtils.CommandResult cr =
                 ShellUtils.execCommand(String.format("input text %s", text), false, false);
-        return cr.mResult == 0;
+        return cr.mReturnCode == 0;
     }
 
     public void clearTextOfEditorView(int charCount) {

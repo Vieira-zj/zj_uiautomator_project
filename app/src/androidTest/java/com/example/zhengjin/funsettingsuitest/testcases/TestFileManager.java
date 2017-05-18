@@ -120,7 +120,7 @@ public final class TestFileManager {
                 cmdCreateMediaDir, cmdCreateVideoFile1, cmdCreateVideoFile2};
 
         ShellUtils.CommandResult result = ShellUtils.execCommand(commands, false, false);
-        Assert.assertTrue(message, (result.mResult == 0));
+        Assert.assertTrue(message, (result.mReturnCode == 0));
     }
 
     private static void removeData() {
@@ -128,7 +128,7 @@ public final class TestFileManager {
         String removeAllFiles = String.format("rm -rf %s", TEST_ROOT_DIR_PATH);
 
         ShellUtils.CommandResult result = ShellUtils.execCommand(removeAllFiles, false, false);
-        Assert.assertTrue(message, (result.mResult == 0));
+        Assert.assertTrue(message, (result.mReturnCode == 0));
     }
 
     @Before

@@ -41,19 +41,19 @@ public final class ShellUtils {
     }
 
     public static CommandResult execCommand(
-            String command, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand(new String[]{command}, isRoot, isNeedResultMsg);
+            String command, boolean isRoot, boolean isReturnResultMsg) {
+        return execCommand(new String[]{command}, isRoot, isReturnResultMsg);
     }
 
     @SuppressWarnings("unused")
     public static CommandResult execCommand(
-            List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
+            List<String> commands, boolean isRoot, boolean isReturnResultMsg) {
         return execCommand((commands == null ? null : commands.toArray(new String[]{})),
-                isRoot, isNeedResultMsg);
+                isRoot, isReturnResultMsg);
     }
 
     public static CommandResult execCommand(
-            String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+            String[] commands, boolean isRoot, boolean isReturnResultMsg) {
         final int DEFAULT_ERROR_CODE = -1;
         final CommandResult defaultCommandResult =
                 new CommandResult(DEFAULT_ERROR_CODE, null, null);
@@ -84,7 +84,7 @@ public final class ShellUtils {
             os.flush();
 
             result = process.waitFor();
-            if (isNeedResultMsg) {
+            if (isReturnResultMsg) {
                 final int DEFAULT_SIZE = 10;
                 String tmpStr;
 
@@ -129,12 +129,13 @@ public final class ShellUtils {
     }
 
     public static class CommandResult {
-        public int mResult;
+
+        public int mReturnCode;
         public String mSuccessMsg;
         public String mErrorMsg;
 
         CommandResult(int results, String successMsg, String errorMsg) {
-            mResult = results;
+            mReturnCode = results;
             mSuccessMsg = successMsg;
             mErrorMsg = errorMsg;
         }
@@ -143,8 +144,8 @@ public final class ShellUtils {
     public static void clearLogcatLog() {
         String cmdClear = "logcat -c";
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdClear, false, false);
-        if (result.mResult != 0) {
-            Log.e(TAG, String.format("clearLogcatLog filed, return code: %d", result.mResult));
+        if (result.mReturnCode != 0) {
+            Log.e(TAG, String.format("clearLogcatLog filed, return code: %d", result.mReturnCode));
         }
     }
 
@@ -160,8 +161,8 @@ public final class ShellUtils {
         String cmdLogcat =
                 String.format("logcat -v time -d *:%s > %s", logLevel, getLogcatFilePath());
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdLogcat, false, false);
-        if (result.mResult != 0) {
-            Log.e(TAG, String.format("dumpLogcatLog failed, return code: %d", result.mResult));
+        if (result.mReturnCode != 0) {
+            Log.e(TAG, String.format("dumpLogcatLog failed, return code: %d", result.mReturnCode));
         }
     }
 
@@ -209,9 +210,9 @@ public final class ShellUtils {
         String cmdFind = "ps | grep logcat | grep system";
 
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdFind, false, true);
-        if (result.mResult != 0) {
+        if (result.mReturnCode != 0) {
             Log.e(TAG, String.format("getLogcatProcessInfo failed, return code: %d"
-                    , result.mResult));
+                    , result.mReturnCode));
             return emptyInfo;
         }
         if (StringUtils.isEmpty(result.mSuccessMsg)) {
@@ -228,8 +229,8 @@ public final class ShellUtils {
 
         String cmdKill = String.format("kill %s", pid);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdKill, false, false);
-        if (result.mResult != 0) {
-            Log.e(TAG, String.format("Failed to kill process (%d)", result.mResult));
+        if (result.mReturnCode != 0) {
+            Log.e(TAG, String.format("Failed to kill process (%d)", result.mReturnCode));
         }
     }
 
@@ -254,19 +255,19 @@ public final class ShellUtils {
     public static void stopProcessByPackageName(String pkgName) {
         String cmdStopProcess = String.format("am force-stop %s", pkgName);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
-        Assert.assertTrue("Force stop the app process.", (result.mResult == 0));
+        Assert.assertTrue("Force stop the app process.", (result.mReturnCode == 0));
     }
 
     public static void stopAndClearPackage(String pkgName) {
         String cmdStopProcess = String.format("pm clear %s", pkgName);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStopProcess, false, false);
-        Assert.assertTrue("Clear the app package.", (result.mResult == 0));
+        Assert.assertTrue("Clear the app package.", (result.mReturnCode == 0));
     }
 
     public static void startSpecifiedActivity(String pkgName, String actName) {
         String cmdStart = String.format("am start %s/%s", pkgName, actName);
         ShellUtils.CommandResult result = ShellUtils.execCommand(cmdStart, false, false);
-        Assert.assertEquals("Start the specified activity.", 0, result.mResult);
+        Assert.assertEquals("Start the specified activity.", 0, result.mReturnCode);
     }
 
     static CommandResult getTopFocusedActivity() {

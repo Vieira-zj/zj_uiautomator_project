@@ -158,7 +158,7 @@ public final class TaskAboutInfo {
         ShellUtils.CommandResult cr =
                 ShellUtils.execCommand("getprop | grep product.model", false, true);
 
-        if (cr.mResult == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
+        if (cr.mReturnCode == 0 && !StringUtils.isEmpty(cr.mSuccessMsg)) {
             String[] items = cr.mSuccessMsg.split("\\s*:\\s*");
             return items[1];
         }
@@ -202,7 +202,7 @@ public final class TaskAboutInfo {
 
         String cmd = RunnerProfile.isPlatform938 ? "df | grep /data" : "df | grep /sdcard";
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
-        if (cr.mResult != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
+        if (cr.mReturnCode != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
             return DEFAULT_ROM_SIZE;
         }
 
@@ -274,7 +274,7 @@ public final class TaskAboutInfo {
 
         String cmd = this.buildCommandByNetworkType(type, "ifconfig %s | grep \"inet addr\"");
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
-        if (cr.mResult != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
+        if (cr.mReturnCode != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
             return DEFAULT_IP;
         }
 
@@ -318,9 +318,9 @@ public final class TaskAboutInfo {
 
     private String runShellCommandAndCheck(String cmd) throws Exception {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
-        if (cr.mResult != 0) {
+        if (cr.mReturnCode != 0) {
             throw new Exception(String.format(Locale.getDefault(),
-                    "The return code is (%d) for command (%s)", cr.mResult, cmd));
+                    "The return code is (%d) for command (%s)", cr.mReturnCode, cmd));
         }
         if (StringUtils.isEmpty(cr.mSuccessMsg)) {
             Log.e(TAG, "The return info is empty by command: " + cmd);

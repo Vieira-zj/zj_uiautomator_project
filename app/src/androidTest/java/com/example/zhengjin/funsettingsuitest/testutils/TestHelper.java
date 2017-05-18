@@ -85,11 +85,11 @@ public final class TestHelper {
 
         for (int i = 0; i < (int) waitByMillis / 1000L; i++) {
             cr = ShellUtils.getTopFocusedActivity();
-            if (cr.mResult == 0 && cr.mSuccessMsg.contains(viewName)) {
+            if (cr.mReturnCode == 0 && cr.mSuccessMsg.contains(viewName)) {
                 Log.d(TAG, "GetViewOnTop, top activity: " + cr.mSuccessMsg);
                 return true;
             }
-            if (cr.mResult == 1 && StringUtils.isEmpty(cr.mSuccessMsg)) {
+            if (cr.mReturnCode == 1 && StringUtils.isEmpty(cr.mSuccessMsg)) {
                 Log.d(TAG, "GetViewOnTop, top view name is empty, it's a bug for platform 938.");
                 return true;
             }

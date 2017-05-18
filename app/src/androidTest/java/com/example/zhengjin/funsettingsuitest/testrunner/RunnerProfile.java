@@ -92,7 +92,7 @@ public final class RunnerProfile {
 
     private static String runShellCommand(String cmd) {
         ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
-        if (cr.mResult != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
+        if (cr.mReturnCode != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
             return "";
         }
 
