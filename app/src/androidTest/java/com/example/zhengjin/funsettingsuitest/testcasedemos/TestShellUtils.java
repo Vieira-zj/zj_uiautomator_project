@@ -281,10 +281,10 @@ public final class TestShellUtils {
         final String COL_TEMP_CUR = "curTemp";
 
         // WeatherContentProvider.query => content://tv.fun.weather.provider/weather/101200101
-        final String WEATHER_URL = "content://tv.fun.weather.provider/weather";
+        final String WEATHER_URI = "content://tv.fun.weather.provider/weather";
         final long CITY_ID = 101200101;
 
-        Uri contentUri = ContentUris.withAppendedId(Uri.parse(WEATHER_URL), CITY_ID);
+        Uri contentUri = ContentUris.withAppendedId(Uri.parse(WEATHER_URI), CITY_ID);
         ContentResolver resolver = mContext.getContentResolver();
         Cursor cursor = null;
         try {
