@@ -1,31 +1,36 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
     defaultConfig {
-        applicationId "com.example.zhengjin.funsettingsuitest"
+        applicationId 'com.example.zhengjin.funsettingsuitest'
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName '1.0'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     lintOptions {
         abortOnError false
     }
     signingConfigs {
-        // http://stackoverflow.com/questions/28512684/android-studio-does-not-sign-the-code-for-debug-build
         debug {
-            // for debug package, build as system app
-            // alias and key are android default
             storeFile file('debug.keystore')
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storePassword 'android'
+            keyAlias key_alias
+            keyPassword key_password
+            storePassword keystore_password
         }
     }
     buildTypes {
+        debug {
+            zipAlignEnabled false
+            shrinkResources false
+            minifyEnabled false
+            versionNameSuffix '_debug'
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
         }
@@ -40,7 +45,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:24.2.1'
+    androidTestCompile 'com.android.support:support-annotations:25.3.1'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     // Set this dependency to build and run Espresso tests
@@ -53,8 +58,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
 }
