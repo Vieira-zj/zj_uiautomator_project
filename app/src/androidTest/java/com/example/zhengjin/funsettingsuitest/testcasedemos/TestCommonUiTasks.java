@@ -31,6 +31,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
 import static android.provider.ContactsContract.Directory.PACKAGE_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FILE_MANAGER_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.LONG_WAIT;
@@ -133,6 +135,27 @@ public final class TestCommonUiTasks {
 
         Assert.assertTrue(TestHelper.waitForActivityOpenedByShellCmd(
                 TestConstants.LAUNCHER_PKG_NAME, ".account.unBindWithHoldActivity"));
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test06InitUiObjectsBefore() {
+        ShellUtils.startSpecifiedActivity("tv.fun.instructions", ".CoverActivity");
+        ShellUtils.systemWaitByMillis(TestConstants.WAIT);
+
+        // ui objects must be init after page is shown
+        UiObject2 container = mDevice.findObject(
+                By.res("tv.fun.instructions:id/indicator")
+                        .clazz("android.widget.HorizontalScrollView"));
+        List<UiObject2> tabs =
+                container.findObjects(By.depth(2).clazz("android.widget.LinearLayout"));
+
+        Assert.assertEquals("Verify count of tabs is 8.", 8, tabs.size());
+
+        for (UiObject2 tab : tabs) {
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "tab name: " +
+                    tab.findObject(By.clazz("android.widget.TextView")).getText());
+        }
     }
 
     @Test
