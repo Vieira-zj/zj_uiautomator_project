@@ -47,6 +47,7 @@ public final class HttpUtils {
         return mClient.newCall(request).execute();
     }
 
+    @SuppressWarnings("unused")
     public static void execute(Request request, Callback responseCallback) {
         mClient.newCall(request).enqueue(responseCallback);
     }
@@ -68,6 +69,7 @@ public final class HttpUtils {
         return String.format("%s?%s", url, formatParams(params));
     }
 
+    @SuppressWarnings("unused")
     public static String attachHttpGetParam(String url, String name, String value) {
         return String.format("%s?%s=%s", url, name, value);
     }

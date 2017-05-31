@@ -38,6 +38,19 @@
         android:id="@+id/text_http_test_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/message_Http_Test" />
+        android:text="@string/message_http_test" />
+
+    <Button
+        android:id="@+id/button_leak_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_leak_test"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:id="@+id/text_leak_test_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_leak_test" />
 
 </LinearLayout>

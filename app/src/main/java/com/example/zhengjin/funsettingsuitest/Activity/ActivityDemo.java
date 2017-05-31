@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.zhengjin.funsettingsuitest.R;
+import com.example.zhengjin.funsettingsuitest.tests.LeakTest;
 import com.example.zhengjin.funsettingsuitest.utils.HttpUtils;
 import com.squareup.okhttp.Request;
 
@@ -35,8 +36,10 @@ public final class ActivityDemo extends AppCompatActivity {
     private EditText mEditorUserName = null;
     private Button mBtnOk = null;
     private Button mBtnHttpTest = null;
+    private Button mBtnLeakTest = null;
     private TextView mTextHelloMsg = null;
     private TextView mTextHttpTest = null;
+    private TextView mTextLeakTest = null;
 
     private List<BasicNameValuePair> URL_PARAMS = new ArrayList<>(5);
     private List<BasicNameValuePair> HEADER_PARAMS = new ArrayList<>(5);
@@ -79,13 +82,23 @@ public final class ActivityDemo extends AppCompatActivity {
                 }
             });
         }
+
+        if (mBtnLeakTest != null) {
+            mBtnLeakTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mTextLeakTest != null) {
+                        LeakTest.getInstance(ActivityDemo.this.getApplicationContext())
+                                .setRetainedTextView(mTextLeakTest);
+                    }
+                }
+            });
+        }
     }
 
-// use static handler and weak reference instead of do clear work onDestroy()
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//
+    @Override
+    protected void onDestroy() {
+        // use static handler and weak reference instead of do clear work onDestroy()
 //        if (mThreadRequestWeatherData != null) {
 //            if (mThreadRequestWeatherData.isAlive()) {
 //                mThreadRequestWeatherData.interrupt();
@@ -93,7 +106,10 @@ public final class ActivityDemo extends AppCompatActivity {
 //                mHandler.removeCallbacks(mThreadRequestWeatherData);
 //            }
 //        }
-//    }
+
+        LeakTest.getInstance(this.getApplicationContext()).removeTextView();
+        super.onDestroy();
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -105,8 +121,10 @@ public final class ActivityDemo extends AppCompatActivity {
         mEditorUserName = (EditText) findViewById(R.id.editor_user_name);
         mBtnOk = (Button) findViewById(R.id.button_ok);
         mBtnHttpTest = (Button) findViewById(R.id.button_http_test);
+        mBtnLeakTest = (Button) findViewById(R.id.button_leak_test);
         mTextHelloMsg = (TextView) findViewById(R.id.text_hello_msg);
         mTextHttpTest = (TextView) findViewById(R.id.text_http_test_msg);
+        mTextLeakTest = (TextView) findViewById(R.id.text_leak_test_msg);
     }
 
     private void initWeatherRequestParams() {
