@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -31,6 +32,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import java.util.List;
 import java.util.Locale;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.ShellUtils.execCommand;
@@ -276,7 +278,7 @@ public final class TestShellUtils {
 
     @Test
     @Category(CategoryDemoTests.class)
-    public void test26AccessDataFromContentProvider() {
+    public void test26GetCityWeatherFromContentProvider() {
         final String COL_AREA_NAME = "areaName";
         final String COL_TEMP_CUR = "curTemp";
 
@@ -305,7 +307,36 @@ public final class TestShellUtils {
             }
         }
 
-        Assert.assertNotNull("Demo, access content provider from test context.", cursor);
+        Assert.assertNotNull("Demo, get city weather data from content provider.", cursor);
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test27GetAppListFromContentProvider() {
+        final String APP_LIST_URI = "content://tv.fun.tvupgrade.upgradeprovider";
+        final String QUERY_ARG = "queryAppList";
+        final String GET_KEY = "applist";
+
+        Uri contentUri = Uri.parse(APP_LIST_URI);
+        ContentResolver resolver = mContext.getContentResolver();
+        Bundle bundle = resolver.call(contentUri, QUERY_ARG, null, null);
+
+        if (bundle == null) {
+            Assert.fail("Content is null from uri: " + APP_LIST_URI);
+        }
+
+        List<String> appList = bundle.getStringArrayList(GET_KEY);
+        if (appList == null) {
+            Assert.fail("Null for get array list from bundle by key: " + GET_KEY);
+        }
+        if (appList.size() == 0) {
+            Assert.fail("Apps count is zero!");
+        }
+
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "app size: " + appList.size());
+        for (String app : appList) {
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "app: " + app);
+        }
     }
 
     private void wait10Seconds() {
