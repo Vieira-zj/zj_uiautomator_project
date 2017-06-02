@@ -1,4 +1,4 @@
-package com.example.zhengjin.funsettingsuitest.tests;
+package com.example.zhengjin.funsettingsuitest.test;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.example.zhengjin.funsettingsuitest.R;
 
-public final class ActivityMain extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity {
 
     private Button mBtnStartDemo = null;
     private Button mBtnStartInstTest = null;

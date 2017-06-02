@@ -38,6 +38,9 @@
         <activity
             android:name=".activity.ActivityUtilsTest2"
             android:label="@string/title_activity_utils_test2" />
+        <activity
+            android:name=".test.InstrumentedActivity"
+            android:label="@string/title_activity_jacoco_test" />
 
         <service
             android:name=".service.ServiceUiTestRunner"
@@ -56,5 +59,11 @@
             android:enabled="true"
             android:exported="false" />
     </application>
+
+    <instrumentation
+        android:name=".test.JacocoInstrumentation"
+        android:handleProfiling="true"
+        android:label="CoverageInstrumentation"
+        android:targetPackage="com.example.zhengjin.funsettingsuitest" />
 
 </manifest>

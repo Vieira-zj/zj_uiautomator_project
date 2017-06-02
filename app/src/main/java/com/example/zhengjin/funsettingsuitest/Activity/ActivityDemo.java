@@ -16,7 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.zhengjin.funsettingsuitest.R;
-import com.example.zhengjin.funsettingsuitest.tests.LeakTest;
+import com.example.zhengjin.funsettingsuitest.test.LeakTest;
 import com.example.zhengjin.funsettingsuitest.utils.HttpUtils;
 import com.squareup.okhttp.Request;
 

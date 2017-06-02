@@ -49,6 +49,9 @@
     <string name="btn_fps_test">FPS Test</string>
     <string name="message_fps_test">Frames Per Second Test</string>
 
+    <!-- jacoco instrumentation activity -->
+    <string name="title_activity_jacoco_test">Jacoco Instrumentation Activity</string>
+
     <!-- dialog, popup and floating window-->
     <string name="dialog_content">Dialog content</string>
     <string name="popup_window_content">Popup window content</string>
