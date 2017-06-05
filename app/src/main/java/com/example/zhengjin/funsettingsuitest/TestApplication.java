@@ -11,21 +11,25 @@ import com.squareup.leakcanary.LeakCanary;
  */
 public final class TestApplication extends Application {
 
-    private static TestApplication sInstance;
-
     public static final String EXTRA_KEY_EXEC_TIME = "ExecTime";
     public static final String EXTRA_KEY_INST_METHOD = "TestInstMethod";
     public static final String EXTRA_KEY_TEST_PACKAGE = "TestPkgName";
     public static final String EXTRA_KEY_TEST_RUNNER = "TestRunner";
 
+    private static final boolean IS_LEAK_TEST = false;
+
+    private static TestApplication sInstance;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
+        if (IS_LEAK_TEST) {
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                return;
+            }
+            LeakCanary.install(this);
         }
-        LeakCanary.install(this);
 
         sInstance = this;
     }

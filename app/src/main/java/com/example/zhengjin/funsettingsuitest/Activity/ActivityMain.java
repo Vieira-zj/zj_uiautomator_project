@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.zhengjin.funsettingsuitest.R;
+import com.example.zhengjin.funsettingsuitest.test.JacocoInstrumentation;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -16,9 +17,19 @@ public class ActivityMain extends AppCompatActivity {
     private Button mBtnStartUtilsTest2 = null;
     private Button mBtnExit = null;
 
+    private boolean mIsJacocoCoverageEnable = false;
+    private JacocoInstrumentation instrumentation = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // use instrumented activity instead of directly inject code in main activity
+        if (mIsJacocoCoverageEnable) {
+            instrumentation = new JacocoInstrumentation();
+            instrumentation.createCoverageFile();
+        }
+
         setContentView(R.layout.activity_main);
         this.initViews();
 
@@ -78,6 +89,15 @@ public class ActivityMain extends AppCompatActivity {
         mBtnStartUtilsTest = (Button) findViewById(R.id.btn_start_utils_test);
         mBtnStartUtilsTest2 = (Button) findViewById(R.id.btn_start_utils_test2);
         mBtnExit = (Button) findViewById(R.id.btn_exit_app);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mIsJacocoCoverageEnable && instrumentation != null) {
+            instrumentation.generateCoverageReport();
+        }
+
+        super.onDestroy();
     }
 
 }

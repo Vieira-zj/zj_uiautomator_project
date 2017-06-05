@@ -22,16 +22,16 @@ public class LeakTest {
         this.mCtx = context;
     }
 
-    // use Application Context instead of Activity Context
     public static LeakTest getInstance(Context context) {
+        // pass Application Context instead of Activity Context
         if (instance == null) {
             instance = new LeakTest(context);
         }
         return instance;
     }
 
-    // textview tv hold activity context
     public void setRetainedTextView(TextView tv) {
+        // TextView tv holds activity context
         this.mTextView = tv;
         mTextView.setText(mCtx.getString(android.R.string.ok));
     }

@@ -8,8 +8,6 @@ import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,29 +19,22 @@ import java.io.OutputStream;
  * For Jacoco.
  * Implement callback onActivityFinished(), and call instrument activity.
  */
-
 public class JacocoInstrumentation extends Instrumentation implements FinishListener {
 
     private static final String TAG = "JacocoInstrumentation:";
-    private static String DEFAULT_COVERAGE_FILE_PATH =
+    private static final String DEFAULT_COVERAGE_FILE_PATH =
             Environment.getExternalStorageDirectory().getAbsolutePath() + "/coverage.ec";
 
     private final Bundle mResults = new Bundle();
     private Intent mIntent;
-    private String mCoverageFilePath;
 
     public JacocoInstrumentation() {
     }
 
     @Override
     public void onCreate(Bundle arguments) {
-        Log.d(TAG, "onCreate(" + arguments + ")");
         super.onCreate(arguments);
-
-        DEFAULT_COVERAGE_FILE_PATH = this.getContext().getFilesDir().getPath() + "/coverage.ec";
-        if (arguments != null) {
-            mCoverageFilePath = arguments.getString("coverageFile");
-        }
+        this.createCoverageFile(DEFAULT_COVERAGE_FILE_PATH);
 
         // init intent and start instrument
         mIntent = new Intent(this.getTargetContext(), InstrumentedActivity.class);
@@ -53,40 +44,45 @@ public class JacocoInstrumentation extends Instrumentation implements FinishList
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart()");
         super.onStart();
-
         Looper.prepare();
-        // start instrument activity and set callback
-        InstrumentedActivity activity = (InstrumentedActivity) startActivitySync(mIntent);
+
+        // start instrumented activity and set callback
+        InstrumentedActivity activity = (InstrumentedActivity) this.startActivitySync(mIntent);
         activity.setFinishListener(this);
     }
 
     @Override
     public void onActivityFinished() {
-        Log.d(TAG, "onActivityFinished()");
         this.generateCoverageReport();
         this.finish(Activity.RESULT_OK, mResults);
     }
 
-    private void generateCoverageReport() {
-        final String savePath = this.getCoverageFilePath();
-        Log.d(TAG, "generateCoverageReport(): " + savePath);
+    public void createCoverageFile() {
+        createCoverageFile(DEFAULT_COVERAGE_FILE_PATH);
+    }
 
-        File file = new File(savePath);
+    private void createCoverageFile(String filePath) {
+        Log.d(TAG, "createCoverageFile(): " + filePath);
+
+        File file = new File(filePath);
         if (!file.exists()) {
             try {
                 if (!file.createNewFile()) {
-                    throw new IOException("Create new file failed!");
+                    throw new IOException("file.createNewFile() return false!");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void generateCoverageReport() {
+        Log.d(TAG, "generateCoverageReport(): " + DEFAULT_COVERAGE_FILE_PATH);
 
         OutputStream out = null;
         try {
-            out = new FileOutputStream(savePath, false);
+            out = new FileOutputStream(DEFAULT_COVERAGE_FILE_PATH, false);
             Object agent =
                     Class.forName("org.jacoco.agent.rt.RT").getMethod("getAgent").invoke(null);
             out.write((byte[]) agent.getClass()
@@ -102,11 +98,6 @@ public class JacocoInstrumentation extends Instrumentation implements FinishList
                 }
             }
         }
-    }
-
-    private String getCoverageFilePath() {
-        return StringUtils.isEmpty(mCoverageFilePath) ?
-                DEFAULT_COVERAGE_FILE_PATH : mCoverageFilePath;
     }
 
 }

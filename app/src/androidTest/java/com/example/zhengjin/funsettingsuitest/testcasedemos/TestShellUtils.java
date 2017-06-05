@@ -1,5 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testcasedemos;
 
+import android.app.Instrumentation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -53,13 +54,14 @@ public final class TestShellUtils {
 
     private final static String TAG = TestShellUtils.class.getSimpleName();
 
-    private UiDevice mDevice;
     private Context mContext;
+    private UiDevice mDevice;
 
     @Before
     public void setUp() {
         Log.d(TAG, String.format("***** Test %s start.", TAG));
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        mDevice = UiDevice.getInstance(instrumentation);
         mContext = InstrumentationRegistry.getContext();
     }
 
