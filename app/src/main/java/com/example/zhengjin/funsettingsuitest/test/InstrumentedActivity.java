@@ -6,7 +6,7 @@ import com.example.zhengjin.funsettingsuitest.activity.ActivityMain;
  * Created by zhengjin on 2017/6/2.
  * <p>
  * For Jacoco.
- * Instrumented Activity invoked from Jacoco instrumentation.
+ * Instrumented Activity extends from main activity, and invoked in Jacoco instrumentation.
  */
 
 public class InstrumentedActivity extends ActivityMain {

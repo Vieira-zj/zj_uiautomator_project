@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.zhengjin.funsettingsuitest.R;
+import com.example.zhengjin.funsettingsuitest.TestApplication;
 import com.example.zhengjin.funsettingsuitest.test.JacocoInstrumentation;
 
 public class ActivityMain extends AppCompatActivity {
@@ -17,7 +18,7 @@ public class ActivityMain extends AppCompatActivity {
     private Button mBtnStartUtilsTest2 = null;
     private Button mBtnExit = null;
 
-    private boolean mIsJacocoCoverageEnable = false;
+    private boolean mIsJacocoCoverageEnable = TestApplication.IS_COVERAGE_TEST_ENABLE;
     private JacocoInstrumentation instrumentation = null;
 
     @Override

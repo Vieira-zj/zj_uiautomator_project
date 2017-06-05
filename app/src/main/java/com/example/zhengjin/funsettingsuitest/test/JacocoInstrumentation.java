@@ -17,7 +17,10 @@ import java.io.OutputStream;
  * Created by zhengjin on 2017/6/2.
  * <p>
  * For Jacoco.
- * Implement callback onActivityFinished(), and call instrument activity.
+ * Implement callback onActivityFinished(), and call instrumented activity.
+ * <p>
+ * Run command:
+ * $ adb shell am instrument com.example.zhengjin.funsettingsuitest/.test.JacocoInstrumentation
  */
 public class JacocoInstrumentation extends Instrumentation implements FinishListener {
 
