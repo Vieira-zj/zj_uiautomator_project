@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,11 +27,9 @@ import java.io.OutputStream;
 public class JacocoInstrumentation extends Instrumentation implements FinishListener {
 
     private static final String TAG = "JacocoInstrumentation:";
-    private static final String DEFAULT_COVERAGE_FILE_PATH =
-            Environment.getExternalStorageDirectory().getAbsolutePath() + "/coverage.ec";
 
-    private final Bundle mResults = new Bundle();
     private Intent mIntent;
+    private String mCoverageFilePath;
 
     public JacocoInstrumentation() {
     }
@@ -37,7 +37,12 @@ public class JacocoInstrumentation extends Instrumentation implements FinishList
     @Override
     public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
-        this.createCoverageFile(DEFAULT_COVERAGE_FILE_PATH);
+        try {
+            this.createCoverageFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            this.finish(-1, null);
+        }
 
         // init intent and start instrument
         mIntent = new Intent(this.getTargetContext(), InstrumentedActivity.class);
@@ -58,21 +63,39 @@ public class JacocoInstrumentation extends Instrumentation implements FinishList
     @Override
     public void onActivityFinished() {
         this.generateCoverageReport();
-        this.finish(Activity.RESULT_OK, mResults);
+        this.finish(Activity.RESULT_OK, new Bundle());
     }
 
-    public void createCoverageFile() {
-        createCoverageFile(DEFAULT_COVERAGE_FILE_PATH);
+    private void createCoverageFile() throws Exception {
+        createCoverageFile("", "");
     }
 
-    private void createCoverageFile(String filePath) {
-        Log.d(TAG, "createCoverageFile(): " + filePath);
+    public void createCoverageFile(String fileName) throws Exception {
+        createCoverageFile("", fileName);
+    }
 
-        File file = new File(filePath);
+    private void createCoverageFile(String fileDirAbsPath, String fileName) throws Exception {
+        final String defaultDirPath =
+                Environment.getExternalStorageDirectory().getAbsolutePath() + "/CoverageTest/";
+        final String defaultFileName = "coverage.ec";
+
+        final String fDir = StringUtils.isEmpty(fileDirAbsPath) ? defaultDirPath : fileDirAbsPath;
+        final String fName = StringUtils.isEmpty(fileName) ? defaultFileName : fileName;
+        mCoverageFilePath = fDir + fName;
+        Log.d(TAG, "createCoverageFile(): " + mCoverageFilePath);
+
+        File dir = new File(fDir);
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new Exception("file.mkdirs() return false!");
+            }
+        }
+
+        File file = new File(mCoverageFilePath);
         if (!file.exists()) {
             try {
                 if (!file.createNewFile()) {
-                    throw new IOException("file.createNewFile() return false!");
+                    throw new Exception("file.createNewFile() return false!");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,11 +104,11 @@ public class JacocoInstrumentation extends Instrumentation implements FinishList
     }
 
     public void generateCoverageReport() {
-        Log.d(TAG, "generateCoverageReport(): " + DEFAULT_COVERAGE_FILE_PATH);
+        Log.d(TAG, "generateCoverageReport(): " + mCoverageFilePath);
 
         OutputStream out = null;
         try {
-            out = new FileOutputStream(DEFAULT_COVERAGE_FILE_PATH, false);
+            out = new FileOutputStream(mCoverageFilePath, false);
             Object agent =
                     Class.forName("org.jacoco.agent.rt.RT").getMethod("getAgent").invoke(null);
             out.write((byte[]) agent.getClass()

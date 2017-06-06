@@ -30,7 +30,7 @@ android {
             versionNameSuffix '_debug'
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            testCoverageEnabled = false  // Jacoco coverage test
+            testCoverageEnabled false  // Jacoco coverage test
         }
         release {
             minifyEnabled false

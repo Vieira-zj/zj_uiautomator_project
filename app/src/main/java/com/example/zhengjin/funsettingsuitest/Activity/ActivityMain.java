@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.TestApplication;
 import com.example.zhengjin.funsettingsuitest.test.JacocoInstrumentation;
+import com.example.zhengjin.funsettingsuitest.utils.HelperUtils;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -27,8 +28,14 @@ public class ActivityMain extends AppCompatActivity {
 
         // use instrumented activity instead of directly inject code in main activity
         if (mIsJacocoCoverageEnable) {
+            String tmpFileName = String.format("coverage_%s.ec", HelperUtils.getCurrentTime());
             instrumentation = new JacocoInstrumentation();
-            instrumentation.createCoverageFile();
+            try {
+                instrumentation.createCoverageFile(tmpFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.finish();
+            }
         }
 
         setContentView(R.layout.activity_main);
