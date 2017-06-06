@@ -30,7 +30,7 @@ android {
             versionNameSuffix '_debug'
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            testCoverageEnabled = true  // Jacoco coverage test
+            testCoverageEnabled = false  // Jacoco coverage test
         }
         release {
             minifyEnabled false
@@ -91,7 +91,8 @@ task jacocoTestReport(type: JacocoReport) {
                        '**/*$ViewInjector*.class'
             ])
     sourceDirectories = files(coverageSourceDirs)
-    executionData = files("$buildDir/outputs/code-coverage/connected/coverage.ec")
+    executionData = files("$buildDir/outputs/code-coverage/connected/coverage01.ec",
+            "$buildDir/outputs/code-coverage/connected/coverage02.ec")
 
     doFirst {
         new File("$buildDir/intermediates/classes/").eachFileRecurse { file ->
