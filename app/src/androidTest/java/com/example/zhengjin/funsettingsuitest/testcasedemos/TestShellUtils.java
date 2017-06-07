@@ -42,6 +42,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_HOME_ACT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
+import static java.lang.String.format;
 
 
 /**
@@ -59,7 +60,7 @@ public final class TestShellUtils {
 
     @Before
     public void setUp() {
-        Log.d(TAG, String.format("***** Test %s start.", TAG));
+        Log.d(TAG, format("***** Test %s start.", TAG));
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         mDevice = UiDevice.getInstance(instrumentation);
         mContext = InstrumentationRegistry.getContext();
@@ -67,7 +68,7 @@ public final class TestShellUtils {
 
     @After
     public void clearUp() {
-        Log.d(TAG, String.format("***** Test %s finished.", TAG));
+        Log.d(TAG, format("***** Test %s finished.", TAG));
     }
 
     @Test
@@ -78,7 +79,7 @@ public final class TestShellUtils {
         for (Class<?> cls : classes) {
             count += RunnerProfile.countAndPrintTestCasesForClass(cls);
         }
-        Log.d(TAG, String.format("Total number of test cases -> %d", count));
+        Log.d(TAG, format("Total number of test cases -> %d", count));
     }
 
     @Test
@@ -87,7 +88,7 @@ public final class TestShellUtils {
         String command = "cat /system/build.prop | grep ro.product.model";
         ShellUtils.CommandResult cr = execCommand(command, false, true);
 
-        String output = String.format(Locale.getDefault(),
+        String output = format(Locale.getDefault(),
                 "Result code: %d\n Success message: %s\n Error message: %s",
                 cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
@@ -117,9 +118,9 @@ public final class TestShellUtils {
     public void test04StopAndStartFileManager() {
         // Note: need system authorized to execute 'start' and 'stop' shell command
 
-        String cmd = String.format("am force-stop %s", FILE_MANAGER_PKG_NAME);
+        String cmd = format("am force-stop %s", FILE_MANAGER_PKG_NAME);
         ShellUtils.CommandResult cr = execCommand(cmd, false, true);
-        String output = String.format(Locale.getDefault(),
+        String output = format(Locale.getDefault(),
                 "Stop file manager\nResult code: %d\nSuccess message: %s\nError message: %s",
                 cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
@@ -128,10 +129,10 @@ public final class TestShellUtils {
         ShellUtils.systemWaitByMillis(TestConstants.WAIT);
 
         // add extra option "--user 0"
-        cmd = String.format("am start --user 0 %s/%s",
+        cmd = format("am start --user 0 %s/%s",
                 FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
         cr = execCommand(cmd, false, true);
-        output = String.format(Locale.getDefault(),
+        output = format(Locale.getDefault(),
                 "Start file manager\nResult code: %d\nSuccess message: %s\nError message: %s",
                 cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
@@ -139,18 +140,18 @@ public final class TestShellUtils {
         Log.d(TAG, output);
 
         ShellUtils.systemWaitByMillis(TestConstants.WAIT);
-        Log.d(TAG, String.format("Top package is %s", mDevice.getCurrentPackageName()));
+        Log.d(TAG, format("Top package is %s", mDevice.getCurrentPackageName()));
     }
 
     @Test
     @Category(CategoryDemoTests.class)
     public void test05StopAndStartCommonSettings() {
-        String cmdStop = String.format("am force-stop %s", SETTINGS_PKG_NAME);
-        String cmdStart = String.format("am start %s/%s", SETTINGS_PKG_NAME, SETTINGS_HOME_ACT);
+        String cmdStop = format("am force-stop %s", SETTINGS_PKG_NAME);
+        String cmdStart = format("am start %s/%s", SETTINGS_PKG_NAME, SETTINGS_HOME_ACT);
 
         ShellUtils.CommandResult cr = execCommand(
                 new String[]{cmdStop, cmdStart}, false, true);
-        String output = String.format(Locale.getDefault(),
+        String output = format(Locale.getDefault(),
                 "Result code: %d\nSuccess message: %s\nError message: %s", cr.mReturnCode,
                 (StringUtils.isEmpty(cr.mSuccessMsg) ? "null" : cr.mSuccessMsg),
                 (StringUtils.isEmpty(cr.mErrorMsg) ? "null" : cr.mErrorMsg));
@@ -195,7 +196,7 @@ public final class TestShellUtils {
     @Test
     @Category(CategoryDemoTests.class)
     public void test10GetCurRunningMethodName() {
-        Log.d(TAG, String.format("Current running test: %s", ShellUtils.getRunningMethodName()));
+        Log.d(TAG, format("Current running test: %s", ShellUtils.getRunningMethodName()));
         Assert.assertTrue("Verify get current running test name.", true);
     }
 
@@ -298,7 +299,7 @@ public final class TestShellUtils {
                 int areaNameIndex = cursor.getColumnIndex(COL_AREA_NAME);
                 int curTempIndex = cursor.getColumnIndex(COL_TEMP_CUR);
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    results += String.format("City name: %s, and current temp: %s\n",
+                    results += format("City name: %s, and current temp: %s\n",
                             cursor.getString(areaNameIndex), cursor.getString(curTempIndex));
                 }
                 Log.d(TAG, TestConstants.LOG_KEYWORD + results);
@@ -339,6 +340,23 @@ public final class TestShellUtils {
         for (String app : appList) {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "app: " + app);
         }
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test31QueryDataFromDatabase() {
+        final String sqlQuery = "'select Volume from tbl_SoundSetting;'";
+        final String cmd = "sqlite3 /tvdatabase/Database/user_setting.db " + sqlQuery;
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(cmd, false, true);
+
+        String msg;
+        if (cr.mReturnCode == 0) {
+            msg = "Success and return content: " + cr.mSuccessMsg;
+        } else {
+            msg = String.format(Locale.getDefault(),
+                    "return code %d, and error message %s", cr.mReturnCode, cr.mErrorMsg);
+        }
+        Log.d(TAG, TestConstants.LOG_KEYWORD + msg);
     }
 
     private void wait10Seconds() {
