@@ -64,7 +64,6 @@ public final class TestCommonSettings {
     private final String TEXT_SYSTEM_RECOVERY = "恢复出厂设置";
     private final String TEXT_FORBIDDEN = "禁止";
     private final String TEXT_CLOSED = "关闭";
-    private final String TEXT_SHUTDOWN_TV_TIME = "定时关机";
 
     private final String[] SUB_VALUES_SLEEP_TIME =
             {"永不休眠", "15分钟", "30分钟", "60分钟", "90分钟", "120分钟"};
@@ -74,6 +73,11 @@ public final class TestCommonSettings {
             {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_WALLPAPER =
             {"星夜如梦", "神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
+    private final String[] ADVANCE_SETTING_ITEMS =
+            {"休眠设置", "定时关机", "信源自动全屏", "无线投屏", "语言切换"};
+    private final String[] ADVANCE_SETTING_ITEMS_EN = {
+            "Hibernation Settings", "Scheduled Turn-Off", "Automatic full screen",
+            "Wireless Projection Screen", "Language switch"};
 
     private UiDevice mDevice;
     private UiActionsManager mAction;
@@ -267,7 +271,7 @@ public final class TestCommonSettings {
         UiObject2 itemContainer = mDevice.findObject(
                 mFunUiObjects.getFullScreenSettingItemContainerSelector());
         UiObject2 itemTitle = itemContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "信源自动全屏", itemTitle.getText());
+        Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[2], itemTitle.getText());
 
         mMessage = "Verify the tips of full screen setting item.";
         UiObject2 itemTips = itemContainer.findObject(mFunUiObjects.getSettingItemTipsSelector());
@@ -287,7 +291,7 @@ public final class TestCommonSettings {
         UiObject2 itemContainer = mDevice.findObject(
                 mFunUiObjects.getScreenProjectionSettingItemContainerSelector());
         UiObject2 itemTitle = itemContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "无线投屏", itemTitle.getText());
+        Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[3], itemTitle.getText());
 
         mMessage = "Verify the value of screen projection setting item.";
         UiObject2 itemValue = itemContainer.findObject(mFunUiObjects.getSettingItemValueSelector());
@@ -304,7 +308,7 @@ public final class TestCommonSettings {
                 mDevice.findObject(mFunUiObjects.getSleepTimeSettingItemContainerSelector());
         Assert.assertTrue(mMessage, sleepSettingContainer.isFocused());
 
-        mMessage = "Verify hidden items is NOT shown after shorten keys, and items count is 4.";
+        mMessage = "Verify hidden items is NOT shown after short keys, and items count is 4.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionCenter(), 5, 500L);
         ShellUtils.systemWaitByMillis(WAIT);
 
@@ -312,7 +316,7 @@ public final class TestCommonSettings {
                 mDevice.findObject(mFunUiObjects.getSettingItemsContainerOnAdvancedSelector());
         List<UiObject2> settingItems = settingItemsContainer.findObjects(
                 By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).maxDepth(1));
-        Assert.assertEquals(mMessage, 4, settingItems.size());
+        Assert.assertEquals(mMessage, 5, settingItems.size());
     }
 
     @Test
@@ -325,7 +329,7 @@ public final class TestCommonSettings {
                 mDevice.findObject(mFunUiObjects.getSleepTimeSettingItemContainerSelector());
         UiObject2 itemKey =
                 sleepSettingContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "休眠设置", itemKey.getText());
+        Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[0], itemKey.getText());
 
         mMessage = "Verify the default value of sleep time setting.";
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(sleepSettingContainer);
@@ -379,7 +383,7 @@ public final class TestCommonSettings {
         UiObject2 shutDownTimeItem =
                 mDevice.findObject(mFunUiObjects.getShutDownTimeSettingItemContainerSelector());
         UiObject2 itemKey = shutDownTimeItem.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, TEXT_SHUTDOWN_TV_TIME, itemKey.getText());
+        Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[1], itemKey.getText());
 
         mMessage = "Verify the default value of set shutdown tv time.";
         UiObject2 itemValue =
@@ -596,7 +600,7 @@ public final class TestCommonSettings {
 
         mMessage = "Verify the key text of set shutdown tv time.";
         UiObject2 itemKey = itemContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, TEXT_SHUTDOWN_TV_TIME, itemKey.getText());
+        Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[1], itemKey.getText());
 
         mMessage = "Verify the default value of set shutdown tv time.";
         UiObject2 itemValue = mTask.getTextViewOfSwitcher(itemContainer);
@@ -897,6 +901,108 @@ public final class TestCommonSettings {
         inputMethod = mTask.getTextViewOfSwitcher(
                 mDevice.findObject(mFunUiObjects.getInputMethodSettingItemContainerSelector()));
         Assert.assertEquals(mMessage, TEXT_INPUT_METHOD, inputMethod.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test41SystemLanguageSettingItemOnAdvance() {
+        mTask.openAdvancedSettingsPage();
+
+        mMessage = "Verify the title of system language setting item.";
+        UiObject2 languageContainer = mDevice.findObject(
+                mFunUiObjects.getSystemLanguageSettingItemContainerSelector());
+        UiObject2 languageTitle =
+                languageContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
+        Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[4], languageTitle.getText());
+
+        mMessage = "Verify the value of system language setting item.";
+        UiObject2 languageValue =
+                languageContainer.findObject(mFunUiObjects.getSettingItemValueSelector());
+        Assert.assertEquals(mMessage, "中文", languageValue.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test42SubValuesOfSystemLanguageSettingItem() {
+        mTask.openAdvancedSettingsPage();
+        mTask.moveToSpecifiedSettingsItem(
+                mFunUiObjects.getSystemLanguageSettingItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionCenter());
+
+        mMessage = "Verify the system language selection dialog is shown.";
+        UiObject2 dialogTitle = mDevice.findObject(mFunUiObjects.getTitleOfCommonDialogSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(dialogTitle));
+
+        mMessage = "Verify the title text of system language dialog.";
+        Assert.assertEquals(mMessage, "系统语言选择", dialogTitle.getText());
+
+        mMessage = "Verify the language selection Chinese.";
+        UiObject2 itemChinese =
+                mDevice.findObject(mFunUiObjects.getConfirmBtnOfCommonDialogSelector());
+        Assert.assertEquals(mMessage, "中文 (中国)", itemChinese.getText());
+
+        mMessage = "Verify the language selection English.";
+        UiObject2 itemEnglish =
+                mDevice.findObject(mFunUiObjects.getCancelBtnOfCommonDialogSelector());
+        Assert.assertEquals(mMessage, "English (United States)", itemEnglish.getText());
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test43SetSystemLanguageAndCancel() {
+        mTask.openAdvancedSettingsPage();
+        mTask.openSystemLanguageSelectionDialog();
+        ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
+
+        mMessage = "Verify the language selection Chinese is default focused.";
+        UiObject2 itemChinese =
+                mDevice.findObject(mFunUiObjects.getConfirmBtnOfCommonDialogSelector());
+        Assert.assertTrue(mMessage, itemChinese.isFocused());
+
+        mMessage = "Verify language selection dialog is closed after click cancel.";
+        mAction.doDeviceActionAndWait(new DeviceActionBack());
+        UiObject2 advanceTitle =
+                mDevice.findObject(mFunUiObjects.getTitleOfSettingsPageSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(advanceTitle));
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test44ItemsTitleOnAdvanceAfterSetLanguageAsEnglish() {
+        try {
+            mTask.openAdvancedSettingsPage();
+            mTask.openSystemLanguageSelectionDialog();
+            mTask.clickOnCancelButtonOfCommonDialog();
+
+            mMessage = "Verify the title of advanced page after set system language as English.";
+            UiObject2 advanceTitle =
+                    mDevice.findObject(mFunUiObjects.getTitleOfSettingsPageSelector());
+            TestHelper.waitForUiObjectEnabled(advanceTitle);
+            Assert.assertEquals(mMessage, "Advanced Settings", advanceTitle.getText());
+
+            mMessage = "Verify the count of advance setting items.";
+            UiObject2 settingsContainer = mDevice.findObject(
+                    mFunUiObjects.getSettingItemsContainerOnAdvancedSelector());
+            List<UiObject2> settingItems = settingsContainer.findObjects(
+                    By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).depth(1));
+            Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS_EN.length, settingItems.size());
+
+            mMessage = "Verify the advance setting item text at position %d.";
+            UiObject2 title;
+            for (int i = 0, size = settingItems.size(); i < size; i++) {
+                title = settingItems.get(i).findObject(mFunUiObjects.getSettingItemKeySelector());
+                Assert.assertEquals(
+                        String.format(mMessage, i), ADVANCE_SETTING_ITEMS_EN[i], title.getText());
+            }
+        } finally {
+            mTask.restoreSystemLanguageAsChineseByApp();
+        }
+    }
+
+    @Test
+    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    public void test45ItemsTitleOnMainAfterSetLanguageAsEnglish() {
+        // TODO: 2017/6/7  
     }
 
     @Test

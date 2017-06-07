@@ -26,6 +26,8 @@ import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -207,6 +209,77 @@ public final class TaskSettings {
                 funUiObjects.getShutDownTimeSettingItemContainerSelector());
         action.doDeviceActionAndWait(new DeviceActionCenter());
         TestHelper.waitForTextVisible(TITLE_SET_SHUTDOWN_TIME_DIALOG);
+    }
+
+    public void openSystemLanguageSelectionDialog() {
+        this.moveToSpecifiedSettingsItem(
+                funUiObjects.getSystemLanguageSettingItemContainerSelector());
+        action.doDeviceActionAndWait(new DeviceActionCenter());
+        TestHelper.waitForUiObjectExist(funUiObjects.getTitleOfCommonDialogSelector());
+    }
+
+    private void clickOnConfirmButtonOfCommonDialog() {
+        this.focusOnButtonOfCommonDialog(CommonDialogButtons.CONFIRM_BUTTON);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    public void clickOnCancelButtonOfCommonDialog() {
+        this.focusOnButtonOfCommonDialog(CommonDialogButtons.CANCEL_BUTTON);
+        action.doDeviceActionAndWait(new DeviceActionEnter());
+    }
+
+    private void focusOnButtonOfCommonDialog(CommonDialogButtons dialogButton) {
+        UiObject2 uiButton;
+        DeviceAction uiAction;
+
+        if (dialogButton == CommonDialogButtons.CONFIRM_BUTTON) {
+            uiButton = device.findObject(funUiObjects.getConfirmBtnOfCommonDialogSelector());
+            uiAction = new DeviceActionMoveUp();
+        } else {
+            uiButton = device.findObject(funUiObjects.getCancelBtnOfCommonDialogSelector());
+            uiAction = new DeviceActionMoveDown();
+        }
+
+        if (uiButton.isFocused() || uiButton.isSelected()) {
+            return;
+        }
+
+        for (int i = 0, max = 3; i < max; i++) {
+            action.doDeviceActionAndWait(uiAction);
+            if (uiButton.isFocused() || uiButton.isSelected()) {
+                return;
+            }
+        }
+
+        Assert.fail("focusOnConfirmButtonOfCommonDialog, fail!");
+    }
+
+    private enum CommonDialogButtons {
+        CONFIRM_BUTTON, CANCEL_BUTTON
+    }
+
+    public void restoreSystemLanguageAsChineseByApp() {
+        ShellUtils.startSpecifiedActivity(
+                TestConstants.SETTINGS_PKG_NAME, ".general.AdvancedSettingsActivity");
+        TestHelper.waitForUiObjectEnabled(
+                device.findObject(funUiObjects.getTitleOfSettingsPageSelector()));
+
+        this.openSystemLanguageSelectionDialog();
+        this.clickOnConfirmButtonOfCommonDialog();
+    }
+
+    @SuppressWarnings("unused")
+    public void restoreSystemLanguageAsChineseByFramework() {
+        // cannot update UI from instrument process
+        try {
+            Class<?> cls = Class.forName("com.android.internal.app.LocalePicker");
+            Method updateLocale = cls.getDeclaredMethod("updateLocale", Locale.class);
+            updateLocale.invoke(cls.newInstance(), Locale.CHINESE);
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+            Assert.fail("setSystemLanguageAsEnglishByFramework, failed!");
+        }
     }
 
     public String getValueOfTimeControlOnShutdownDialog(UiObject2 container) {

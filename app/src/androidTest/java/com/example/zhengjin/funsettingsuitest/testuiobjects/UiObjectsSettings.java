@@ -69,6 +69,10 @@ public final class UiObjectsSettings {
         return By.res("tv.fun.settings:id/setting_item_wifi_display");
     }
 
+    public BySelector getSystemLanguageSettingItemContainerSelector() {
+        return By.res("tv.fun.settings:id/setting_item_language");
+    }
+
     public BySelector getScreenSaverSettingItemContainerSelector() {
         return By.res("tv.fun.settings:id/setting_item_screen_saver");
     }
