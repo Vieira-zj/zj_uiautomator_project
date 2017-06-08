@@ -49,7 +49,7 @@ public final class UiObjectsSettings {
         return By.res("tv.fun.settings:id/setting_item_advanced");
     }
 
-    public BySelector getSettingItemsContainerOnAdvancedSelector() {
+    public BySelector getSettingItemsContainerSelector() {
         return By.res("tv.fun.settings:id/settings_container");
     }
 

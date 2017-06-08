@@ -61,7 +61,6 @@ public final class TestCommonSettings {
     private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
 
     private final String TEXT_INPUT_METHOD = "百度输入法TV版";
-    private final String TEXT_SYSTEM_RECOVERY = "恢复出厂设置";
     private final String TEXT_FORBIDDEN = "禁止";
     private final String TEXT_CLOSED = "关闭";
 
@@ -73,6 +72,14 @@ public final class TestCommonSettings {
             {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
     private final String[] SUB_VALUES_WALLPAPER =
             {"星夜如梦", "神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
+
+    private final String[] COMMON_SETTING_ITEMS = {
+            "设备名称", "蓝牙设置", "壁纸", "屏保", "高级设置",
+            "输入法", "安装未知来源应用", "恢复出厂设置"};
+    private final String[] COMMON_SETTING_ITEMS_EN = {
+            "Device Name", "Bluetooth Settings", "Wallpaper", "Screensaver",
+            "Advanced Settings", "Input method", "Install unknown source app",
+            "Restore to factory settings"};
     private final String[] ADVANCE_SETTING_ITEMS =
             {"休眠设置", "定时关机", "信源自动全屏", "无线投屏", "语言切换"};
     private final String[] ADVANCE_SETTING_ITEMS_EN = {
@@ -83,7 +90,6 @@ public final class TestCommonSettings {
     private UiActionsManager mAction;
     private UiObjectsSettings mFunUiObjects;
     private TaskSettings mTask;
-
     private String mMessage;
 
     @BeforeClass
@@ -131,7 +137,7 @@ public final class TestCommonSettings {
         mMessage = "Verify the device name item is focused as default.";
         Assert.assertTrue(mMessage, deviceNameContainer.isFocused());
 
-        UiObject2 deviceNameKey = deviceNameContainer.findObject(By.text("设备名称"));
+        UiObject2 deviceNameKey = deviceNameContainer.findObject(By.text(COMMON_SETTING_ITEMS[0]));
         mMessage = "Verify the device name key text.";
         Assert.assertNotNull(mMessage, deviceNameKey);
 
@@ -259,7 +265,7 @@ public final class TestCommonSettings {
         UiObject2 advancedPageTitle =
                 mDevice.findObject(mFunUiObjects.getTitleOfSettingsPageSelector());
         TestHelper.waitForUiObjectEnabled(advancedPageTitle);
-        Assert.assertEquals("高级设置", advancedPageTitle.getText());
+        Assert.assertEquals(COMMON_SETTING_ITEMS[4], advancedPageTitle.getText());
     }
 
     @Test
@@ -313,7 +319,7 @@ public final class TestCommonSettings {
         ShellUtils.systemWaitByMillis(WAIT);
 
         UiObject2 settingItemsContainer =
-                mDevice.findObject(mFunUiObjects.getSettingItemsContainerOnAdvancedSelector());
+                mDevice.findObject(mFunUiObjects.getSettingItemsContainerSelector());
         List<UiObject2> settingItems = settingItemsContainer.findObjects(
                 By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).maxDepth(1));
         Assert.assertEquals(mMessage, 5, settingItems.size());
@@ -636,7 +642,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test18_01ScreenSaverDefaultValue() {
-        mTask.scrollMoveToSpecificSettingsItem("屏保");
+        mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[3]);
 
         mMessage = "Verify the default value of screen saver.";
         UiObject2 screenSaverContainer =
@@ -695,7 +701,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test21InstallUnknownAppDefaultValue() {
-        mTask.scrollMoveToSpecificSettingsItem("安装未知来源应用");
+        mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[6]);
 
         mMessage = "Verify the default value text of install unknown app settings item.";
         UiObject2 installUnknownAppItemContainer = mDevice.findObject(
@@ -768,7 +774,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test25SystemRecoverDialogAndClickCancel() {
-        mTask.scrollMoveToSpecificSettingsItem(TEXT_SYSTEM_RECOVERY);
+        mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[7]);
         UiObject2 recoverItem =
                 mDevice.findObject(mFunUiObjects.getSystemRecoverSettingItemSelector());
         mAction.doClickActionAndWait(recoverItem);  // open dialog
@@ -793,7 +799,7 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test26SaveInfoOnSystemRecoverDialog() {
-        mTask.scrollMoveToSpecificSettingsItem(TEXT_SYSTEM_RECOVERY);
+        mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[7]);
         UiObject2 recoverItem =
                 mDevice.findObject(mFunUiObjects.getSystemRecoverSettingItemSelector());
         mAction.doClickActionAndWait(recoverItem);  // open dialog
@@ -827,7 +833,7 @@ public final class TestCommonSettings {
 
         mMessage = "Verify the item key for wallpaper setting item.";
         UiObject2 itemKey = itemWallpaper.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "壁纸", itemKey.getText());
+        Assert.assertEquals(mMessage, COMMON_SETTING_ITEMS[2], itemKey.getText());
         mMessage = "Verify the default wallpaper.";
         UiObject2 itemValue = itemWallpaper.findObject(mFunUiObjects.getSettingItemValueSelector());
         Assert.assertEquals(mMessage, SUB_VALUES_WALLPAPER[0], itemValue.getText());
@@ -876,7 +882,7 @@ public final class TestCommonSettings {
 
         mMessage = "Verify the item key for input method setting item.";
         UiObject2 itemKey = itemInput.findObject(mFunUiObjects.getSettingItemKeySelector());
-        Assert.assertEquals(mMessage, "输入法", itemKey.getText());
+        Assert.assertEquals(mMessage, COMMON_SETTING_ITEMS[5], itemKey.getText());
 
         mMessage = "Verify the default input method.";
         UiObject2 inputMethod = mTask.getTextViewOfSwitcher(itemInput);
@@ -915,7 +921,7 @@ public final class TestCommonSettings {
                 languageContainer.findObject(mFunUiObjects.getSettingItemKeySelector());
         Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS[4], languageTitle.getText());
 
-        mMessage = "Verify the value of system language setting item.";
+        mMessage = "Verify the value of system language setting item is default chinese.";
         UiObject2 languageValue =
                 languageContainer.findObject(mFunUiObjects.getSettingItemValueSelector());
         Assert.assertEquals(mMessage, "中文", languageValue.getText());
@@ -981,18 +987,17 @@ public final class TestCommonSettings {
             Assert.assertEquals(mMessage, "Advanced Settings", advanceTitle.getText());
 
             mMessage = "Verify the count of advance setting items.";
-            UiObject2 settingsContainer = mDevice.findObject(
-                    mFunUiObjects.getSettingItemsContainerOnAdvancedSelector());
+            UiObject2 settingsContainer =
+                    mDevice.findObject(mFunUiObjects.getSettingItemsContainerSelector());
             List<UiObject2> settingItems = settingsContainer.findObjects(
                     By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).depth(1));
             Assert.assertEquals(mMessage, ADVANCE_SETTING_ITEMS_EN.length, settingItems.size());
 
-            mMessage = "Verify the advance setting item text at position %d.";
+            mMessage = "Verify the advance setting item text(English) at position %d.";
             UiObject2 title;
             for (int i = 0, size = settingItems.size(); i < size; i++) {
                 title = settingItems.get(i).findObject(mFunUiObjects.getSettingItemKeySelector());
-                Assert.assertEquals(
-                        String.format(mMessage, i), ADVANCE_SETTING_ITEMS_EN[i], title.getText());
+                Assert.assertEquals(mMessage + i, ADVANCE_SETTING_ITEMS_EN[i], title.getText());
             }
         } finally {
             mTask.restoreSystemLanguageAsChineseByApp();
@@ -1002,7 +1007,37 @@ public final class TestCommonSettings {
     @Test
     @Category({CategorySettingsTests.class, CategoryVersion30.class})
     public void test45ItemsTitleOnMainAfterSetLanguageAsEnglish() {
-        // TODO: 2017/6/7  
+        try {
+            mTask.openAdvancedSettingsPage();
+            mTask.openSystemLanguageSelectionDialog();
+            mTask.clickOnCancelButtonOfCommonDialog();
+
+            mMessage = "Verify the title of main page after set system language as English.";
+            Assert.assertTrue(TestHelper.waitForActivityOpenedByShellCmd(
+                    TestConstants.SETTINGS_PKG_NAME, TestConstants.ADVANCE_SETTINGS_HOME_ACT));
+            mAction.doDeviceActionAndWait(new DeviceActionBack());
+
+            UiObject2 mainTitle =
+                    mDevice.findObject(mFunUiObjects.getTitleOfSettingsPageSelector());
+            TestHelper.waitForUiObjectEnabled(mainTitle);
+            Assert.assertEquals(mMessage, "General Settings", mainTitle.getText());
+
+            mMessage = "Verify the count of common setting items.";
+            UiObject2 settingsContainer =
+                    mDevice.findObject(mFunUiObjects.getSettingItemsContainerSelector());
+            List<UiObject2> settingItems = settingsContainer.findObjects(
+                    By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).depth(1));
+            Assert.assertEquals(mMessage, COMMON_SETTING_ITEMS_EN.length, settingItems.size());
+
+            mMessage = "Verify the common setting item text(English) at position %d.";
+            UiObject2 title;
+            for (int i = 0, size = settingItems.size(); i < size; i++) {
+                title = settingItems.get(i).findObject(mFunUiObjects.getSettingItemKeySelector());
+                Assert.assertEquals(mMessage + i, COMMON_SETTING_ITEMS_EN[i], title.getText());
+            }
+        } finally {
+            mTask.restoreSystemLanguageAsChineseByApp();
+        }
     }
 
     @Test
