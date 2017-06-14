@@ -78,7 +78,7 @@ public final class TestCommonSettings {
             "输入法", "安装未知来源应用", "恢复出厂设置"};
     private final String[] COMMON_SETTING_ITEMS_EN = {
             "Device Name", "Bluetooth Settings", "Wallpaper", "Screensaver",
-            "Advanced Settings", "Input method", "Install unknown source app",
+            "Advanced Settings", "Input Method", "Install unknown source app",
             "Restore to factory settings"};
     private final String[] ADVANCE_SETTING_ITEMS =
             {"休眠设置", "定时关机", "信源自动全屏", "无线投屏", "语言切换"};
@@ -1027,11 +1027,12 @@ public final class TestCommonSettings {
                     mDevice.findObject(mFunUiObjects.getSettingItemsContainerSelector());
             List<UiObject2> settingItems = settingsContainer.findObjects(
                     By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).depth(1));
-            Assert.assertEquals(mMessage, COMMON_SETTING_ITEMS_EN.length, settingItems.size());
+            final int expectedLength = COMMON_SETTING_ITEMS_EN.length - 1;
+            Assert.assertEquals(mMessage, expectedLength, settingItems.size());
 
             mMessage = "Verify the common setting item text(English) at position %d.";
             UiObject2 title;
-            for (int i = 0, size = settingItems.size(); i < size; i++) {
+            for (int i = 0; i < expectedLength; i++) {
                 title = settingItems.get(i).findObject(mFunUiObjects.getSettingItemKeySelector());
                 Assert.assertEquals(mMessage + i, COMMON_SETTING_ITEMS_EN[i], title.getText());
             }
