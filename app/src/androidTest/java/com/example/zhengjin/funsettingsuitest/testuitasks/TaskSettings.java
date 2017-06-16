@@ -261,6 +261,7 @@ public final class TaskSettings {
     public void restoreSystemLanguageAsChineseByApp() {
         ShellUtils.startSpecifiedActivity(
                 TestConstants.SETTINGS_PKG_NAME, ".general.AdvancedSettingsActivity");
+        ShellUtils.systemWaitByMillis(TestConstants.WAIT);
         TestHelper.waitForUiObjectEnabled(
                 device.findObject(funUiObjects.getTitleOfSettingsPageSelector()));
 

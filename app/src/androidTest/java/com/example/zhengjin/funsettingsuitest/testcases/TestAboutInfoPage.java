@@ -41,6 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHORT_WAIT;
 import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAIT;
 
 /**
@@ -131,7 +132,7 @@ public final class TestAboutInfoPage {
         mAction.doMultipleDeviceActionsAndWait(new DeviceAction[]{
                 new DeviceActionMoveLeft(), new DeviceActionMoveLeft(),
                 new DeviceActionMoveUp(), new DeviceActionMoveLeft()}, 500L);
-        ShellUtils.systemWaitByMillis(WAIT);
+        ShellUtils.systemWaitByMillis(SHORT_WAIT);
 
         mMessage = "Verify the hidden apps version item is shown after short keys.";
         UiObject2 appsVersionItem =

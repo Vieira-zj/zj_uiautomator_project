@@ -468,6 +468,7 @@ public final class TestFileManager {
 
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
+        mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_NAME);
 
         mMessage = "Verify the video file is hidden from video category.";
         UiObject2 fileHiddenFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
@@ -491,6 +492,7 @@ public final class TestFileManager {
 
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
+        mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_NAME);
 
         mMessage = "Verify the video file is shown from video category.";
         UiObject2 fileShownFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
@@ -537,6 +539,7 @@ public final class TestFileManager {
 
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
+        mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_NAME);
 
         mMessage = "Verify all video files(%s) in directory is shown from Video category.";
         UiObject2 videoFileTest1 = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
@@ -554,13 +557,14 @@ public final class TestFileManager {
         mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
         mTask.moveUntilSpecifiedItemSelected(TEST1_VIDEO_FILE_NAME);
 
-        mMessage = "Verify the video file is removed after click Show All button.";
+        mMessage = "Verify the video file is removed after click Remove button.";
         this.removeFileAndConfirm();
         UiObject2 fileRemovedFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
         Assert.assertNull(mMessage, fileRemovedFromAll);
 
         this.backToFileManagerHome();
         mTask.openCategoryVideoCard();
+        mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_NAME);
 
         mMessage = "Verify the video file is removed from video category.";
         UiObject2 fileRemovedFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
@@ -575,6 +579,7 @@ public final class TestFileManager {
     @Category(CategoryFileManagerTests.class)
     public void test41_06RemoveVideoFileFromVideoCategory() {
         mTask.openCategoryVideoCard();
+        mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_NAME);
         mTask.moveUntilSpecifiedItemSelected(TEST2_VIDEO_FILE_NAME);
 
         mMessage = "Verify the video file is removed from video category.";

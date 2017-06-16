@@ -22,7 +22,8 @@ import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -217,20 +218,15 @@ public final class TaskFileManager {
     // path like: android/data/tv.fun.filemanager
     // or: /android/data/tv.fun.filemanager/
     private List<String> parsePath(String path) {
-        int levels = 20;
-        List<String> dirs = new ArrayList<>(levels);
+        Assert.assertFalse("parsePath, invalid path: " + path, StringUtils.isEmpty(path));
 
         String[] tempDirs = path.split("/");
-        for (String dir : tempDirs) {
-            if (!StringUtils.isEmpty(dir)) {
-                dirs.add(dir);
-            }
-        }
-        if (dirs.size() == 0) {
-            Assert.assertTrue("parsePath, error: the dirs size is 0.", false);
-        }
+        Assert.assertTrue("parsePath, exception: the dirs size is 0.", tempDirs.length > 0);
 
-        return dirs;
+        if (tempDirs.length == 1) {
+            return Collections.singletonList(path);
+        }
+        return Arrays.asList(tempDirs);
     }
 
     public void showMenuAndClickBtn(String btnText) {
