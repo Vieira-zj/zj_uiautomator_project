@@ -587,9 +587,10 @@ public final class TestFileManager {
     @Test
     @Category({CategoryFileManagerTests.class})
     public void test42_01OpenPictureFile() {
-        final File testPicFile = mTask.createPicTestFile(mDevice);
+        ShellUtils.clearScreenCaptureFiles();
 
         mMessage = "Verify open the picture file by image browser.";
+        final File testPicFile = mTask.createPicTestFile(mDevice);
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(testPicFile.getAbsolutePath());
 

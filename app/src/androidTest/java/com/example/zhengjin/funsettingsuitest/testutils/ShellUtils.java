@@ -249,6 +249,16 @@ public final class ShellUtils {
         return filePath;
     }
 
+    public static int clearScreenCaptureFiles() {
+        final String tmpCmd = String.format("rm %s/*.png", SNAPSHOT_PATH);
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(tmpCmd, false, true);
+        if (cr.mReturnCode != 0) {
+            Log.w(TAG, TestConstants.LOG_KEYWORD + cr.mErrorMsg);
+        }
+
+        return cr.mReturnCode;
+    }
+
     private static boolean createTestingDirectory(String path) {
         File testDirPath = new File(path);
         return testDirPath.exists() || testDirPath.mkdirs();

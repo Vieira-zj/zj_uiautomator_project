@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -76,12 +77,12 @@ public final class TestConstants {
 
     private static String getSnapshotDirPath() {
         final String TEST_SNAPSHOT_DIR_NAME = "snapshots";
-        return String.format("%s/%s", getTestingRootPath(), TEST_SNAPSHOT_DIR_NAME);
+        return getTestingRootPath() + File.separator + TEST_SNAPSHOT_DIR_NAME;
     }
 
     private static String getLogcatLogDirPath() {
         final String TEST_LOGCAT_DIR_NAME = "logcat_log";
-        return String.format("%s/%s", getTestingRootPath(), TEST_LOGCAT_DIR_NAME);
+        return getTestingRootPath() + File.separator + TEST_LOGCAT_DIR_NAME;
     }
 
     public enum FunSystemVersion {

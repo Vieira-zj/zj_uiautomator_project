@@ -225,17 +225,19 @@ public final class TestShellUtils {
     @Test
     @Category(CategoryDemoTests.class)
     public void test13RemoveFile() {
+        final int SUCCESS = 0;
+        Assert.assertEquals("Clear snapshots files.",
+                SUCCESS, ShellUtils.clearScreenCaptureFiles());
+
         final String path = Environment.getExternalStorageDirectory() + File.separator +
                 "auto_test_logs/snapshots/snapshot_2017-06-20_11-15-21-393.png";
-
         File testFile = new File(path);
-        Log.d(TAG, TestConstants.LOG_KEYWORD + "remove file: " +
-                testFile.getParentFile().getName() + File.separator + testFile.getName());
-
-//        testFile.deleteOnExit();
         if (testFile.exists() && testFile.isFile()) {
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "remove file: " +
+                    testFile.getParentFile().getName() + File.separator + testFile.getName());
             Assert.assertTrue(testFile.delete());
         }
+//        testFile.deleteOnExit();
     }
 
     @Test
