@@ -60,10 +60,11 @@
             android:exported="false" />
     </application>
 
-    <instrumentation
-        android:name=".test.JacocoInstrumentation"
-        android:handleProfiling="true"
-        android:label="CoverageInstrumentation"
-        android:targetPackage="com.example.zhengjin.funsettingsuitest" />
+    <!--suppress AndroidDomInspection -->
+    <!--<instrumentation-->
+    <!--android:name=".test.JacocoInstrumentation"-->
+    <!--android:handleProfiling="true"-->
+    <!--android:label="CoverageInstrumentation"-->
+    <!--android:targetPackage="com.example.zhengjin.funsettingsuitest" />-->
 
 </manifest>

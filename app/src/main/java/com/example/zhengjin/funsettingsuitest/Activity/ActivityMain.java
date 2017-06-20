@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.example.zhengjin.funsettingsuitest.R;
 import com.example.zhengjin.funsettingsuitest.TestApplication;
-import com.example.zhengjin.funsettingsuitest.test.JacocoInstrumentation;
+import com.example.zhengjin.funsettingsuitest.test.JacocoHelper;
 import com.example.zhengjin.funsettingsuitest.utils.HelperUtils;
 
 public class ActivityMain extends AppCompatActivity {
@@ -19,19 +19,19 @@ public class ActivityMain extends AppCompatActivity {
     private Button mBtnStartUtilsTest2 = null;
     private Button mBtnExit = null;
 
-    private boolean mIsJacocoCoverageEnable = TestApplication.IS_COVERAGE_TEST_ENABLE;
-    private JacocoInstrumentation instrumentation = null;
+    private boolean mIsGenerateCoverageFile = TestApplication.IS_COVERAGE_TEST_ENABLE;
+    private JacocoHelper jacocoHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // use instrumented activity instead of directly inject code in main activity
-        if (mIsJacocoCoverageEnable) {
+        if (mIsGenerateCoverageFile) {
             String tmpFileName = String.format("coverage_%s.ec", HelperUtils.getCurrentTime());
-            instrumentation = new JacocoInstrumentation();
+            jacocoHelper = new JacocoHelper();
             try {
-                instrumentation.createCoverageFile(tmpFileName);
+                jacocoHelper.createCoverageFile(tmpFileName);
             } catch (Exception e) {
                 e.printStackTrace();
                 this.finish();
@@ -101,8 +101,8 @@ public class ActivityMain extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        if (mIsJacocoCoverageEnable && instrumentation != null) {
-            instrumentation.generateCoverageReport();
+        if (mIsGenerateCoverageFile && jacocoHelper != null) {
+            jacocoHelper.generateCoverageReport();
         }
 
         super.onDestroy();

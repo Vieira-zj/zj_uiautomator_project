@@ -24,46 +24,50 @@ import java.io.OutputStream;
  * Run command:
  * $ adb shell am instrument com.example.zhengjin.funsettingsuitest/.test.JacocoInstrumentation
  */
-public class JacocoInstrumentation extends Instrumentation implements FinishListener {
+public class JacocoHelper implements FinishListener {
 
-    private static final String TAG = "JacocoInstrumentation:";
+    private static final String TAG = "JacocoHelper:";
 
     private Intent mIntent;
     private String mCoverageFilePath;
 
-    public JacocoInstrumentation() {
+    public JacocoHelper() {
     }
 
-    @Override
-    public void onCreate(Bundle arguments) {
-        super.onCreate(arguments);
-        try {
-            this.createCoverageFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.finish(-1, null);
+    // if public, JacocoInstrumentation will be set as default test runner
+    private class JacocoInstrumentation extends Instrumentation {
+        @Override
+        public void onCreate(Bundle arguments) {
+            super.onCreate(arguments);
+            try {
+                JacocoHelper.this.createCoverageFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.finish(-1, null);
+            }
+
+            // init intent and start instrument
+            mIntent = new Intent(this.getTargetContext(), InstrumentedActivity.class);
+            mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.start();
         }
 
-        // init intent and start instrument
-        mIntent = new Intent(this.getTargetContext(), InstrumentedActivity.class);
-        mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.start();
-    }
+        @Override
+        public void onStart() {
+            super.onStart();
+            Looper.prepare();
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Looper.prepare();
-
-        // start instrumented activity and set callback
-        InstrumentedActivity activity = (InstrumentedActivity) this.startActivitySync(mIntent);
-        activity.setFinishListener(this);
+            // start instrumented activity and set callback
+            InstrumentedActivity activity = (InstrumentedActivity) this.startActivitySync(mIntent);
+            activity.setFinishListener(JacocoHelper.this);
+        }
     }
 
     @Override
     public void onActivityFinished() {
         this.generateCoverageReport();
-        this.finish(Activity.RESULT_OK, new Bundle());
+        Instrumentation instrumentation = new JacocoInstrumentation();
+        instrumentation.finish(Activity.RESULT_OK, new Bundle());
     }
 
     private void createCoverageFile() throws Exception {
