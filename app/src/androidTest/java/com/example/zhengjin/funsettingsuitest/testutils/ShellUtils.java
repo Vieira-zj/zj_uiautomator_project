@@ -234,17 +234,19 @@ public final class ShellUtils {
         }
     }
 
-    public static void takeScreenCapture(UiDevice device) {
+    public static String takeScreenCapture(UiDevice device) {
         if (!createTestingDirectory(SNAPSHOT_PATH)) {
-            return;
+            return "";
         }
 
         final String suffix = ".png";
         String filePath = String.format(
                 "%s/snapshot_%s%s", SNAPSHOT_PATH, ShellUtils.getCurrentDateTime(), suffix);
         if (!device.takeScreenshot(new File(filePath))) {
-            Log.e(TAG, String.format("takeScreenCapture failed, save path: %s", filePath));
+            Log.e(TAG, "takeScreenCapture failed, save path: " + filePath);
         }
+
+        return filePath;
     }
 
     private static boolean createTestingDirectory(String path) {

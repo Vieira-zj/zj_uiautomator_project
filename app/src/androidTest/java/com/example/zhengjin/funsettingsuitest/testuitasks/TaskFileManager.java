@@ -17,11 +17,13 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsFileManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 import com.example.zhengjin.funsettingsuitest.utils.StringUtils;
 
 import junit.framework.Assert;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -116,7 +118,7 @@ public final class TaskFileManager {
     }
 
     private void clickOnSpecifiedCardOfFileManagerHome(int positionX, int positionY) {
-        Assert.assertTrue("openLocalFilesCard, error click at position.",
+        Assert.assertTrue("clickOnSpecifiedCardOfFileManagerHome, error when click at position.",
                 device.click(positionX, positionY));
         ShellUtils.systemWaitByMillis(WAIT);
     }
@@ -158,8 +160,6 @@ public final class TaskFileManager {
 
     private void clickOnSpecifiedItemFromCurrentDir(String itemName, boolean flag_bottom) {
         // Item for both directory and file
-        final int ScrollSteps = 5;
-
         UiScrollable fileList = new UiScrollable(new UiSelector()
                 .resourceId("tv.fun.filemanager:id/activity_sub_grid"));
         fileList.setAsVerticalList();
@@ -167,6 +167,7 @@ public final class TaskFileManager {
             fileList.scrollTextIntoView(itemName);
             ShellUtils.systemWaitByMillis(SHORT_WAIT);
             if (flag_bottom) {
+                final int ScrollSteps = 5;
                 fileList.scrollForward(ScrollSteps);
                 ShellUtils.systemWaitByMillis(SHORT_WAIT);
             }
@@ -254,6 +255,31 @@ public final class TaskFileManager {
     public void showMenuAndRequestFocus() {
         action.doDeviceActionAndWait(new DeviceActionMenu());
         action.doDeviceActionAndWait(new DeviceActionMoveDown());  // request focus
+    }
+
+    public File createPicTestFile(UiDevice device) {
+        final String mMessage = "createPicTestFile, for testing setup.";
+        String savedPath = ShellUtils.takeScreenCapture(device);
+        Assert.assertFalse(mMessage, StringUtils.isEmpty(savedPath));
+
+        File testPicFile = new File(savedPath);
+        Assert.assertTrue(mMessage, testPicFile.exists() && testPicFile.isFile());
+
+        return testPicFile;
+    }
+
+    public void deleteTestFile(File testPicFile) {
+        if (testPicFile.exists() && testPicFile.isFile()) {
+            Assert.assertTrue("deleteTestFile, for testing clear up.", testPicFile.delete());
+        }
+    }
+
+    public void restartFileManagerApp() {
+        ShellUtils.stopProcessByPackageName(TestConstants.FILE_MANAGER_PKG_NAME);
+        ShellUtils.systemWaitByMillis(TestConstants.SHORT_WAIT);
+        ShellUtils.startSpecifiedActivity(
+                TestConstants.FILE_MANAGER_PKG_NAME, TestConstants.FILE_MANAGER_HOME_ACT);
+        ShellUtils.systemWaitByMillis(TestConstants.WAIT);
     }
 
 }

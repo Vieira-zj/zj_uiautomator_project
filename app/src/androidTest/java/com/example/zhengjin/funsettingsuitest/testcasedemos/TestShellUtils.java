@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -33,6 +34,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -217,6 +219,22 @@ public final class TestShellUtils {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 3.0");
         } else {
             Log.d(TAG, TestConstants.LOG_KEYWORD + "Version number is 2.0");
+        }
+    }
+
+    @Test
+    @Category(CategoryDemoTests.class)
+    public void test13RemoveFile() {
+        final String path = Environment.getExternalStorageDirectory() + File.separator +
+                "auto_test_logs/snapshots/snapshot_2017-06-20_11-15-21-393.png";
+
+        File testFile = new File(path);
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "remove file: " +
+                testFile.getParentFile().getName() + File.separator + testFile.getName());
+
+//        testFile.deleteOnExit();
+        if (testFile.exists() && testFile.isFile()) {
+            Assert.assertTrue(testFile.delete());
         }
     }
 

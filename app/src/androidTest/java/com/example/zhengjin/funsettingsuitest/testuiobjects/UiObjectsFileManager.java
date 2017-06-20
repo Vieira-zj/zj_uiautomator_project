@@ -85,4 +85,8 @@ public final class UiObjectsFileManager {
         return By.res("tv.fun.filemanager:id/sub_blank_tips");
     }
 
+    public BySelector getMenuContainerOfImageBrowserSelector() {
+        return By.res("tv.fun.filemanager:id/menu_item_container");
+    }
+
 }
