@@ -42,7 +42,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 /**
  * Created by zhengjin on 2016/6/6.
  * <p>
- * Include the UI selectors and tasks for settings apk.
+ * Include general tasks for settings apk.
  */
 public final class TaskSettings {
 

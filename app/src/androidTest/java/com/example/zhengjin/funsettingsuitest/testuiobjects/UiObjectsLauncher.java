@@ -34,16 +34,15 @@ public class UiObjectsLauncher {
         return By.res("com.bestv.ott:id/container");
     }
 
-    public BySelector getQuickAccessBtnSettingsSelector() {
+    public BySelector getQuickAccessTabSettingsSelector() {
         return By.res("com.bestv.ott:id/setting");
     }
 
-    public BySelector getQuickAccessBtnWeatherSelector() {
+    public BySelector getQuickAccessTabWeatherSelector() {
         return By.res("com.bestv.ott:id/weather");
     }
 
-    @SuppressWarnings("unused")
-    public BySelector getQuickAccessBtnNetworkSelector() {
+    public BySelector getQuickAccessTabNetworkSelector() {
         return By.res("com.bestv.ott:id/network");
     }
 

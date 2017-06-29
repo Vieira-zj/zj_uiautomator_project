@@ -165,10 +165,10 @@ public final class TaskLauncher {
         ACTION.doDeviceActionAndWait(new DeviceActionEnter(), LONG_WAIT);
     }
 
-    public static void clickOnButtonFromTopQuickAccessBar(BySelector selector) {
+    private static void enterOnTabFromTopQuickAccessBar(BySelector selector) {
         showLauncherTopBar();
         UiObject2 quickAccessBtn = DEVICE.findObject(selector);
-        Assert.assertNotNull("clickOnButtonFromTopQuickAccessBar, " +
+        Assert.assertNotNull("enterOnTabFromTopQuickAccessBar, " +
                 "the settings button from top bar is NOT found.", quickAccessBtn);
 
         if (!quickAccessBtn.isFocused()) {
@@ -187,7 +187,7 @@ public final class TaskLauncher {
     }
 
     public static void openSettingsFromLauncherQuickAccessBar() {
-        clickOnButtonFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessBtnSettingsSelector());
+        enterOnTabFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessTabSettingsSelector());
 
         if (RunnerProfile.isVersion30) {
             UiObject2 settingsCard = TestHelper.waitForUiObjectExistAndReturn(
@@ -195,15 +195,23 @@ public final class TaskLauncher {
             ACTION.doClickActionAndWait(settingsCard);
             ACTION.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
         }
-        Assert.assertTrue("openCommonSettingsHomePage, open failed!",
+        Assert.assertTrue("openSettingsFromLauncherQuickAccessBar, open failed!",
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
+
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+    }
+
+    public static void openNetworkConfigFromLauncherQuickAccessBar() {
+        enterOnTabFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessTabNetworkSelector());
+        Assert.assertTrue("openNetworkConfigFromLauncherQuickAccessBar, open failed!",
                 TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
 
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
     public static void openWeatherFromLauncherQuickAccessBar() {
-        clickOnButtonFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessBtnWeatherSelector());
-        Assert.assertTrue("openWeatherHomePage, open failed!",
+        enterOnTabFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessTabWeatherSelector());
+        Assert.assertTrue("openWeatherFromLauncherQuickAccessBar, open failed!",
                 TestHelper.waitForAppOpenedByUntil(WEATHER_PKG_NAME));
     }
 

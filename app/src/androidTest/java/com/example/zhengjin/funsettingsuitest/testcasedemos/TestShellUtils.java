@@ -373,7 +373,7 @@ public final class TestShellUtils {
         if (cr.mReturnCode == 0) {
             msg = "Success and return content: " + cr.mSuccessMsg;
         } else {
-            msg = String.format(Locale.getDefault(),
+            msg = format(Locale.getDefault(),
                     "return code %d, and error message %s", cr.mReturnCode, cr.mErrorMsg);
         }
         Log.d(TAG, TestConstants.LOG_KEYWORD + msg);
