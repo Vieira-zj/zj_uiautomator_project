@@ -53,9 +53,9 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestCommonSettings {
+public final class TestGeneralSettings {
 
-    private static final String TAG = TestCommonSettings.class.getSimpleName();
+    private static final String TAG = TestGeneralSettings.class.getSimpleName();
 
     private final String SELECT_DEVICE_NAME = "书房的电视";
     private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
@@ -1044,8 +1044,8 @@ public final class TestCommonSettings {
     @Test
     @Category(CategorySettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskSettings.destroyInstance();
+        UiObjectsSettings.destroyInstance();
     }
 
 }

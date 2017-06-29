@@ -10,19 +10,26 @@ import android.support.test.uiautomator.BySelector;
  */
 public final class UiObjectsSettings {
 
-    private static UiObjectsSettings ourInstance = new UiObjectsSettings();
+    private static UiObjectsSettings ourInstance;
+
+    private UiObjectsSettings() {
+    }
 
     public static UiObjectsSettings getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsSettings.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsSettings();
+                }
+            }
+        }
         return ourInstance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }
-    }
-
-    private UiObjectsSettings() {
     }
 
     public BySelector getTitleOfSettingsPageSelector() {

@@ -28,7 +28,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 
 public final class TaskImageAndSound {
 
-    private static TaskImageAndSound instance = null;
+    private static TaskImageAndSound instance;
 
     private UiDevice device;
     private UiActionsManager action;
@@ -42,14 +42,18 @@ public final class TaskImageAndSound {
         funUiObjects = UiObjectsImageAndSound.getInstance();
     }
 
-    public static synchronized TaskImageAndSound getInstance() {
+    public static TaskImageAndSound getInstance() {
         if (instance == null) {
-            instance = new TaskImageAndSound();
+            synchronized (TaskImageAndSound.class) {
+                if (instance == null) {
+                    instance = new TaskImageAndSound();
+                }
+            }
         }
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

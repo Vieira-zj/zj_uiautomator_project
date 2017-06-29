@@ -677,8 +677,8 @@ public final class TestAboutInfoPage {
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskAboutInfo.destroyInstance();
+        UiObjectsAboutInfo.destroyInstance();
     }
 
     private String getCatchLogBtnTextInFeedbackMenu() {

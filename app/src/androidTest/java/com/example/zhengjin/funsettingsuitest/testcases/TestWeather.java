@@ -502,8 +502,8 @@ public final class TestWeather {
     @Test
     @Category(CategoryWeatherTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskWeather.destroyInstance();
+        UiObjectsWeather.destroyInstance();
     }
 
     private class dateComparator implements Comparator<String> {

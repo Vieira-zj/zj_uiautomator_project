@@ -1,6 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
-import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
+import com.example.zhengjin.funsettingsuitest.testcases.TestGeneralSettings;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
 
 import org.junit.experimental.categories.Categories;
@@ -14,6 +14,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory(CategoryVersion20.class)
-@Suite.SuiteClasses(TestCommonSettings.class)
+@Suite.SuiteClasses(TestGeneralSettings.class)
 public final class SettingsTestsSuite {
 }

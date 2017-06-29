@@ -53,14 +53,18 @@ public final class TaskFileManager {
         funUiObjects = UiObjectsFileManager.getInstance();
     }
 
-    public static synchronized TaskFileManager getInstance() {
+    public static TaskFileManager getInstance() {
         if (instance == null) {
-            instance = new TaskFileManager();
+            synchronized (TaskFileManager.class) {
+                if (instance == null) {
+                    instance = new TaskFileManager();
+                }
+            }
         }
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

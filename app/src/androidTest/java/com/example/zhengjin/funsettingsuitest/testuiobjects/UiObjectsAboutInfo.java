@@ -10,16 +10,23 @@ import android.support.test.uiautomator.BySelector;
  */
 public final class UiObjectsAboutInfo {
 
-    private static UiObjectsAboutInfo ourInstance = new UiObjectsAboutInfo();
-
-    public static UiObjectsAboutInfo getInstance() {
-        return ourInstance;
-    }
+    private static UiObjectsAboutInfo ourInstance;
 
     private UiObjectsAboutInfo() {
     }
 
-    public void destroyInstance() {
+    public static UiObjectsAboutInfo getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsAboutInfo.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsAboutInfo();
+                }
+            }
+        }
+        return ourInstance;
+    }
+
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }

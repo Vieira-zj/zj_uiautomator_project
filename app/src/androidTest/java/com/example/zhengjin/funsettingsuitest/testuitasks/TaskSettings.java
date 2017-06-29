@@ -46,7 +46,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskSettings {
 
-    private static TaskSettings instance = null;
+    private static TaskSettings instance;
 
     private UiDevice device;
     private UiActionsManager action;
@@ -62,12 +62,16 @@ public final class TaskSettings {
 
     public static synchronized TaskSettings getInstance() {
         if (instance == null) {
-            instance = new TaskSettings();
+            synchronized (TaskSettings.class) {
+                if (instance == null) {
+                    instance = new TaskSettings();
+                }
+            }
         }
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

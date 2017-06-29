@@ -11,16 +11,23 @@ import android.support.test.uiautomator.BySelector;
 
 public class UiObjectsLauncher {
 
-    private static UiObjectsLauncher ourInstance = new UiObjectsLauncher();
-
-    public static UiObjectsLauncher getInstance() {
-        return ourInstance;
-    }
+    private static UiObjectsLauncher ourInstance;
 
     private UiObjectsLauncher() {
     }
 
-    public void destroyInstance() {
+    public static UiObjectsLauncher getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsLauncher.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsLauncher();
+                }
+            }
+        }
+        return ourInstance;
+    }
+
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }

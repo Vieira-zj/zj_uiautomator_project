@@ -60,7 +60,7 @@ public final class TaskVideoHomeTab {
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

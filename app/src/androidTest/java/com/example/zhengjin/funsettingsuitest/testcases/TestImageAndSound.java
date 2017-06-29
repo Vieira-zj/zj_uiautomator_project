@@ -44,7 +44,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestImageAndSoundSettings {
+public final class TestImageAndSound {
 
     private final String TURN_ON_TEXT = "已开启";
     private final String TURN_OFF_TEXT = "已关闭";
@@ -545,8 +545,8 @@ public final class TestImageAndSoundSettings {
     @Test
     @Category(CategoryImageAndSoundSettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskImageAndSound.destroyInstance();
+        UiObjectsImageAndSound.destroyInstance();
     }
 
     private void openImageParamsPageFromImageAndSound() {

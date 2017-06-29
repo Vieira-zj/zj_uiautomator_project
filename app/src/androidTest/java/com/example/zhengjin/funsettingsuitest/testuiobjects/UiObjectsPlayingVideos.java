@@ -11,19 +11,26 @@ import android.support.test.uiautomator.BySelector;
 
 public final class UiObjectsPlayingVideos {
 
-    private static UiObjectsPlayingVideos ourInstance = new UiObjectsPlayingVideos();
+    private static UiObjectsPlayingVideos ourInstance;
+
+    private UiObjectsPlayingVideos() {
+    }
 
     public static UiObjectsPlayingVideos getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsPlayingVideos.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsPlayingVideos();
+                }
+            }
+        }
         return ourInstance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }
-    }
-
-    private UiObjectsPlayingVideos() {
     }
 
     public BySelector getVideoPlayerByClassSelector() {

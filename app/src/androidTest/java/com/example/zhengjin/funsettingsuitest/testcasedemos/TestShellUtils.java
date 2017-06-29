@@ -14,7 +14,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
+import com.example.zhengjin.funsettingsuitest.testcases.TestGeneralSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
@@ -77,7 +77,7 @@ public final class TestShellUtils {
     @Category(CategoryDemoTests.class)
     public void test01PrintTestCasesName() {
         int count = 0;
-        Class<?>[] classes = {TestCommonSettings.class, TestFileManager.class, TestWeather.class};
+        Class<?>[] classes = {TestGeneralSettings.class, TestFileManager.class, TestWeather.class};
         for (Class<?> cls : classes) {
             count += RunnerProfile.countAndPrintTestCasesForClass(cls);
         }

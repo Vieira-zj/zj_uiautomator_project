@@ -1,10 +1,10 @@
 package com.example.zhengjin.funsettingsuitest.testsuites;
 
 import com.example.zhengjin.funsettingsuitest.testcases.TestAboutInfoPage;
-import com.example.zhengjin.funsettingsuitest.testcases.TestCommonSettings;
+import com.example.zhengjin.funsettingsuitest.testcases.TestGeneralSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestHomeVideoTab;
-import com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSoundSettings;
+import com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
@@ -41,10 +41,10 @@ import org.junit.runners.Suite;
 //@Categories.IncludeCategory(CategoryDemoTests.class)
 @Categories.ExcludeCategory({CategoryVersion20.class})
 @Suite.SuiteClasses({
-        TestCommonSettings.class,
+        TestGeneralSettings.class,
         TestFileManager.class,
         TestWeather.class,
-        TestImageAndSoundSettings.class,
+        TestImageAndSound.class,
         TestAboutInfoPage.class,
         TestHomeVideoTab.class})
 public final class AllTestsSuite {

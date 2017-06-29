@@ -708,8 +708,8 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskFileManager.destroyInstance();
+        UiObjectsFileManager.destroyInstance();
     }
 
     private void backToFileManagerHome() {

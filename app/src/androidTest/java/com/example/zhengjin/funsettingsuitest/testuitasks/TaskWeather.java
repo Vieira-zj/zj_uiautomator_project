@@ -49,14 +49,18 @@ public final class TaskWeather {
         funUiObjects = UiObjectsWeather.getInstance();
     }
 
-    public static synchronized TaskWeather getInstance() {
+    public static TaskWeather getInstance() {
         if (instance == null) {
-            instance = new TaskWeather();
+            synchronized (TaskWeather.class) {
+                if (instance == null) {
+                    instance = new TaskWeather();
+                }
+            }
         }
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

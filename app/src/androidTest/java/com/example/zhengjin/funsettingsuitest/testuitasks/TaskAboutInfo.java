@@ -54,15 +54,18 @@ public final class TaskAboutInfo {
         funUiObjects = UiObjectsAboutInfo.getInstance();
     }
 
-    public static synchronized TaskAboutInfo getInstance() {
+    public static TaskAboutInfo getInstance() {
         if (instance == null) {
-            instance = new TaskAboutInfo();
+            synchronized (TaskAboutInfo.class) {
+                if (instance == null) {
+                    instance = new TaskAboutInfo();
+                }
+            }
         }
-
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

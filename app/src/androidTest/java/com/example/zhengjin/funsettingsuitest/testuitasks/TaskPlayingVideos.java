@@ -54,14 +54,18 @@ public final class TaskPlayingVideos {
         funUiObjects = UiObjectsPlayingVideos.getInstance();
     }
 
-    public static synchronized TaskPlayingVideos getInstance() {
+    public static TaskPlayingVideos getInstance() {
         if (instance == null) {
-            instance = new TaskPlayingVideos();
+            synchronized (TaskPlayingVideos.class) {
+                if (instance == null) {
+                    instance = new TaskPlayingVideos();
+                }
+            }
         }
         return instance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (instance != null) {
             instance = null;
         }

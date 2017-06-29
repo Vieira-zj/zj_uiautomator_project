@@ -10,16 +10,23 @@ import android.support.test.uiautomator.BySelector;
  */
 public final class UiObjectsImageAndSound {
 
-    private static UiObjectsImageAndSound ourInstance = new UiObjectsImageAndSound();
-
-    public static UiObjectsImageAndSound getInstance() {
-        return ourInstance;
-    }
+    private static UiObjectsImageAndSound ourInstance;
 
     private UiObjectsImageAndSound() {
     }
 
-    public void destroyInstance() {
+    public static UiObjectsImageAndSound getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsImageAndSound.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsImageAndSound();
+                }
+            }
+        }
+        return ourInstance;
+    }
+
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }

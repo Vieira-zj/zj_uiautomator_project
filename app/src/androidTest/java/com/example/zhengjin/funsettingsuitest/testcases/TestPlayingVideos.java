@@ -227,9 +227,9 @@ public final class TestPlayingVideos {
     @Test
     @Category({Category24x7LauncherTests.class})
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mTaskVideoHomeTab.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskPlayingVideos.destroyInstance();
+        TaskVideoHomeTab.destroyInstance();
+        UiObjectsPlayingVideos.destroyInstance();
     }
 
     private void logTestVideoStart(String videoTitle) {

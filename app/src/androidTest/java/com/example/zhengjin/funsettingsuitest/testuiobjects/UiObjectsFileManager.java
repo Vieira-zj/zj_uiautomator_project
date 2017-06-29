@@ -6,23 +6,30 @@ import android.support.test.uiautomator.BySelector;
 /**
  * Created by zhengjin on 2017/2/28.
  * <p>
- * Include the UI obejcts for file manager apk.
+ * Include the UI objects for file manager apk.
  */
 public final class UiObjectsFileManager {
 
-    private static UiObjectsFileManager ourInstance = new UiObjectsFileManager();
+    private static UiObjectsFileManager ourInstance;
+
+    private UiObjectsFileManager() {
+    }
 
     public static UiObjectsFileManager getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsFileManager.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsFileManager();
+                }
+            }
+        }
         return ourInstance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }
-    }
-
-    private UiObjectsFileManager() {
     }
 
     public BySelector getFileManagerHomeTabSelector() {

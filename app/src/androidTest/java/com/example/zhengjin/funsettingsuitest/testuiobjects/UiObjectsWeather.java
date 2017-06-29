@@ -10,16 +10,23 @@ import android.support.test.uiautomator.BySelector;
  */
 public final class UiObjectsWeather {
 
-    private static UiObjectsWeather ourInstance = new UiObjectsWeather();
-
-    public static UiObjectsWeather getInstance() {
-        return ourInstance;
-    }
+    private static UiObjectsWeather ourInstance;
 
     private UiObjectsWeather() {
     }
 
-    public void destroyInstance() {
+    public static UiObjectsWeather getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsWeather.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsWeather();
+                }
+            }
+        }
+        return ourInstance;
+    }
+
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }

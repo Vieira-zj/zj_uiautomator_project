@@ -11,19 +11,26 @@ import android.support.test.uiautomator.BySelector;
 
 public final class UiObjectsVideoHomeTab {
 
-    private static UiObjectsVideoHomeTab ourInstance = new UiObjectsVideoHomeTab();
+    private static UiObjectsVideoHomeTab ourInstance;
+
+    private UiObjectsVideoHomeTab() {
+    }
 
     public static UiObjectsVideoHomeTab getInstance() {
+        if (ourInstance == null) {
+            synchronized (UiObjectsVideoHomeTab.class) {
+                if (ourInstance == null) {
+                    ourInstance = new UiObjectsVideoHomeTab();
+                }
+            }
+        }
         return ourInstance;
     }
 
-    public void destroyInstance() {
+    public static synchronized void destroyInstance() {
         if (ourInstance != null) {
             ourInstance = null;
         }
-    }
-
-    private UiObjectsVideoHomeTab() {
     }
 
     public BySelector getCardTitleOfLauncherHomeLeftAreaSelector() {

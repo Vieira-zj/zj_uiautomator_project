@@ -238,8 +238,8 @@ public final class TestHomeVideoTab {
     @Test
     @Category({CategoryHomeVideoTabTests.class})
     public void test99ClearUpAfterAllTestCasesDone() {
-        mTask.destroyInstance();
-        mFunUiObjects.destroyInstance();
+        TaskVideoHomeTab.destroyInstance();
+        UiObjectsVideoHomeTab.destroyInstance();
     }
 
 }
