@@ -4,7 +4,7 @@ import com.example.zhengjin.funsettingsuitest.testcases.TestAboutInfoPage;
 import com.example.zhengjin.funsettingsuitest.testcases.TestGeneralSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestHomeVideoTab;
-import com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSound;
+import com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSoundConfigs;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
@@ -44,7 +44,7 @@ import org.junit.runners.Suite;
         TestGeneralSettings.class,
         TestFileManager.class,
         TestWeather.class,
-        TestImageAndSound.class,
+        TestImageAndSoundConfigs.class,
         TestAboutInfoPage.class,
         TestHomeVideoTab.class})
 public final class AllTestsSuite {

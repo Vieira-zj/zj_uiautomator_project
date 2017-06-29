@@ -45,11 +45,12 @@ public final class TestConstants {
     public final static String VIDEO_SUB_PAGE_ACT = ".retrieve.RetrieveActivity";
     public final static String VIDEO_PLAYER_ACT = ".player.FunVideoPlayerActivity";
 
-    public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
+    public final static String CLASS_RELATIVE_LAYOUT = "android.widget.RelativeLayout";
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
     public final static String CLASS_TEXT_SWITCHER = "android.widget.TextSwitcher";
     public final static String CLASS_WEB_VIEW = "android.webkit.WebView";
-    public final static String CLASS_RELATIVE_LAYOUT = "android.widget.RelativeLayout";
+    public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
+    public final static String CLASS_EDIT_VIEW = "android.widget.EditText";
 
     public final static String TEST_ROOT_DIR_PATH = getTestingRootPath();
     final static String SNAPSHOT_PATH = getSnapshotDirPath();

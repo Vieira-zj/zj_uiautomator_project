@@ -7,6 +7,7 @@ import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsNetworkConfigs;
+import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 
 import java.util.List;
@@ -45,6 +46,34 @@ public final class TaskNetworkConfigs {
         if (instance != null) {
             instance = null;
         }
+    }
+
+    private final String DEFAULT_NULL_IP = "0.0.0.0";
+
+    public String getIpAddressFromSystemProperties() {
+        return this.getPropValueFromSystemProperties("dhcp.eth0.ipaddress");
+    }
+
+    public String getGatewayIpFromSystemProperties() {
+        return this.getPropValueFromSystemProperties("dhcp.eth0.gateway");
+    }
+
+    private String getPropValueFromSystemProperties(String propName) {
+        final String CMD = "getprop | grep " + propName;
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(CMD, false, true);
+        return cr.mReturnCode == 0 ?
+                this.getValueFromPropertyKeyValuePair(cr.mSuccessMsg) : DEFAULT_NULL_IP;
+    }
+
+    private String getValueFromPropertyKeyValuePair(String results) {
+        String propValue = results.split(":")[1].trim();
+        return propValue.substring(1, propValue.length() - 1);
+    }
+
+    public String getDnsIpAddressFromSystemConfigs() {
+        final String CMD = "cat /etc/resolv.conf";
+        ShellUtils.CommandResult cr = ShellUtils.execCommand(CMD, false, true);
+        return cr.mReturnCode == 0 ? cr.mSuccessMsg.split(" ")[1].trim() : DEFAULT_NULL_IP;
     }
 
     public List<UiObject2> getWifiHotSpotsList() {

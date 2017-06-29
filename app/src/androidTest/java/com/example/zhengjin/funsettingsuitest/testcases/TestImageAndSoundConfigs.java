@@ -44,7 +44,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestImageAndSound {
+public final class TestImageAndSoundConfigs {
 
     private final String TURN_ON_TEXT = "已开启";
     private final String TURN_OFF_TEXT = "已关闭";

@@ -195,9 +195,9 @@ public final class TaskLauncher {
             ACTION.doClickActionAndWait(settingsCard);
             ACTION.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
         }
+
         Assert.assertTrue("openSettingsFromLauncherQuickAccessBar, open failed!",
                 TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
-
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
@@ -205,7 +205,6 @@ public final class TaskLauncher {
         enterOnTabFromTopQuickAccessBar(UI_OBJECTS.getQuickAccessTabNetworkSelector());
         Assert.assertTrue("openNetworkConfigFromLauncherQuickAccessBar, open failed!",
                 TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
-
         ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
     }
 
