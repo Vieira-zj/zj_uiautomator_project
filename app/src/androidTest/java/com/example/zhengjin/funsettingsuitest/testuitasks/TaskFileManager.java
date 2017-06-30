@@ -78,10 +78,11 @@ public final class TaskFileManager {
             ShellUtils.startSpecifiedActivity(FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT);
             ShellUtils.systemWaitByMillis(WAIT);
         } else {
-            TaskLauncher.openSpecifiedAppFromAppTab("文件管理");
+            final String TEXT_FILE_MANAGER = "文件管理";
+            TaskLauncher.openSpecifiedAppFromAppTab(TEXT_FILE_MANAGER);
         }
 
-        Assert.assertTrue("openFileManagerHomePage, open failed!",
+        Assert.assertTrue("openFileManagerHomePage, failed!",
                 TestHelper.waitForActivityOpenedByShellCmd(
                         FILE_MANAGER_PKG_NAME, FILE_MANAGER_HOME_ACT));
     }
@@ -260,9 +261,9 @@ public final class TaskFileManager {
         action.doDeviceActionAndWait(new DeviceActionMoveDown());  // request focus
     }
 
-    public File createPicTestFile(UiDevice device) {
+    public File createPicTestFile(UiDevice device, String dirPath) {
         final String mMessage = "createPicTestFile, for testing setup.";
-        String savedPath = ShellUtils.takeScreenCapture(device);
+        String savedPath = ShellUtils.takeScreenCapture(device, dirPath);
         Assert.assertFalse(mMessage, StringUtils.isEmpty(savedPath));
 
         File testPicFile = new File(savedPath);

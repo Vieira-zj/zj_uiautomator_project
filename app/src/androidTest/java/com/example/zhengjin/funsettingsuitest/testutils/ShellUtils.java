@@ -235,33 +235,45 @@ public final class ShellUtils {
     }
 
     public static String takeScreenCapture(UiDevice device) {
-        if (!createTestingDirectory(SNAPSHOT_PATH)) {
+        return takeScreenCapture(device, SNAPSHOT_PATH);
+    }
+
+    public static String takeScreenCapture(UiDevice device, String dirPath) {
+        if (!createTestingDirectory(dirPath)) {
+            Log.e(TAG, TestConstants.LOG_KEYWORD + "takeScreenCapture, failed to create directory: "
+                    + dirPath);
             return "";
         }
 
         final String suffix = ".png";
-        String filePath = String.format(
-                "%s/snapshot_%s%s", SNAPSHOT_PATH, ShellUtils.getCurrentDateTime(), suffix);
+        String filePath = dirPath + File.separator +
+                String.format("snapshot_%s%s", ShellUtils.getCurrentDateTime(), suffix);
         if (!device.takeScreenshot(new File(filePath))) {
-            Log.e(TAG, "takeScreenCapture failed, save path: " + filePath);
+            Log.e(TAG, TestConstants.LOG_KEYWORD + "takeScreenCapture failed, saved path: "
+                    + filePath);
         }
 
         return filePath;
     }
 
-    public static int clearScreenCaptureFiles() {
-        final String tmpCmd = String.format("rm %s/*.png", SNAPSHOT_PATH);
+    private static boolean createTestingDirectory(String path) {
+        File testDirPath = new File(path);
+        return (testDirPath.exists() && testDirPath.isDirectory()) || testDirPath.mkdirs();
+    }
+
+    @SuppressWarnings("unused")
+    public static int deleteAllFilesFromDirectory(String dirPath) {
+        return deleteAllFilesFromDirectory(dirPath, "*");
+    }
+
+    public static int deleteAllFilesFromDirectory(String dirPath, String pattern) {
+        final String tmpCmd = String.format("rm %s/%s", dirPath, pattern);
         ShellUtils.CommandResult cr = ShellUtils.execCommand(tmpCmd, false, true);
         if (cr.mReturnCode != 0) {
             Log.w(TAG, TestConstants.LOG_KEYWORD + cr.mErrorMsg);
         }
 
         return cr.mReturnCode;
-    }
-
-    private static boolean createTestingDirectory(String path) {
-        File testDirPath = new File(path);
-        return testDirPath.exists() || testDirPath.mkdirs();
     }
 
     public static void stopProcessByPackageName(String pkgName) {

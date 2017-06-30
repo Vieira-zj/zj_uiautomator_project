@@ -55,6 +55,8 @@ public final class TestFileManager {
     private static final String TEST_DIR_PATH;
     private static final String TEST_MEDIA_DIR_NAME = "TestMediaDir";
     private static final String TEST_MEDIA_DIR_PATH;
+    private static final String TEST_PIC_DIR_NAME = "TestPicDir";
+    private static final String TEST_PIC_DIR_PATH;
 
     private static final String TEST1_FILE_NAME = "TestFile1.log";
     private static final String TEST1_FILE_PATH;
@@ -99,6 +101,8 @@ public final class TestFileManager {
         TEST_MEDIA_DIR_PATH = TEST_ROOT_DIR_PATH + File.separator + TEST_MEDIA_DIR_NAME;
         TEST1_VIDEO_FILE_PATH = TEST_MEDIA_DIR_PATH + File.separator + TEST1_VIDEO_FILE_NAME;
         TEST2_VIDEO_FILE_PATH = TEST_MEDIA_DIR_PATH + File.separator + TEST2_VIDEO_FILE_NAME;
+
+        TEST_PIC_DIR_PATH = TEST_ROOT_DIR_PATH + File.separator + TEST_PIC_DIR_NAME;
     }
 
     @BeforeClass
@@ -114,13 +118,13 @@ public final class TestFileManager {
 
     private static void prepareData() {
         String message = "Prepare files for file manager test.";
-        String cmdCreateTestDir = String.format("mkdir -p %s", TEST_DIR_PATH);
-        String cmdCreateTxtFile1 = String.format("touch %s", TEST1_FILE_PATH);
-        String cmdCreateTxtFile2 = String.format("touch %s", TEST2_FILE_PATH);
+        String cmdCreateTestDir = "mkdir -p " + TEST_DIR_PATH;
+        String cmdCreateTxtFile1 = "touch " + TEST1_FILE_PATH;
+        String cmdCreateTxtFile2 = "touch " + TEST2_FILE_PATH;
 
-        String cmdCreateMediaDir = String.format("mkdir -p %s", TEST_MEDIA_DIR_PATH);
-        String cmdCreateVideoFile1 = String.format("touch %s", TEST1_VIDEO_FILE_PATH);
-        String cmdCreateVideoFile2 = String.format("touch %s", TEST2_VIDEO_FILE_PATH);
+        String cmdCreateMediaDir = "mkdir -p " + TEST_MEDIA_DIR_PATH;
+        String cmdCreateVideoFile1 = "touch " + TEST1_VIDEO_FILE_PATH;
+        String cmdCreateVideoFile2 = "touch " + TEST2_VIDEO_FILE_PATH;
 
         String commands[] = {cmdCreateTestDir, cmdCreateTxtFile1, cmdCreateTxtFile2,
                 cmdCreateMediaDir, cmdCreateVideoFile1, cmdCreateVideoFile2};
@@ -383,13 +387,14 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test31MessageWhenEmptyForAppCard() {
-        mTask.openCategoryAppCard();
+        final String MESSAGE_TEXT_NO_APPS_FOUND = "未发现可安装的应用";
 
         mMessage = "Verify the tips when no files in APP card.";
+        mTask.openCategoryAppCard();
         UiObject2 tips = mDevice.findObject(
                 mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, "未发现可安装的应用", tips.getText());
+        Assert.assertEquals(mMessage, MESSAGE_TEXT_NO_APPS_FOUND, tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in APP card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());
@@ -583,10 +588,11 @@ public final class TestFileManager {
     @Test
     @Category({CategoryFileManagerTests.class})
     public void test42_01OpenPictureFile() {
-        ShellUtils.clearScreenCaptureFiles();
+        final String pattern = "*.png";
+        ShellUtils.deleteAllFilesFromDirectory(TEST_PIC_DIR_PATH, pattern);
 
         mMessage = "Verify open the picture file by image browser.";
-        final File testPicFile = mTask.createPicTestFile(mDevice);
+        final File testPicFile = mTask.createPicTestFile(mDevice, TEST_PIC_DIR_PATH);
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(testPicFile.getAbsolutePath());
 
@@ -601,10 +607,10 @@ public final class TestFileManager {
         UiObject2 container = mDevice.findObject(
                 mFunUiObjects.getMenuContainerOfImageBrowserSelector());
         UiObject2 uiBtnTest;
-        for (String buttonText : buttonsText) {
+        for (String btnText : buttonsText) {
             mAction.doDeviceActionAndWait(new DeviceActionMoveDown(), 500L);
-            uiBtnTest = container.findObject(By.text(buttonText));
-            Assert.assertNotNull(mMessage + buttonText, uiBtnTest);
+            uiBtnTest = container.findObject(By.text(btnText));
+            Assert.assertNotNull(mMessage + btnText, uiBtnTest);
         }
 
         mTask.deleteTestFile(testPicFile);
@@ -613,16 +619,13 @@ public final class TestFileManager {
     @Test
     @Category({CategoryFileManagerTests.class})
     public void test42_02RemovePictureFileFromLocalDir() {
-        File testPicFile = mTask.createPicTestFile(mDevice);
+        File testPicFile = mTask.createPicTestFile(mDevice, TEST_PIC_DIR_PATH);
 
         mMessage = "Verify picture file is delete after click Remove menu button.";
         mTask.openLocalFilesCard();
         mTask.navigateToSpecifiedPath(testPicFile.getAbsolutePath());
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
-
-        mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
-        UiObject2 confirmBtn = mDevice.findObject(mFunUiObjects.getYesBtnOfConfirmDialogSelector());
-        mAction.doClickActionAndWait(confirmBtn);
+        this.removeFileAndConfirm();
 
         UiObject2 fileDeleted = mDevice.findObject(By.text(testPicFile.getName()));
         Assert.assertNull(mMessage, fileDeleted);
@@ -633,18 +636,15 @@ public final class TestFileManager {
     @Test
     @Category({CategoryFileManagerTests.class})
     public void test42_03RemovePictureFileFromPicCategory() {
-        File testPicFile = mTask.createPicTestFile(mDevice);
-        mTask.restartFileManagerApp();  // restart app to trigger file scan
+        File testPicFile = mTask.createPicTestFile(mDevice, TEST_PIC_DIR_PATH);
 
+        mTask.restartFileManagerApp();  // restart app to trigger file scan
         mTask.openCategoryPictureCard();
         mTask.navigateToSpecifiedPath(testPicFile.getParentFile().getName());
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
 
         mMessage = "Verify picture file is delete after click Remove menu button.";
-        mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
-        UiObject2 confirmBtn = mDevice.findObject(mFunUiObjects.getYesBtnOfConfirmDialogSelector());
-        mAction.doClickActionAndWait(confirmBtn);
-
+        this.removeFileAndConfirm();
         UiObject2 uiTip = mDevice.findObject(
                 mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(uiTip));
@@ -680,13 +680,14 @@ public final class TestFileManager {
     @Test
     @Category(CategoryFileManagerTests.class)
     public void test43_02MessageWhenEmptyForMusicCard() {
-        mTask.openCategoryMusicCard();
+        final String MESSAGE_TEXT_NO_MUSIC_FOUND = "未发现可播放的音乐";
 
         mMessage = "Verify the tips when no files in music card.";
+        mTask.openCategoryMusicCard();
         UiObject2 tips = mDevice.findObject(
                 mFunUiObjects.getTipsOfEmptyDirFromLocalFilesCardSelector());
         Assert.assertNotNull(tips);
-        Assert.assertEquals(mMessage, "未发现可播放的音乐", tips.getText());
+        Assert.assertEquals(mMessage, MESSAGE_TEXT_NO_MUSIC_FOUND, tips.getText());
 
         mMessage = "Verify the menu is NOT shown when no files in music card.";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());

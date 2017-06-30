@@ -93,7 +93,7 @@ public final class TestConstants {
     }
 
     private static String getSnapshotDirPath() {
-        final String TEST_SNAPSHOT_DIR_NAME = "snapshots";
+        final String TEST_SNAPSHOT_DIR_NAME = ".snapshots";
         return getTestingRootPath() + File.separator + TEST_SNAPSHOT_DIR_NAME;
     }
 
