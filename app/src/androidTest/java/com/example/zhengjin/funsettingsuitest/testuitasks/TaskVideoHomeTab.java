@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.annotation.Nullable;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -16,6 +15,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRigh
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -48,7 +48,7 @@ public final class TaskVideoHomeTab {
     public static final String TEXT_CARD_TV = "电视剧";
 
     private TaskVideoHomeTab() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         funUiObjects = UiObjectsVideoHomeTab.getInstance();
         action = UiActionsManager.getInstance();
     }

@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
@@ -55,7 +54,7 @@ public final class TaskSettings {
     public final String TITLE_SET_SHUTDOWN_TIME_DIALOG = "设置定时关机";
 
     private TaskSettings() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsSettings.getInstance();
     }

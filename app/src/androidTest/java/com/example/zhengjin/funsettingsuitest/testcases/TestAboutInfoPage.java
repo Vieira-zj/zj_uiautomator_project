@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.os.Build;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -53,8 +52,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestAboutInfoPage {
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsAboutInfo mFunUiObjects = UiObjectsAboutInfo.getInstance();
     private final TaskAboutInfo mTask = TaskAboutInfo.getInstance();

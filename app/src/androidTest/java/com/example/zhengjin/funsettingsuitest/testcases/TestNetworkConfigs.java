@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -44,8 +43,7 @@ public final class TestNetworkConfigs {
 
     private static final String TAG = TestNetworkConfigs.class.getSimpleName();
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsNetworkConfigs mFunUiObjects = UiObjectsNetworkConfigs.getInstance();
     private final TaskNetworkConfigs mTask = TaskNetworkConfigs.getInstance();

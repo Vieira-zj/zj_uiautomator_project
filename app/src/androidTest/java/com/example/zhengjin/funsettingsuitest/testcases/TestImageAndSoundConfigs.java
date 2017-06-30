@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -46,8 +45,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestImageAndSoundConfigs {
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsImageAndSound mFunUiObjects = UiObjectsImageAndSound.getInstance();
     private final TaskImageAndSound mTask = TaskImageAndSound.getInstance();

@@ -44,13 +44,15 @@ public final class TaskLauncher {
 
     private static final String TAG = TaskLauncher.class.getSimpleName();
 
-    private static final UiDevice DEVICE =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private static final UiDevice DEVICE = TestConstants.GetUiDeviceInstance();
     private static final UiActionsManager ACTION = UiActionsManager.getInstance();
     private static final UiObjectsLauncher UI_OBJECTS = UiObjectsLauncher.getInstance();
 
     public static final String[] LAUNCHER_HOME_TABS =
             {"电视", "视频", "体育", "少儿", "应用", "设置", "设置icon"};
+
+    private TaskLauncher() {
+    }
 
     public static void backToLauncher() {
         if (RunnerProfile.isPlatform938) {

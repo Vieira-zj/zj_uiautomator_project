@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.annotation.Nullable;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.Direction;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -49,7 +48,7 @@ public final class TaskPlayingVideos {
     private final UiObjectsPlayingVideos funUiObjects;
 
     private TaskPlayingVideos() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsPlayingVideos.getInstance();
     }

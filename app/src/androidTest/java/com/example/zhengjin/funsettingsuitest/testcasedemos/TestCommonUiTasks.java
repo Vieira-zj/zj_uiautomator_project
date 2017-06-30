@@ -55,7 +55,7 @@ public final class TestCommonUiTasks {
 
     @Before
     public void setUp() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mDevice = TestConstants.GetUiDeviceInstance();
         mFileManagerTask = TaskFileManager.getInstance();
         mAboutInfoTask = TaskAboutInfo.getInstance();
     }

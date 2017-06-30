@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
@@ -49,7 +48,7 @@ public final class TaskAboutInfo {
     private final String MAC_NULL = "00:00:00:00:00:00";
 
     private TaskAboutInfo() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsAboutInfo.getInstance();
     }

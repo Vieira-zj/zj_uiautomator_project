@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.os.SystemClock;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -47,8 +46,7 @@ public final class TestPlayingVideos {
 
     private static final String TAG = TestPlayingVideos.class.getSimpleName();
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsPlayingVideos mFunUiObjects = UiObjectsPlayingVideos.getInstance();
     private final UiObjectsVideoHomeTab mFunUiObjects2 = UiObjectsVideoHomeTab.getInstance();

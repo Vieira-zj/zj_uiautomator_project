@@ -1,5 +1,7 @@
 package com.example.zhengjin.funsettingsuitest.testutils;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.uiautomator.UiDevice;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.utils.FileUtils;
@@ -57,7 +59,20 @@ public final class TestConstants {
 
     private final static String TAG = TestConstants.class.getSimpleName();
 
+    private static UiDevice device;
+
     private TestConstants() {
+    }
+
+    public static UiDevice GetUiDeviceInstance() {
+        if (device == null) {
+            synchronized (TestConstants.class) {
+                if (device == null) {
+                    device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+                }
+            }
+        }
+        return device;
     }
 
     private static String getExternalStoragePath() {

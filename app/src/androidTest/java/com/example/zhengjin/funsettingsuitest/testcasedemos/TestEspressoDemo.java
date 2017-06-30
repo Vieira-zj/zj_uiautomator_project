@@ -20,9 +20,9 @@ import org.junit.runners.MethodSorters;
 
 /**
  * Created by zhengjin on 2016/6/1.
- *
+ * <p>
  * Include UI test cases for demo activity by using Espresso.
- *
+ * <p>
  * Note:
  * Espresso demos run pass on Genymotion virtual system,
  * but failed on funshion TV because of start intent error.
@@ -47,15 +47,15 @@ public final class TestEspressoDemo {
 
     @Test
     public void test1ActDemoEditWithEmpty() {
-        String result = "Hello Message";
+        final String result = "Hello Message";
         ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.text_hello_msg));
         text.check(ViewAssertions.matches(ViewMatchers.withText(result)));
     }
 
     @Test
     public void test2ActDemoEditWithString() {
-        String input = "ZhengJin";
-        String result = "Hello, ZhengJin";
+        final String input = "ZhengJin";
+        final String result = "Hello, ZhengJin";
 
         ViewInteraction edit = Espresso.onView(ViewMatchers.withId(R.id.editor_user_name));
         edit.perform(ViewActions.clearText());
@@ -67,4 +67,5 @@ public final class TestEspressoDemo {
         ViewInteraction text = Espresso.onView(ViewMatchers.withId(R.id.text_hello_msg));
         text.check(ViewAssertions.matches(ViewMatchers.withText(result)));
     }
+
 }

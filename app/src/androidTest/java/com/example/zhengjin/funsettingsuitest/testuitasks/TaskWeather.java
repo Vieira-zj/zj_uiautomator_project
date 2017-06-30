@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -44,7 +43,7 @@ public final class TaskWeather {
     public final String MENU_BUTTON_TEXT_DELETE_CITY = "删除当前";
 
     private TaskWeather() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsWeather.getInstance();
     }

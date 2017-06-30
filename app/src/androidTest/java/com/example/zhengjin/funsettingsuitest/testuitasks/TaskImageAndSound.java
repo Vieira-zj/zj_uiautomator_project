@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -10,6 +9,7 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -37,7 +37,7 @@ public final class TaskImageAndSound {
     public final String IMAGE_AND_SOUND_TEXT = "图像与声音";
 
     private TaskImageAndSound() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsImageAndSound.getInstance();
     }

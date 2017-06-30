@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -15,6 +14,7 @@ import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsWeather;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
+import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -48,8 +48,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestWeather {
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsWeather mFunUiObjects = UiObjectsWeather.getInstance();
     private final TaskWeather mTask = TaskWeather.getInstance();

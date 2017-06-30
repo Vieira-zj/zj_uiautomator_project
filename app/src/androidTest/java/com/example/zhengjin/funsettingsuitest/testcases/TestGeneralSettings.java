@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -57,8 +56,7 @@ public final class TestGeneralSettings {
 
     private static final String TAG = TestGeneralSettings.class.getSimpleName();
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsSettings mFunUiObjects = UiObjectsSettings.getInstance();
     private final TaskSettings mTask = TaskSettings.getInstance();

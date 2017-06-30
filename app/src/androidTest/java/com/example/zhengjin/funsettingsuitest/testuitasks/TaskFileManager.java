@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -48,7 +47,7 @@ public final class TaskFileManager {
     private final UiObjectsFileManager funUiObjects;
 
     private TaskFileManager() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device = TestConstants.GetUiDeviceInstance();
         action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsFileManager.getInstance();
     }

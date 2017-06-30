@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -74,8 +73,7 @@ public final class TestFileManager {
     private final String MESSAGE_TEXT_NO_VIDEO_FOUND = "未发现可播放的视频";
     private final String MESSAGE_TEXT_NO_PIC_FOUND = "未发现可显示的图片";
 
-    private final UiDevice mDevice =
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
     private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsFileManager mFunUiObjects = UiObjectsFileManager.getInstance();
     private final TaskFileManager mTask = TaskFileManager.getInstance();

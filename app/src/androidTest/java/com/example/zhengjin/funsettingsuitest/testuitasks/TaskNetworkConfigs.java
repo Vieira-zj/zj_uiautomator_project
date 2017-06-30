@@ -1,6 +1,5 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -26,7 +25,7 @@ public final class TaskNetworkConfigs {
     private final UiObjectsNetworkConfigs FUN_UI_OBJECTS;
 
     private TaskNetworkConfigs() {
-        DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        DEVICE = TestConstants.GetUiDeviceInstance();
         ACTION = UiActionsManager.getInstance();
         FUN_UI_OBJECTS = UiObjectsNetworkConfigs.getInstance();
     }
