@@ -44,9 +44,9 @@ public final class TaskPlayingVideos {
 
     private static TaskPlayingVideos instance = null;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsPlayingVideos funUiObjects;
+    private final UiDevice device;
+    private final UiActionsManager action;
+    private final UiObjectsPlayingVideos funUiObjects;
 
     private TaskPlayingVideos() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

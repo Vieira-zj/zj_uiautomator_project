@@ -46,6 +46,12 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestImageAndSoundConfigs {
 
+    private final UiDevice mDevice =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiActionsManager mAction = UiActionsManager.getInstance();
+    private final UiObjectsImageAndSound mFunUiObjects = UiObjectsImageAndSound.getInstance();
+    private final TaskImageAndSound mTask = TaskImageAndSound.getInstance();
+
     private final String TURN_ON_TEXT = "已开启";
     private final String TURN_OFF_TEXT = "已关闭";
 
@@ -57,11 +63,6 @@ public final class TestImageAndSoundConfigs {
             {"标准", "10", "50", "50", "50"};
     private final String[] IMAGE_COLOR_TMP_VALUES_ARR = {"暖", "冷", "标准"};
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsImageAndSound mFunUiObjects;
-    private TaskImageAndSound mTask;
-
     private String mMessage;
 
     @BeforeClass
@@ -71,11 +72,6 @@ public final class TestImageAndSoundConfigs {
 
     @Before
     public void setUp() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mAction = UiActionsManager.getInstance();
-        mFunUiObjects = UiObjectsImageAndSound.getInstance();
-        mTask = TaskImageAndSound.getInstance();
-
         TaskLauncher.backToLauncher();
         mTask.openImageAndSoundSettingsPage();
     }

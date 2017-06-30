@@ -14,7 +14,6 @@ import java.io.IOException;
  */
 public final class TestConstants {
 
-    private final static String TAG = TestConstants.class.getSimpleName();
     public final static String LOG_KEYWORD = "ZJTest => ";
 
     public final static long SHORT_WAIT = 1000L;
@@ -55,6 +54,8 @@ public final class TestConstants {
     public final static String TEST_ROOT_DIR_PATH = getTestingRootPath();
     final static String SNAPSHOT_PATH = getSnapshotDirPath();
     final static String LOGCAT_LOG_PATH = getLogcatLogDirPath();
+
+    private final static String TAG = TestConstants.class.getSimpleName();
 
     private TestConstants() {
     }

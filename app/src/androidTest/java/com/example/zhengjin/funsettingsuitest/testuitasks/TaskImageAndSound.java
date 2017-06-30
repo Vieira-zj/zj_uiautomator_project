@@ -30,9 +30,9 @@ public final class TaskImageAndSound {
 
     private static TaskImageAndSound instance;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsImageAndSound funUiObjects;
+    private final UiDevice device;
+    private final UiActionsManager action;
+    private final UiObjectsImageAndSound funUiObjects;
 
     public final String IMAGE_AND_SOUND_TEXT = "图像与声音";
 

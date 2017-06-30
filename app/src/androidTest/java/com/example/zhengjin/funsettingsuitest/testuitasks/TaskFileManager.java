@@ -43,9 +43,9 @@ public final class TaskFileManager {
 
     private static TaskFileManager instance = null;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsFileManager funUiObjects;
+    private final UiDevice device;
+    private final UiActionsManager action;
+    private final UiObjectsFileManager funUiObjects;
 
     private TaskFileManager() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

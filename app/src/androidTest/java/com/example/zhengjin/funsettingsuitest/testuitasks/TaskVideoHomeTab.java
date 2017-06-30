@@ -40,9 +40,9 @@ public final class TaskVideoHomeTab {
 
     private static TaskVideoHomeTab instance = null;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsVideoHomeTab funUiObjects;
+    private final UiDevice device;
+    private final UiActionsManager action;
+    private final UiObjectsVideoHomeTab funUiObjects;
 
     public static final String TEXT_CARD_FILM = "电影";
     public static final String TEXT_CARD_TV = "电视剧";
@@ -263,7 +263,7 @@ public final class TaskVideoHomeTab {
     }
 
     private void focusedOnSignalSourceCardOnHomeTvTab() {
-        TaskLauncher.navigateToSpecifiedTopTab(TaskLauncher.LAUNCHER_HOME_TABS[0]);
+        TaskLauncher.navigateToSpecifiedMainTab(TaskLauncher.LAUNCHER_HOME_TABS[0]);
         action.doDeviceActionAndWait(new DeviceActionMoveDown());
         UiObject2 card = device.findObject(funUiObjects.getSignalSourceCardOnHomeTvTabSelector());
         Assert.assertTrue("focusedOnSignalSourceCardOnHomeTvTab, failed to focus!",

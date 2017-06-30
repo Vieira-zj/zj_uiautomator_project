@@ -42,19 +42,15 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
  */
 public final class TaskLauncher {
 
-    public static final String TAG = TaskLauncher.class.getSimpleName();
+    private static final String TAG = TaskLauncher.class.getSimpleName();
+
+    private static final UiDevice DEVICE =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private static final UiActionsManager ACTION = UiActionsManager.getInstance();
+    private static final UiObjectsLauncher UI_OBJECTS = UiObjectsLauncher.getInstance();
+
     public static final String[] LAUNCHER_HOME_TABS =
             {"电视", "视频", "体育", "少儿", "应用", "设置", "设置icon"};
-
-    private static UiActionsManager ACTION;
-    private static UiDevice DEVICE;
-    private static UiObjectsLauncher UI_OBJECTS;
-
-    static {
-        DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        ACTION = UiActionsManager.getInstance();
-        UI_OBJECTS = UiObjectsLauncher.getInstance();
-    }
 
     public static void backToLauncher() {
         if (RunnerProfile.isPlatform938) {
@@ -91,7 +87,7 @@ public final class TaskLauncher {
         return resolveInfo.activityInfo.packageName;
     }
 
-    public static void navigateToSpecifiedTopTab(String tabText) {
+    public static void navigateToSpecifiedMainTab(String tabText) {
         navigateToVideoTab();
 
         UiObject2 tabApp;
@@ -117,8 +113,7 @@ public final class TaskLauncher {
             }
         }
 
-        Assert.assertTrue(String.format(
-                "navigateToSpecifiedTopTab, tab %s is NOT focused!", tabText), false);
+        Assert.assertTrue("navigateToSpecifiedMainTab, failed to focus on tab: " + tabText, false);
     }
 
     public static void navigateToVideoTab() {
@@ -148,15 +143,15 @@ public final class TaskLauncher {
     }
 
     public static void openSpecifiedAppFromAppTab(String appName) {
-        openSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[4], appName);
+        openSpecifiedCardFromMainTab(LAUNCHER_HOME_TABS[4], appName);
     }
 
     static void openSpecifiedCardFromSettingsTab(String cardText) {
-        openSpecifiedCardFromTopTab(LAUNCHER_HOME_TABS[5], cardText);
+        openSpecifiedCardFromMainTab(LAUNCHER_HOME_TABS[5], cardText);
     }
 
-    private static void openSpecifiedCardFromTopTab(String tabText, String cardText) {
-        navigateToSpecifiedTopTab(tabText);
+    private static void openSpecifiedCardFromMainTab(String tabText, String cardText) {
+        navigateToSpecifiedMainTab(tabText);
         ACTION.doDeviceActionAndWait(new DeviceActionCenter(), WAIT);
 
         UiObject2 appCard = DEVICE.findObject(By.text(cardText));
@@ -169,7 +164,7 @@ public final class TaskLauncher {
         showLauncherTopBar();
         UiObject2 quickAccessBtn = DEVICE.findObject(selector);
         Assert.assertNotNull("enterOnTabFromTopQuickAccessBar, " +
-                "the settings button from top bar is NOT found.", quickAccessBtn);
+                "the tab from top quick access bar is NOT found.", quickAccessBtn);
 
         if (!quickAccessBtn.isFocused()) {
             ACTION.doClickActionAndWait(quickAccessBtn);

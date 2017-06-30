@@ -50,35 +50,51 @@ public final class UiObjectsNetworkConfigs {
         return By.res("tv.fun.settings:id/ethernet_state_tips");
     }
 
-    public BySelector getManualSettingContainerOnWireNetworkConfigsSelector() {
+    public BySelector getWifiHotSpotItemContainerSelector() {
+        return By.res("tv.fun.settings:id/wifi_ap_layer");
+    }
+
+    public BySelector getWifiHotSpotItemTitleSelector() {
+        return By.res("tv.fun.settings:id/wifi_ap_state_title");
+    }
+
+    public BySelector getWifiHotSpotItemTipsSelector() {
+        return By.res("tv.fun.settings:id/wifi_ap_state_tips");
+    }
+
+    public BySelector getManualSettingContainerOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_network_type");
     }
 
-    public BySelector getManualSettingSwitchOnWireNetworkConfigsSelector() {
+    public BySelector getManualSettingSwitchOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_network_switch_text");
     }
 
-    public BySelector getIpAddressContainerOnWireNetworkConfigsSelector() {
+    public BySelector getIpAddressContainerOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_ethernet_ip");
     }
 
-    public BySelector getSubMaskContainerOnWireNetworkConfigsSelector() {
+    public BySelector getSubMaskContainerOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_ethernet_mask");
     }
 
-    public BySelector getGatewayContainerOnWireNetworkConfigsSelector() {
+    public BySelector getGatewayContainerOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_ethernet_gate");
     }
 
-    public BySelector getNdsContainerOnWireNetworkConfigsSelector() {
+    public BySelector getDnsContainerOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_ethernet_dns");
     }
 
-    public BySelector getItemTitleOnWireNetworkConfigsSelector() {
+    public BySelector getSaveButtonOnWiredNetworkConfigsSelector() {
+        return By.res("tv.fun.settings:id/activity_ethernet_save");
+    }
+
+    public BySelector getItemTitleOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/ethernet_item_title");
     }
 
-    public BySelector getItemEditorOnWireNetworkConfigsSelector() {
+    public BySelector getItemEditorOnWiredNetworkConfigsSelector() {
         return By.clazz(TestConstants.CLASS_EDIT_VIEW);
     }
 

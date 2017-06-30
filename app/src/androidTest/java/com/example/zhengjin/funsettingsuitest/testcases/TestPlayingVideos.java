@@ -47,26 +47,20 @@ public final class TestPlayingVideos {
 
     private static final String TAG = TestPlayingVideos.class.getSimpleName();
 
+    private final UiDevice mDevice =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiActionsManager mAction = UiActionsManager.getInstance();
+    private final UiObjectsPlayingVideos mFunUiObjects = UiObjectsPlayingVideos.getInstance();
+    private final UiObjectsVideoHomeTab mFunUiObjects2 = UiObjectsVideoHomeTab.getInstance();
+    private final TaskPlayingVideos mTask = TaskPlayingVideos.getInstance();
+    private final TaskVideoHomeTab mTaskVideoHomeTab = TaskVideoHomeTab.getInstance();
+
     private final int RANDOM_SELECT_NUM = 5;
     private final int PLAY_TIME_BY_SEC = 30;
     private final int RUN_TIMES = 3;
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsPlayingVideos mFunUiObjects;
-    private UiObjectsVideoHomeTab mFunUiObjects2;
-    private TaskPlayingVideos mTask;
-    private TaskVideoHomeTab mTaskVideoHomeTab;
-
     @Before
     public void setUp() {
-        mAction = UiActionsManager.getInstance();
-        mFunUiObjects = UiObjectsPlayingVideos.getInstance();
-        mFunUiObjects2 = UiObjectsVideoHomeTab.getInstance();
-        mTask = TaskPlayingVideos.getInstance();
-        mTaskVideoHomeTab = TaskVideoHomeTab.getInstance();
-
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mDevice.registerWatcher("BufferRefreshFailedWatcher", new BufferRefreshFailedWatcher());
 
         ShellUtils.clearLogcatLog();

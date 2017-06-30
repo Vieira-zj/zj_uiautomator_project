@@ -57,6 +57,12 @@ public final class TestGeneralSettings {
 
     private static final String TAG = TestGeneralSettings.class.getSimpleName();
 
+    private final UiDevice mDevice =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiActionsManager mAction = UiActionsManager.getInstance();
+    private final UiObjectsSettings mFunUiObjects = UiObjectsSettings.getInstance();
+    private final TaskSettings mTask = TaskSettings.getInstance();
+
     private final String SELECT_DEVICE_NAME = "书房的电视";
     private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
 
@@ -86,10 +92,6 @@ public final class TestGeneralSettings {
             "Hibernation Settings", "Scheduled Turn-Off", "Automatic full screen",
             "Wireless Projection Screen", "Language switch"};
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsSettings mFunUiObjects;
-    private TaskSettings mTask;
     private String mMessage;
 
     @BeforeClass
@@ -99,11 +101,6 @@ public final class TestGeneralSettings {
 
     @Before
     public void setUp() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mAction = UiActionsManager.getInstance();
-        mFunUiObjects = UiObjectsSettings.getInstance();
-        mTask = TaskSettings.getInstance();
-
         TaskLauncher.backToLauncher();
         TaskLauncher.openSettingsFromLauncherQuickAccessBar();
     }

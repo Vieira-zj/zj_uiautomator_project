@@ -45,25 +45,16 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestHomeVideoTab {
 
-    private final static String FILM_CARD_TEXT = "电影";
-    private final static String TV_SERIAL_CARD_TEXT = "电视剧";
-    private final static String CHILDREN_CARD_TEXT = "少儿";
-    private final static String VARIETY_CARD_TEXT = "综艺";
-    private final static String FOLLOWING_TV_SERIAL_TEXT = "跟播";
-    private final static String NEWLY_ADD_IN_7_DAYS_TEXT = "7日新增";
+    private final UiDevice mDevice =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiActionsManager mAction = UiActionsManager.getInstance();
+    private final UiObjectsVideoHomeTab mFunUiObjects = UiObjectsVideoHomeTab.getInstance();
+    private final TaskVideoHomeTab mTask = TaskVideoHomeTab.getInstance();
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsVideoHomeTab mFunUiObjects;
-    private TaskVideoHomeTab mTask;
+    private final String[] HOME_VIDEO_TABS = {"电影", "电视剧", "少儿", "综艺", "跟播", "7日新增"};
 
     @Before
     public void setUp() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mAction = UiActionsManager.getInstance();
-        mFunUiObjects = UiObjectsVideoHomeTab.getInstance();
-        mTask = TaskVideoHomeTab.getInstance();
-
         TaskLauncher.backToLauncher();
     }
 
@@ -78,7 +69,7 @@ public final class TestHomeVideoTab {
     // unstable case
     public void test11OpenFilmCardOfLeftArea() {
         UiObject2 filmCard =
-                mTask.getSpecifiedCardFromHomeLeftAreaByText(FILM_CARD_TEXT);
+                mTask.getSpecifiedCardFromHomeLeftAreaByText(HOME_VIDEO_TABS[0]);
         mAction.doClickActionAndWait(filmCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
@@ -99,7 +90,7 @@ public final class TestHomeVideoTab {
     // unstable case
     public void test12OpenTvSerialCardOfLeftArea() {
         UiObject2 tvSerialCard =
-                mTask.getSpecifiedCardFromHomeLeftAreaByText(TV_SERIAL_CARD_TEXT);
+                mTask.getSpecifiedCardFromHomeLeftAreaByText(HOME_VIDEO_TABS[1]);
         mAction.doClickActionAndWait(tvSerialCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
@@ -125,7 +116,7 @@ public final class TestHomeVideoTab {
     // unstable case
     public void test13OpenChildrenCardOfLeftArea() {
         UiObject2 childrenCard =
-                mTask.getSpecifiedCardFromHomeLeftAreaByText(CHILDREN_CARD_TEXT);
+                mTask.getSpecifiedCardFromHomeLeftAreaByText(HOME_VIDEO_TABS[2]);
         mAction.doClickActionAndWait(childrenCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
@@ -146,7 +137,7 @@ public final class TestHomeVideoTab {
     // unstable case
     public void test14OpenVarietyCardOfLeftArea() {
         UiObject2 varietyCard =
-                mTask.getSpecifiedCardFromHomeLeftAreaByText(VARIETY_CARD_TEXT);
+                mTask.getSpecifiedCardFromHomeLeftAreaByText(HOME_VIDEO_TABS[3]);
         mAction.doClickActionAndWait(varietyCard);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
@@ -166,7 +157,7 @@ public final class TestHomeVideoTab {
     @Category({CategoryHomeVideoTabTests.class})
     // UI changes
     public void test21OpenFollowingLatestTvSerialOfRightArea() {
-        UiObject2 card = mTask.getSpecifiedCardFromHomeRightAreaByText(FOLLOWING_TV_SERIAL_TEXT);
+        UiObject2 card = mTask.getSpecifiedCardFromHomeRightAreaByText(HOME_VIDEO_TABS[4]);
         mAction.doClickActionAndWait(card);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 
@@ -194,7 +185,7 @@ public final class TestHomeVideoTab {
     @Category({CategoryHomeVideoTabTests.class})
     // UI changes
     public void test23OpenNewlyUpdatesIn7DaysOfRightArea() {
-        UiObject2 card = mTask.getSpecifiedCardFromHomeRightAreaByText(NEWLY_ADD_IN_7_DAYS_TEXT);
+        UiObject2 card = mTask.getSpecifiedCardFromHomeRightAreaByText(HOME_VIDEO_TABS[5]);
         mAction.doClickActionAndWait(card);
         mAction.doDeviceActionAndWaitForIdle(new DeviceActionEnter());
 

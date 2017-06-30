@@ -37,13 +37,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskAboutInfo {
 
-    public static final String TAG = TaskAboutInfo.class.getSimpleName();
+    private static final String TAG = TaskAboutInfo.class.getSimpleName();
 
     private static TaskAboutInfo instance;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsAboutInfo funUiObjects;
+    private final UiDevice device;
+    private final UiActionsManager action;
+    private final UiObjectsAboutInfo funUiObjects;
 
     public final String ABOUT_INFO_PAGE_TEXT = "关于";
     private final String MAC_NULL = "00:00:00:00:00:00";

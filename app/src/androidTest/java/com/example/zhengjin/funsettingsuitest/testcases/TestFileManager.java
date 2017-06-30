@@ -51,7 +51,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
 public final class TestFileManager {
 
     private static final String TEST_ROOT_DIR_NAME = "AutoTestFiles";
-    private static String TEST_ROOT_DIR_PATH;
+    private static final String TEST_ROOT_DIR_PATH;
     private static final String TEST_DIR_NAME = "TestNonMediaDir";
     private static final String TEST_DIR_PATH;
     private static final String TEST_MEDIA_DIR_NAME = "TestMediaDir";
@@ -74,30 +74,33 @@ public final class TestFileManager {
     private final String MESSAGE_TEXT_NO_VIDEO_FOUND = "未发现可播放的视频";
     private final String MESSAGE_TEXT_NO_PIC_FOUND = "未发现可显示的图片";
 
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsFileManager mFunUiObjects;
-    private TaskFileManager mTask;
+    private final UiDevice mDevice =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiActionsManager mAction = UiActionsManager.getInstance();
+    private final UiObjectsFileManager mFunUiObjects = UiObjectsFileManager.getInstance();
+    private final TaskFileManager mTask = TaskFileManager.getInstance();
 
     private String mMessage;
 
     static {
+        String SDCARD_PATH = "";
         try {
-            TEST_ROOT_DIR_PATH =
-                    String.format("%s/%s", FileUtils.getExternalStoragePath(), TEST_ROOT_DIR_NAME);
+            SDCARD_PATH = FileUtils.getExternalStoragePath();
         } catch (IOException e) {
             e.printStackTrace();
             // Assert failed in static block, then all test methods will run failed
             Assert.assertTrue(e.getMessage(), false);
         }
 
-        TEST_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_DIR_NAME);
-        TEST1_FILE_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST1_FILE_NAME);
-        TEST2_FILE_PATH = String.format("%s/%s", TEST_DIR_PATH, TEST2_FILE_NAME);
+        TEST_ROOT_DIR_PATH = SDCARD_PATH + File.separator + TEST_ROOT_DIR_NAME;
 
-        TEST_MEDIA_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_MEDIA_DIR_NAME);
-        TEST1_VIDEO_FILE_PATH = String.format("%s/%s", TEST_MEDIA_DIR_PATH, TEST1_VIDEO_FILE_NAME);
-        TEST2_VIDEO_FILE_PATH = String.format("%s/%s", TEST_MEDIA_DIR_PATH, TEST2_VIDEO_FILE_NAME);
+        TEST_DIR_PATH = TEST_ROOT_DIR_PATH + File.separator + TEST_DIR_NAME;
+        TEST1_FILE_PATH = TEST_ROOT_DIR_PATH + File.separator + TEST1_FILE_NAME;
+        TEST2_FILE_PATH = TEST_DIR_PATH + File.separator + TEST2_FILE_NAME;
+
+        TEST_MEDIA_DIR_PATH = TEST_ROOT_DIR_PATH + File.separator + TEST_MEDIA_DIR_NAME;
+        TEST1_VIDEO_FILE_PATH = TEST_MEDIA_DIR_PATH + File.separator + TEST1_VIDEO_FILE_NAME;
+        TEST2_VIDEO_FILE_PATH = TEST_MEDIA_DIR_PATH + File.separator + TEST2_VIDEO_FILE_NAME;
     }
 
     @BeforeClass
@@ -138,11 +141,6 @@ public final class TestFileManager {
 
     @Before
     public void setUp() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mAction = UiActionsManager.getInstance();
-        mFunUiObjects = UiObjectsFileManager.getInstance();
-        mTask = TaskFileManager.getInstance();
-
         TaskLauncher.backToLauncher();
         mTask.openFileManagerHomePage();
     }

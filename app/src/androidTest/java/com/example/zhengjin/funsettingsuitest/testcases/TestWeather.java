@@ -48,6 +48,12 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestWeather {
 
+    private final UiDevice mDevice =
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private final UiActionsManager mAction = UiActionsManager.getInstance();
+    private final UiObjectsWeather mFunUiObjects = UiObjectsWeather.getInstance();
+    private final TaskWeather mTask = TaskWeather.getInstance();
+
     private final String TEXT_ADD_CITY = "添加城市";
 
     private final String INIT_PROVINCE = "湖北";
@@ -56,11 +62,6 @@ public final class TestWeather {
     private final String ADD_CITY_1 = "青岛";
     private final String ADD_DEFAULT_PROVINCE_2 = "海南";
     private final String ADD_DEFAULT_CITY_2 = "三亚";
-
-    private UiDevice mDevice;
-    private UiActionsManager mAction;
-    private UiObjectsWeather mFunUiObjects;
-    private TaskWeather mTask;
 
     private String mMessage;
 
@@ -71,11 +72,6 @@ public final class TestWeather {
 
     @Before
     public void setUp() {
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        mAction = UiActionsManager.getInstance();
-        mFunUiObjects = UiObjectsWeather.getInstance();
-        mTask = TaskWeather.getInstance();
-
         TaskLauncher.backToLauncher();
         TaskLauncher.openWeatherFromLauncherQuickAccessBar();
     }

@@ -48,9 +48,9 @@ public final class TaskSettings {
 
     private static TaskSettings instance;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsSettings funUiObjects;
+    private final UiDevice device;
+    private final UiActionsManager action;
+    private final UiObjectsSettings funUiObjects;
 
     public final String TITLE_SET_SHUTDOWN_TIME_DIALOG = "设置定时关机";
 

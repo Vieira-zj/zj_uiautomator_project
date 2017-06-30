@@ -34,7 +34,7 @@ public final class FileUtils {
     public static String getExternalStoragePath() throws IOException {
         File file = getExternalStorageDir();
         if (file == null) {
-            throw new IOException("The external storage(sdcard) is not available");
+            throw new IOException("The external storage(sdcard) is not available!");
         }
         return file.getAbsolutePath();
     }
@@ -52,7 +52,7 @@ public final class FileUtils {
             }
             data = sb.toString();
         } catch (IOException e) {
-            Log.e(TAG, "IOException from readFileSdcard()!");
+            Log.e(TAG, "IOException in readFileSdcard()!");
             e.printStackTrace();
         } finally {
             if (br != null) {
@@ -82,7 +82,7 @@ public final class FileUtils {
             bw.write(fileContent);
             ret = true;
         } catch (IOException e) {
-            Log.e(TAG, "IOException from writeFileSdcard()!");
+            Log.e(TAG, "IOException in writeFileSdcard()!");
             e.printStackTrace();
         } finally {
             if (bw != null) {

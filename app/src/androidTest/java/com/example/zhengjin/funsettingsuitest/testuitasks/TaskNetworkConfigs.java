@@ -21,14 +21,14 @@ public final class TaskNetworkConfigs {
 
     private static TaskNetworkConfigs instance = null;
 
-    private UiDevice device;
-    private UiActionsManager action;
-    private UiObjectsNetworkConfigs funUiObjects;
+    private final UiDevice DEVICE;
+    private final UiActionsManager ACTION;
+    private final UiObjectsNetworkConfigs FUN_UI_OBJECTS;
 
     private TaskNetworkConfigs() {
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        action = UiActionsManager.getInstance();
-        funUiObjects = UiObjectsNetworkConfigs.getInstance();
+        DEVICE = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        ACTION = UiActionsManager.getInstance();
+        FUN_UI_OBJECTS = UiObjectsNetworkConfigs.getInstance();
     }
 
     public static TaskNetworkConfigs getInstance() {
@@ -77,8 +77,8 @@ public final class TaskNetworkConfigs {
     }
 
     public List<UiObject2> getWifiHotSpotsList() {
-        UiObject2 container = device.findObject(
-                funUiObjects.getContainerOfWifiHotSpotsListSelector());
+        UiObject2 container = DEVICE.findObject(
+                FUN_UI_OBJECTS.getContainerOfWifiHotSpotsListSelector());
         return container.findObjects(By.clazz(TestConstants.CLASS_RELATIVE_LAYOUT).depth(1));
     }
 

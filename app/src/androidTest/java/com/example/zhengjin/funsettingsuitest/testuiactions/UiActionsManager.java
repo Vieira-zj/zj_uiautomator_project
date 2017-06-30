@@ -16,6 +16,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
 public final class UiActionsManager {
 
     private static UiActionsManager instance = null;
+
     private UiDevice mDevice = null;
 
     private UiActionsManager() {
@@ -26,7 +27,6 @@ public final class UiActionsManager {
         if (instance == null) {
             instance = new UiActionsManager();
         }
-
         return instance;
     }
 
