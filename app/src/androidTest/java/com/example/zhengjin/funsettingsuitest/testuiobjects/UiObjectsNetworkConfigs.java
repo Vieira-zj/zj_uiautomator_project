@@ -62,6 +62,18 @@ public final class UiObjectsNetworkConfigs {
         return By.res("tv.fun.settings:id/wifi_ap_state_tips");
     }
 
+    public BySelector getWifiNetworkSwitchItemContainerSelector() {
+        return By.res("tv.fun.settings:id/wifi_state_layer");
+    }
+
+    public BySelector getWifiNetworkSwitchItemTitleSelector() {
+        return By.res("tv.fun.settings:id/wifi_state_title");
+    }
+
+    public BySelector getWifiNetworkSwitchItemTextSelector() {
+        return By.res("tv.fun.settings:id/wifi_switch_text");
+    }
+
     public BySelector getManualSettingContainerOnWiredNetworkConfigsSelector() {
         return By.res("tv.fun.settings:id/activity_network_type");
     }
@@ -100,6 +112,10 @@ public final class UiObjectsNetworkConfigs {
 
     public BySelector getContainerOfWifiHotSpotsListSelector() {
         return By.res("tv.fun.settings:id/wifi_list");
+    }
+
+    public BySelector getQuickConnectButtonOnNetworkConfigsSelector() {
+        return By.res("tv.fun.settings:id/wifi_fast_connect");
     }
 
 }

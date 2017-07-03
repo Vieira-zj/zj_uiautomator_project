@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryNetworkConfigsTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
+import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsNetworkConfigs;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -50,6 +51,7 @@ public final class TestNetworkConfigs {
 
     private final String[] NETWORK_CONFIGS_ITEMS = {"有线网络", "移动热点", "无线网络"};
     private final String[] WIRED_NETWORK_ITEMS = {"IP地址", "子网掩码", "默认网关", "DNS服务器"};
+    private final String TEXT_ON = "已开启";
     private final String TEXT_OFF = "已关闭";
 
     private String mMessage;
@@ -229,20 +231,92 @@ public final class TestNetworkConfigs {
     @Test
     @Category({CategoryNetworkConfigsTests.class})
     public void test07ConfigOffOnWifiHotSpotPage() {
-        // TODO: 2017/6/30  
+        // TODO: 2017/7/3
     }
 
     @Test
     @Category({CategoryNetworkConfigsTests.class})
     public void test11WifiHotSpotsListWhenWifiDefaultOpened() {
-        mMessage = "Verify the wifi list when open network configs and wifi is default opened.";
+        mMessage = "Verify title text of wifi network switch item on network configs page.";
+        UiObject2 wifiContainer =
+                mDevice.findObject(mFunUiObjects.getWifiNetworkSwitchItemContainerSelector());
+        UiObject2 uiTitle =
+                wifiContainer.findObject(mFunUiObjects.getWifiNetworkSwitchItemTitleSelector());
+        Assert.assertEquals(mMessage, NETWORK_CONFIGS_ITEMS[2], uiTitle.getText());
+
+        mMessage = "Verify wifi network switch is default on.";
+        UiObject2 uiText = wifiContainer.findObject(
+                mFunUiObjects.getWifiNetworkSwitchItemTextSelector());
+        Assert.assertEquals(mMessage, TEXT_ON, uiText.getText());
+
+        mMessage = "Verify the wifi list (wifi network is opened) on network configs page.";
+        final int min_wifi_aps_size = 2;
         List<UiObject2> wifiList = mTask.getWifiHotSpotsList();
-        Assert.assertTrue(mMessage, wifiList.size() > 0);
+        Assert.assertTrue(mMessage, wifiList.size() > min_wifi_aps_size);
 
         Log.d(TAG, TestConstants.LOG_KEYWORD + "wifi list size: " + wifiList.size());
         for (UiObject2 wifi : wifiList) {
             UiObject2 wifiName = wifi.findObject(By.clazz(TestConstants.CLASS_TEXT_VIEW));
-            Log.d(TAG, TestConstants.LOG_KEYWORD + "wifi name: " + wifiName.getText());
+            Log.d(TAG, TestConstants.LOG_KEYWORD + "wifi ap name: " + wifiName.getText());
+        }
+    }
+
+    @Test
+    @Category({CategoryNetworkConfigsTests.class})
+    public void test12TurnOffAndOnWifiNetwork() {
+        mMessage = "Verify wifi list is shown when wifi network switch is on.";
+        UiObject2 wifiList =
+                mDevice.findObject(mFunUiObjects.getContainerOfWifiHotSpotsListSelector());
+        Assert.assertNotNull(mMessage, wifiList);
+
+        // on -> off
+        mMessage = "Verify wifi network switch text when set on to off.";
+        mTask.moveToSpecifiedConfigsItemBySelector(
+                mFunUiObjects.getWifiNetworkSwitchItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), TestConstants.WAIT);
+
+        UiObject2 wifiContainer =
+                mDevice.findObject(mFunUiObjects.getWifiNetworkSwitchItemContainerSelector());
+        UiObject2 uiText = wifiContainer.findObject(By.text(TEXT_OFF));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(uiText));
+
+        mMessage = "Verify wifi list is hidden when set wifi network switch on to off.";
+        wifiList = mDevice.findObject(mFunUiObjects.getContainerOfWifiHotSpotsListSelector());
+        Assert.assertNull(mMessage, wifiList);
+
+        // off -> on
+        mMessage = "Verify wifi network switch text when set off to on.";
+        mAction.doDeviceActionAndWait(new DeviceActionEnter(), 30 * 1000L);
+        uiText = wifiContainer.findObject(By.text(TEXT_ON));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(uiText));
+
+        mMessage = "Verify wifi list is shown when set wifi network switch off to on.";
+        wifiList = mDevice.findObject(mFunUiObjects.getContainerOfWifiHotSpotsListSelector());
+        Assert.assertNotNull(mMessage, wifiList);
+    }
+
+    @Test
+    @Category({CategoryNetworkConfigsTests.class})
+    public void test15OpenAndConfigItemsOfQuickConnectView() {
+        final String TEXT_QUICK_CONNECT = "快速连接";
+
+        mMessage = "Verify wifi network quick connect button is enabled.";
+        UiObject2 quickConnectBtn =
+                mDevice.findObject(mFunUiObjects.getQuickConnectButtonOnNetworkConfigsSelector());
+        Assert.assertTrue(mMessage, quickConnectBtn.isClickable());
+        Assert.assertEquals(mMessage, TEXT_QUICK_CONNECT, quickConnectBtn.getText());
+
+        mMessage = "Verify page title text of quick connect view.";
+        mTask.openQuickConnectViewFromNetworkConfigs();
+        UiObject2 uiTitle = mDevice.findObject(mFunUiObjects.getTitleOfNetworkConfigsSelector());
+        Assert.assertEquals(mMessage, TEXT_QUICK_CONNECT, uiTitle.getText());
+
+        mMessage = "Verify config items (%s) are enabled on quick connect view.";
+        UiObject2 uiItemTitle;
+        final String[] QUICK_CONNECT_CONFIG_ITEMS = {"添加网络", "WPS连接", "手机扫码连接"};
+        for (String itemText : QUICK_CONNECT_CONFIG_ITEMS) {
+            uiItemTitle = mDevice.findObject(By.text(itemText));
+            Assert.assertNotNull(String.format(mMessage, itemText), uiItemTitle);
         }
     }
 

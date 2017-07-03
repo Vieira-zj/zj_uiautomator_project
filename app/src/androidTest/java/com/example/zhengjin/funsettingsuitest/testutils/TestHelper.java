@@ -166,6 +166,10 @@ public final class TestHelper {
         return parent.wait(Until.hasObject(By.text(uiText)), TIME_OUT);
     }
 
+    public static boolean verifyIsUiObjectFocused(UiObject2 uiObject) {
+        return uiObject.isFocused() || uiObject.isSelected();
+    }
+
     public static boolean waitForLoadingComplete() {
         // if loading is showing, wait for loading disappear
         UiObject2 loading =
