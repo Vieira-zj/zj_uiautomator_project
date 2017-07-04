@@ -64,8 +64,14 @@ public final class TaskLauncher {
 
     private static void backToLauncherByDevice() {
         ACTION.doDeviceActionAndWait(new DeviceActionHome(), WAIT);
-        Assert.assertTrue("backToLauncher, failed to back to the launcher home.",
-                TestHelper.waitForAppOpenedByUntil(DEVICE.getLauncherPackageName()));
+
+        final String pkgName = DEVICE.getLauncherPackageName();
+        Log.d(TAG, TestConstants.LOG_KEYWORD + "current package name: " + pkgName);
+        if ("android".equals(pkgName)) {
+            return;
+        }
+        Assert.assertTrue("backToLauncherByDevice, failed to back to the launcher home.",
+                TestHelper.waitForAppOpenedByUntil(pkgName));
     }
 
     private static void backToLauncherByPm() {
