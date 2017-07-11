@@ -16,9 +16,10 @@ public final class TestApplication extends Application {
     public static final String EXTRA_KEY_TEST_PACKAGE = "TestPkgName";
     public static final String EXTRA_KEY_TEST_RUNNER = "TestRunner";
 
-    private static final boolean IS_LEAK_TEST = false;
     // pre-condition: set "testCoverageEnabled = true" in build.gradle
     public static final boolean IS_COVERAGE_TEST_ENABLE = false;
+
+    private static final boolean IS_LEAK_TEST = false;
 
     private static TestApplication sInstance;
 

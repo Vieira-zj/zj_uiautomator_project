@@ -3,6 +3,7 @@ package com.example.zhengjin.funsettingsuitest.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,33 +14,33 @@ import com.example.zhengjin.funsettingsuitest.utils.HelperUtils;
 
 public class ActivityMain extends AppCompatActivity {
 
+    private final static String TAG = ActivityMain.class.getSimpleName();
+
     private Button mBtnStartDemo = null;
     private Button mBtnStartInstTest = null;
     private Button mBtnStartUtilsTest = null;
     private Button mBtnStartUtilsTest2 = null;
     private Button mBtnExit = null;
 
-    private boolean mIsGenerateCoverageFile = TestApplication.IS_COVERAGE_TEST_ENABLE;
     private JacocoHelper jacocoHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // use instrumented activity instead of directly inject code in main activity
-        if (mIsGenerateCoverageFile) {
-            String tmpFileName = String.format("coverage_%s.ec", HelperUtils.getCurrentTime());
-            jacocoHelper = new JacocoHelper();
-            try {
-                jacocoHelper.createCoverageFile(tmpFileName);
-            } catch (Exception e) {
-                e.printStackTrace();
-                this.finish();
-            }
-        }
-
         setContentView(R.layout.activity_main);
         this.initViews();
+
+        // use instrumented activity instead of directly inject code in main activity
+        if (TestApplication.IS_COVERAGE_TEST_ENABLE) {
+            String fileName = String.format("coverage_%s.ec", HelperUtils.getCurrentTime());
+            jacocoHelper = new JacocoHelper();
+            try {
+                jacocoHelper.createCoverageFile(fileName);
+            } catch (Exception e) {
+                Log.e(TAG, "ZJTEST => " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
 
         if (mBtnStartDemo != null) {
             mBtnStartDemo.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +102,7 @@ public class ActivityMain extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        if (mIsGenerateCoverageFile && jacocoHelper != null) {
+        if (TestApplication.IS_COVERAGE_TEST_ENABLE && jacocoHelper != null) {
             jacocoHelper.generateCoverageReport();
         }
 
