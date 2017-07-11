@@ -6,5 +6,5 @@ package com.example.zhengjin.funsettingsuitest.testcategory;
  * Testing category for Image and sound settings test cases.
  */
 
-public interface CategoryImageAndSoundSettingsTests {
+public interface CategoryImageSoundConfigsTests {
 }

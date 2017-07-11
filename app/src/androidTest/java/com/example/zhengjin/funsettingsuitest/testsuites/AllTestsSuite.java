@@ -5,12 +5,14 @@ import com.example.zhengjin.funsettingsuitest.testcases.TestGeneralSettings;
 import com.example.zhengjin.funsettingsuitest.testcases.TestFileManager;
 import com.example.zhengjin.funsettingsuitest.testcases.TestHomeVideoTab;
 import com.example.zhengjin.funsettingsuitest.testcases.TestImageAndSoundConfigs;
+import com.example.zhengjin.funsettingsuitest.testcases.TestNetworkConfigs;
 import com.example.zhengjin.funsettingsuitest.testcases.TestWeather;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryFileManagerTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageSoundConfigsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryGeneralSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryNetworkConfigsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
 
@@ -32,9 +34,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Categories.class)
 @Categories.IncludeCategory({
-        CategorySettingsTests.class,
-        CategoryImageAndSoundSettingsTests.class,
+        CategoryGeneralSettingsTests.class,
         CategoryAboutInfoTests.class,
+        CategoryImageSoundConfigsTests.class,
+        CategoryNetworkConfigsTests.class,
         CategoryFileManagerTests.class,
         CategoryWeatherTests.class,
         CategoryHomeVideoTabTests.class})
@@ -42,10 +45,11 @@ import org.junit.runners.Suite;
 @Categories.ExcludeCategory({CategoryVersion20.class})
 @Suite.SuiteClasses({
         TestGeneralSettings.class,
+        TestAboutInfoPage.class,
+        TestImageAndSoundConfigs.class,
+        TestNetworkConfigs.class,
         TestFileManager.class,
         TestWeather.class,
-        TestImageAndSoundConfigs.class,
-        TestAboutInfoPage.class,
         TestHomeVideoTab.class})
 public final class AllTestsSuite {
 }

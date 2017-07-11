@@ -5,5 +5,5 @@ package com.example.zhengjin.funsettingsuitest.testcategory;
  *
  * Testing category for common settings test cases.
  */
-public interface CategorySettingsTests {
+public interface CategoryGeneralSettingsTests {
 }

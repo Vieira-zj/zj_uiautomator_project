@@ -7,7 +7,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageSoundConfigsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
@@ -522,7 +522,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test17SystemVersionItemOnAboutInfo() {
         mMessage = "Verify the System Version item on about info page.";
         UiObject2 sysVersion =
@@ -541,7 +541,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test18PlayControllerItemOnAboutInfo() {
         mMessage = "Verify the play controller item on about info page.";
         UiObject2 controller =
@@ -560,7 +560,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test21LawInfoItemOnAboutInfo() {
         mMessage = "Verify the law info item on about info page.";
         UiObject2 law = mDevice.findObject(mFunUiObjects.getLawInfoItemOnAboutSelector());
@@ -572,7 +572,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test22TitleAndItemsOnLawInfoSubPage() {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
 
@@ -609,7 +609,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test23TitleAndContentOnCopyRightProtectSubPage() {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
         mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[0]);
@@ -629,7 +629,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test24TitleAndContentOnPrivacyPolicySubPage() {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
         mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[1]);
@@ -649,7 +649,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test25TitleAndContentOnUserAgreementSubPage() {
         mTask.openSpecifiedAboutInfoItemSubPage(ABOUT_ITEM_TITLES_ARR[4]);
         mTask.openSpecifiedAboutInfoItemSubPage(LAW_ITEM_TITLES_ARR[2]);
@@ -669,7 +669,7 @@ public final class TestAboutInfoPage {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         TaskAboutInfo.destroyInstance();
         UiObjectsAboutInfo.destroyInstance();

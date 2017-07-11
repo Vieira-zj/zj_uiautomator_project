@@ -4,7 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageAndSoundSettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageSoundConfigsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
@@ -80,7 +80,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test01TitleOfImageAndSoundSettingsPage() {
         mMessage = "Verify the text of title on Image and Sound settings page.";
         UiObject2 title =
@@ -89,7 +89,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test02TitleOfImageParamsSettingItem() {
         mMessage = "Verify the image params setting item is enabled.";
         UiObject2 imageParamsItem =
@@ -104,7 +104,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test03TitleAndDefaultValueOfPressKeySoundSettingItem() {
         mMessage = "Verify the press key sound setting item is enabled.";
         UiObject2 pressKeySoundItem =
@@ -125,7 +125,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test04TurnOffPressKeySoundSettingItem() {
         mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[2]);
 
@@ -147,7 +147,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test05TitleAndDefaultValueOfAudioAroundSettingItem() {
         mMessage = "Verify the audio around setting item is enabled.";
         UiObject2 audioAroundItem =
@@ -167,7 +167,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test06TurnOnAudioAroundSettingItem() {
         mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[3]);
 
@@ -187,7 +187,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category({CategoryImageAndSoundSettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryImageSoundConfigsTests.class, CategoryVersion30.class})
     public void test07ShowSavePowerModeHiddenItem() {
         mMessage = "Verify the image params setting item is default focused.";
         UiObject2 imageParamsItem =
@@ -220,7 +220,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category({CategoryImageAndSoundSettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryImageSoundConfigsTests.class, CategoryVersion30.class})
     public void test08TitleAndValueOfCECRemoteControl() {
         mMessage = "Verify CEC remote control setting item is enabled.";
         UiObject2 cecControl = mDevice.findObject(
@@ -239,7 +239,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category({CategoryImageAndSoundSettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryImageSoundConfigsTests.class, CategoryVersion30.class})
     public void test09TitleAndValueOfDefaultPlayClarity() {
         mMessage = "Verify the default play clarity setting item is enabled.";
         UiObject2 playClarityItem =
@@ -258,7 +258,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test11TitleAndDefaultValueOfColorTmpOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -281,7 +281,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test12SubValuesOfColorTmpOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -301,7 +301,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test13TitleAndDefaultValueOfBackLightOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -322,7 +322,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test14SetValueOfBackLightOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
         UiObject2 backLightItem =
@@ -344,7 +344,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test21TitleAndDefaultValueOfBrightnessOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -365,7 +365,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test22SetValueOfBrightnessOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
         UiObject2 brightnessItem =
@@ -387,7 +387,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test23TitleAndDefaultValueOfContrastOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -408,7 +408,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test24SetValueOfContrastOnImageParams() {
         final long waitTime = 500L;
 
@@ -432,7 +432,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test25TitleAndDefaultValueOfSaturationOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -453,7 +453,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test26SetValueOfSaturationOnImageParams() {
         final long waitTime = 250L;
 
@@ -477,7 +477,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test27TitleOfResetAllToDefaultOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
 
@@ -493,7 +493,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test28ValuesSetToDefaultAfterResetOnImageParams() {
         this.openImageParamsPageFromImageAndSound();
         UiObject2 resetItem = mDevice.findObject(
@@ -537,7 +537,7 @@ public final class TestImageAndSoundConfigs {
     }
 
     @Test
-    @Category(CategoryImageAndSoundSettingsTests.class)
+    @Category(CategoryImageSoundConfigsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         TaskImageAndSound.destroyInstance();
         UiObjectsImageAndSound.destroyInstance();

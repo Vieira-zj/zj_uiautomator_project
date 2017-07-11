@@ -7,7 +7,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
 
-import com.example.zhengjin.funsettingsuitest.testcategory.CategorySettingsTests;
+import com.example.zhengjin.funsettingsuitest.testcategory.CategoryGeneralSettingsTests;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion20;
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryVersion30;
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
@@ -113,7 +113,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategoryGeneralSettingsTests.class})
     public void test11TitleNameOfSettingsPage() {
         UiObject2 settingsTitle =
                 mDevice.findObject(mFunUiObjects.getTitleOfSettingsPageSelector());
@@ -123,7 +123,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategoryGeneralSettingsTests.class})
     public void test12DeviceNameDefaultValue() {
         UiObject2 deviceNameContainer =
                 mDevice.findObject(mFunUiObjects.getDeviceNameSettingItemContainerSelector());
@@ -142,7 +142,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategoryGeneralSettingsTests.class})
     public void test13DeviceNameSubValues() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());
         mDevice.wait(Until.hasObject(mFunUiObjects.getDialogDeviceNameListSelector()), WAIT);
@@ -156,7 +156,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test14_01SelectDeviceName() {
         mAction.doDeviceActionAndWait(new DeviceActionEnter());  // open device name menu
         // select a sub device name and back
@@ -173,7 +173,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test14_02SelfDefineDeviceNameAndCancel() {
         try {
             mTask.openSelfDefineDeviceNamePage();
@@ -201,7 +201,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test14_03SelfDefineDeviceNameAndConfirm() {
         try {
             mTask.openSelfDefineDeviceNamePage();
@@ -233,7 +233,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test14_04SelfDefineEmptyNameAndConfirm() {
         mTask.openSelfDefineDeviceNamePage();
 
@@ -251,7 +251,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test15_01OpenAdvancedSettingItem() {
         mTask.moveToSpecifiedSettingsItem(mFunUiObjects.getAdvancedItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
@@ -264,7 +264,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test15_02FullScreenSettingItemOnAdvance() {
         mTask.openAdvancedSettingsPage();
 
@@ -284,7 +284,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test15_03ScreenProjectionSettingItemOnAdvance() {
         mTask.openAdvancedSettingsPage();
 
@@ -300,7 +300,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test15_04ExternalSettingItemsIsHidden() {
         mTask.openAdvancedSettingsPage();
 
@@ -321,7 +321,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test16_01SleepTimeDefaultValue() {
         mTask.openAdvancedSettingsPage();
 
@@ -339,7 +339,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test16_02SleepTimeSubValues() {
         mTask.openAdvancedSettingsPage();
 
@@ -360,7 +360,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test16_03SelectSleepTime() {
         mTask.openAdvancedSettingsPage();
 
@@ -376,7 +376,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_01TitleAndValueOfSetShutDownTime() {
         mTask.openAdvancedSettingsPage();
 
@@ -393,7 +393,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_02TitleAndTipsOnSetShutDownTimeDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -408,7 +408,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_03ShutDownTimeCheckboxOnDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -428,7 +428,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_04TimesControlOnShutDownTimeDialog() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -449,7 +449,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_05EditHoursControlOnShutDownTimeDialog() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -484,7 +484,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_06EditMinutesControlOnSetShutDownTimeDialog() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -520,7 +520,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_11SetShutDownTimeAndSave() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -546,20 +546,20 @@ public final class TestGeneralSettings {
 
     @Test
     @Ignore
-    @Category({CategorySettingsTests.class})
+    @Category({CategoryGeneralSettingsTests.class})
     public void test17_12SetShutDownTimeEqualCurTime() {
         // TODO: 2017/2/24
     }
 
     @Test
     @Ignore
-    @Category({CategorySettingsTests.class})
+    @Category({CategoryGeneralSettingsTests.class})
     public void test17_13SetShutDownTimeLessThanCurTime() {
         // TODO: 2017/2/24
     }
 
     @Test
-    @Category({CategorySettingsTests.class})
+    @Category({CategoryGeneralSettingsTests.class})
     public void test17_14UnsetShutDownTime() {
         mTask.openAdvancedSettingsPage();
         mTask.unSetShutDownTvTime();
@@ -573,7 +573,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test17_15SetShutDownTimeLessThanFiveMinutes() {
         mTask.openAdvancedSettingsPage();
         mTask.openSetShutDownTimeDialog();
@@ -594,7 +594,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion20.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion20.class})
     public void test17_21SetShutDownTvTimeDefaultValue() {
         UiObject2 itemContainer =
                 mDevice.findObject(mFunUiObjects.getShutDownTimeSettingItemContainerSelector());
@@ -610,7 +610,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion20.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion20.class})
     public void test17_22SetShutDownTvTimeSubValues() {
         mTask.openAdvancedSettingsPage();
         mTask.moveToSpecifiedSettingsItem(
@@ -635,7 +635,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test18_01ScreenSaverDefaultValue() {
         mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[3]);
 
@@ -648,7 +648,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test18_02SelectScreenSaver() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getScreenSaverSettingItemContainerSelector());
@@ -667,7 +667,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test18_03ScreenSaverSubValues() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getScreenSaverSettingItemContainerSelector());
@@ -694,7 +694,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test21InstallUnknownAppDefaultValue() {
         mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[6]);
 
@@ -707,7 +707,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test22AllowedInstallUnknownAppAndCancel() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getInstallUnknownAppSettingItemContainerSelector());
@@ -733,7 +733,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test23AllowedInstallUnknownAppAndConfirm() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getInstallUnknownAppSettingItemContainerSelector());
@@ -753,7 +753,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test24ForbiddenInstallUnknownApp() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getInstallUnknownAppSettingItemContainerSelector());
@@ -767,7 +767,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test25SystemRecoverDialogAndClickCancel() {
         mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[7]);
         UiObject2 recoverItem =
@@ -792,7 +792,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test26SaveInfoOnSystemRecoverDialog() {
         mTask.scrollMoveToSpecificSettingsItem(COMMON_SETTING_ITEMS[7]);
         UiObject2 recoverItem =
@@ -821,7 +821,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test31WallpaperDefaultValue() {
         UiObject2 itemWallpaper =
                 mDevice.findObject(mFunUiObjects.getWallpaperSettingItemContainerSelector());
@@ -835,7 +835,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test32SubWallpapersOnSelectPage() {
         mTask.moveToSpecifiedSettingsItem(mFunUiObjects.getWallpaperSettingItemContainerSelector());
         mAction.doDeviceActionAndWait(new DeviceActionEnter(), WAIT);
@@ -853,7 +853,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test33SelectWallpaper() {
         final String selectWallpaper = SUB_VALUES_WALLPAPER[2];
 
@@ -870,7 +870,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test34InputMethodDefaultValue() {
         UiObject2 itemInput =
                 mDevice.findObject(mFunUiObjects.getInputMethodSettingItemContainerSelector());
@@ -885,7 +885,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test35SelectInputMethod() {
         mTask.moveToSpecifiedSettingsItem(
                 mFunUiObjects.getInputMethodSettingItemContainerSelector());
@@ -905,7 +905,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test41SystemLanguageSettingItemOnAdvance() {
         mTask.openAdvancedSettingsPage();
 
@@ -923,7 +923,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test42SubValuesOfSystemLanguageSettingItem() {
         mTask.openAdvancedSettingsPage();
         mTask.moveToSpecifiedSettingsItem(
@@ -949,7 +949,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test43SetSystemLanguageAndCancel() {
         mTask.openAdvancedSettingsPage();
         mTask.openSystemLanguageSelectionDialog();
@@ -968,7 +968,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test44ItemsTitleOnAdvanceAfterSetLanguageAsEnglish() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -1000,7 +1000,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category({CategorySettingsTests.class, CategoryVersion30.class})
+    @Category({CategoryGeneralSettingsTests.class, CategoryVersion30.class})
     public void test45ItemsTitleOnMainAfterSetLanguageAsEnglish() {
         try {
             mTask.openAdvancedSettingsPage();
@@ -1037,7 +1037,7 @@ public final class TestGeneralSettings {
     }
 
     @Test
-    @Category(CategorySettingsTests.class)
+    @Category(CategoryGeneralSettingsTests.class)
     public void test99ClearUpAfterAllTestCasesDone() {
         TaskSettings.destroyInstance();
         UiObjectsSettings.destroyInstance();
