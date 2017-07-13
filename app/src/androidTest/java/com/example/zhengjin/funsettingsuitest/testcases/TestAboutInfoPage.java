@@ -3,7 +3,6 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 import android.os.Build;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryAboutInfoTests;
@@ -16,7 +15,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -50,10 +48,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestAboutInfoPage {
+public final class TestAboutInfoPage extends TestCaseBase {
 
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsAboutInfo mFunUiObjects = UiObjectsAboutInfo.getInstance();
     private final TaskAboutInfo mTask = TaskAboutInfo.getInstance();
 

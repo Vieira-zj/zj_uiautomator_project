@@ -2,19 +2,16 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryWeatherTests;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsWeather;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -46,10 +43,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WEA
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestWeather {
+public final class TestWeather extends TestCaseBase {
 
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsWeather mFunUiObjects = UiObjectsWeather.getInstance();
     private final TaskWeather mTask = TaskWeather.getInstance();
 

@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryHomeVideoTabTests;
@@ -12,7 +11,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTab;
@@ -42,10 +40,8 @@ import java.util.List;
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestHomeVideoTab {
+public final class TestHomeVideoTab extends TestCaseBase {
 
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsVideoHomeTab mFunUiObjects = UiObjectsVideoHomeTab.getInstance();
     private final TaskVideoHomeTab mTask = TaskVideoHomeTab.getInstance();
 

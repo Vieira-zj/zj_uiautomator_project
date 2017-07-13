@@ -3,7 +3,6 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 import android.os.SystemClock;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiWatcher;
 import android.util.Log;
@@ -14,7 +13,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -42,12 +40,8 @@ import static com.example.zhengjin.funsettingsuitest.testuitasks.TaskVideoHomeTa
  * Test playing videos, include test cases to run more than 8 hours.
  */
 @RunWith(AndroidJUnit4.class)
-public final class TestPlayingVideos {
+public final class TestPlayingVideos extends TestCaseBase {
 
-    private static final String TAG = TestPlayingVideos.class.getSimpleName();
-
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsPlayingVideos mFunUiObjects = UiObjectsPlayingVideos.getInstance();
     private final UiObjectsVideoHomeTab mFunUiObjects2 = UiObjectsVideoHomeTab.getInstance();
     private final TaskPlayingVideos mTask = TaskPlayingVideos.getInstance();

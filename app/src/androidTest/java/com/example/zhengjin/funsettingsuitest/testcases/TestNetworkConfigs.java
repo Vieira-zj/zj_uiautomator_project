@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
@@ -10,7 +9,6 @@ import com.example.zhengjin.funsettingsuitest.testcategory.CategoryNetworkConfig
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionCenter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsNetworkConfigs;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskNetworkConfigs;
@@ -40,12 +38,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SET
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestNetworkConfigs {
+public final class TestNetworkConfigs extends TestCaseBase {
 
-    private static final String TAG = TestNetworkConfigs.class.getSimpleName();
-
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsNetworkConfigs mFunUiObjects = UiObjectsNetworkConfigs.getInstance();
     private final TaskNetworkConfigs mTask = TaskNetworkConfigs.getInstance();
 

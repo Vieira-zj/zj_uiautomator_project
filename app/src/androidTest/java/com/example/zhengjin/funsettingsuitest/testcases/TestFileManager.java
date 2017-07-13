@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryDemoTests;
@@ -13,7 +12,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskFileManager;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -47,7 +45,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.FIL
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestFileManager {
+public final class TestFileManager extends TestCaseBase {
 
     private static final String TEST_ROOT_DIR_NAME = "AutoTestFiles";
     private static final String TEST_ROOT_DIR_PATH;
@@ -75,8 +73,6 @@ public final class TestFileManager {
     private final String MESSAGE_TEXT_NO_VIDEO_FOUND = "未发现可播放的视频";
     private final String MESSAGE_TEXT_NO_PIC_FOUND = "未发现可显示的图片";
 
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsFileManager mFunUiObjects = UiObjectsFileManager.getInstance();
     private final TaskFileManager mTask = TaskFileManager.getInstance();
 

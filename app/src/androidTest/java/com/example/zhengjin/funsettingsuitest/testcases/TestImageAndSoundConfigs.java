@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testcases;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testcategory.CategoryImageSoundConfigsTests;
@@ -13,7 +12,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testuitasks.TaskLauncher;
@@ -43,10 +41,8 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestImageAndSoundConfigs {
+public final class TestImageAndSoundConfigs extends TestCaseBase {
 
-    private final UiDevice mDevice = TestConstants.GetUiDeviceInstance();
-    private final UiActionsManager mAction = UiActionsManager.getInstance();
     private final UiObjectsImageAndSound mFunUiObjects = UiObjectsImageAndSound.getInstance();
     private final TaskImageAndSound mTask = TaskImageAndSound.getInstance();
 
