@@ -40,7 +40,7 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  */
 public final class TaskFileManager {
 
-    private static TaskFileManager instance = null;
+    private static TaskFileManager instance;
 
     private final UiDevice device;
     private final UiActionsManager action;

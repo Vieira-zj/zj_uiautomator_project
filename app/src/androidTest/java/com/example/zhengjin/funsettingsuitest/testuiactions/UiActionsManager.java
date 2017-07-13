@@ -15,9 +15,9 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SHO
  */
 public final class UiActionsManager {
 
-    private static UiActionsManager instance = null;
+    private static UiActionsManager instance;
 
-    private UiDevice mDevice = null;
+    private final UiDevice mDevice;
 
     private UiActionsManager() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -30,7 +30,7 @@ public final class UiActionsManager {
         return instance;
     }
 
-    // default wait time is 1 second
+    // default wait time: 1 second
     public boolean doDeviceActionAndWait(DeviceAction action) {
         return doDeviceActionAndWait(action, SHORT_WAIT);
     }
@@ -49,7 +49,7 @@ public final class UiActionsManager {
     private boolean doDeviceActionAndWaitForIdle(DeviceAction action, long wait) {
         boolean ret = action.doDeviceAction(mDevice);
 
-        if (wait > 0) {
+        if (wait > 0L) {
             mDevice.waitForIdle(wait);
         } else {
             mDevice.waitForIdle();
