@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by zhengjin on 2017/2/20.
  * <p>
- * A run listener demo extends from RunListener.
+ * A junit run listener demo extends from RunListener.
  * Usage: -e listener com.example.zhengjin.funsettingsuitest.testrunner.RunnerListenerDemo
  * <p>
  * Refer to http://stackoverflow.com/questions/35230276/specifying-custom-runlistener-in-androidmanifest-metadata-not-working

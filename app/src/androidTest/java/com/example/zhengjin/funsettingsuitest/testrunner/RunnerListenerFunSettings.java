@@ -26,7 +26,9 @@ import java.util.Locale;
 /**
  * Created by zhengjin on 2017/2/20.
  * <p>
- * Customized runner listener to generate testing report.
+ * Customized runner listener to generate xml testing report.
+ * Note: for xml element, write attribute first, then text value.
+ * <p>
  * Usage: -e listener com.example.zhengjin.funsettingsuitest.testrunner.RunnerListenerFunSettings
  */
 @SuppressWarnings("unused")
@@ -70,8 +72,7 @@ public final class RunnerListenerFunSettings extends RunListener {
 
         File resultDir = new File(TEST_RESULTS_DIR);
         if (!resultDir.exists()) {
-            Assert.assertTrue(String.format("mkdir failed: %s", resultDir.getAbsolutePath()),
-                    resultDir.mkdir());
+            Assert.assertTrue("mkdir failed: " + resultDir.getAbsolutePath(), resultDir.mkdir());
         }
 
         File resultFile = new File(TEST_RESULTS_DIR, JUNIT_XML_FILE);

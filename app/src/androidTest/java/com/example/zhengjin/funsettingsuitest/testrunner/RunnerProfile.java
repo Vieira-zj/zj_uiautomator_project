@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Created by zhengjin on 2016/9/29.
  * <p>
- * Include the properties when running the test cases.
+ * Include the ENV variables before run the test cases.
  */
 public final class RunnerProfile {
 
@@ -25,12 +25,12 @@ public final class RunnerProfile {
     public static boolean isTakeSnapshot = false;
     public static boolean isAccountVipFree = false;
 
+    // Global properties set in test cases
+    public static String deviceName = "风行电视";
+
     // Below properties set auto
     public static boolean isPlatform938 = isPlatformChipType938();
     public static boolean isVersion30 = isFunSystemVersion30();
-
-    // Global properties set in test cases
-    public static String deviceName = "风行电视";
 
     private RunnerProfile() {
     }
@@ -95,7 +95,6 @@ public final class RunnerProfile {
         if (cr.mReturnCode != 0 || StringUtils.isEmpty(cr.mSuccessMsg)) {
             return "";
         }
-
         return cr.mSuccessMsg;
     }
 
