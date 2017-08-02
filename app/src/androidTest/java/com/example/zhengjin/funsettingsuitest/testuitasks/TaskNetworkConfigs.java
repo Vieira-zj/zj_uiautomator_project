@@ -17,6 +17,8 @@ import junit.framework.Assert;
 
 import java.util.List;
 
+import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.SETTINGS_PKG_NAME;
+
 /**
  * Created by zhengjin on 2017/6/29.
  * <p>
@@ -54,6 +56,14 @@ public final class TaskNetworkConfigs {
     }
 
     private final String DEFAULT_NULL_IP = "0.0.0.0";
+
+    public void openNetworkConfigPage() {
+        final String cartText = "网络设置";
+        TaskLauncher.openSpecifiedCardFromSettingsTab(cartText);
+        Assert.assertTrue("openNetworkConfigPage, open failed!",
+                TestHelper.waitForAppOpenedByUntil(SETTINGS_PKG_NAME));
+        ACTION.doDeviceActionAndWait(new DeviceActionMoveUp());  // request focus
+    }
 
     public String getIpAddressFromSystemProperties() {
         return this.getPropValueFromSystemProperties("dhcp.eth0.ipaddress");

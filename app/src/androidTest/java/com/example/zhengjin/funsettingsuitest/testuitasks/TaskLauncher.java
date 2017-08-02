@@ -104,23 +104,23 @@ public final class TaskLauncher {
     public static void navigateToSpecifiedMainTab(String tabText) {
         navigateToVideoTab();
 
-        UiObject2 tabApp;
+        UiObject2 uiTab;
         if (RunnerProfile.isVersion30 && LAUNCHER_HOME_TABS[6].equals(tabText)) {
-            tabApp = DEVICE.findObject(UI_OBJECTS.getSettingsEntrySelector());
+            uiTab = DEVICE.findObject(UI_OBJECTS.getSettingsEntrySelector());
         } else {
-            tabApp = getSpecifiedTab(tabText);
+            uiTab = getSpecifiedTab(tabText);
         }
 
         if (LAUNCHER_HOME_TABS[0].equals(tabText)) {
             ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
-            if (tabApp != null && (tabApp.isFocused() || tabApp.isSelected())) {
+            if (uiTab != null && (uiTab.isFocused() || uiTab.isSelected())) {
                 return;
             }
         } else {
-            for (int i = 0, moveTimes = 7; i < moveTimes; i++) {
+            for (int i = 0, moveTimes = 9; i < moveTimes; i++) {
                 ACTION.doDeviceActionAndWait(new DeviceActionMoveRight());
-                if (tabApp != null) {
-                    if (tabApp.isFocused() || tabApp.isSelected()) {
+                if (uiTab != null) {
+                    if (uiTab.isFocused() || uiTab.isSelected()) {
                         return;
                     }
                 }

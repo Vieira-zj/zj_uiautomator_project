@@ -105,8 +105,8 @@ public class TestTaskLauncher {
         UiObject2 selectedTab;
         UiObject2 tabText;
         for (int idx = 1, max = 10; idx < max; idx++) {
-            selectedTab = scrollView.findObject(By.clazz(
-                    "android.widget.RelativeLayout").selected(true));
+            selectedTab = scrollView.findObject(
+                    By.clazz("android.widget.RelativeLayout").selected(true));
             tabText = selectedTab.findObject(By.clazz("android.widget.TextView"));
             if (tabText.getText().equals("应用")) {
                 break;

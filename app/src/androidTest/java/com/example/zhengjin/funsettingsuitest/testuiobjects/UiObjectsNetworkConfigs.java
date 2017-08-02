@@ -118,4 +118,16 @@ public final class UiObjectsNetworkConfigs {
         return By.res("tv.fun.settings:id/wifi_fast_connect");
     }
 
+    public BySelector getSwitchContainerOnWifiHotspotConfigPageSelector() {
+        return By.res("tv.fun.settings:id/wifi_ap_switch");
+    }
+
+    public BySelector getItemTitleOnGeneralSettingsPageSelector() {
+        return By.res("tv.fun.settings:id/item_title");
+    }
+
+    public BySelector getItemTextOnGeneralSettingsPageSelector() {
+        return By.res("tv.fun.settings:id/item_value");
+    }
+
 }

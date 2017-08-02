@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -58,7 +59,7 @@ public final class TestNetworkConfigs extends TestCaseBase {
     @Before
     public void setUp() {
         TaskLauncher.backToLauncher();
-        TaskLauncher.openNetworkConfigFromLauncherQuickAccessBar();
+        mTask.openNetworkConfigPage();
     }
 
     @After
@@ -223,9 +224,34 @@ public final class TestNetworkConfigs extends TestCaseBase {
     }
 
     @Test
+    @Ignore
     @Category({CategoryNetworkConfigsTests.class})
-    public void test07ConfigOffOnWifiHotSpotPage() {
-        // TODO: 2017/7/3
+    public void test07TitleAndItemOnWifiHotSpotPageWhenOff() {
+        // pre-condition: wifi must be off
+        mTask.moveToSpecifiedConfigsItemBySelector(
+                mFunUiObjects.getWifiHotSpotItemContainerSelector());
+        mAction.doDeviceActionAndWait(new DeviceActionCenter());
+
+        mMessage = "Verify the Wifi Hotspot config page is opened.";
+        UiObject2 title = mDevice.findObject(mFunUiObjects.getTitleOfNetworkConfigsSelector());
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(title));
+
+        mMessage = "Verify the title on Wifi Hotspot config page.";
+        final String wifiHotspotConfigTitle = "移动热点设置";
+        Assert.assertEquals(mMessage, wifiHotspotConfigTitle, title.getText());
+
+        mMessage = "Verify the title of switch item on Wifi Hotspot config page.";
+        final String switchItemTitle = "移动热点";
+        UiObject2 switchItemContainer = mDevice.findObject(
+                mFunUiObjects.getSwitchContainerOnWifiHotspotConfigPageSelector());
+        UiObject2 itemTitle = switchItemContainer.findObject(
+                mFunUiObjects.getItemTitleOnGeneralSettingsPageSelector());
+        Assert.assertEquals(mMessage, switchItemTitle, itemTitle.getText());
+
+        mMessage = "Verify the text of switch item on Wifi Hotspot config page.";
+        UiObject2 itemText = switchItemContainer.findObject(
+                mFunUiObjects.getItemTextOnGeneralSettingsPageSelector());
+        Assert.assertEquals(mMessage, TEXT_OFF, itemText.getText());
     }
 
     @Test
