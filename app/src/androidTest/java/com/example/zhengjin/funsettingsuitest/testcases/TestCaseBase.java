@@ -8,7 +8,7 @@ import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 /**
  * Created by zhengjin on 2017/7/13.
  * <p>
- * Parent for test case class.
+ * Parent for UI test case class.
  */
 
 class TestCaseBase {

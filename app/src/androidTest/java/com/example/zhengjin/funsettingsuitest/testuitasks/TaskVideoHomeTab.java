@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.annotation.Nullable;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
@@ -12,10 +11,8 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsVideoHomeTab;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -34,23 +31,17 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * <p>
  * Include UI selectors and tasks on video tab of home page.
  */
-public final class TaskVideoHomeTab {
-
-    private static final String TAG = TaskVideoHomeTab.class.getSimpleName();
+public final class TaskVideoHomeTab extends TaskBase {
 
     private static TaskVideoHomeTab instance = null;
 
-    private final UiDevice device;
-    private final UiActionsManager action;
     private final UiObjectsVideoHomeTab funUiObjects;
 
     public static final String TEXT_CARD_FILM = "电影";
     public static final String TEXT_CARD_TV = "电视剧";
 
     private TaskVideoHomeTab() {
-        device = TestConstants.GetUiDeviceInstance();
         funUiObjects = UiObjectsVideoHomeTab.getInstance();
-        action = UiActionsManager.getInstance();
     }
 
     public static synchronized TaskVideoHomeTab getInstance() {

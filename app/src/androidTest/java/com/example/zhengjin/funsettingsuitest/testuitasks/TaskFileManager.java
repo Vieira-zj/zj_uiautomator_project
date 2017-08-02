@@ -13,7 +13,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsFileManager;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -38,17 +37,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * <p>
  * Include the UI selectors and tasks for file manager apk.
  */
-public final class TaskFileManager {
+public final class TaskFileManager extends TaskBase {
 
     private static TaskFileManager instance;
 
-    private final UiDevice device;
-    private final UiActionsManager action;
     private final UiObjectsFileManager funUiObjects;
 
     private TaskFileManager() {
-        device = TestConstants.GetUiDeviceInstance();
-        action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsFileManager.getInstance();
     }
 

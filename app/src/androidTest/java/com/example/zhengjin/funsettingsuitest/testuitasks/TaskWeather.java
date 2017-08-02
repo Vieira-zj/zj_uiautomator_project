@@ -1,7 +1,6 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceAction;
@@ -10,7 +9,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsWeather;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -29,12 +27,10 @@ import java.util.Locale;
  * <p>
  * Include the UI selectors and tasks for weather app.
  */
-public final class TaskWeather {
+public final class TaskWeather extends TaskBase {
 
     private static TaskWeather instance;
 
-    private UiDevice device;
-    private UiActionsManager action;
     private UiObjectsWeather funUiObjects;
 
     public final String MENU_BUTTON_TEXT_UPDATE = "更新";
@@ -43,8 +39,6 @@ public final class TaskWeather {
     public final String MENU_BUTTON_TEXT_DELETE_CITY = "删除当前";
 
     private TaskWeather() {
-        device = TestConstants.GetUiDeviceInstance();
-        action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsWeather.getInstance();
     }
 

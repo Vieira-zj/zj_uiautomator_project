@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
@@ -16,7 +15,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsSettings;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -43,19 +41,16 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * <p>
  * Include general tasks for settings apk.
  */
-public final class TaskSettings {
+public final class TaskSettings extends TaskBase {
 
     private static TaskSettings instance;
 
-    private final UiDevice device;
-    private final UiActionsManager action;
     private final UiObjectsSettings funUiObjects;
 
     public final String TITLE_SET_SHUTDOWN_TIME_DIALOG = "设置定时关机";
+    private final String BAIDU_INPUT_IME_SERVICE = "com.baidu.input_baidutv/.ImeService";
 
     private TaskSettings() {
-        device = TestConstants.GetUiDeviceInstance();
-        action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsSettings.getInstance();
     }
 
@@ -173,14 +168,13 @@ public final class TaskSettings {
 
     public void enableInputMethod() {
         if (!isInputMethodEnabled()) {
-            ShellUtils.execCommand("ime enable com.baidu.input_baidutv/.ImeService", false, false);
+            ShellUtils.execCommand("ime enable " + BAIDU_INPUT_IME_SERVICE, false, false);
         }
     }
 
     private void disableInputMethod() {
         if (isInputMethodEnabled()) {
-            ShellUtils.execCommand(
-                    "ime disable com.baidu.input_baidutv/.ImeService", false, false);
+            ShellUtils.execCommand("ime disable " + BAIDU_INPUT_IME_SERVICE, false, false);
         }
     }
 

@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
@@ -12,7 +11,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMenu;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveUp;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsAboutInfo;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
@@ -34,22 +32,16 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * <p>
  * Include the UI selectors and tasks for about info page test cases.
  */
-public final class TaskAboutInfo {
-
-    private static final String TAG = TaskAboutInfo.class.getSimpleName();
+public final class TaskAboutInfo extends TaskBase {
 
     private static TaskAboutInfo instance;
 
-    private final UiDevice device;
-    private final UiActionsManager action;
     private final UiObjectsAboutInfo funUiObjects;
 
     public final String ABOUT_INFO_PAGE_TEXT = "关于";
     private final String MAC_NULL = "00:00:00:00:00:00";
 
     private TaskAboutInfo() {
-        device = TestConstants.GetUiDeviceInstance();
-        action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsAboutInfo.getInstance();
     }
 

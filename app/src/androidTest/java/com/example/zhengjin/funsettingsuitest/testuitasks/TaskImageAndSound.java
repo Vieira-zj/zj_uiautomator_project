@@ -1,15 +1,12 @@
 package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveDown;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsImageAndSound;
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
-import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
 
 import junit.framework.Assert;
@@ -26,19 +23,15 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.WAI
  * Include the UI selectors and tasks for image and sound settings.
  */
 
-public final class TaskImageAndSound {
+public final class TaskImageAndSound extends TaskBase {
 
     private static TaskImageAndSound instance;
 
-    private final UiDevice device;
-    private final UiActionsManager action;
     private final UiObjectsImageAndSound funUiObjects;
 
     public final String IMAGE_AND_SOUND_TEXT = "图像与声音";
 
     private TaskImageAndSound() {
-        device = TestConstants.GetUiDeviceInstance();
-        action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsImageAndSound.getInstance();
     }
 

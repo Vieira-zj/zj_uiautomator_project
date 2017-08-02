@@ -2,7 +2,6 @@ package com.example.zhengjin.funsettingsuitest.testuitasks;
 
 import android.support.annotation.Nullable;
 import android.support.test.uiautomator.Direction;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
@@ -13,7 +12,6 @@ import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionBack;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveLeft;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionMoveRight;
-import com.example.zhengjin.funsettingsuitest.testuiactions.UiActionsManager;
 import com.example.zhengjin.funsettingsuitest.testuiobjects.UiObjectsPlayingVideos;
 import com.example.zhengjin.funsettingsuitest.testutils.TestConstants;
 import com.example.zhengjin.funsettingsuitest.testutils.TestHelper;
@@ -37,19 +35,13 @@ import static com.example.zhengjin.funsettingsuitest.testutils.TestConstants.VID
  */
 
 @SuppressWarnings("deprecation")
-public final class TaskPlayingVideos {
-
-    private final static String TAG = TaskPlayingVideos.class.getSimpleName();
+public final class TaskPlayingVideos extends TaskBase {
 
     private static TaskPlayingVideos instance = null;
 
-    private final UiDevice device;
-    private final UiActionsManager action;
     private final UiObjectsPlayingVideos funUiObjects;
 
     private TaskPlayingVideos() {
-        device = TestConstants.GetUiDeviceInstance();
-        action = UiActionsManager.getInstance();
         funUiObjects = UiObjectsPlayingVideos.getInstance();
     }
 
@@ -324,7 +316,7 @@ public final class TaskPlayingVideos {
             } else if (vipFree.equals(this.vipType)) {
                 return true;
             } else {
-                Log.e(TAG, "isVip, invalid vip type: " + this.vipType);
+                Log.e("videoInfo", "isVip, invalid vip type: " + this.vipType);
                 return false;
             }
         }
