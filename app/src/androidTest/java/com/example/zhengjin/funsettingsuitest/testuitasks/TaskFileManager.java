@@ -6,6 +6,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
+import android.text.TextUtils;
 
 import com.example.zhengjin.funsettingsuitest.testrunner.RunnerProfile;
 import com.example.zhengjin.funsettingsuitest.testuiactions.DeviceActionEnter;
@@ -218,7 +219,10 @@ public final class TaskFileManager extends TaskBase {
     // path like: android/data/tv.fun.filemanager
     // or: /android/data/tv.fun.filemanager/
     private List<String> parsePath(String path) {
-        Assert.assertFalse("parsePath, invalid path: " + path, StringUtils.isEmpty(path));
+        Assert.assertFalse("parsePath, invalid path: " + path, TextUtils.isEmpty(path));
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
 
         String[] tempDirs = path.split("/");
         Assert.assertTrue("parsePath, exception: the dirs size is 0.", tempDirs.length > 0);

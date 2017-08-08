@@ -236,7 +236,7 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
 
     @Test
     @Category({CategoryImageSoundConfigsTests.class, CategoryVersion30.class})
-    public void test09TitleAndValueOfDefaultPlayClarity() {
+    public void test0901TitleAndDefaultValueOfPlayClarity() {
         mMessage = "Verify the default play clarity setting item is enabled.";
         UiObject2 playClarityItem =
                 mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
@@ -251,6 +251,25 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the value of default play clarity setting item.";
         UiObject2 playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
         Assert.assertEquals(mMessage, "超清", playClarityValue.getText());
+    }
+
+    @Test
+    @Category({CategoryImageSoundConfigsTests.class, CategoryVersion30.class})
+    public void test0902SubValuesOfPlayClarity() {
+        mTask.focusOnSpecifiedImageAndSoundSettingsItem(IMAGE_AND_SOUND_SETTINGS_TITLE_ARR[0]);
+
+        String[] subValues = {"1080P", "4K", "标清", "高清", "超清"};
+        mMessage = "Verify sub values for play clarity setting item.";
+
+        UiObject2 playClarityItem =
+                mDevice.findObject(mFunUiObjects.getDefaultPlayClaritySettingItemSelector());
+        UiObject2 playClarityValue;
+        for (String subValue : subValues) {
+            mAction.doDeviceActionAndWait(new DeviceActionMoveLeft());
+            mDevice.waitForIdle(TestConstants.WAIT);
+            playClarityValue = mTask.getSwitcherValueOfColorTmpSetting(playClarityItem);
+            Assert.assertEquals(mMessage, subValue, playClarityValue.getText());
+        }
     }
 
     @Test
