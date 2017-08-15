@@ -429,10 +429,23 @@ public final class TestAboutInfoPage extends TestCaseBase {
         Assert.assertTrue(TestHelper.waitForUiObjectEnabled(subPageTitle));
         Assert.assertEquals(mMessage, ABOUT_ITEM_TITLES_ARR[3], subPageTitle.getText());
 
-        mMessage = "Verify the content on question feedback sub page.";
-        UiObject2 subPageContent =
+        mMessage = "Verify the service tel number content on question feedback sub page.";
+        final String telNumber = "400-600-6258";
+        UiObject2 contentTelNum =
+                mDevice.findObject(mFunUiObjects.getServiceTelNumberOnFeedbackSubPageSelector());
+        Assert.assertTrue(mMessage, contentTelNum.getText().contains(telNumber));
+
+        mMessage = "Verify the service QQ number content on question feedback sub page.";
+        final String qqNumber = "249243895";
+        UiObject2 contentQqNum =
+                mDevice.findObject(mFunUiObjects.getServiceQQNumberOnFeedbackSubPageSelector());
+        Assert.assertTrue(mMessage, contentQqNum.getText().contains(qqNumber));
+
+        mMessage = "Verify the upload log content on question feedback sub page.";
+        final String contentText = "如需上传日志，请按 “菜单” 键";
+        UiObject2 contentLog =
                 mDevice.findObject(mFunUiObjects.getQuestionFeedbackSubPageContentSelector());
-        Assert.assertEquals(mMessage, "如需上传日志，请按 “菜单” 键", subPageContent.getText());
+        Assert.assertEquals(mMessage, contentText, contentLog.getText());
 
         mMessage = "Verify the bottom feedback menu is exist on sub page!";
         mAction.doDeviceActionAndWait(new DeviceActionMenu());

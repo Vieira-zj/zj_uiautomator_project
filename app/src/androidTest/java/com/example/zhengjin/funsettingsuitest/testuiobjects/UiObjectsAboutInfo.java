@@ -124,6 +124,14 @@ public final class UiObjectsAboutInfo {
         return By.res("tv.fun.settings:id/about_item_feedback");
     }
 
+    public BySelector getServiceTelNumberOnFeedbackSubPageSelector() {
+        return By.res("tv.fun.settings:id/feedback_tips_3");
+    }
+
+    public BySelector getServiceQQNumberOnFeedbackSubPageSelector() {
+        return By.res("tv.fun.settings:id/feedback_tips_4");
+    }
+
     public BySelector getQuestionFeedbackSubPageContentSelector() {
         return By.res("tv.fun.settings:id/feedback_tips_5");
     }
