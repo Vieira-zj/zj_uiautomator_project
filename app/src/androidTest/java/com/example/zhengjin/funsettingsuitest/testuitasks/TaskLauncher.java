@@ -112,7 +112,7 @@ public final class TaskLauncher {
         }
 
         if (LAUNCHER_HOME_TABS[0].equals(tabText)) {
-            ACTION.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
+            ACTION.doDeviceActionAndWait(new DeviceActionMoveLeft());
             if (uiTab != null && (uiTab.isFocused() || uiTab.isSelected())) {
                 return;
             }

@@ -221,7 +221,7 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify CEC remote control setting item is enabled.";
         UiObject2 cecControl = mDevice.findObject(
                 mFunUiObjects.getCECRemoteControlSettingItemSelector());
-        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(cecControl));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(cecControl));
 
         mMessage = "Verify CEC remote control setting item title.";
         UiObject2 itemTitle = cecControl.findObject(
@@ -288,11 +288,11 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the title of color tmp setting item.";
         UiObject2 itemTitle =
                 colorTmpItem.findObject(mFunUiObjects.getTitleOfColorTmpSettingSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[0], itemTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_TITLE_ARR[0], itemTitle.getText());
 
         mMessage = "Verify the default value of color tmp setting item.";
         UiObject2 itemValue = mTask.getSwitcherValueOfColorTmpSetting(colorTmpItem);
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[0], itemValue.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[0], itemValue.getText());
     }
 
     @Test
@@ -308,8 +308,8 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         for (int i = 0, count = 3; i < count; i++) {
             mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2, WAIT);
             UiObject2 itemValue = mTask.getSwitcherValueOfColorTmpSetting(colorTmpItem);
-            Assert.assertEquals(String.format(mMessage, i)
-                    , IMAGE_COLOR_TMP_VALUES_ARR[i], itemValue.getText());
+            Assert.assertEquals(String.format(mMessage, i),
+                    IMAGE_COLOR_TMP_VALUES_ARR[i], itemValue.getText());
         }
 
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2, WAIT);  // do update
@@ -323,17 +323,17 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the background light setting item is enabled on image params page.";
         UiObject2 backLightItem =
                 mDevice.findObject(mFunUiObjects.getBackLightSettingItemOfImageParamsSelector());
-        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(backLightItem));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(backLightItem));
 
         mMessage = "Verify the title of background light setting item.";
         UiObject2 itemTitle = backLightItem.findObject(
                 mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[1], itemTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_TITLE_ARR[1], itemTitle.getText());
 
         mMessage = "Verify the default value of background light setting item.";
         UiObject2 itemValue = backLightItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[1], itemValue.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[1], itemValue.getText());
     }
 
     @Test
@@ -349,13 +349,14 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 2);
         UiObject2 itemValue = backLightItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("8", itemValue.getText());
+        Assert.assertEquals(mMessage, "8", itemValue.getText());
 
         mMessage = "Verify text after plus background light value.";
         mAction.doDeviceActionAndWait(new DeviceActionMoveRight());
+        mDevice.waitForIdle(WAIT);
         itemValue = backLightItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("9", itemValue.getText());
+        Assert.assertEquals(mMessage, "9", itemValue.getText());
     }
 
     @Test
@@ -366,17 +367,17 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the brightness setting item is enabled on image params page.";
         UiObject2 brightnessItem =
                 mDevice.findObject(mFunUiObjects.getBrightnessSettingItemOfImageParamsSelector());
-        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(brightnessItem));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(brightnessItem));
 
         mMessage = "Verify the title of brightness setting item.";
         UiObject2 itemTitle = brightnessItem.findObject(
                 mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[2], itemTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_TITLE_ARR[2], itemTitle.getText());
 
         mMessage = "Verify the default value of brightness setting item.";
         UiObject2 itemValue = brightnessItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[2], itemValue.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[2], itemValue.getText());
     }
 
     @Test
@@ -392,13 +393,13 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 3);
         UiObject2 itemValue = brightnessItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("47", itemValue.getText());
+        Assert.assertEquals(mMessage, "47", itemValue.getText());
 
         mMessage = "Verify text after plus brightness value.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 5);
         itemValue = brightnessItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("52", itemValue.getText());
+        Assert.assertEquals(mMessage, "52", itemValue.getText());
     }
 
     @Test
@@ -409,17 +410,17 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the contrast setting item is enabled on image params page.";
         UiObject2 contrastItem =
                 mDevice.findObject(mFunUiObjects.getContrastSettingItemOfImageParamsSelector());
-        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(contrastItem));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(contrastItem));
 
         mMessage = "Verify the title of contrast setting item.";
         UiObject2 itemTitle = contrastItem.findObject(
                 mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[3], itemTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_TITLE_ARR[3], itemTitle.getText());
 
         mMessage = "Verify the default value of contrast setting item.";
         UiObject2 itemValue = contrastItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[3], itemValue.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[3], itemValue.getText());
     }
 
     @Test
@@ -437,13 +438,13 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 11, waitTime);
         UiObject2 itemValue = contrastItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("39", itemValue.getText());
+        Assert.assertEquals(mMessage, "39", itemValue.getText());
 
         mMessage = "Verify text after plus contrast value.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 2, waitTime);
         itemValue = contrastItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("41", itemValue.getText());
+        Assert.assertEquals(mMessage, "41", itemValue.getText());
     }
 
     @Test
@@ -459,12 +460,12 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the title of saturation setting item.";
         UiObject2 itemTitle = saturationItem.findObject(
                 mFunUiObjects.getTitleOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[4], itemTitle.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_TITLE_ARR[4], itemTitle.getText());
 
         mMessage = "Verify the default value of saturation setting item.";
         UiObject2 itemValue = saturationItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], itemValue.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_VALUE_ARR[4], itemValue.getText());
     }
 
     @Test
@@ -482,13 +483,13 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveLeft(), 4, waitTime);
         UiObject2 itemValue = saturationItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("46", itemValue.getText());
+        Assert.assertEquals(mMessage, "46", itemValue.getText());
 
         mMessage = "Verify text after plus saturationItem value.";
         mAction.doRepeatDeviceActionAndWait(new DeviceActionMoveRight(), 8, waitTime);
         itemValue = saturationItem.findObject(
                 mFunUiObjects.getValueOfImageSettingsOnImageParamsSelector());
-        Assert.assertEquals("54", itemValue.getText());
+        Assert.assertEquals(mMessage, "54", itemValue.getText());
     }
 
     @Test
@@ -499,12 +500,12 @@ public final class TestImageAndSoundConfigs extends TestCaseBase {
         mMessage = "Verify the reset all to default setting item is enabled on image params.";
         UiObject2 resetItem = mDevice.findObject(
                 mFunUiObjects.getResetToDefaultSettingItemOfImageParamsSelector());
-        Assert.assertTrue(TestHelper.waitForUiObjectEnabled(resetItem));
+        Assert.assertTrue(mMessage, TestHelper.waitForUiObjectEnabled(resetItem));
 
         mMessage = "Verify the title of reset all to default setting item.";
         UiObject2 title = resetItem.findObject(
                 mFunUiObjects.getTitleOfResetToDefaultSettingItemSelector());
-        Assert.assertEquals(IMAGE_PARAMS_SETTINGS_TITLE_ARR[5], title.getText());
+        Assert.assertEquals(mMessage, IMAGE_PARAMS_SETTINGS_TITLE_ARR[5], title.getText());
     }
 
     @Test
