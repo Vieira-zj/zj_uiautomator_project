@@ -1,6 +1,8 @@
 package com.example.zhengjin.funsettingsuitest.testrunner;
 
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.zhengjin.funsettingsuitest.testutils.ShellUtils;
@@ -85,6 +87,7 @@ public final class RunnerListenerFunSettings extends RunListener {
         }
     }
 
+    @Nullable
     private XmlSerializer createSerializer(Writer writer) {
         try {
             XmlPullParserFactory pf = XmlPullParserFactory.newInstance();
@@ -293,6 +296,7 @@ public final class RunnerListenerFunSettings extends RunListener {
         return String.format(Locale.getDefault(), "%.1fs", (runTime / 1000.0f));
     }
 
+    @NonNull
     private String getSimpleTestClassName(String fullClassName) {
         return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
     }
